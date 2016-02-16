@@ -4,8 +4,6 @@
   "description": "webpage",
   "main": "app.js",
   "dependencies": {
-    "@cycle/core": "^6.0.0",
-    "@cycle/dom": "^9.0.1",
     "autoprefixer": "^6.3.1",
     "babel": "^6.3.26",
     "babel-loader": "^6.2.1",
