@@ -5,4 +5,6 @@
 3. Touch screen [ http://onlinelibrary.wiley.com/doi/10.1002/adfm.201402547/abstract ]
 4. Speakers [ http://arxiv.org/ftp/arxiv/papers/1303/1303.2391.pdf ]
 5. Long-lasting lubricant [ http://phys.org/news/2014-10-graphene-long-lasting-lubricant.html ]
-6. Biomedical Applications [ http://www.sciencedirect.com/science/article/pii/S1369702113003015 ]
+6. Biomedical Applications [ http://www.sciencedirect.com/science/article/pii/S1369702113003015 / http://www.medscape.com/viewarticle/738857_0 ]
+
+

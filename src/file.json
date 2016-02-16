@@ -1,0 +1,9 @@
+{
+	"scene": "[name]",
+	"vide_file": "vid/vid1.mp4",
+	"choice": {
+		"exsists": true,
+		"repeat_file": "vid/repeat/vid1.mp4",
+		"list": [{ "show": "[text to show]", "scene": "[scene name to go]"}]
+	}
+}

@@ -4,7 +4,7 @@ var lost 			= require('lost');
 var cssnext 		= require('postcss-cssnext');
 
 module.exports = {
-	entry: ["./main.js"],
+	entry: ["./js/main.js"],
 	output: {
 		filename: "./out/bundle.js",   
 	},
@@ -27,7 +27,7 @@ module.exports = {
 			},
 			{
 				test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
-				loader: 'url-loader'
+				loader: 'url-loader?limit=10000'
 			}
 		]
 	},
