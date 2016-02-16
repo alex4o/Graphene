@@ -112,7 +112,7 @@
 					_react2.default.createElement(
 						'h1',
 						null,
-						'Hello graphene!!!'
+						'Hello graphene !!'
 					)
 				);
 			}
