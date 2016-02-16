@@ -16,6 +16,8 @@
     "postcss": "^5.0.14",
     "postcss-cssnext": "^2.4.0",
     "precss": "^1.4.0",
+    "react": "^0.14.7",
+    "react-dom": "^0.14.7",
     "rx": "^4.0.7",
     "webpack": "^1.12.11"
   },

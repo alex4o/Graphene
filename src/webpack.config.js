@@ -38,7 +38,7 @@ module.exports = {
 		};
 	},
 	resolve: {
-		modulesDirectories: ["node_modules"],
+		modulesDirectories: ["./node_modules"],
 	}
 	//,plugins: [/*new EncodingPlugin('utf-8'),*/ new BomPlugin(true)]
 }

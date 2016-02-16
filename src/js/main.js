@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Katex from "./katex";
 import lodash from "lodash"; //because I can
 
 //import TabPanel from "./tabPanel.js";
