@@ -99,13 +99,33 @@
 	
 			var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(App).call(this, props));
 	
-			_this.state = {};
+			_this.state = {
+				src: "preintro.mp4"
+			};
 			return _this;
 		}
 	
 		(0, _createClass3.default)(App, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				var _this2 = this;
+	
+				window.video = this.video;
+				this.video.onended = function (e) {
+	
+					_this2.setState({ src: "intro.mp4" });
+				};
+				this.video.addEventListener("timeupdate", function () {
+					if (this.currentTime >= 5.0) {
+						this.currentTime = 4.0;
+					}
+				});
+			}
+		}, {
 			key: 'render',
 			value: function render() {
+				var _this3 = this;
+	
 				return _react2.default.createElement(
 					'div',
 					null,
@@ -113,6 +133,13 @@
 						'h1',
 						null,
 						'Hello graphene !!'
+					),
+					_react2.default.createElement(
+						'video',
+						{ controls: true, autoPlay: true, ref: function ref(_ref) {
+								return _this3.video = _ref;
+							} },
+						_react2.default.createElement('source', { src: this.state.src, type: 'video/mp4' })
 					)
 				);
 			}
