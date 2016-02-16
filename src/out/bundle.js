@@ -120,6 +120,8 @@
 		return App;
 	}(_react2.default.Component);
 
+	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('app-root'));
+
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
