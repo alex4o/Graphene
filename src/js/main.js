@@ -24,5 +24,7 @@ class App extends React.Component
 	}
 }
 
+document.addEventListener( "DOMContentLoaded", () => {
+	ReactDOM.render(<App/>, document.getElementById('app-root'));
+}, false )
 
-ReactDOM.render(<App/>, document.getElementById('app-root'));

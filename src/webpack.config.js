@@ -5,6 +5,7 @@ var cssnext 		= require('postcss-cssnext');
 
 module.exports = {
 	entry: ["./js/main.js"],
+	devtool: 'source-map',
 	output: {
 		filename: "./out/bundle.js",   
 	},
