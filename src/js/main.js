@@ -16,7 +16,7 @@ class App extends React.Component
 	render(){
 		return (
 			<div>
-				<h1>Hello graphene!!!</h1>
+				<h1>Hello graphene !!</h1>
 				
 
 			</div>
