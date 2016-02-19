@@ -36,9 +36,9 @@ class App extends React.Component
 
 		this.video.addEventListener("timeupdate", () => {
 
-			if(this.video.currentTime >= 9.0) {
-				this.video.currentTime = 8.0;
-			}
+		//	if(this.video.currentTime >= 9.0) {
+		//		this.video.currentTime = 8.0;
+		//	}
 		});
 
 	}

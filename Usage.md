@@ -8,3 +8,10 @@
 6. Biomedical Applications [ http://www.sciencedirect.com/science/article/pii/S1369702113003015 / http://www.medscape.com/viewarticle/738857_0 ]
 
 
+Свойства:
+
+1. Еlectrical conductivity (1738 siemens/m)
+2. Мechanical strength (about 1100 GPa)
+3. Тhermal conductivity (5000 W/m/K) 
+4. Еnergy density 75 F/g and 31·9 Wh kg−1 
+5. 

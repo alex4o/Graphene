@@ -133,9 +133,9 @@
 	
 				this.video.addEventListener("timeupdate", function () {
 	
-					if (_this2.video.currentTime >= 9.0) {
-						_this2.video.currentTime = 8.0;
-					}
+					//	if(this.video.currentTime >= 9.0) {
+					//		this.video.currentTime = 8.0;
+					//	}
 				});
 			}
 		}, {
