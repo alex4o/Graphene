@@ -14,7 +14,8 @@ class App extends React.Component
 	constructor(props){
 		super(props)
 		this.state = {
-			src: "preintro.mp4"
+			src: "preintro.mp4",
+			sub: "intro.mp4"
 		}
 	}
 
@@ -64,10 +65,10 @@ class App extends React.Component
 	render(){
 		return (
 			<div>
-				<video controls src={this.state.src} autoPlay ref={(ref) => this.video = ref}>
+				<video src={this.state.src} autoPlay ref={(ref) => this.video = ref}>
 				</video>
-				<canvas id="drawSurf" className="draw" ref={(ref) => this.canvas = ref}></canvas>
 
+				<canvas id="drawSurf" className="draw" ref={(ref) => this.canvas = ref}></canvas>
 			</div>
 			)
 	}
