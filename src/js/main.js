@@ -22,6 +22,20 @@ class App extends React.Component
 		window.video = this.video
 		paper.setup(this.canvas)
 		let planet = new paper.Raster("./mercury.png")
+
+		planet.onClick = (e) => {
+			planet.remove();
+		}
+
+		planet.onMouseEnter = (e) => {
+			planet.opacity = 0.5
+		}
+
+		planet.onMouseLeave = (e) => {
+			planet.opacity = 1
+
+		}
+
 		planet.position = paper.view.center;
 		this.video.addEventListener("ended", (e) => {
 
@@ -42,12 +56,15 @@ class App extends React.Component
 		});
 
 	}
+
+	componentDidUpdate(){
+		this.video.play();  
+	}
 	
 	render(){
 		return (
 			<div>
-				<video controls autoPlay ref={(ref) => this.video = ref}>
-					<source src={this.state.src} type="video/mp4"/>
+				<video controls src={this.state.src} autoPlay ref={(ref) => this.video = ref}>
 				</video>
 				<canvas id="drawSurf" className="draw" ref={(ref) => this.canvas = ref}></canvas>
 

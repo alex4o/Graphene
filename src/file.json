@@ -1,3 +1,5 @@
+//explanation
+
 {
 	"scene": "[name]",
 	"vide_file": "vid/vid1.mp4",
@@ -7,3 +9,5 @@
 		"list": [{ "show": "[text to show]", "scene": "[scene name to go]"}]
 	}
 }
+// save data
+["name1","name2"]
