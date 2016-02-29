@@ -46697,24 +46697,26 @@
 		}, {
 			key: 'resolveVideos',
 			value: function resolveVideos() {
-				var videos = _lodash2.default.filter(people, function (p) {
-					return _lodash2.default.includes(_lodash2.default.map(this.props.storyLocationc, "scene"), p.name);
+				var _this2 = this;
+	
+				var videos = _lodash2.default.filter(this.people, function (p) {
+					return _lodash2.default.includes(_lodash2.default.map(_this2.props.storyLocationc, "scene"), p.name);
 				});
 			}
 		}, {
 			key: 'render',
 			value: function render() {
-				var _this2 = this;
+				var _this3 = this;
 	
 				return _react2.default.createElement(
 					'div',
 					null,
 					this.resolveVideos(),
 					_react2.default.createElement('video', { src: this.state.src, ref: function ref(_ref) {
-							return _this2.video = _ref;
+							return _this3.video = _ref;
 						} }),
 					_react2.default.createElement('video', { src: this.state.sub, style: { display: this.state.dis }, ref: function ref(_ref2) {
-							return _this2.video2 = _ref2;
+							return _this3.video2 = _ref2;
 						} })
 				);
 			}
