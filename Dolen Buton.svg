@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X7 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="200mm" height="200mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 20000 20000"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str1 {stroke:#2B2A29;stroke-width:20}
+    .str0 {stroke:#2B2A29;stroke-width:20;stroke-linejoin:bevel}
+    .fil0 {fill:#9D9E9E}
+   ]]>
+  </style>
+    <clipPath id="id0">
+     <path d="M184 7610l19615 -377 0 3948 -19615 376 0 -3947z"/>
+    </clipPath>
+    <clipPath id="id1">
+     <path d="M-15830 6480l13900 -267 0 2803 -13900 267 0 -2803z"/>
+    </clipPath>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_821342416">
+   <g style="clip-path:url(#id0)">
+    <image x="184" y="7233" width="19615" height="4325" xlink:href="Dolen_Images\Dolen_ImgID1.png"/>
+   </g>
+  </g>
+  <g id="_821335728">
+   <polygon class="fil0 str0" points="907,7508 2705,7309 2727,7307 2748,7307 17187,7307 17208,7307 17229,7309 19062,7508 19036,7506 19009,7505 960,7505 934,7506 "/>
+  </g>
+  <path class="fil0 str1" d="M19532 8028l0 2367c0,288 -235,523 -523,523l-18049 0c-287,0 -522,-235 -522,-523l0 -2367c0,-287 235,-523 522,-523l18049 0c288,0 523,236 523,523z"/>
+  <g id="_821342128">
+   <g style="clip-path:url(#id1)">
+    <image x="-15830" y="6213" width="13900" height="3070" xlink:href="Dolen_Images\Dolen_ImgID2.png"/>
+   </g>
+  </g>
+  <g id="_821345392">
+   <polygon class="fil0 str0" points="-15315,8825 -14041,8966 -14026,8967 -14011,8968 -3783,8968 -3768,8967 -3753,8966 -2455,8825 -2474,8826 -2493,8827 -15277,8827 -15296,8826 "/>
+  </g>
+  <path class="fil0 str1" d="M-2122 8456l0 -1676c0,-204 -167,-371 -371,-371l-12784 0c-204,0 -370,167 -370,371l0 1676c0,204 166,371 370,371l12784 0c204,0 371,-167 371,-371z"/>
+ </g>
+</svg>

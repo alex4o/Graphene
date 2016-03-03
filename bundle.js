@@ -205,6 +205,10 @@
 					//		this.video.currentTime = 8.0;
 					//	}
 				});
+	
+				//this.video.play(); 
+	
+				this.video2.play();
 			}
 		}, {
 			key: 'componentDidUpdate',

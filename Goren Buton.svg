@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X7 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="200mm" height="200mm" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 20000 20000"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str1 {stroke:#2B2A29;stroke-width:20}
+    .str0 {stroke:#2B2A29;stroke-width:20;stroke-linejoin:bevel}
+    .fil0 {fill:#9D9E9E}
+   ]]>
+  </style>
+    <clipPath id="id0">
+     <path d="M-19583 7304l19615 -377 0 3948 -19615 376 0 -3947z"/>
+    </clipPath>
+    <clipPath id="id1">
+     <path d="M74 7961l19645 -377 0 3954 -19645 377 0 -3954z"/>
+    </clipPath>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_821349712">
+   <g style="clip-path:url(#id0)">
+    <image x="-19583" y="6927" width="19615" height="4325" xlink:href="Goren_Images\Goren_ImgID1.png"/>
+   </g>
+  </g>
+  <g id="_821335952">
+   <polygon class="fil0 str0" points="-18860,7202 -17062,7003 -17041,7001 -17019,7001 -2581,7001 -2559,7001 -2538,7003 -705,7202 -732,7200 -759,7199 -18807,7199 -18834,7200 "/>
+  </g>
+  <path class="fil0 str1" d="M-236 7722l0 2367c0,288 -235,523 -523,523l-18048 0c-288,0 -523,-235 -523,-523l0 -2367c0,-287 235,-523 523,-523l18048 0c288,0 523,236 523,523z"/>
+  <g id="_821342992">
+   <g style="clip-path:url(#id1)">
+    <image x="74" y="7584" width="19645" height="4331" xlink:href="Goren_Images\Goren_ImgID2.png"/>
+   </g>
+  </g>
+  <g id="_821344976">
+   <polygon class="fil0 str0" points="798,11272 2599,11472 2621,11473 2642,11474 17103,11474 17125,11473 17146,11472 18981,11272 18955,11274 18928,11275 852,11275 825,11274 "/>
+  </g>
+  <path class="fil0 str1" d="M19452 10751l0 -2370c0,-289 -236,-524 -524,-524l-18076 0c-288,0 -524,235 -524,524l0 2370c0,288 236,524 524,524l18076 0c288,0 524,-236 524,-524z"/>
+ </g>
+</svg>
