@@ -109,6 +109,11 @@ class App extends React.Component
 		//	}
 		});
 
+		//this.video.play();  
+
+		this.video2.play();  
+
+
 	}
 
 	componentDidUpdate(){
