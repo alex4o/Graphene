@@ -21,7 +21,7 @@ var story = [
 		"choice": [
 			{ "show": "Докажи, че си по добър", "scene": "compete"},
 			{ "show": "Остави го да говори", "scene": ""},
-			{ "show": "Осави го", "scene": "provoke"}
+			{ "show": "Игнорирай го", "scene": "provoke"}
 		]
 	},
 	{

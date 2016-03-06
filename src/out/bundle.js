@@ -41197,7 +41197,7 @@
 	}, {
 		"scene": "use_words",
 		"src": "vid/Background.mp4",
-		"choice": [{ "show": "Докажи, че си по добър", "scene": "compete" }, { "show": "Остави го да говори", "scene": "" }, { "show": "Осави го", "scene": "provoke" }]
+		"choice": [{ "show": "Докажи, че си по добър", "scene": "compete" }, { "show": "Остави го да говори", "scene": "" }, { "show": "Игнорирай го", "scene": "provoke" }]
 	}, {
 		"scene": "listen",
 		"src": "vid/Background.mp4",
