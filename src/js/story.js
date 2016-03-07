@@ -1,4 +1,5 @@
 import _ from "lodash";
+import Dialogue from "./dialogue"
 
 var story = [
 	{
@@ -9,6 +10,7 @@ var story = [
 	{
 		"scene": "conflict",
 		"src": "vid/Background.mp4",
+		dialogue: "dialog_one",
 		"choice": [
 			{ "show": "Покажи силата си", "scene": "provoke"},
 			{ "show": "Използвай думи", "scene": "use_words"},
@@ -122,6 +124,8 @@ var story = [
 		"scene": "end2"
 	}	
 ]
+
+
 window.s = story
 
 var cache = []
@@ -145,6 +149,7 @@ function createVideo(element){
 export default class Story {
 	constructor(){
 		this.story = story;
+		this.dialogue = new Dialogue();
 		this.current = this.story[0];
 		_.forEach(this.story, createVideo)
 		console.log(cache)
@@ -158,6 +163,10 @@ export default class Story {
 		return _.map(this.current.choice, "show");
 	}
 
+	dialogue(){
+
+	}
+
 	neededVideos(){
 		if(this.current.choice){
 			return _.map(this.current.choice, (e) => this.scene(e.scene) )
@@ -167,6 +176,9 @@ export default class Story {
 	}
 
 	next(){
+		//if()
+
+
 		if(this.current.next){
 			this.current = this.scene(this.current.next);
 		}else{

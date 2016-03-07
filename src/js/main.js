@@ -3,6 +3,7 @@ import paper from "paper";
 import rx from "rx"
 import Story from "./story"
 window.p = paper
+window.rx = rx
 require("../css/global.css");
 
 
@@ -34,99 +35,123 @@ function componentDidMount(){
 
 }
 
-
-var canvas = null;
-var container = null;
-var planet = null;
-
-var video = null;
-
-var tobjects = null;
-
-var resize = rx.Observable.fromEvent(window, "resize")
-	.map((e) => {return {height: window.innerHeight, width: window.innerWidth}})
-	.tap((size) => {
-		canvas.width = size.width
-		canvas.height = size.height
-		paper.view.setViewSize(size.width, size.height);
-	})
-
-resize.subscribe((size) => {
-	planet.position = paper.view.center;
-	paper.view.draw();
-})
-
-function end(){
-	story.next()
-	_.forEach(tobjects, (o) => o.remove())
-	video.remove()
-	video = show()
-
-}
-
-function show(){
-	let video = story.current.video
-	
-	let choices = story.choices()
-	if(choices.length!= 0){
-		console.log(choices)
-		var length = choices.length
-		tobjects = _.map(choices, (choice, n) => {
-			
-			let point = new paper.Point();
-			point.x = paper.view.center.x;
-			point.y = paper.view.center.y;
-
-
-			let coef = ((n+1)/(length/2 + 0.5))
-
-			point.x = point.x * coef
-			point.y = (point.y * 2) - 50
-			console.log(point)
-			let text = new paper.PointText({
-				point: point,
-				content: choice,
-				fillColor: 'white',
-				fontFamily: 'Courier New',
-				fontWeight: 'bold',
-				fontSize: 20,
-				justification: "center"
-			});
-			paper.view.draw();
-			text.onClick = () => window.next(n)
-			return text
-		})
+function set(obj, path){
+	return (val) => {
+		obj[path] = val
 	}
-
-	window.video = video;
-	video.addEventListener("ended", end);
-
-	container.appendChild(video)
-	video.play()
-	return video
-
 }
 
-window.next = (args) => {
-	story.next(args)
-	video.remove()
-	_.forEach(tobjects, (o) => o.remove())
-	video = show()
-
-}
 
 window.addEventListener("load", (event) => {
-	console.log("Hello")
+
+	var canvas = null;
+	var container = null;
+	var planet = null;
+
+	var video = null;
+
+	var tobjects = null;
 
 	canvas = document.getElementById("drawSurf")
+	paper.setup(canvas)
+
+	var size = rx.Observable.fromEvent(window, "resize").map(() => { return { width: window.innerWidth, height: window.innerHeight} }).do((size) => {
+		paper.view.setViewSize(size.width, size.height);
+		paper.view.draw();
+	})
+
+	console.log(size)
+
+
+
+
+
+	var center = size.map((e) => paper.view.center) // clone the object to be sure for the map
+
+	
+	var height = size.pluck("height")
+	var width = size.pluck("width")
+
+	height.do(set(canvas, "height"))
+	width.do(set(canvas, "width"))
+
+	center.do(set(planet, "position"))
+
+
+
+	center.subscribe((x) => console.log(x))
+
+
+	function end(){
+		story.next()
+		_.forEach(tobjects, (o) => o.remove())
+		video.remove()
+		video = show()
+
+	}
+
+	function show(){
+		let video = story.current.video
+		
+		let choices = story.choices()
+		if(choices.length!= 0){
+			console.log(choices)
+			var length = choices.length
+			tobjects = _.map(choices, (choice, n) => {
+				
+				let coef = ((n+1)/(length/2 + 0.5))
+				
+
+
+
+				//console.log(point)
+				var text = new paper.PointText({
+					content: choice,
+					fillColor: 'white',
+					fontFamily: 'Courier New',
+					fontWeight: 'bold',
+					fontSize: 20,
+					justification: "center"
+				});
+
+				center.map((center) => new paper.Point(center.x * coef, (center.y * 2) - 50)).do(set(text, "point"))
+
+
+				paper.view.draw();
+				text.onClick = () => window.next(n)
+				return text
+			})
+		}
+
+		window.video = video;
+		video.addEventListener("ended", end);
+
+		container.appendChild(video)
+		video.play()
+		return video
+
+	}
+
+	window.next = (args) => {
+		story.next(args)
+		video.remove()
+		_.forEach(tobjects, (o) => o.remove())
+		video = show()
+
+	}
+
+
+	console.log("Hello")
+
 	container = document.getElementById("container")
 
-	paper.setup(canvas)
+
 	planet = new paper.Raster("./mercury.png")
 	planet.position = paper.view.center;
 	planet.onClick = () => {
 		planet.remove()
 	}
+
 	video = show()
 
 

@@ -73,7 +73,8 @@
 	
 	window.p = _paper2.default; //because I can
 	
-	__webpack_require__(13);
+	window.rx = _rx2.default;
+	__webpack_require__(14);
 	
 	var story = new _story2.default();
 	//import TabPanel from "./tabPanel.js";
@@ -100,100 +101,119 @@
 		console.log("WTF:", window, this);
 	}
 	
-	var canvas = null;
-	var container = null;
-	var planet = null;
-	
-	var video = null;
-	
-	var tobjects = null;
-	
-	var resize = _rx2.default.Observable.fromEvent(window, "resize").map(function (e) {
-		return { height: window.innerHeight, width: window.innerWidth };
-	}).tap(function (size) {
-		canvas.width = size.width;
-		canvas.height = size.height;
-		_paper2.default.view.setViewSize(size.width, size.height);
-	});
-	
-	resize.subscribe(function (size) {
-		planet.position = _paper2.default.view.center;
-		_paper2.default.view.draw();
-	});
-	
-	function end() {
-		story.next();
-		_lodash2.default.forEach(tobjects, function (o) {
-			return o.remove();
-		});
-		video.remove();
-		video = show();
+	function set(obj, path) {
+		return function (val) {
+			obj[path] = val;
+		};
 	}
-	
-	function show() {
-		var video = story.current.video;
-	
-		var choices = story.choices();
-		if (choices.length != 0) {
-			console.log(choices);
-			var length = choices.length;
-			tobjects = _lodash2.default.map(choices, function (choice, n) {
-	
-				var point = new _paper2.default.Point();
-				point.x = _paper2.default.view.center.x;
-				point.y = _paper2.default.view.center.y;
-	
-				var coef = (n + 1) / (length / 2 + 0.5);
-	
-				point.x = point.x * coef;
-				point.y = point.y * 2 - 50;
-				console.log(point);
-				var text = new _paper2.default.PointText({
-					point: point,
-					content: choice,
-					fillColor: 'white',
-					fontFamily: 'Courier New',
-					fontWeight: 'bold',
-					fontSize: 20,
-					justification: "center"
-				});
-				_paper2.default.view.draw();
-				text.onClick = function () {
-					return window.next(n);
-				};
-				return text;
-			});
-		}
-	
-		window.video = video;
-		video.addEventListener("ended", end);
-	
-		container.appendChild(video);
-		video.play();
-		return video;
-	}
-	
-	window.next = function (args) {
-		story.next(args);
-		video.remove();
-		_lodash2.default.forEach(tobjects, function (o) {
-			return o.remove();
-		});
-		video = show();
-	};
 	
 	window.addEventListener("load", function (event) {
-		console.log("Hello");
+	
+		var canvas = null;
+		var container = null;
+		var planet = null;
+	
+		var video = null;
+	
+		var tobjects = null;
 	
 		canvas = document.getElementById("drawSurf");
+		_paper2.default.setup(canvas);
+	
+		var size = _rx2.default.Observable.fromEvent(window, "resize").map(function () {
+			return { width: window.innerWidth, height: window.innerHeight };
+		}).do(function (size) {
+			_paper2.default.view.setViewSize(size.width, size.height);
+			_paper2.default.view.draw();
+		});
+	
+		console.log(size);
+	
+		var center = size.map(function (e) {
+			return _paper2.default.view.center;
+		}); // clone the object to be sure for the map
+	
+		var height = size.pluck("height");
+		var width = size.pluck("width");
+	
+		height.do(set(canvas, "height"));
+		width.do(set(canvas, "width"));
+	
+		center.do(set(planet, "position"));
+	
+		center.subscribe(function (x) {
+			return console.log(x);
+		});
+	
+		function end() {
+			story.next();
+			_lodash2.default.forEach(tobjects, function (o) {
+				return o.remove();
+			});
+			video.remove();
+			video = show();
+		}
+	
+		function show() {
+			var video = story.current.video;
+	
+			var choices = story.choices();
+			if (choices.length != 0) {
+				console.log(choices);
+				var length = choices.length;
+				tobjects = _lodash2.default.map(choices, function (choice, n) {
+	
+					var coef = (n + 1) / (length / 2 + 0.5);
+	
+					//console.log(point)
+					var text = new _paper2.default.PointText({
+						content: choice,
+						fillColor: 'white',
+						fontFamily: 'Courier New',
+						fontWeight: 'bold',
+						fontSize: 20,
+						justification: "center"
+					});
+	
+					center.map(function (center) {
+						return new _paper2.default.Point(center.x * coef, center.y * 2 - 50);
+					}).do(set(text, "point"));
+	
+					_paper2.default.view.draw();
+					text.onClick = function () {
+						return window.next(n);
+					};
+					return text;
+				});
+			}
+	
+			window.video = video;
+			video.addEventListener("ended", end);
+	
+			container.appendChild(video);
+			video.play();
+			return video;
+		}
+	
+		window.next = function (args) {
+			story.next(args);
+			video.remove();
+			_lodash2.default.forEach(tobjects, function (o) {
+				return o.remove();
+			});
+			video = show();
+		};
+	
+		console.log("Hello");
+	
 		container = document.getElementById("container");
 	
-		_paper2.default.setup(canvas);
 		planet = new _paper2.default.Raster("./mercury.png");
 		planet.position = _paper2.default.view.center;
 		planet.onClick = function () {
 			planet.remove();
 		};
+	
 		video = show();
 	}, false);
 
@@ -41184,6 +41204,10 @@
 	
 	var _lodash2 = _interopRequireDefault(_lodash);
 	
+	var _dialogue = __webpack_require__(13);
+	
+	var _dialogue2 = _interopRequireDefault(_dialogue);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var story = [{
@@ -41193,6 +41217,7 @@
 	}, {
 		"scene": "conflict",
 		"src": "vid/Background.mp4",
+		dialogue: "dialog_one",
 		"choice": [{ "show": "Покажи силата си", "scene": "provoke" }, { "show": "Използвай думи", "scene": "use_words" }, { "show": "Осави го", "scene": "provoke" }]
 	}, {
 		"scene": "use_words",
@@ -41265,6 +41290,7 @@
 		"src": "vid/Background.mp4",
 		"scene": "end2"
 	}];
+	
 	window.s = story;
 	
 	var cache = [];
@@ -41289,6 +41315,7 @@
 			(0, _classCallCheck3.default)(this, Story);
 	
 			this.story = story;
+			this.dialogue = new _dialogue2.default();
 			this.current = this.story[0];
 			_lodash2.default.forEach(this.story, createVideo);
 			console.log(cache);
@@ -41305,6 +41332,9 @@
 				return _lodash2.default.map(this.current.choice, "show");
 			}
 		}, {
+			key: "dialogue",
+			value: function dialogue() {}
+		}, {
 			key: "neededVideos",
 			value: function neededVideos() {
 				var _this = this;
@@ -41320,6 +41350,8 @@
 		}, {
 			key: "next",
 			value: function next() {
+				//if()
+	
 				if (this.current.next) {
 					this.current = this.scene(this.current.next);
 				} else {
@@ -41423,13 +41455,142 @@
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _classCallCheck2 = __webpack_require__(8);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(9);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _lodash = __webpack_require__(2);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var participants = ["Graphene", "Carbon"];
+	
+	var dialogue = [{
+		name: "dialog_one",
+		array: [{ //loc: 0
+			//say: "Loerm ipsum"
+			who: "Graphene",
+			answer: [{ say: "ans 1", loc: 1 }, { say: "ans 2", loc: 2 }, { say: "ans 3", loc: 3 }]
+		}, { //loc: 1
+			who: "Carbon",
+			say: "I'm so much better",
+			loc: 4
+		}, { //loc: 2
+			who: "Carbon",
+			say: "I'm so much better or no",
+			loc: 4
+		}, { //loc: 3
+			who: "Carbon",
+			say: "You are so much better",
+			loc: 4
+		}, { //loc: 4
+			who: "Graphene",
+			answer: [{ say: "other ans 1", loc: 5 }, { say: "new ans 2", loc: 6 }, { say: "wtf ans 3", loc: 7 }]
+		}]
+	}, {
+		name: "dialog_two",
+		array: [{ //loc: 0
+			who: "Carbon",
+			say: "This wont last for long",
+			loc: 1
+		}, { //loc: 1
+			//say: "Loerm ipsum"
+			who: "Graphene",
+			answer: [{ say: "ans 1", loc: 2 }, { say: "ans 2", loc: 3 }, { say: "ans 3", loc: 4 }]
+		}, { //loc: 2
+			who: "Carbon",
+			say: "I'm so much better",
+			loc: 5
+		}, { //loc: 3
+			who: "Carbon",
+			say: "I'm so much better or no",
+			loc: 5
+		}, { //loc: 4
+			who: "Carbon",
+			say: "You are so much better",
+			loc: 5
+		}, { //loc: 5
+			who: "Graphene",
+			answer: [{ say: "other ans 1", loc: 6 }, { say: "new ans 2", loc: 7 }, { say: "wtf ans 3", loc: 8 }]
+		}]
+	}];
+	
+	window.d = dialogue;
+	
+	var Dialogue = function () {
+		function Dialogue() {
+			(0, _classCallCheck3.default)(this, Dialogue);
+	
+			this.dialogue = dialogue;
+		}
+	
+		(0, _createClass3.default)(Dialogue, [{
+			key: "select",
+			value: function select(name) {
+				this.currentDialogue = _lodash2.default.find(this.dialogue, ["name", name]);
+				this.currentPhrase = currentDialogue.array[0];
+			}
+		}, {
+			key: "phrase",
+			value: function phrase(loc) {
+				return this.currentDialogue.array[loc];
+			}
+		}, {
+			key: "choices",
+			value: function choices() {
+				return _lodash2.default.map(this.currentPhrase.answer, "say");
+			}
+		}, {
+			key: "hasNext",
+			value: function hasNext() {
+				this.currentDialogue.array.length();
+			}
+		}, {
+			key: "next",
+			value: function next() {
+				if (this.currentPhrase.loc) {
+					this.currentPhrase = this.select(this.currentPhrase.loc);
+				} else {
+					if (arguments.length > 0 && this.currentPhrase.answer) {
+						if (arguments[0] <= this.current.answer.length) {
+							this.current = this.select(this.current.array[arguments[0]].loc);
+						} else {
+							throw "This answer does not exists";
+						}
+					} else {
+						throw "This transition to the next phrase requires an argument";
+					}
+				}
+			}
+		}]);
+		return Dialogue;
+	}();
+
+	exports.default = Dialogue;
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(14);
+	var content = __webpack_require__(15);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(16)(content, {});
+	var update = __webpack_require__(17)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -41446,10 +41607,10 @@
 	}
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(15)();
+	exports = module.exports = __webpack_require__(16)();
 	// imports
 	
 	
@@ -41460,7 +41621,7 @@
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	/*
@@ -41516,7 +41677,7 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
