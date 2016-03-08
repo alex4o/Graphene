@@ -2,9 +2,20 @@ import _ from "lodash"; //because I can
 import paper from "paper";
 import rx from "rx"
 import Story from "./story"
+
+import {Kefir} from "kefir"
+import Atom from "kefir.atom"
+
+import R from "ramda"
+
+window.R = R
 window.p = paper
-window.rx = rx
+
 require("../css/global.css");
+
+Kefir.Observable.prototype.pluck = function(prop) {
+    return this.map(R.view(R.lensProp(prop)));
+};
 
 
 let story = new Story();
@@ -35,125 +46,191 @@ function componentDidMount(){
 
 }
 
-function set(obj, path){
+
+var canvas = null;
+var container = null;
+
+//var planet = null;
+var graphene = null;
+var carbon = null;
+
+var video = null;
+
+var tobjects = null;
+var talk_text = null;
+
+var font_size = 20;
+
+var resize = Kefir.fromEvents(window, "resize").toProperty(() => null)
+	.map((e) => {return {height: window.innerHeight, width: window.innerWidth}})
+
+var center = resize.map(() => paper.view.center).toProperty(() => paper.view.center)
+
+window.c = center
+
+function set(obj, prop){
 	return (val) => {
-		obj[path] = val
+		obj[prop] = val
 	}
 }
 
 
+function end(){
+	window.next()
+}
+
+function toggleCharacters(val){
+	graphene.visible = val
+	carbon.visible = val
+	talk_text.visible = val
+}
+
+function calculateTextPoint(n, N, center){
+	let coef = ((n+1)/(N/2 + 0.5))
+	return new paper.Point(center.x * coef, (center.y * 2) - 50);
+}
+
+function showDialogue(){
+	let choices = story.choices()
+	
+	if(_.isArray(choices)){
+		console.log(choices)
+		var length = choices.length
+		tobjects = _.map(choices, (choice, n) => {
+
+			var text = new paper.PointText({
+			//	point: point,
+				content: choice,
+				fillColor: 'white',
+				fontFamily: 'Courier New',
+				fontWeight: 'bold',
+				fontSize: font_size,
+				justification: "center"
+			});
+
+			center.map((center) => calculateTextPoint(n, length, center)).onValue(set(text, "point"))
+
+			paper.view.draw();
+			text.onClick = () => window.next(n)
+			return text
+		})
+	}else{
+		talk_text.content = choices.who +": "+ choices.say;
+
+		//setTimeout(1000,() => {
+
+		//})
+	}
+	paper.view.draw();
+
+}
+
+function show(current){
+	let video = story.current.video
+	if(video == current){
+		return video;
+	}else{
+		if(current){
+			console.log("Removeing: ", video)
+			current.remove()
+		}
+	}
+
+	window.video = video;
+	video.addEventListener("ended", end);
+
+	container.appendChild(video)
+	video.play()
+	return video
+
+}
+
+window.next = (arg) => {
+
+	if(story.hasChoices() && arg == null){
+		return
+	}
+
+	story.next(arg)
+	_.forEach(tobjects, (o) => o.remove())
+
+	if(story.hasDialogue()){
+		
+		showDialogue()
+		toggleCharacters(true)
+	
+	}else{
+		toggleCharacters(false)
+	}
+
+	video = show(video)
+	console.log(video)
+}
+
+
+
 window.addEventListener("load", (event) => {
-
-	var canvas = null;
-	var container = null;
-	var planet = null;
-
-	var video = null;
-
-	var tobjects = null;
+	console.log("Loading")
 
 	canvas = document.getElementById("drawSurf")
-	paper.setup(canvas)
-
-	var size = rx.Observable.fromEvent(window, "resize").map(() => { return { width: window.innerWidth, height: window.innerHeight} }).do((size) => {
-		paper.view.setViewSize(size.width, size.height);
-		paper.view.draw();
-	})
-
-	console.log(size)
-
-
-
-
-
-	var center = size.map((e) => paper.view.center) // clone the object to be sure for the map
-
-	
-	var height = size.pluck("height")
-	var width = size.pluck("width")
-
-	height.do(set(canvas, "height"))
-	width.do(set(canvas, "width"))
-
-	center.do(set(planet, "position"))
-
-
-
-	center.subscribe((x) => console.log(x))
-
-
-	function end(){
-		story.next()
-		_.forEach(tobjects, (o) => o.remove())
-		video.remove()
-		video = show()
-
-	}
-
-	function show(){
-		let video = story.current.video
-		
-		let choices = story.choices()
-		if(choices.length!= 0){
-			console.log(choices)
-			var length = choices.length
-			tobjects = _.map(choices, (choice, n) => {
-				
-				let coef = ((n+1)/(length/2 + 0.5))
-				
-
-
-
-				//console.log(point)
-				var text = new paper.PointText({
-					content: choice,
-					fillColor: 'white',
-					fontFamily: 'Courier New',
-					fontWeight: 'bold',
-					fontSize: 20,
-					justification: "center"
-				});
-
-				center.map((center) => new paper.Point(center.x * coef, (center.y * 2) - 50)).do(set(text, "point"))
-
-
-				paper.view.draw();
-				text.onClick = () => window.next(n)
-				return text
-			})
-		}
-
-		window.video = video;
-		video.addEventListener("ended", end);
-
-		container.appendChild(video)
-		video.play()
-		return video
-
-	}
-
-	window.next = (args) => {
-		story.next(args)
-		video.remove()
-		_.forEach(tobjects, (o) => o.remove())
-		video = show()
-
-	}
-
-
-	console.log("Hello")
-
 	container = document.getElementById("container")
 
+	paper.setup(canvas)
 
-	planet = new paper.Raster("./mercury.png")
-	planet.position = paper.view.center;
-	planet.onClick = () => {
-		planet.remove()
+
+	resize.onValue((size) => {
+		canvas.width = size.width
+		canvas.height = size.height
+		paper.view.setViewSize(size.width, size.height);
+		paper.view.draw();
+		paper.view.update(true)
+//		_.map(tobjects, (obj, n) => {
+//			obj.point = calculateTextPoint(n, tobjects.length, paper.view.center)
+//		})
+	})
+
+	//planet = new paper.Raster("./mercury.png")
+
+
+
+	graphene = new paper.Raster("./Graphene.png")
+	carbon = new paper.Raster("./Carbon1.png")
+	graphene.scale(-1,1)
+	window.g = graphene
+	resize.pluck("width").toProperty().map((v) => v - 100).onValue(set(graphene.position,"x"))
+	carbon.position.x = 100
+	center.onValue((center) => {
+		carbon.position.y = center.y
+		graphene.position.y = center.y
+
+	});
+
+	talk_text = new paper.PointText({
+		point: paper.view.center,
+	//	content: choices.who +": "+ choices.say,
+		fillColor: 'white',
+		fontFamily: 'Courier New',
+		fontWeight: 'bold',
+		fontSize: font_size,
+		justification: "rigth"
+	});
+
+	resize.map((size) => new paper.Point(size.width * 0.2, size.height - 100)).onValue(set(talk_text, "point"))
+
+	
+
+	//planet.position = paper.view.center;
+	
+	paper.view.onMouseDown = () => {
+		console.log("Everywhere click")
+		window.next()
 	}
+	
+	//center.onValue(set(planet, "position"))
 
 	video = show()
+	toggleCharacters(false)
 
-
+	console.log("Loaded")
 }, false )
 
