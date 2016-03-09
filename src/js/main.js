@@ -61,6 +61,9 @@ var talk_text = null;
 
 var font_size = 20;
 
+var g_text = null;
+var c_text = null;
+
 var resize = Kefir.fromEvents(window, "resize").toProperty(() => null)
 	.map((e) => {return {height: window.innerHeight, width: window.innerWidth}})
 
@@ -83,6 +86,8 @@ function toggleCharacters(val){
 	graphene.visible = val
 	carbon.visible = val
 	talk_text.visible = val
+	g_text.visible = val
+	c_text.visible = val
 }
 
 function calculateTextPoint(n, N, center){
@@ -200,14 +205,27 @@ window.addEventListener("load", (event) => {
 	window.g = graphene
 	resize.pluck("width").toProperty().map((v) => v - 100).onValue(set(graphene.position,"x"))
 	carbon.position.x = 100
-	carbon.scale(0.9,0.9)
-	graphene.scale(0.9,0.9)
-	
 
-	center.onValue((center) => {
-		carbon.position.y = center.y
-		graphene.position.y = center.y
-	});
+	carbon.scale(0.8,0.8)
+	graphene.scale(0.8,0.8)
+
+	/*resize.map((size) => {
+		if(size.width > size.height){
+			return 1920/size.width
+		}else if(size.width < size.height){
+			return 1080/size.height
+		}else{
+			return 1500/size.width
+		}
+
+	}).onValue((val) => {
+		carbon.scale(val,val)
+		graphene.scale(val,val)
+	})*/
+
+
+
+
 
 
 	talk_text = new paper.PointText({
@@ -218,6 +236,41 @@ window.addEventListener("load", (event) => {
 		fontWeight: 'bold',
 		fontSize: font_size,
 		justification: "center"
+	});
+
+
+
+	g_text = new paper.PointText({
+		point: paper.view.center,
+		content: "Графен",
+		fillColor: 'white',
+		fontFamily: 'Courier New',
+		fontWeight: 'bold',
+		fontSize: font_size,
+		justification: "center"
+	});
+
+
+	c_text = new paper.PointText({
+		point: paper.view.center,
+		content: "Карбон",
+		fillColor: 'white',
+		fontFamily: 'Courier New',
+		fontWeight: 'bold',
+		fontSize: font_size,
+		justification: "center"
+	});
+	
+	resize.pluck("width").toProperty().map((v) => v - 100).onValue(set(g_text.position,"x"))
+
+	c_text.position.x = 100
+
+	center.onValue((center) => {
+		carbon.position.y = center.y - 100
+		graphene.position.y = center.y - 100
+		g_text.position.y = center.y + 200
+		c_text.position.y = center.y + 200
+
 	});
 
 	center.map((point) => new paper.Point(point.x, (point.y * 2) - 100)).onValue(set(talk_text, "point"))
