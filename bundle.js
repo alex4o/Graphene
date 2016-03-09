@@ -242,6 +242,7 @@
 		} else {
 			toggleCharacters(false);
 		}
+		_paper2.default.view.update(true);
 	
 		video = show(video);
 		console.log(video);
@@ -276,6 +277,9 @@
 			return v - 100;
 		}).onValue(set(graphene.position, "x"));
 		carbon.position.x = 100;
+		carbon.scale(0.9, 0.9);
+		graphene.scale(0.9, 0.9);
+	
 		center.onValue(function (center) {
 			carbon.position.y = center.y;
 			graphene.position.y = center.y;
@@ -288,11 +292,11 @@
 			fontFamily: 'Courier New',
 			fontWeight: 'bold',
 			fontSize: font_size,
-			justification: "rigth"
+			justification: "center"
 		});
 	
-		resize.map(function (size) {
-			return new _paper2.default.Point(size.width * 0.2, size.height - 100);
+		center.map(function (point) {
+			return new _paper2.default.Point(point.x, point.y * 2 - 100);
 		}).onValue(set(talk_text, "point"));
 	
 		//planet.position = paper.view.center;
