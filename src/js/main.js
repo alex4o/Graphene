@@ -162,6 +162,7 @@ window.next = (arg) => {
 	}else{
 		toggleCharacters(false)
 	}
+	paper.view.update(true)
 
 	video = show(video)
 	console.log(video)
@@ -199,11 +200,15 @@ window.addEventListener("load", (event) => {
 	window.g = graphene
 	resize.pluck("width").toProperty().map((v) => v - 100).onValue(set(graphene.position,"x"))
 	carbon.position.x = 100
+	carbon.scale(0.9,0.9)
+	graphene.scale(0.9,0.9)
+	
+
 	center.onValue((center) => {
 		carbon.position.y = center.y
 		graphene.position.y = center.y
-
 	});
+
 
 	talk_text = new paper.PointText({
 		point: paper.view.center,
@@ -212,10 +217,10 @@ window.addEventListener("load", (event) => {
 		fontFamily: 'Courier New',
 		fontWeight: 'bold',
 		fontSize: font_size,
-		justification: "rigth"
+		justification: "center"
 	});
 
-	resize.map((size) => new paper.Point(size.width * 0.2, size.height - 100)).onValue(set(talk_text, "point"))
+	center.map((point) => new paper.Point(point.x, (point.y * 2) - 100)).onValue(set(talk_text, "point"))
 
 	
 
