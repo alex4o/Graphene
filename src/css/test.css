@@ -6,20 +6,17 @@ body {
 	padding-top: 3%; 
 }
 
-.panel .panel-default {
-	background-color: rgba(0,0,0,0) !important;
-	color: white !important;
-
+video {
+	width: 100%;
 }
 
-.panel-heading {
 
-}
-
-.panel-body {
-	color: white !important;
-
-	background-color: rgba(0,0,0,0) !important;
+.alert_img
+{
+	position: fixed;
+	top: 0px;
+	left: 0px;
+	width: 100%;
 }
 
 @import url(https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cyborg/bootstrap.min.css);

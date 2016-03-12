@@ -94,8 +94,13 @@ var story = [
 		"scene": "end2"
 	},
 	{
-		"src": "vid/End.mp4",
-		"scene": "end_true"
+		"src": "vid/Background.mp4",
+		"scene": "end_true",
+		"next": "test"
+	},
+	{
+		"src": "vid/Background.mp4",
+		"scene": "test"
 	}	
 ]
 
@@ -185,7 +190,7 @@ export default class Story {
 		}
 	}
 
-	onAfter(scene){
+	onAfter(scene, fn){
 		if(this.exists(scene)){
 			this.scene(scene).onAfter = fn
 		}
@@ -201,14 +206,14 @@ export default class Story {
 
 	switchTo(scene){
 		if(scene != null){
-			if(scene.onAfter != null) scene.onAfter()
+			if(this.current.onAfter != null) this.current.onAfter()
 			console.log("Switching to scene:", scene)
 
 			this.current = this.scene(scene);
 			console.log(this.current)
 			if(this.current.onBefore != null) this.current.onBefore()
 
-			
+
 			if(this.current.dialogue != null){
 				this.dialogue.select(this.current.dialogue)
 			}

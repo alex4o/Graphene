@@ -8,6 +8,17 @@ import Atom from "kefir.atom"
 
 import R from "ramda"
 
+import c from "cassowary"
+
+import e from "./Element.mutation.js"
+
+var solver = new c.SimplexSolver()
+
+var windowWidth = new c.Variable({name: "width", value: window.innerWidth})
+var windowHeight = new c.Variable({name: "height", value: window.innerHeight})
+
+
+
 window.R = R
 window.p = paper
 
@@ -20,9 +31,7 @@ Kefir.Observable.prototype.pluck = function(prop) {
 
 let story = new Story();
 //import TabPanel from "./tabPanel.js";
-story.onBefore("end_true",() => {
-	window.location.href = "./test.html"
-})
+
 
 var canvas = null;
 var container = null;
@@ -46,6 +55,25 @@ var c_text = null;
 var timeout_id = 0;
 
 var main_button = null;
+
+
+story.onBefore("end_true",() => {
+	toggleCharacters(false)
+
+	window.must = false
+	graphene.visible = true
+	talk_text.visible = true
+
+
+	graphene.setPosition(paper.view.center)
+	talk_text.content = "А ти какво научи от всико това."	
+	paper.view.update(true)
+
+})
+
+story.onAfter("end_true",() => {
+	window.location.href = "./test.html"
+})
 
 var resize = Kefir.fromEvents(window, "resize").toProperty(() => null)
 	.map((e) => {return {height: window.innerHeight, width: window.innerWidth}})
@@ -74,8 +102,11 @@ function toggleCharacters(val){
 }
 
 function calculateTextPoint(n, N, center){
+	/* old way */
 	let coef = ((n+1)/(N/2 + 0.5))
 	return new paper.Point(center.x * coef, (center.y * 2) - 50);
+	
+	//return new paper.Point();
 }
 
 function calculateButtonSize(rect){
@@ -97,42 +128,49 @@ function showDialogue(){
 		var length = choices.length
 		bobjects = []
 
-		tobjects = _.map(choices, (choice, n) => {
-			var text = new paper.PointText({
-			//	point: point,
-				content: choice,
-				fillColor: '#000080',
-				fontFamily: 'Courier New',
-				fontWeight: 'bold',
-				fontSize: font_size,
-				justification: "center"
-			});
-
-
-
-			let size = center.map(center => calculateTextPoint(n, length, center))
-			
-			size.onValue(set(text, "point"))
-
-
-			let button = main_button.clone()
-
-			button.visible = true
-
-
-			size.onValue(val => {
-				button.setBounds(calculateButtonSize(text.getBounds()))
+			let width = 0;
+			tobjects = _.map(choices, (choice,n) => {
+				let text = new paper.PointText({
+				//	point: point,
+					content: choice,
+					fillColor: '#000080',
+					fontFamily: 'Courier New',
+					fontWeight: 'bold',
+					fontSize: font_size,
+					justification: "left"
+				});
+				text.onClick = () => window.next(n)
+				width += text.getBounds().width
+				return text
 			})
 
-			bobjects.push(button)
+			bobjects = _.map(tobjects, obj => {
+				let button = main_button.clone()
+				button.visible = true
+				return button
+			})
+
+			resize.onValue(size => {
+				let rem = size.width - width
+				let padding = rem/(tobjects.length + 1)
+				let cur = padding
+				for(let i = 0; i < bobjects.length; i++){
+					let text = tobjects[i];
+					let button = bobjects[i];
+					text.point = new paper.Point(cur, size.height - 50);
+					
+					let bounds = text.getBounds()
+					button.setBounds(calculateButtonSize(bounds))
+
+					cur += (bounds.width + padding)
+				}
+			})
+
+
 			paper.view.draw();
 
-			text.onClick = () => window.next(n)
-			return text
-		})
 
-
-		window.tob = tobjects
+			window.tob = tobjects
 
 	}else{
 		talk_text.content = choices.who +": "+ choices.say;
@@ -172,16 +210,18 @@ function show(current){
 
 }
 
+window.must = true
+
 window.next = (arg) => {
 	clearTimeout(timeout_id)
 	if(story.hasChoices() && arg == null){
 		return
 	}
 
-	story.next(arg)
 	_.forEach(tobjects, o => o.remove())
 	_.forEach(bobjects, o => o.remove())
 
+	story.next(arg)
 
 	if(story.hasDialogue()){
 		
@@ -189,7 +229,9 @@ window.next = (arg) => {
 		toggleCharacters(true)
 	
 	}else{
-		toggleCharacters(false)
+		if(window.must){
+			toggleCharacters(false)
+		}
 	}
 	paper.view.update(true)
 
@@ -212,11 +254,12 @@ window.addEventListener("load", (event) => {
 		canvas.width = size.width
 		canvas.height = size.height
 		paper.view.setViewSize(size.width, size.height);
-		paper.view.draw();
-		paper.view.update(true)
+
 //		_.map(tobjects, (obj, n) => {
 //			obj.point = calculateTextPoint(n, tobjects.length, paper.view.center)
 //		})
+		paper.view.draw();
+		paper.view.update(true)
 	})
 
 	//planet = new paper.Raster("./mercury.png")

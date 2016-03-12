@@ -3,14 +3,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import R from "ramda"
-import {Grid, Row, Col, Panel, Input, Button, Alert} from "react-bootstrap"
+import {Grid, Row, Col, Panel, Input, Button, Alert, Modal} from "react-bootstrap"
 
 require("../css/test.css");
 
 let questions = [
 	{
 		title: "",
-		text: "От какво е направен фрафена",
+		text: "От какво е направен графена",
 		answers: ["Въглерод", "Водород", "Натрий"],
 		correct: 0
 	},
@@ -82,8 +82,8 @@ class App extends React.Component
 		
 		super(props)
 		this.state = {
-			result: 0
-
+			result: 0,
+			videoModal: false
 		}
 
 	}
@@ -115,6 +115,12 @@ class App extends React.Component
 		}
 	}
 
+	openEnding(){
+		this.setState({videoModal: true},e => {
+			this.video.play()
+		})
+	}
+
 	result(res){
 		switch(res){
 			case 0:
@@ -124,14 +130,19 @@ class App extends React.Component
 				return (
 					<Alert bsStyle="danger">
 						Имате под 75% на теста
+						<img className="alert_img" src="./SadEnd.png" onClick={e => this.setState({result: 0})}/>
+
 					</Alert> )
 				break
 			case 2:
+				setTimeout(this.openEnding.bind(this),15000)
 				return ( 
 					<Alert bsStyle="success">
 						Браво вие преминахте теста
+						<img className="alert_img" src="./HappyEnd.png" onClick={this.openEnding.bind(this)}/>
+
 					</Alert> )
-					reak
+					break
 			case 3:
 				return (
 					<Alert bsStyle="warning">
@@ -146,6 +157,7 @@ class App extends React.Component
 	render(){
 		return(
 			<Grid>
+
 				<Row className="show-grid">
 					{this.renderQuestions()}
 					{this.result(this.state.result)}
@@ -153,6 +165,16 @@ class App extends React.Component
 
 					<Button onClick={this.checkAnswers.bind(this)}>Провери</Button>
 				</Row>
+				<Modal show={this.state.videoModal} onHide={e => {this.video.pause(); this.setState({videoModal: false, result: 0})}}  bsSize="large">
+					<Modal.Header closeButton>
+						<Modal.Title>Благодаря за вниманието</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<video src="vid/End.mp4" ref={e => this.video = e}></video>
+					</Modal.Body>
+				</Modal>
+				
+
 			</Grid>
 			)
 	}
