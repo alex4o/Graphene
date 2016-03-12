@@ -56,6 +56,7 @@ var timeout_id = 0;
 
 var main_button = null;
 
+var volume = 1;
 
 story.onBefore("end_true",() => {
 	toggleCharacters(false)
@@ -66,7 +67,7 @@ story.onBefore("end_true",() => {
 
 
 	graphene.setPosition(paper.view.center)
-	talk_text.content = "А ти какво научи от всико това."	
+	talk_text.content = "А ти какво научи от всико това?"	
 	paper.view.update(true)
 
 })
@@ -236,6 +237,8 @@ window.next = (arg) => {
 	paper.view.update(true)
 
 	video = show(video)
+	video.volume = volume
+
 	console.log(video)
 }
 
@@ -246,6 +249,25 @@ window.addEventListener("load", (event) => {
 
 	canvas = document.getElementById("drawSurf")
 	container = document.getElementById("container")
+
+
+	canvas.addEventListener("mousewheel", e => {
+
+		if(e.wheelDelta < 0){
+			volume -= 0.1
+			//down
+		}else{
+			volume += 0.1
+			//up
+		}
+
+		if(volume < 0){
+			volume = 0
+		}else if(volume > 1){
+			volume = 1
+		}
+		video.volume = volume
+	});
 
 	paper.setup(canvas)
 
