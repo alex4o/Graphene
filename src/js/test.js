@@ -10,32 +10,32 @@ require("../css/test.css");
 let questions = [
 	{
 		title: "",
-		text: "От какво е направен графена",
+		text: "На какво е разновидност графена?",
 		answers: ["Въглерод", "Водород", "Натрий"],
 		correct: 0
 	},
 	{
 		title: "",
-		text: "От колко атома е",
+		text: "От колко атома е създаден мулекулния строеж на графена?",
 		answers: ["3", "5", "6"],
 		correct: 2
 	},
 	{
 		title: "",
-		text: "Кога е открит",
-		answers: ["през 20 век", "началото на 21 век", "през 19 век"],
+		text: "Кога е открит?",
+		answers: ["По някое време през 20 век.", "09.2004", "2015"],
 		correct: 1
 	},
 	{
 		title: "",
-		text: "Кое свойство притежава графена",
-		answers: ["Слаба електропроводимост", "Изолатор", "Силна електропроводимост"],
+		text: "Кое свойство притежава графена?",
+		answers: ["Слаба електропроводимост.", "Изолатор.", "Силна електропроводимост."],
 		correct: 2
 	},
 	{
 		title: "",
-		text: "Графена по здрав ли е от карбона",
-		answers: ["да", "не"],
+		text: "Графена по-здрав ли е от карбона?",
+		answers: ["Да.", "Не."],
 		correct: 0
 	}
 ]
@@ -129,7 +129,7 @@ class App extends React.Component
 			case 1:
 				return (
 					<Alert bsStyle="danger">
-						Имате под 75% на теста
+						Имате под 75% на теста.
 						<img className="alert_img" src="./SadEnd.png" onClick={e => this.setState({result: 0})}/>
 
 					</Alert> )
@@ -138,7 +138,7 @@ class App extends React.Component
 				setTimeout(this.openEnding.bind(this),15000)
 				return ( 
 					<Alert bsStyle="success">
-						Браво вие преминахте теста
+						Браво вие преминахте теста!
 						<img className="alert_img" src="./HappyEnd.png" onClick={this.openEnding.bind(this)}/>
 
 					</Alert> )
@@ -167,7 +167,7 @@ class App extends React.Component
 				</Row>
 				<Modal show={this.state.videoModal} onHide={e => {this.video.pause(); this.setState({videoModal: false, result: 0})}}  bsSize="large">
 					<Modal.Header closeButton>
-						<Modal.Title>Благодаря за вниманието</Modal.Title>
+						<Modal.Title>Благодаря за вниманието!</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
 						<video src="vid/End.mp4" ref={e => this.video = e}></video>
