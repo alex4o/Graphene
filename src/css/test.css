@@ -1,0 +1,25 @@
+
+body {
+	background-image: url("./Background.jpg");
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	padding-top: 3%; 
+}
+
+.panel .panel-default {
+	background-color: rgba(0,0,0,0) !important;
+	color: white !important;
+
+}
+
+.panel-heading {
+
+}
+
+.panel-body {
+	color: white !important;
+
+	background-color: rgba(0,0,0,0) !important;
+}
+
+@import url(https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/cyborg/bootstrap.min.css);

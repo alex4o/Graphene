@@ -138,6 +138,10 @@ export default class Story {
 		return _.find(this.story, ["scene", name])
 	}
 
+	exists(scene){
+		return this.scene(scene) != null
+	}
+
 	choices(){
 		if(this.current.dialogue != null){
 			if(this.dialogue.hasChoices()){
@@ -167,40 +171,62 @@ export default class Story {
 		}
 	}
 
+	//events for the scene
+
+	onBefore(scene, fn){
+		if(this.exists(scene)){
+			this.scene(scene).onBefore = fn
+		}
+	}
+
+	offBefore(scene){
+		if(this.exists(scene)){
+			delete this.scene(scene).onBefore
+		}
+	}
+
+	onAfter(scene){
+		if(this.exists(scene)){
+			this.scene(scene).onAfter = fn
+		}
+	}
+
+	offAfetr(scene){
+		if(this.exists(scene)){
+			delete this.scene(scene).onAfter
+		}
+	}
+
+
+
+	switchTo(scene){
+		if(scene != null){
+			if(scene.onAfter != null) scene.onAfter()
+			console.log("Switching to scene:", scene)
+
+			this.current = this.scene(scene);
+			console.log(this.current)
+			if(this.current.onBefore != null) this.current.onBefore()
+
+			
+			if(this.current.dialogue != null){
+				this.dialogue.select(this.current.dialogue)
+			}
+		}
+	}
+
 	next(choice){
 		if(this.current.dialogue != null){
 			var scene = this.dialogue.next(choice)
-			if(scene != null){
-				console.log("Switching scene:", scene)
-				this.current = this.scene(scene);
-				if(this.current.dialogue != null){
-					this.dialogue.select(this.current.dialogue)
-				}
-				return;
-			}else{
-				return;
-			}
-		}
+			this.switchTo(scene)
 
-		console.log("Switching from: ", this.current)
 
-		if(this.current.next){
-			this.current = this.scene(this.current.next);
+			
 		}else{
-			if(arguments.length > 0 && this.current.choice){
-				if(choice <= this.current.choice.length){
-					this.current = this.scene(this.current.choice[choice].scene);
-				}else{
-					throw "This path does not exists"
-				}
-			}else{
-				throw "This transition to the next scene requires an argument"
-			}
+			this.switchTo(this.current.next)
+
 		}
 
-		if(this.current.dialogue != null){
-			this.dialogue.select(this.current.dialogue)
-		}
 
 	}
 }

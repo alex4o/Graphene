@@ -20,32 +20,9 @@ Kefir.Observable.prototype.pluck = function(prop) {
 
 let story = new Story();
 //import TabPanel from "./tabPanel.js";
-
-function componentDidMount(){
-	
-	this.pclick = 
-		this.pclick.subscribe((e) => {
-		if(story.current.src == "default"){
-			story.next();
-		}
-		//planet.remove();
-	});
-		
-	planet.onMouseEnter = (e) => {
-		planet.opacity = 0.5
-	}
-	
-	planet.onMouseLeave = (e) => {
-		planet.opacity = 1
-	}
-	
-	paper.view.setViewSize(window.innerWidth, window.innerHeight);
-	planet.position = paper.view.center;
-	console.log("WTF:", window, this);
-	
-
-}
-
+story.onBefore("end_true",() => {
+	window.location.href = "./test.html"
+})
 
 var canvas = null;
 var container = null;
@@ -56,13 +33,19 @@ var carbon = null;
 
 var video = null;
 
-var tobjects = null;
+var tobjects = [];
+var bobjects = [];
 var talk_text = null;
 
-var font_size = 20;
+var font_size = 22;
+
 
 var g_text = null;
 var c_text = null;
+
+var timeout_id = 0;
+
+var main_button = null;
 
 var resize = Kefir.fromEvents(window, "resize").toProperty(() => null)
 	.map((e) => {return {height: window.innerHeight, width: window.innerWidth}})
@@ -95,36 +78,75 @@ function calculateTextPoint(n, N, center){
 	return new paper.Point(center.x * coef, (center.y * 2) - 50);
 }
 
+function calculateButtonSize(rect){
+	let res_rect = R.clone(rect)
+	let margin = 10
+	res_rect.x -= margin/2
+	res_rect.y -= margin/2
+	res_rect.width += margin
+	res_rect.height += margin
+
+	return res_rect
+}
+
 function showDialogue(){
 	let choices = story.choices()
 	
 	if(_.isArray(choices)){
 		console.log(choices)
 		var length = choices.length
-		tobjects = _.map(choices, (choice, n) => {
+		bobjects = []
 
+		tobjects = _.map(choices, (choice, n) => {
 			var text = new paper.PointText({
 			//	point: point,
 				content: choice,
-				fillColor: 'white',
+				fillColor: '#000080',
 				fontFamily: 'Courier New',
 				fontWeight: 'bold',
 				fontSize: font_size,
 				justification: "center"
 			});
 
-			center.map((center) => calculateTextPoint(n, length, center)).onValue(set(text, "point"))
 
+
+			let size = center.map(center => calculateTextPoint(n, length, center))
+			
+			size.onValue(set(text, "point"))
+
+
+			let button = main_button.clone()
+
+			button.visible = true
+
+
+			size.onValue(val => {
+				button.setBounds(calculateButtonSize(text.getBounds()))
+			})
+
+			bobjects.push(button)
 			paper.view.draw();
+
 			text.onClick = () => window.next(n)
 			return text
 		})
+
+
+		window.tob = tobjects
+
 	}else{
 		talk_text.content = choices.who +": "+ choices.say;
+		let len = choices.say.length
+		let t = 0
+		if(len < 10) {
+			t = 5000
+		}else{
+			t = len * 200 
+		}
 
-		//setTimeout(1000,() => {
-
-		//})
+		timeout_id = setTimeout(() => {
+ 			window.next()
+		}, t)
 	}
 	paper.view.draw();
 
@@ -151,13 +173,15 @@ function show(current){
 }
 
 window.next = (arg) => {
-
+	clearTimeout(timeout_id)
 	if(story.hasChoices() && arg == null){
 		return
 	}
 
 	story.next(arg)
-	_.forEach(tobjects, (o) => o.remove())
+	_.forEach(tobjects, o => o.remove())
+	_.forEach(bobjects, o => o.remove())
+
 
 	if(story.hasDialogue()){
 		
@@ -184,7 +208,7 @@ window.addEventListener("load", (event) => {
 	paper.setup(canvas)
 
 
-	resize.onValue((size) => {
+	resize.onValue(size => {
 		canvas.width = size.width
 		canvas.height = size.height
 		paper.view.setViewSize(size.width, size.height);
@@ -203,7 +227,7 @@ window.addEventListener("load", (event) => {
 	carbon = new paper.Raster("./Carbon1.png")
 	graphene.scale(-1,1)
 	window.g = graphene
-	resize.pluck("width").toProperty().map((v) => v - 100).onValue(set(graphene.position,"x"))
+	resize.pluck("width").toProperty().map(v => v - 100).onValue(set(graphene.position,"x"))
 	carbon.position.x = 100
 
 	carbon.scale(0.8,0.8)
@@ -261,7 +285,14 @@ window.addEventListener("load", (event) => {
 		justification: "center"
 	});
 	
-	resize.pluck("width").toProperty().map((v) => v - 100).onValue(set(g_text.position,"x"))
+
+	talk_text.importSVG("button.svg", e => {
+		main_button = e
+		main_button.visible = false
+	})
+
+
+	resize.pluck("width").toProperty().map(v => v - 100).onValue(set(g_text.position,"x"))
 
 	c_text.position.x = 100
 
@@ -273,7 +304,7 @@ window.addEventListener("load", (event) => {
 
 	});
 
-	center.map((point) => new paper.Point(point.x, (point.y * 2) - 100)).onValue(set(talk_text, "point"))
+	center.map(point => new paper.Point(point.x, (point.y * 2) - 100)).onValue(set(talk_text, "point"))
 
 	
 
@@ -288,7 +319,6 @@ window.addEventListener("load", (event) => {
 
 	video = show()
 	toggleCharacters(false)
-
 	console.log("Loaded")
 }, false )
 
