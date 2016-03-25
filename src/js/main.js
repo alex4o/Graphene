@@ -1,5 +1,10 @@
 import _ from "lodash"; //because I can
+
 import paper from "paper";
+
+import {fabric} from "fabric-webpack";
+window.f = fabric
+
 import rx from "rx"
 import Story from "./story"
 
@@ -25,14 +30,14 @@ window.p = paper
 require("../css/global.css");
 
 Kefir.Observable.prototype.pluck = function(prop) {
-    return this.map(R.view(R.lensProp(prop)));
+	return this.map(R.view(R.lensProp(prop)));
 };
 
 
 let story = new Story();
 //import TabPanel from "./tabPanel.js";
 
-
+var fbc = null;
 var canvas = null;
 var container = null;
 
@@ -184,7 +189,7 @@ function showDialogue(){
 		}
 
 		timeout_id = setTimeout(() => {
- 			window.next()
+			window.next()
 		}, t)
 	}
 	paper.view.draw();
@@ -249,6 +254,7 @@ window.addEventListener("load", (event) => {
 
 	canvas = document.getElementById("drawSurf")
 	container = document.getElementById("container")
+	fbc = new fabric.Canvas(canvas);
 
 
 	canvas.addEventListener("mousewheel", e => {
@@ -268,35 +274,49 @@ window.addEventListener("load", (event) => {
 		}
 		video.volume = volume
 	});
-
-	paper.setup(canvas)
+	//paper.setup(canvas)
 
 
 	resize.onValue(size => {
 		canvas.width = size.width
 		canvas.height = size.height
-		paper.view.setViewSize(size.width, size.height);
+		fbc.setHeight(size.height);
+		fbc.setWidth(size.width);
+		//paper.view.setViewSize(size.width, size.height);
 
 //		_.map(tobjects, (obj, n) => {
 //			obj.point = calculateTextPoint(n, tobjects.length, paper.view.center)
 //		})
-		paper.view.draw();
-		paper.view.update(true)
+	//	paper.view.draw();
+	//	paper.view.update(true)
 	})
 
 	//planet = new paper.Raster("./mercury.png")
 
 
 
-	graphene = new paper.Raster("./Graphene.png")
-	carbon = new paper.Raster("./Carbon1.png")
-	graphene.scale(-1,1)
+	fabric.Image.fromURL("./Graphene.png", (oImg) => {
+		graphene = oImg
+		graphene.setScaleX(-1)
+		graphene.setScaleY(1)
 	window.g = graphene
-	resize.pluck("width").toProperty().map(v => v - 100).onValue(set(graphene.position,"x"))
+ 
+		fbc.add(oImg);
+	});
+
+
+	fabric.Image.fromURL("./Carbon1.png", (oImg) => {
+		carbon = oImg
+
+
+
+		fbc.add(oImg);
+	});
+
 	carbon.position.x = 100
 
-	carbon.scale(0.8,0.8)
-	graphene.scale(0.8,0.8)
+	//carbon.scale(0.8,0.8)
+	//graphene.scale(0.8,0.8)
 
 	/*resize.map((size) => {
 		if(size.width > size.height){
@@ -315,7 +335,7 @@ window.addEventListener("load", (event) => {
 
 
 
-
+/*
 
 	talk_text = new paper.PointText({
 		point: paper.view.center,
@@ -358,7 +378,7 @@ window.addEventListener("load", (event) => {
 
 
 	resize.pluck("width").toProperty().map(v => v - 100).onValue(set(g_text.position,"x"))
-
+*/
 	c_text.position.x = 100
 
 	center.onValue((center) => {
