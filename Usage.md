@@ -21,7 +21,7 @@
 
 Св-ва на кондензатор от графен:
 -------------------------------
-1. Еnergy density 85.6 Wh/kg (ionic electrolytes at voltages up to 4 V)
+1. Specific energy density 85.6 Wh/kg (ionic electrolytes at voltages < 4 V)
 2. Capacitance of 550 F/g
 3. 
 
