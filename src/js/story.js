@@ -1,4 +1,4 @@
-import _ from "lodash";
+import R from "ramda"
 import Dialogue from "./dialogue"
 
 var story = [
@@ -111,7 +111,7 @@ window.s = story
 var cache = []
 
 function createVideo(element){
-	var item = _.find(cache,["src", element.src])
+	var item = R.find(R.propEq("src", element.src))(cache)
 	if(item != null){
 		element.video = item.video
 	}else{
@@ -129,18 +129,19 @@ function createVideo(element){
 export default class Story {
 	constructor(){
 		this.story = story;
+		this.showDialogue = false;
 		this.dialogue = new Dialogue();
 		this.current = this.story[0];
-		_.forEach(this.story, createVideo)
+		this.story.forEach(createVideo)
 		console.log(cache)
 	}
 
 	defaultVideo(){
-		return _.find(cache,["src", "vid/Background.mp4"])
+		return R.find(R.propEq("src", "vid/Background.mp4"))(cache)
 	}
 
 	scene(name){
-		return _.find(this.story, ["scene", name])
+		return R.find(R.propEq("scene", name))(this.story)
 	}
 
 	exists(scene){
@@ -155,8 +156,13 @@ export default class Story {
 				return this.dialogue.say()
 			}
 		}
-
-		return _.map(this.current.choice, "show");
+		if(this.current.choice != null){
+			return this.current.choice.map(o => o.show)
+		}
+		else
+		{
+			return []
+		}
 	}
 
 	hasChoices(){
@@ -164,13 +170,17 @@ export default class Story {
 	}
 
 
+	setHasDialogue(bool /* bool */){
+		this.showDialogue = bool
+	}
+
 	hasDialogue(){
-		return this.current.dialogue != null
+		return this.showDialogue
 	}
 
 	neededVideos(){
 		if(this.current.choice){
-			return _.map(this.current.choice, (e) => this.scene(e.scene) )
+			return this.current.choice.map((e) => this.scene(e.scene))
 		}else{
 			return [ this.scene(this.current.next) ]
 		}
@@ -206,17 +216,24 @@ export default class Story {
 
 	switchTo(scene){
 		if(scene != null){
-			if(this.current.onAfter != null) this.current.onAfter()
-			console.log("Switching to scene:", scene)
+			if(this.current.onAfter != null){ // calls onAfter just before switching the video
+				this.current.onAfter()
+			}
 
-			this.current = this.scene(scene);
-			console.log(this.current)
-			if(this.current.onBefore != null) this.current.onBefore()
-
+			this.current = this.scene(scene); // switch the video with the next one
 
 			if(this.current.dialogue != null){
 				this.dialogue.select(this.current.dialogue)
+				this.showDialogue = true;
+			}else{
+				this.showDialogue = false;
 			}
+
+			if(this.current.onBefore != null){ // call onBefore for the the next video 
+				this.current.onBefore()
+			}
+
+
 		}
 	}
 
@@ -224,9 +241,7 @@ export default class Story {
 		if(this.current.dialogue != null){
 			var scene = this.dialogue.next(choice)
 			this.switchTo(scene)
-
-
-			
+		
 		}else{
 			this.switchTo(this.current.next)
 

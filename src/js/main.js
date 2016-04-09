@@ -1,10 +1,4 @@
-import _ from "lodash"; //because I can
-
 import paper from "paper";
-
-import {fabric} from "fabric-webpack";
-window.f = fabric
-
 import rx from "rx"
 import Story from "./story"
 
@@ -13,16 +7,7 @@ import Atom from "kefir.atom"
 
 import R from "ramda"
 
-import c from "cassowary"
-
 import e from "./Element.mutation.js"
-
-var solver = new c.SimplexSolver()
-
-var windowWidth = new c.Variable({name: "width", value: window.innerWidth})
-var windowHeight = new c.Variable({name: "height", value: window.innerHeight})
-
-
 
 window.R = R
 window.p = paper
@@ -30,14 +15,12 @@ window.p = paper
 require("../css/global.css");
 
 Kefir.Observable.prototype.pluck = function(prop) {
-	return this.map(R.view(R.lensProp(prop)));
+    return this.map(R.view(R.lensProp(prop)));
 };
 
 
 let story = new Story();
-//import TabPanel from "./tabPanel.js";
 
-var fbc = null;
 var canvas = null;
 var container = null;
 
@@ -47,8 +30,8 @@ var carbon = null;
 
 var video = null;
 
-var tobjects = [];
-var bobjects = [];
+var gobjects = [];
+
 var talk_text = null;
 
 var font_size = 22;
@@ -61,12 +44,13 @@ var timeout_id = 0;
 
 var main_button = null;
 
-var volume = 1;
+var volume = new Atom(0.5);
 
 story.onBefore("end_true",() => {
-	toggleCharacters(false)
 
-	window.must = false
+	story.showDialogue = true
+
+	toggleCharacters(false)
 	graphene.visible = true
 	talk_text.visible = true
 
@@ -77,7 +61,9 @@ story.onBefore("end_true",() => {
 
 })
 
-story.onAfter("end_true",() => {
+//gala --replace
+
+story.on("test",() => {
 	window.location.href = "./test.html"
 })
 
@@ -86,8 +72,6 @@ var resize = Kefir.fromEvents(window, "resize").toProperty(() => null)
 
 var center = resize.map(() => paper.view.center).toProperty(() => paper.view.center)
 
-window.c = center
-
 function set(obj, prop){
 	return (val) => {
 		obj[prop] = val
@@ -95,9 +79,6 @@ function set(obj, prop){
 }
 
 
-function end(){
-	window.next()
-}
 
 function toggleCharacters(val){
 	graphene.visible = val
@@ -105,14 +86,9 @@ function toggleCharacters(val){
 	talk_text.visible = val
 	g_text.visible = val
 	c_text.visible = val
-}
+	paper.view.draw()
+	paper.view.update(true)
 
-function calculateTextPoint(n, N, center){
-	/* old way */
-	let coef = ((n+1)/(N/2 + 0.5))
-	return new paper.Point(center.x * coef, (center.y * 2) - 50);
-	
-	//return new paper.Point();
 }
 
 function calculateButtonSize(rect){
@@ -129,56 +105,57 @@ function calculateButtonSize(rect){
 function showDialogue(){
 	let choices = story.choices()
 	
-	if(_.isArray(choices)){
+	if(R.isArrayLike(choices)){
 		console.log(choices)
 		var length = choices.length
-		bobjects = []
+		gobjects = []
 
-			let width = 0;
-			tobjects = _.map(choices, (choice,n) => {
-				let text = new paper.PointText({
-				//	point: point,
-					content: choice,
-					fillColor: '#000080',
-					fontFamily: 'Courier New',
-					fontWeight: 'bold',
-					fontSize: font_size,
-					justification: "left"
-				});
-				text.onClick = () => window.next(n)
-				width += text.getBounds().width
-				return text
-			})
+		let width = 0;
+		gobjects = choices.map((choice,n) => {
+			let group = new paper.Group()
 
-			bobjects = _.map(tobjects, obj => {
-				let button = main_button.clone()
-				button.visible = true
-				return button
-			})
+			let text = new paper.PointText({
+			//	point: point,
+				content: choice,
+				fillColor: '#000080',
+				fontFamily: 'Courier New',
+				fontWeight: 'bold',
+				fontSize: font_size,
+				justification: "left"
+			});
+			text.onClick = () => window.next(n)
 
-			resize.onValue(size => {
-				let rem = size.width - width
-				let padding = rem/(tobjects.length + 1)
-				let cur = padding
-				for(let i = 0; i < bobjects.length; i++){
-					let text = tobjects[i];
-					let button = bobjects[i];
-					text.point = new paper.Point(cur, size.height - 50);
-					
-					let bounds = text.getBounds()
-					button.setBounds(calculateButtonSize(bounds))
+			let button = main_button.clone()
+			button.visible = true
+			button.setBounds(calculateButtonSize(text.bounds))
 
-					cur += (bounds.width + padding)
-				}
-			})
+			group.addChild(button)
+			group.addChild(text)
 
+			width += group.getBounds().width
+
+			return group
+		})
+
+		resize.onValue(size => {
+			let rem = size.width - width
+			let padding = rem/(gobjects.length + 1)
+			let cur = padding
+			for(let i = 0; i < gobjects.length; i++){
+				let group = gobjects[i]
+				group.bounds.x = cur
+				group.bounds.y = size.height - 75
+				
+				cur += group.bounds.width + padding
+
+			}
 
 			paper.view.draw();
+		})
 
-
-			window.tob = tobjects
-
+		paper.view.draw();
 	}else{
+
 		talk_text.content = choices.who +": "+ choices.say;
 		let len = choices.say.length
 		let t = 0
@@ -189,7 +166,7 @@ function showDialogue(){
 		}
 
 		timeout_id = setTimeout(() => {
-			window.next()
+ 			window.next()
 		}, t)
 	}
 	paper.view.draw();
@@ -207,8 +184,7 @@ function show(current){
 		}
 	}
 
-	window.video = video;
-	video.addEventListener("ended", end);
+	video.addEventListener("ended", () => window.next());
 
 	container.appendChild(video)
 	video.play()
@@ -216,16 +192,13 @@ function show(current){
 
 }
 
-window.must = true
-
 window.next = (arg) => {
 	clearTimeout(timeout_id)
 	if(story.hasChoices() && arg == null){
 		return
 	}
 
-	_.forEach(tobjects, o => o.remove())
-	_.forEach(bobjects, o => o.remove())
+	gobjects.forEach(o => o.remove())
 
 	story.next(arg)
 
@@ -235,107 +208,64 @@ window.next = (arg) => {
 		toggleCharacters(true)
 	
 	}else{
-		if(window.must){
-			toggleCharacters(false)
-		}
+		toggleCharacters(false)
 	}
 	paper.view.update(true)
 
 	video = show(video)
-	video.volume = volume
+	video.volume = volume.get()
 
 	console.log(video)
 }
 
-
+const volumeModifier = 0.05
 
 window.addEventListener("load", (event) => {
 	console.log("Loading")
 
 	canvas = document.getElementById("drawSurf")
 	container = document.getElementById("container")
-	fbc = new fabric.Canvas(canvas);
 
+	Kefir.fromEvents(canvas, "mousewheel").map(e => e.wheelDelta < 0 ? -volumeModifier : volumeModifier).onValue(mod => {
+		volume.modify(old => {
+			let volume = old + mod
+			if(volume < 0){
+				volume = 0
+			}else if(volume > 1){
+				volume = 1
+			}
+			return volume
+		})
 
-	canvas.addEventListener("mousewheel", e => {
+	})
 
-		if(e.wheelDelta < 0){
-			volume -= 0.1
-			//down
-		}else{
-			volume += 0.1
-			//up
-		}
+	paper.setup(canvas)
 
-		if(volume < 0){
-			volume = 0
-		}else if(volume > 1){
-			volume = 1
-		}
-		video.volume = volume
-	});
-	//paper.setup(canvas)
-
+	volume.onValue(vol => {
+		if(video != null)
+			video.volume = vol
+	})
 
 	resize.onValue(size => {
 		canvas.width = size.width
 		canvas.height = size.height
-		fbc.setHeight(size.height);
-		fbc.setWidth(size.width);
-		//paper.view.setViewSize(size.width, size.height);
+		paper.view.setViewSize(size.width, size.height);
 
-//		_.map(tobjects, (obj, n) => {
-//			obj.point = calculateTextPoint(n, tobjects.length, paper.view.center)
-//		})
-	//	paper.view.draw();
-	//	paper.view.update(true)
+		paper.view.draw();
+		paper.view.update(true)
 	})
 
 	//planet = new paper.Raster("./mercury.png")
 
-
-
-	fabric.Image.fromURL("./Graphene.png", (oImg) => {
-		graphene = oImg
-		graphene.setScaleX(-1)
-		graphene.setScaleY(1)
-	window.g = graphene
- 
-		fbc.add(oImg);
-	});
-
-
-	fabric.Image.fromURL("./Carbon1.png", (oImg) => {
-		carbon = oImg
-
-
-
-		fbc.add(oImg);
-	});
-
+	graphene = new paper.Raster("./Graphene.png")
+	carbon = new paper.Raster("./Carbon1.png")
+	graphene.scale(-1,1)
+	
+	resize.pluck("width").toProperty().map(v => v - 100).onValue(set(graphene.position,"x"))
 	carbon.position.x = 100
 
-	//carbon.scale(0.8,0.8)
-	//graphene.scale(0.8,0.8)
-
-	/*resize.map((size) => {
-		if(size.width > size.height){
-			return 1920/size.width
-		}else if(size.width < size.height){
-			return 1080/size.height
-		}else{
-			return 1500/size.width
-		}
-
-	}).onValue((val) => {
-		carbon.scale(val,val)
-		graphene.scale(val,val)
-	})*/
-
-
-
-
-/*
+	carbon.scale(0.8,0.8)
+	graphene.scale(0.8,0.8)
 
 	talk_text = new paper.PointText({
 		point: paper.view.center,
@@ -347,8 +277,6 @@ window.addEventListener("load", (event) => {
 		justification: "center"
 	});
 
-
-
 	g_text = new paper.PointText({
 		point: paper.view.center,
 		content: "Графен",
@@ -358,7 +286,6 @@ window.addEventListener("load", (event) => {
 		fontSize: font_size,
 		justification: "center"
 	});
-
 
 	c_text = new paper.PointText({
 		point: paper.view.center,
@@ -378,7 +305,7 @@ window.addEventListener("load", (event) => {
 
 
 	resize.pluck("width").toProperty().map(v => v - 100).onValue(set(g_text.position,"x"))
-*/
+
 	c_text.position.x = 100
 
 	center.onValue((center) => {
@@ -396,7 +323,6 @@ window.addEventListener("load", (event) => {
 	//planet.position = paper.view.center;
 	
 	paper.view.onMouseDown = () => {
-		console.log("Everywhere click")
 		window.next()
 	}
 	

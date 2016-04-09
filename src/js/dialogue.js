@@ -1,4 +1,4 @@
-import _ from "lodash";
+import R from "ramda"
 
 var participants = [
 	"Graphene",
@@ -244,7 +244,7 @@ export default class Dialogue {
 	}
 
 	select(name){
-		this.currentDialogue = _.find(this.dialogue, ["name", name])
+		this.currentDialogue = R.find(R.propEq("name", name))(this.dialogue)
 		this.currentPhrase = this.currentDialogue.array[0]
 	}
 
@@ -254,7 +254,7 @@ export default class Dialogue {
 
 
 	choices(){
-		return _.map(this.currentPhrase.answer, "say");
+		return this.currentPhrase.answer.map(o => o.say);
 	}
 
 	hasChoices(){

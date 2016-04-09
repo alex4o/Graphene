@@ -2,9 +2,13 @@ var autoprefixer	= require('autoprefixer');
 var precss			= require('precss');
 var lost 			= require('lost');
 var cssnext 		= require('postcss-cssnext');
+var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 
 module.exports = {
-	entry: {main: "./js/main.js", test: "./js/test.js"},
+	entry: {
+		main: "./js/main.js", 
+		test: "./js/test.js"
+	},
 	devtool: 'source-map',
 	output: {
 		path: "./out",
@@ -33,6 +37,9 @@ module.exports = {
 			}
 		]
 	},
+	plugins: [
+        new CommonsChunkPlugin("commons.chunk.js")
+    ],
 	postcss: function () {
 		return {
 			defaults: [autoprefixer, precss, lost, cssnext],

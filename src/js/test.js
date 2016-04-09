@@ -40,6 +40,11 @@ let questions = [
 	}
 ]
 
+class TestMangler
+{
+	
+}
+
 class Quetion extends React.Component
 {
 	renderAnswers(){
