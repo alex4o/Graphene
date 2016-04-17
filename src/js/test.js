@@ -107,7 +107,7 @@ class App extends React.Component
 		this.state = {
 			result: 0,
 			videoModal: false,
-			questions: TestMangler(questions,4)
+			questions: TestMangler(questions, 4)
 		}
 
 	}
@@ -121,16 +121,16 @@ class App extends React.Component
 	checkAnswers(){
 		
 		let correct = 0
-		for(let i in _.range(0, questions.length)){
+		for(let i in _.range(0, this.state.questions.length)){
 			if(this.state[i] == null){
 				this.setState({ result: 3 })
 				return
 			}
-			if(this.state[i] == questions[i].correct){
+			if(this.state[i] == this.state.questions[i].correct){
 				correct += 1
 			}
 		}
-		var coef = correct/questions.length
+		var coef = correct/this.state.questions.length
 		console.log(coef)
 		if(coef < (1/4)){
 			this.setState({ result: 1 })
