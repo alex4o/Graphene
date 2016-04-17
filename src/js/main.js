@@ -1,4 +1,4 @@
-import paper from "paper";
+import paper from "paper"
 import rx from "rx"
 import Story from "./story"
 
@@ -15,7 +15,7 @@ window.p = paper
 require("../css/global.css");
 
 Kefir.Observable.prototype.pluck = function(prop) {
-    return this.map(R.view(R.lensProp(prop)));
+	return this.map(R.view(R.lensProp(prop)));
 };
 
 
@@ -63,7 +63,7 @@ story.onBefore("end_true",() => {
 
 //gala --replace
 
-story.on("test",() => {
+story.onBefore("test",() => {
 	window.location.href = "./test.html"
 })
 
@@ -76,6 +76,87 @@ function set(obj, prop){
 	return (val) => {
 		obj[prop] = val
 	}
+}
+
+window.createVolumeCtrl = () => {
+	var size = {
+		x: 20,
+		y: 20,
+		w: 60,
+	}
+	size.h = 3*size.w
+
+	var path = {
+		mw: 23, // margin width,x
+		mh: 15 // margin height,y
+	}
+	var volCtrlGroup = new paper.Group();
+
+	let rect_out_box = new paper.Rectangle(size.x,size.y, size.w, size.h)
+	var box = new paper.Shape.Rectangle(rect_out_box)
+	box.fillColor = "black"
+
+	volCtrlGroup.addChild(box)
+
+	let rect_blue_path = new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), (size.h - 20) - (path.mh*2))
+	var path_blue = new paper.Shape.Rectangle(rect_blue_path)
+	path_blue.fillColor = "#000080"
+
+	volCtrlGroup.addChild(path_blue)
+
+
+	var vol = ((volume.get() * 100) | 0)
+
+
+	let rect_white_path = new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), (((size.h - 20) - (path.mh*2)) * (1 - volume.get())) | 0)
+	var path_white = new paper.Shape.Rectangle(rect_white_path)
+	path_white.fillColor = "white"
+
+	volCtrlGroup.addChild(path_white)
+
+
+	let text = new paper.PointText({
+		point: new paper.Point(size.x + (size.w/2), size.w + ((size.h - 25) - (path.mh*2))),
+		content: vol + "%",
+		fillColor: "white",
+		fontFamily: "Sans Serif",
+		fontWeight: "bold",
+		fontSize: 13,
+		justification: "center"
+	})
+
+	volCtrlGroup.addChild(text) 
+
+	volCtrlGroup.visible = false
+
+	window.vcg = volCtrlGroup
+
+	var black_line = new paper.Shape.Rectangle(new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), 1))
+	black_line.fillColor = "black"
+	
+	volume.onValue((value) => {
+		volCtrlGroup.visible = true
+		clearTimeout(window.vol_timout)
+
+		let vol = ((value * 100) | 0)
+		let bounds = new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), (((size.h - 20) - (path.mh*2)) * (1 - value)) | 0)
+
+		if(bounds.height < 1) {
+			bounds.height = 1;
+		}
+
+		path_white.setBounds(bounds)
+		text.content = vol + "%"
+		paper.view.draw()
+
+		window.vol_timout = setTimeout(() => {
+			volCtrlGroup.visible = false
+			paper.view.draw()
+		}, 500)
+	})
+
+
+	paper.view.draw()
 }
 
 
@@ -106,23 +187,22 @@ function showDialogue(){
 	let choices = story.choices()
 	
 	if(R.isArrayLike(choices)){
-		console.log(choices)
-		var length = choices.length
+	//	console.log(choices)
 		gobjects = []
 
-		let width = 0;
+		let width = 0
 		gobjects = choices.map((choice,n) => {
 			let group = new paper.Group()
 
 			let text = new paper.PointText({
 			//	point: point,
 				content: choice,
-				fillColor: '#000080',
-				fontFamily: 'Courier New',
-				fontWeight: 'bold',
+				fillColor: "#000080",
+				fontFamily: "Courier New",
+				fontWeight: "bold",
 				fontSize: font_size,
 				justification: "left"
-			});
+			})
 			text.onClick = () => window.next(n)
 
 			let button = main_button.clone()
@@ -150,13 +230,13 @@ function showDialogue(){
 
 			}
 
-			paper.view.draw();
+			paper.view.draw()
 		})
 
-		paper.view.draw();
+		paper.view.draw()
 	}else{
 
-		talk_text.content = choices.who +": "+ choices.say;
+		talk_text.content = choices.who +": "+ choices.say
 		let len = choices.say.length
 		let t = 0
 		if(len < 10) {
@@ -166,17 +246,17 @@ function showDialogue(){
 		}
 
 		timeout_id = setTimeout(() => {
- 			window.next()
+			window.next()
 		}, t)
 	}
-	paper.view.draw();
+	paper.view.draw()
 
 }
 
 function show(current){
 	let video = story.current.video
 	if(video == current){
-		return video;
+		return video
 	}else{
 		if(current){
 			console.log("Removeing: ", video)
@@ -184,7 +264,7 @@ function show(current){
 		}
 	}
 
-	video.addEventListener("ended", () => window.next());
+	video.addEventListener("ended", () => window.next())
 
 	container.appendChild(video)
 	video.play()
@@ -330,6 +410,9 @@ window.addEventListener("load", (event) => {
 
 	video = show()
 	toggleCharacters(false)
+	
+	createVolumeCtrl()
+
 	console.log("Loaded")
 }, false )
 

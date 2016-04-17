@@ -2,8 +2,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import R from "ramda"
+import _ from "lodash"
+
 import {Grid, Row, Col, Panel, Input, Button, Alert, Modal} from "react-bootstrap"
+
+var math = require('mathjs'); // TODO: remove if unused
 
 require("../css/test.css");
 
@@ -40,9 +43,11 @@ let questions = [
 	}
 ]
 
-class TestMangler
-{
-	
+function TestMangler(questions, count){ // the function that randomizes the questions
+	if(count > questions.length){
+		throw "count can not be more then the length of questions"
+	}
+	return _.shuffle(questions).slice(0, count)
 }
 
 class Quetion extends React.Component
@@ -70,7 +75,7 @@ class Quetion extends React.Component
 
 	render(){
 		return(
-		<Panel header={"Върпос " + this.props.title}>
+		<Panel header={"Въпрос " + this.props.title}>
 			{this.props.question.text}
 			<Row>
 				{this.renderAnswers()}
@@ -88,19 +93,22 @@ class App extends React.Component
 		super(props)
 		this.state = {
 			result: 0,
-			videoModal: false
+			videoModal: false,
+			questions: TestMangler(questions,4)
 		}
 
 	}
 
 	renderQuestions(){
-		return questions.map((e, i) => <Quetion key={i} index={i} question={e} title={(i + 1)} onValue={v => this.setState(v)}/>)
+		return this.state.questions.map((e, i) => <Quetion key={i} index={i} question={e} title={(i + 1)} onValue={v => this.setState(v)} />)
 	}
 
+// problem with the sublime theme fix /
+
 	checkAnswers(){
-		console.log("Checking answers")
+		
 		let correct = 0;
-		for(let i in R.range(0,questions.length)){
+		for(let i in _.range(0, questions.length)){
 			if(this.state[i] == null){
 				this.setState({ result: 3 })
 				return
@@ -111,7 +119,7 @@ class App extends React.Component
 		}
 		var coef = correct/questions.length
 		console.log(coef)
-		if(coef < (75/100)){
+		if(coef < (1/4)){
 			this.setState({ result: 1 })
 
 		}else{

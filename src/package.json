@@ -21,6 +21,7 @@
     "kefir.atom": "^1.1.4",
     "lodash": "^4.5.1",
     "lost": "^6.6.3",
+    "mathjs": "^3.1.4",
     "paper": "paperjs/paper.js",
     "postcss": "^5.0.14",
     "postcss-cssnext": "^2.4.0",
@@ -35,7 +36,9 @@
     "url-loader": "^0.5.7",
     "webpack": "^1.12.11"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint-plugin-react": "^4.3.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "webpack"
