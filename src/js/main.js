@@ -1,5 +1,4 @@
 import paper from "paper"
-import rx from "rx"
 import Story from "./story"
 
 import {Kefir} from "kefir"
@@ -7,44 +6,44 @@ import Atom from "kefir.atom"
 
 import R from "ramda"
 
-import e from "./Element.mutation.js"
+require("./Element.mutation.js")
 
 window.R = R
 window.p = paper
 
-require("../css/global.css");
+require("../css/global.css")
 
 Kefir.Observable.prototype.pluck = function(prop) {
-	return this.map(R.view(R.lensProp(prop)));
-};
+	return this.map(R.view(R.lensProp(prop)))
+}
 
 
-let story = new Story();
+let story = new Story()
 
-var canvas = null;
-var container = null;
+var canvas = null
+var container = null
 
 //var planet = null;
-var graphene = null;
-var carbon = null;
+var graphene = null
+var carbon = null
 
-var video = null;
+var video = null
 
-var gobjects = [];
+var gobjects = []
 
-var talk_text = null;
+var talk_text = null
 
-var font_size = 22;
+var font_size = 22
 
 
-var g_text = null;
-var c_text = null;
+var g_text = null
+var c_text = null
 
-var timeout_id = 0;
+var timeout_id = 0
 
-var main_button = null;
+var main_button = null
 
-var volume = new Atom(0.5);
+var volume = new Atom(0.5)
 
 story.onBefore("end_true",() => {
 
@@ -68,7 +67,7 @@ story.onBefore("test",() => {
 })
 
 var resize = Kefir.fromEvents(window, "resize").toProperty(() => null)
-	.map((e) => {return {height: window.innerHeight, width: window.innerWidth}})
+	.map(() => {return {height: window.innerHeight, width: window.innerWidth}})
 
 var center = resize.map(() => paper.view.center).toProperty(() => paper.view.center)
 
@@ -82,7 +81,7 @@ window.createVolumeCtrl = () => {
 	var size = {
 		x: 20,
 		y: 20,
-		w: 60,
+		w: 60
 	}
 	size.h = 3*size.w
 
@@ -90,7 +89,7 @@ window.createVolumeCtrl = () => {
 		mw: 23, // margin width,x
 		mh: 15 // margin height,y
 	}
-	var volCtrlGroup = new paper.Group();
+	var volCtrlGroup = new paper.Group()
 
 	let rect_out_box = new paper.Rectangle(size.x,size.y, size.w, size.h)
 	var box = new paper.Shape.Rectangle(rect_out_box)
@@ -142,7 +141,7 @@ window.createVolumeCtrl = () => {
 		let bounds = new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), (((size.h - 20) - (path.mh*2)) * (1 - value)) | 0)
 
 		if(bounds.height < 1) {
-			bounds.height = 1;
+			bounds.height = 1
 		}
 
 		path_white.setBounds(bounds)
@@ -158,8 +157,6 @@ window.createVolumeCtrl = () => {
 
 	paper.view.draw()
 }
-
-
 
 function toggleCharacters(val){
 	graphene.visible = val

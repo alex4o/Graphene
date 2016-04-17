@@ -12,7 +12,7 @@ module.exports = {
 	devtool: 'source-map',
 	output: {
 		path: "./out",
-		filename: "[name].bundle.js", 
+		filename: "[name].bundle.js"
 	},
 	module: {
 		loaders: [
@@ -38,7 +38,9 @@ module.exports = {
 		]
 	},
 	plugins: [
-        new CommonsChunkPlugin("commons.chunk.js")
+        new CommonsChunkPlugin("commons.chunk.js"),
+        new webpack.optimize.DedupePlugin()
+
     ],
 	postcss: function () {
 		return {
