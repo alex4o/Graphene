@@ -142,6 +142,7 @@ class App extends React.Component
 	}
 
 	openEnding(){
+		clearTimeout(this.oet)
 		this.setState({videoModal: true}, () => {
 			this.video.play()
 		})
@@ -158,7 +159,7 @@ class App extends React.Component
 					<img className="alert_img" src="./SadEnd.png" onClick={() => this.setState({result: 0})}/>
 				</Alert> )
 		case 2:
-			setTimeout(this.openEnding.bind(this),15000)
+			this.oet = setTimeout(this.openEnding.bind(this),10000)
 			
 			return ( 
 				<Alert bsStyle="success">
@@ -201,6 +202,6 @@ class App extends React.Component
 	}
 }
 
-window.addEventListener("load", (event) => {
-	ReactDOM.render(<App/>, document.getElementById("app-root"));
-});
+window.addEventListener("load", () => {
+	ReactDOM.render(<App/>, document.getElementById("app-root"))
+})
