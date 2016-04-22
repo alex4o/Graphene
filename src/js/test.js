@@ -51,13 +51,14 @@ function TestMangler(questions, count){ // the function that randomizes the ques
 
 	let shuffled = _.shuffle(questions).slice(0, count)
 
-	for(let i in shuffled){
+/*	for(let i in shuffled){
 		let answers = shuffled[i].answers.map(i => new Object({text: i, correct: false}))
 		answers[shuffled[i].correct].correct = true
 		let sha = _.shuffle(answers) // shuffled answers (sha)
 		shuffled[i].answers = sha.map(e => e.text)
 		shuffled[i].correct = sha.reduce((p, c, i) => c.correct ? i : p)
-	}
+}
+*/
 
 	return shuffled
 
