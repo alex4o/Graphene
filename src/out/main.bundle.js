@@ -63,7 +63,7 @@ webpackJsonp([0],[
 	
 	story.onBefore("end_true", function () {
 	
-		story.showDialogue = true;
+		story.showDialogue = false;
 	
 		toggleCharacters(false);
 		graphene.visible = true;
@@ -150,6 +150,8 @@ webpackJsonp([0],[
 	
 		var black_line = new _paper2.default.Shape.Rectangle(new _paper2.default.Rectangle(size.x + path.mw, size.y + path.mh, size.w - path.mw * 2, 1));
 		black_line.fillColor = "black";
+	
+		volCtrlGroup.addChild(tblack_line);
 	
 		volume.onValue(function (value) {
 			volCtrlGroup.visible = true;

@@ -47,7 +47,7 @@ var volume = new Atom(0.5)
 
 story.onBefore("end_true",() => {
 
-	story.showDialogue = true
+	story.showDialogue = false
 
 	toggleCharacters(false)
 	graphene.visible = true
@@ -132,7 +132,9 @@ window.createVolumeCtrl = () => {
 
 	var black_line = new paper.Shape.Rectangle(new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), 1))
 	black_line.fillColor = "black"
-	
+
+	volCtrlGroup.addChild(tblack_line) 
+
 	volume.onValue((value) => {
 		volCtrlGroup.visible = true
 		clearTimeout(window.vol_timout)
