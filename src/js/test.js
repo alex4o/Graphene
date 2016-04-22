@@ -133,7 +133,7 @@ class App extends React.Component
 		}
 		var coef = correct/this.state.questions.length
 		console.log(coef)
-		if(coef < (1/4)){
+		if(coef < (3/4)){
 			this.setState({ result: 1 })
 
 		}else{
