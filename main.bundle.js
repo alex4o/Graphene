@@ -61,10 +61,12 @@ webpackJsonp([0],[
 	
 	var volume = new _kefir3.default(0.5);
 	
+	var guz = false;
+	
 	story.onBefore("end_true", function () {
 	
 		story.showDialogue = false;
-	
+		guz = true;
 		toggleCharacters(false);
 		graphene.visible = true;
 		talk_text.visible = true;
@@ -301,13 +303,13 @@ webpackJsonp([0],[
 		});
 	
 		story.next(arg);
-	
-		if (story.hasDialogue()) {
-	
-			showDialogue();
-			toggleCharacters(true);
-		} else {
-			toggleCharacters(false);
+		if (!guz) {
+			if (story.hasDialogue()) {
+				showDialogue();
+				toggleCharacters(true);
+			} else {
+				toggleCharacters(false);
+			}
 		}
 		_paper2.default.view.update(true);
 	
