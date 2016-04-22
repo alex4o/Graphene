@@ -45,10 +45,12 @@ var main_button = null
 
 var volume = new Atom(0.5)
 
+var guz = false
+
 story.onBefore("end_true",() => {
 
 	story.showDialogue = false
-
+	guz = true
 	toggleCharacters(false)
 	graphene.visible = true
 	talk_text.visible = true
@@ -280,14 +282,13 @@ window.next = (arg) => {
 	gobjects.forEach(o => o.remove())
 
 	story.next(arg)
-
-	if(story.hasDialogue()){
-		
-		showDialogue()
-		toggleCharacters(true)
-	
-	}else{
-		toggleCharacters(false)
+	if(!guz){
+		if(story.hasDialogue()){
+			showDialogue()
+			toggleCharacters(true)
+		}else{
+			toggleCharacters(false)
+		}
 	}
 	paper.view.update(true)
 
