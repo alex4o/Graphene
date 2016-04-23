@@ -72,7 +72,7 @@ webpackJsonp([0],[
 		talk_text.visible = true;
 	
 		graphene.setPosition(_paper2.default.view.center);
-		talk_text.content = "А ти какво научи от всико това?";
+		talk_text.content = "А ти какво научи от всичко това?";
 		_paper2.default.view.update(true);
 	});
 	
