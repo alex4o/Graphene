@@ -57,7 +57,7 @@ story.onBefore("end_true",() => {
 
 
 	graphene.setPosition(paper.view.center)
-	talk_text.content = "А ти какво научи от всико това?"	
+	talk_text.content = "А ти какво научи от всичко това?"	
 	paper.view.update(true)
 
 })
