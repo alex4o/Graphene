@@ -14,6 +14,8 @@
     "babel-preset-stage-0": "^6.3.13",
     "belle": "^2.0.4",
     "css-loader": "^0.23.1",
+    "electron": "^0.4.1",
+    "electron-prebuilt": "^0.37.7",
     "elemental": "^0.5.13",
     "fabric-webpack": "^1.6.0-rc.1",
     "file-loader": "^0.8.5",
@@ -37,6 +39,7 @@
     "webpack": "^1.12.11"
   },
   "devDependencies": {
+    "electron-packager": "^7.0.1",
     "eslint-plugin-react": "^4.3.0"
   },
   "scripts": {
@@ -44,7 +47,7 @@
     "compile": "webpack"
   },
   "repository": {
-  " type": "git",
+    " type": "git",
     "url": "https://github.com/alex4o/Graphene.git"
   },
   "author": "",
