@@ -1,7 +1,7 @@
-var autoprefixer	= require('autoprefixer')
-var precss			= require('precss')
-var lost 			= require('lost')
-var cssnext 		= require('postcss-cssnext')
+//var autoprefixer	= require("autoprefixer")
+// var precss			= require("precss")
+// var lost 			= require("lost")
+// var cssnext 		= require("postcss-cssnext")
 var webpack 		= require("webpack")
 
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin")
@@ -11,7 +11,7 @@ module.exports = {
 		main: "./js/main.js", 
 		test: "./js/test.js"
 	},
-	devtool: 'source-map',
+	devtool: "source-map",
 	output: {
 		path: "./out",
 		filename: "[name].bundle.js"
@@ -21,11 +21,11 @@ module.exports = {
 			{ 
 				test: /\.js$/,
 				exclude: /node_modules/,
-				loader: 'babel',
+				loader: "babel",
 				query: {
 					cacheDirectory: true,
-					plugins: ['transform-runtime'],
-					presets: ['es2015', 'stage-0', 'react'],
+					plugins: ["transform-runtime"],
+					presets: ["es2015", "stage-0", "react"]
 				}
 
 			},
@@ -35,22 +35,22 @@ module.exports = {
 			},
 			{
 				test: /\.(eot|woff|woff2|ttf|svg|png|jpg)$/,
-				loader: 'file-loader'
+				loader: "file-loader"
 			}
 		]
 	},
 	plugins: [
 		new CommonsChunkPlugin("commons.chunk.js"),
 		new webpack.optimize.DedupePlugin()
-    ],
+	],
 	/*postcss: function () {
 		return {
 			defaults: [autoprefixer, precss, lost, cssnext],
-			cleaner:  [autoprefixer({ browsers: ['last 1 version'] })]
+			cleaner:  [autoprefixer({ browsers: ["last 1 version"] })]
 		};
 	},*/
 	resolve: {
-		modulesDirectories: ["./node_modules"],
+		modulesDirectories: ["./node_modules"]
 	}
-	//,plugins: [/*new EncodingPlugin('utf-8'),*/ new BomPlugin(true)]
+	//,plugins: [/*new EncodingPlugin("utf-8"),*/ new BomPlugin(true)]
 }

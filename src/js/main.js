@@ -198,7 +198,7 @@ function showDialogue(){
 			let text = new paper.PointText({
 			//	point: point,
 				content: choice,
-				fillColor: "#000080",
+				fillColor: "#AEE1F9",
 				fontFamily: "Helvetica",
 				fontWeight: "bold",
 				fontSize: font_size,
