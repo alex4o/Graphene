@@ -215,7 +215,7 @@ webpackJsonp([0],[
 					var text = new _paper2.default.PointText({
 						//	point: point,
 						content: choice,
-						fillColor: "#000080",
+						fillColor: "#AEE1F9",
 						fontFamily: "Helvetica",
 						fontWeight: "bold",
 						fontSize: font_size,
