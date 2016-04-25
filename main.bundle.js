@@ -153,7 +153,7 @@ webpackJsonp([0],[
 		var black_line = new _paper2.default.Shape.Rectangle(new _paper2.default.Rectangle(size.x + path.mw, size.y + path.mh, size.w - path.mw * 2, 1));
 		black_line.fillColor = "black";
 	
-		volCtrlGroup.addChild(tblack_line);
+		volCtrlGroup.addChild(black_line);
 	
 		volume.onValue(function (value) {
 			volCtrlGroup.visible = true;
@@ -216,7 +216,7 @@ webpackJsonp([0],[
 						//	point: point,
 						content: choice,
 						fillColor: "#000080",
-						fontFamily: "Courier New",
+						fontFamily: "Helvetica",
 						fontWeight: "bold",
 						fontSize: font_size,
 						justification: "left"
@@ -321,7 +321,7 @@ webpackJsonp([0],[
 	
 	var volumeModifier = 0.05;
 	
-	window.addEventListener("load", function (event) {
+	window.addEventListener("load", function () {
 		console.log("Loading");
 	
 		canvas = document.getElementById("drawSurf");
@@ -373,9 +373,9 @@ webpackJsonp([0],[
 		talk_text = new _paper2.default.PointText({
 			point: _paper2.default.view.center,
 			//	content: choices.who +": "+ choices.say,
-			fillColor: 'white',
-			fontFamily: 'Courier New',
-			fontWeight: 'bold',
+			fillColor: "white",
+			fontFamily: "Courier New",
+			fontWeight: "bold",
 			fontSize: font_size,
 			justification: "center"
 		});
@@ -383,9 +383,9 @@ webpackJsonp([0],[
 		g_text = new _paper2.default.PointText({
 			point: _paper2.default.view.center,
 			content: "Графен",
-			fillColor: 'white',
-			fontFamily: 'Courier New',
-			fontWeight: 'bold',
+			fillColor: "white",
+			fontFamily: "Courier New",
+			fontWeight: "bold",
 			fontSize: font_size,
 			justification: "center"
 		});
@@ -393,9 +393,9 @@ webpackJsonp([0],[
 		c_text = new _paper2.default.PointText({
 			point: _paper2.default.view.center,
 			content: "Карбон",
-			fillColor: 'white',
-			fontFamily: 'Courier New',
-			fontWeight: 'bold',
+			fillColor: "white",
+			fontFamily: "Courier New",
+			fontWeight: "bold",
 			fontSize: font_size,
 			justification: "center"
 		});
@@ -433,7 +433,7 @@ webpackJsonp([0],[
 		video = show();
 		toggleCharacters(false);
 	
-		createVolumeCtrl();
+		window.createVolumeCtrl();
 	
 		console.log("Loaded");
 	}, false);
