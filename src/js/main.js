@@ -135,7 +135,7 @@ window.createVolumeCtrl = () => {
 	var black_line = new paper.Shape.Rectangle(new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), 1))
 	black_line.fillColor = "black"
 
-	volCtrlGroup.addChild(tblack_line) 
+	volCtrlGroup.addChild(black_line) 
 
 	volume.onValue((value) => {
 		volCtrlGroup.visible = true
@@ -199,7 +199,7 @@ function showDialogue(){
 			//	point: point,
 				content: choice,
 				fillColor: "#000080",
-				fontFamily: "Courier New",
+				fontFamily: "Helvetica",
 				fontWeight: "bold",
 				fontSize: font_size,
 				justification: "left"
@@ -300,7 +300,7 @@ window.next = (arg) => {
 
 const volumeModifier = 0.05
 
-window.addEventListener("load", (event) => {
+window.addEventListener("load", () => {
 	console.log("Loading")
 
 	canvas = document.getElementById("drawSurf")
@@ -329,9 +329,9 @@ window.addEventListener("load", (event) => {
 	resize.onValue(size => {
 		canvas.width = size.width
 		canvas.height = size.height
-		paper.view.setViewSize(size.width, size.height);
+		paper.view.setViewSize(size.width, size.height)
 
-		paper.view.draw();
+		paper.view.draw()
 		paper.view.update(true)
 	})
 
@@ -350,32 +350,32 @@ window.addEventListener("load", (event) => {
 	talk_text = new paper.PointText({
 		point: paper.view.center,
 	//	content: choices.who +": "+ choices.say,
-		fillColor: 'white',
-		fontFamily: 'Courier New',
-		fontWeight: 'bold',
+		fillColor: "white",
+		fontFamily: "Courier New",
+		fontWeight: "bold",
 		fontSize: font_size,
 		justification: "center"
-	});
+	})
 
 	g_text = new paper.PointText({
 		point: paper.view.center,
 		content: "Графен",
-		fillColor: 'white',
-		fontFamily: 'Courier New',
-		fontWeight: 'bold',
+		fillColor: "white",
+		fontFamily: "Courier New",
+		fontWeight: "bold",
 		fontSize: font_size,
 		justification: "center"
-	});
+	})
 
 	c_text = new paper.PointText({
 		point: paper.view.center,
 		content: "Карбон",
-		fillColor: 'white',
-		fontFamily: 'Courier New',
-		fontWeight: 'bold',
+		fillColor: "white",
+		fontFamily: "Courier New",
+		fontWeight: "bold",
 		fontSize: font_size,
 		justification: "center"
-	});
+	})
 	
 
 	talk_text.importSVG("button.svg", e => {
@@ -394,7 +394,7 @@ window.addEventListener("load", (event) => {
 		g_text.position.y = center.y + 200
 		c_text.position.y = center.y + 200
 
-	});
+	})
 
 	center.map(point => new paper.Point(point.x, (point.y * 2) - 100)).onValue(set(talk_text, "point"))
 
@@ -411,7 +411,7 @@ window.addEventListener("load", (event) => {
 	video = show()
 	toggleCharacters(false)
 	
-	createVolumeCtrl()
+	window.createVolumeCtrl()
 
 	console.log("Loaded")
 }, false )

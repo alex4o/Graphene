@@ -8,5 +8,6 @@ app.on("ready", function(){
 		height: 1080
 	})
 
-	win.loadURL("file://" + __dirname + "/../out/index.html")
+	win.loadURL("file://" + __dirname + "/out/index.html")
+	win.openDevTools() 
 })
