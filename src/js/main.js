@@ -33,7 +33,7 @@ var gobjects = []
 
 var talk_text = null
 
-var font_size = 22
+var font_size = 18
 
 
 var g_text = null
@@ -120,7 +120,7 @@ window.createVolumeCtrl = () => {
 		point: new paper.Point(size.x + (size.w/2), size.w + ((size.h - 25) - (path.mh*2))),
 		content: vol + "%",
 		fillColor: "white",
-		fontFamily: "Sans Serif",
+		fontFamily: "Verdana",
 		fontWeight: "bold",
 		fontSize: 13,
 		justification: "center"
@@ -199,7 +199,7 @@ function showDialogue(){
 			//	point: point,
 				content: choice,
 				fillColor: "#AEE1F9",
-				fontFamily: "Helvetica",
+				fontFamily: "Verdana",
 				fontWeight: "bold",
 				fontSize: font_size,
 				justification: "left"
@@ -337,8 +337,8 @@ window.addEventListener("load", () => {
 
 	//planet = new paper.Raster("./mercury.png")
 
-	graphene = new paper.Raster("./Graphene.png")
-	carbon = new paper.Raster("./Carbon1.png")
+	graphene = new paper.Raster("./img/Graphene.png")
+	carbon = new paper.Raster("./img/Carbon1.png")
 	graphene.scale(-1,1)
 	
 	resize.pluck("width").toProperty().map(v => v - 100).onValue(set(graphene.position,"x"))
@@ -351,7 +351,7 @@ window.addEventListener("load", () => {
 		point: paper.view.center,
 	//	content: choices.who +": "+ choices.say,
 		fillColor: "white",
-		fontFamily: "Courier New",
+		fontFamily: "Verdana",
 		fontWeight: "bold",
 		fontSize: font_size,
 		justification: "center"
@@ -361,7 +361,7 @@ window.addEventListener("load", () => {
 		point: paper.view.center,
 		content: "Графен",
 		fillColor: "white",
-		fontFamily: "Courier New",
+		fontFamily: "Verdana",
 		fontWeight: "bold",
 		fontSize: font_size,
 		justification: "center"
@@ -371,14 +371,14 @@ window.addEventListener("load", () => {
 		point: paper.view.center,
 		content: "Карбон",
 		fillColor: "white",
-		fontFamily: "Courier New",
+		fontFamily: "Verdana",
 		fontWeight: "bold",
 		fontSize: font_size,
 		justification: "center"
 	})
 	
 
-	talk_text.importSVG("button.svg", e => {
+	talk_text.importSVG("./img/button.svg", e => {
 		main_button = e
 		main_button.visible = false
 	})

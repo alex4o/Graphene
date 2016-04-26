@@ -10,7 +10,7 @@ app.on("ready", function(){
 	})
 
 	win.loadURL("file://" + __dirname + "/out/index.html")
-	win.openDevTools() 
+	win.openDevTools()
 	win.setFullScreen(true)
-	
+
 })

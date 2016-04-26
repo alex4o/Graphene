@@ -50,7 +50,7 @@ webpackJsonp([0],[
 	
 	var talk_text = null;
 	
-	var font_size = 22;
+	var font_size = 18;
 	
 	var g_text = null;
 	var c_text = null;
@@ -138,7 +138,7 @@ webpackJsonp([0],[
 			point: new _paper2.default.Point(size.x + size.w / 2, size.w + (size.h - 25 - path.mh * 2)),
 			content: vol + "%",
 			fillColor: "white",
-			fontFamily: "Sans Serif",
+			fontFamily: "Verdana",
 			fontWeight: "bold",
 			fontSize: 13,
 			justification: "center"
@@ -216,7 +216,7 @@ webpackJsonp([0],[
 						//	point: point,
 						content: choice,
 						fillColor: "#AEE1F9",
-						fontFamily: "Helvetica",
+						fontFamily: "Verdana",
 						fontWeight: "bold",
 						fontSize: font_size,
 						justification: "left"
@@ -358,8 +358,8 @@ webpackJsonp([0],[
 	
 		//planet = new paper.Raster("./mercury.png")
 	
-		graphene = new _paper2.default.Raster("./Graphene.png");
-		carbon = new _paper2.default.Raster("./Carbon1.png");
+		graphene = new _paper2.default.Raster("./img/Graphene.png");
+		carbon = new _paper2.default.Raster("./img/Carbon1.png");
 		graphene.scale(-1, 1);
 	
 		resize.pluck("width").toProperty().map(function (v) {
@@ -374,7 +374,7 @@ webpackJsonp([0],[
 			point: _paper2.default.view.center,
 			//	content: choices.who +": "+ choices.say,
 			fillColor: "white",
-			fontFamily: "Courier New",
+			fontFamily: "Verdana",
 			fontWeight: "bold",
 			fontSize: font_size,
 			justification: "center"
@@ -384,7 +384,7 @@ webpackJsonp([0],[
 			point: _paper2.default.view.center,
 			content: "Графен",
 			fillColor: "white",
-			fontFamily: "Courier New",
+			fontFamily: "Verdana",
 			fontWeight: "bold",
 			fontSize: font_size,
 			justification: "center"
@@ -394,13 +394,13 @@ webpackJsonp([0],[
 			point: _paper2.default.view.center,
 			content: "Карбон",
 			fillColor: "white",
-			fontFamily: "Courier New",
+			fontFamily: "Verdana",
 			fontWeight: "bold",
 			fontSize: font_size,
 			justification: "center"
 		});
 	
-		talk_text.importSVG("button.svg", function (e) {
+		talk_text.importSVG("./img/button.svg", function (e) {
 			main_button = e;
 			main_button.visible = false;
 		});

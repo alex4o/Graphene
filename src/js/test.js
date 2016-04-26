@@ -1,6 +1,6 @@
 
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from "react"
+import ReactDOM from "react-dom"
 
 import _ from "lodash"
 
@@ -143,7 +143,6 @@ class App extends React.Component
 	}
 
 	openEnding(){
-		clearTimeout(this.oet)
 		this.setState({videoModal: true}, () => {
 			this.video.play()
 		})
@@ -157,15 +156,13 @@ class App extends React.Component
 			return (
 				<Alert bsStyle="danger">
 					Имате под 75% на теста.
-					<img className="alert_img" src="./SadEnd.png" onClick={() => this.setState({result: 0})}/>
+					<img className="alert_img" src="./img/SadEnd.png" onClick={() => this.setState({result: 0})}/>
 				</Alert> )
-		case 2:
-			this.oet = setTimeout(this.openEnding.bind(this),10000)
-			
+		case 2:			
 			return ( 
 				<Alert bsStyle="success">
 					Браво вие преминахте теста!
-					<img className="alert_img" src="./HappyEnd.png" onClick={this.openEnding.bind(this)}/>
+					<img className="alert_img" src="./img/HappyEnd.png" onClick={this.openEnding.bind(this)}/>
 				</Alert> )				
 		case 3:
 			return (
