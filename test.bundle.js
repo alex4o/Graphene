@@ -2,7 +2,7 @@ webpackJsonp([1],[
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 	
 	var _getPrototypeOf = __webpack_require__(18);
 	
@@ -100,7 +100,7 @@ webpackJsonp([1],[
 		}
 	
 		(0, _createClass3.default)(Quetion, [{
-			key: 'renderAnswers',
+			key: "renderAnswers",
 			value: function renderAnswers() {
 				var _this2 = this;
 	
@@ -109,12 +109,12 @@ webpackJsonp([1],[
 					return _react2.default.createElement(
 						_reactBootstrap.Col,
 						{ xs: 3, key: i },
-						_react2.default.createElement(_reactBootstrap.Input, { type: 'radio', value: i, label: e, name: _this2.props.index, onChange: hc(_this2.props.index) })
+						_react2.default.createElement(_reactBootstrap.Input, { type: "radio", value: i, label: e, name: _this2.props.index, onChange: hc(_this2.props.index) })
 					);
 				});
 			}
 		}, {
-			key: 'handleChange',
+			key: "handleChange",
 			value: function handleChange(key) {
 				var _this3 = this;
 	
@@ -131,7 +131,7 @@ webpackJsonp([1],[
 				};
 			}
 		}, {
-			key: 'render',
+			key: "render",
 			value: function render() {
 				return _react2.default.createElement(
 					_reactBootstrap.Panel,
@@ -166,7 +166,7 @@ webpackJsonp([1],[
 		}
 	
 		(0, _createClass3.default)(App, [{
-			key: 'renderQuestions',
+			key: "renderQuestions",
 			value: function renderQuestions() {
 				var _this5 = this;
 	
@@ -180,7 +180,7 @@ webpackJsonp([1],[
 			// problem with the sublime theme fix /
 	
 		}, {
-			key: 'checkAnswers',
+			key: "checkAnswers",
 			value: function checkAnswers() {
 	
 				var correct = 0;
@@ -202,53 +202,50 @@ webpackJsonp([1],[
 				}
 			}
 		}, {
-			key: 'openEnding',
+			key: "openEnding",
 			value: function openEnding() {
 				var _this6 = this;
 	
-				clearTimeout(this.oet);
 				this.setState({ videoModal: true }, function () {
 					_this6.video.play();
 				});
 			}
 		}, {
-			key: 'result',
+			key: "result",
 			value: function result(res) {
 				var _this7 = this;
 	
 				switch (res) {
 					case 0:
-						return _react2.default.createElement('span', null);
+						return _react2.default.createElement("span", null);
 					case 1:
 						return _react2.default.createElement(
 							_reactBootstrap.Alert,
-							{ bsStyle: 'danger' },
-							'Имате под 75% на теста.',
-							_react2.default.createElement('img', { className: 'alert_img', src: './SadEnd.png', onClick: function onClick() {
+							{ bsStyle: "danger" },
+							"Имате под 75% на теста.",
+							_react2.default.createElement("img", { className: "alert_img", src: "./img/SadEnd.png", onClick: function onClick() {
 									return _this7.setState({ result: 0 });
 								} })
 						);
 					case 2:
-						this.oet = setTimeout(this.openEnding.bind(this), 10000);
-	
 						return _react2.default.createElement(
 							_reactBootstrap.Alert,
-							{ bsStyle: 'success' },
-							'Браво вие преминахте теста!',
-							_react2.default.createElement('img', { className: 'alert_img', src: './HappyEnd.png', onClick: this.openEnding.bind(this) })
+							{ bsStyle: "success" },
+							"Браво вие преминахте теста!",
+							_react2.default.createElement("img", { className: "alert_img", src: "./img/HappyEnd.png", onClick: this.openEnding.bind(this) })
 						);
 					case 3:
 						return _react2.default.createElement(
 							_reactBootstrap.Alert,
-							{ bsStyle: 'warning' },
-							'Трябва да попълните всички въпроси'
+							{ bsStyle: "warning" },
+							"Трябва да попълните всички въпроси"
 						);
 					default:
 						throw "Shouldn't get here";
 				}
 			}
 		}, {
-			key: 'render',
+			key: "render",
 			value: function render() {
 				var _this8 = this;
 	
@@ -257,33 +254,33 @@ webpackJsonp([1],[
 					null,
 					_react2.default.createElement(
 						_reactBootstrap.Row,
-						{ className: 'show-grid' },
+						{ className: "show-grid" },
 						this.renderQuestions(),
 						this.result(this.state.result),
 						_react2.default.createElement(
 							_reactBootstrap.Button,
 							{ onClick: this.checkAnswers.bind(this) },
-							'Провери'
+							"Провери"
 						)
 					),
 					_react2.default.createElement(
 						_reactBootstrap.Modal,
 						{ show: this.state.videoModal, onHide: function onHide() {
 								_this8.video.pause();_this8.setState({ videoModal: false, result: 0 });
-							}, bsSize: 'large' },
+							}, bsSize: "large" },
 						_react2.default.createElement(
 							_reactBootstrap.Modal.Header,
 							{ closeButton: true },
 							_react2.default.createElement(
 								_reactBootstrap.Modal.Title,
 								null,
-								'Благодаря за вниманието!'
+								"Благодаря за вниманието!"
 							)
 						),
 						_react2.default.createElement(
 							_reactBootstrap.Modal.Body,
 							null,
-							_react2.default.createElement('video', { src: 'vid/End.mp4', ref: function ref(e) {
+							_react2.default.createElement("video", { src: "vid/End.mp4", ref: function ref(e) {
 									return _this8.video = e;
 								} })
 						)
