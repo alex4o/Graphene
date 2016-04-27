@@ -1,7 +1,7 @@
-//var autoprefixer	= require("autoprefixer")
-// var precss			= require("precss")
-// var lost 			= require("lost")
-// var cssnext 		= require("postcss-cssnext")
+var autoprefixer	= require("autoprefixer")
+var precss			= require("precss")
+var lost 			= require("lost")
+var cssnext 		= require("postcss-cssnext")
 var webpack 		= require("webpack")
 
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin")
@@ -24,7 +24,7 @@ module.exports = {
 				loader: "babel",
 				query: {
 					cacheDirectory: true,
-					plugins: ["transform-runtime"],
+					plugins: ["transform-runtime", "closure-elimination"],
 					presets: ["es2015", "stage-0", "react"]
 				}
 
@@ -41,14 +41,22 @@ module.exports = {
 	},
 	plugins: [
 		new CommonsChunkPlugin("commons.chunk.js"),
-		new webpack.optimize.DedupePlugin()
+		new webpack.optimize.DedupePlugin(),
+		new webpack.optimize.UglifyJsPlugin({
+			compress: {
+				warnings: false
+			},
+			beautify: true,
+		//	mangle: false
+		}),
+		new webpack.optimize.OccurrenceOrderPlugin()
 	],
-	/*postcss: function () {
+	postcss: function () {
 		return {
-			defaults: [autoprefixer, precss, lost, cssnext],
+			defaults: [precss, lost, cssnext],
 			cleaner:  [autoprefixer({ browsers: ["last 1 version"] })]
 		};
-	},*/
+	},
 	resolve: {
 		modulesDirectories: ["./node_modules"]
 	}

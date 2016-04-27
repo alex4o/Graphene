@@ -1,5 +1,7 @@
 import paper from "paper"
+
 import Story from "./story"
+import VolumeCtrl from "./VolumeCtrl"
 
 import {Kefir} from "kefir"
 import Atom from "kefir.atom"
@@ -16,7 +18,74 @@ require("../css/global.css")
 Kefir.Observable.prototype.pluck = function(prop) {
 	return this.map(R.view(R.lensProp(prop)))
 }
+// TODO: move to new file and find better name
+class DialogueButtons {
+	constructor(){
+		this.list = []
+		this.width = 0		
+	}
 
+	create(choices){
+		this.remove()
+
+		this.list = choices.map((choice,n) => {
+			let group = new paper.Group()
+
+			let text = new paper.PointText({
+			//	point: point,
+				content: choice,
+				fillColor: "#AEE1F9",
+				fontFamily: "Verdana",
+				fontWeight: "bold",
+				fontSize: font_size,
+				justification: "left"
+			})
+			text.onClick = () => window.next(n)
+
+			let button = main_button.clone()
+			button.visible = true
+			button.setBounds(this.calculateButtonSize(text.bounds))
+
+			group.addChild(button)
+			group.addChild(text)
+
+			this.width += group.getBounds().width
+
+			return group
+		})
+	}
+
+	calculateButtonSize(rect){
+		let res_rect = R.clone(rect)
+		let margin = 10
+		res_rect.x -= margin/2
+		res_rect.y -= margin/2
+		res_rect.width += margin
+		res_rect.height += margin
+
+		return res_rect
+	}
+
+	calculate(size){
+		//(re)calculate dialogue buttons
+		let rem = size.width - this.width
+		let padding = rem/(this.list.length + 1)
+		let cur = padding
+		for(let i = 0; i < this.list.length; i++){
+			let group = this.list[i]
+			group.bounds.x = cur
+			group.bounds.y = size.height - 75
+			
+			cur += group.bounds.width + padding
+		}
+	}
+
+	remove(){
+		this.list.forEach(button => button.remove())
+		this.list = []
+		this.width = 0
+	}
+}
 
 let story = new Story()
 
@@ -29,7 +98,7 @@ var carbon = null
 
 var video = null
 
-var gobjects = []
+var dbuttons = new DialogueButtons()
 
 var talk_text = null
 
@@ -46,6 +115,8 @@ var main_button = null
 var volume = new Atom(0.5)
 
 var guz = false
+
+
 
 story.onBefore("end_true",() => {
 
@@ -79,89 +150,6 @@ function set(obj, prop){
 	}
 }
 
-window.createVolumeCtrl = () => {
-	var size = {
-		x: 20,
-		y: 20,
-		w: 60
-	}
-	size.h = 3*size.w
-
-	var path = {
-		mw: 23, // margin width,x
-		mh: 15 // margin height,y
-	}
-	var volCtrlGroup = new paper.Group()
-
-	let rect_out_box = new paper.Rectangle(size.x,size.y, size.w, size.h)
-	var box = new paper.Shape.Rectangle(rect_out_box)
-	box.fillColor = "black"
-
-	volCtrlGroup.addChild(box)
-
-	let rect_blue_path = new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), (size.h - 20) - (path.mh*2))
-	var path_blue = new paper.Shape.Rectangle(rect_blue_path)
-	path_blue.fillColor = "#000080"
-
-	volCtrlGroup.addChild(path_blue)
-
-
-	var vol = ((volume.get() * 100) | 0)
-
-
-	let rect_white_path = new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), (((size.h - 20) - (path.mh*2)) * (1 - volume.get())) | 0)
-	var path_white = new paper.Shape.Rectangle(rect_white_path)
-	path_white.fillColor = "white"
-
-	volCtrlGroup.addChild(path_white)
-
-
-	let text = new paper.PointText({
-		point: new paper.Point(size.x + (size.w/2), size.w + ((size.h - 25) - (path.mh*2))),
-		content: vol + "%",
-		fillColor: "white",
-		fontFamily: "Verdana",
-		fontWeight: "bold",
-		fontSize: 13,
-		justification: "center"
-	})
-
-	volCtrlGroup.addChild(text) 
-
-	volCtrlGroup.visible = false
-
-	window.vcg = volCtrlGroup
-
-	var black_line = new paper.Shape.Rectangle(new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), 1))
-	black_line.fillColor = "black"
-
-	volCtrlGroup.addChild(black_line) 
-
-	volume.onValue((value) => {
-		volCtrlGroup.visible = true
-		clearTimeout(window.vol_timout)
-
-		let vol = ((value * 100) | 0)
-		let bounds = new paper.Rectangle(size.x + path.mw, size.y + path.mh, size.w - (path.mw*2), (((size.h - 20) - (path.mh*2)) * (1 - value)) | 0)
-
-		if(bounds.height < 1) {
-			bounds.height = 1
-		}
-
-		path_white.setBounds(bounds)
-		text.content = vol + "%"
-		paper.view.draw()
-
-		window.vol_timout = setTimeout(() => {
-			volCtrlGroup.visible = false
-			paper.view.draw()
-		}, 500)
-	})
-
-
-	paper.view.draw()
-}
-
 function toggleCharacters(val){
 	graphene.visible = val
 	carbon.visible = val
@@ -173,66 +161,14 @@ function toggleCharacters(val){
 
 }
 
-function calculateButtonSize(rect){
-	let res_rect = R.clone(rect)
-	let margin = 10
-	res_rect.x -= margin/2
-	res_rect.y -= margin/2
-	res_rect.width += margin
-	res_rect.height += margin
-
-	return res_rect
-}
-
 function showDialogue(){
 	let choices = story.choices()
 	
 	if(R.isArrayLike(choices)){
 	//	console.log(choices)
-		gobjects = []
-
-		let width = 0
-		gobjects = choices.map((choice,n) => {
-			let group = new paper.Group()
-
-			let text = new paper.PointText({
-			//	point: point,
-				content: choice,
-				fillColor: "#AEE1F9",
-				fontFamily: "Verdana",
-				fontWeight: "bold",
-				fontSize: font_size,
-				justification: "left"
-			})
-			text.onClick = () => window.next(n)
-
-			let button = main_button.clone()
-			button.visible = true
-			button.setBounds(calculateButtonSize(text.bounds))
-
-			group.addChild(button)
-			group.addChild(text)
-
-			width += group.getBounds().width
-
-			return group
-		})
-
-		resize.onValue(size => {
-			let rem = size.width - width
-			let padding = rem/(gobjects.length + 1)
-			let cur = padding
-			for(let i = 0; i < gobjects.length; i++){
-				let group = gobjects[i]
-				group.bounds.x = cur
-				group.bounds.y = size.height - 75
-				
-				cur += group.bounds.width + padding
-
-			}
-
-			paper.view.draw()
-		})
+		
+		dbuttons.create(choices)
+		dbuttons.calculate({height: window.innerHeight, width: window.innerWidth})
 
 		paper.view.draw()
 	}else{
@@ -279,17 +215,18 @@ window.next = (arg) => {
 		return
 	}
 
-	gobjects.forEach(o => o.remove())
+	dbuttons.remove()
 
 	story.next(arg)
-	if(!guz){
-		if(story.hasDialogue()){
-			showDialogue()
-			toggleCharacters(true)
-		}else{
+	if(story.hasDialogue()){
+		showDialogue()
+		toggleCharacters(true)
+	}else{
+		if(!guz){
 			toggleCharacters(false)
 		}
 	}
+
 	paper.view.update(true)
 
 	video = show(video)
@@ -301,10 +238,15 @@ window.next = (arg) => {
 const volumeModifier = 0.05
 
 window.addEventListener("load", () => {
+
+
+
 	console.log("Loading")
 
 	canvas = document.getElementById("drawSurf")
 	container = document.getElementById("container")
+
+
 
 	Kefir.fromEvents(canvas, "mousewheel").map(e => e.wheelDelta < 0 ? -volumeModifier : volumeModifier).onValue(mod => {
 		volume.modify(old => {
@@ -321,19 +263,8 @@ window.addEventListener("load", () => {
 
 	paper.setup(canvas)
 
-	volume.onValue(vol => {
-		if(video != null)
-			video.volume = vol
-	})
 
-	resize.onValue(size => {
-		canvas.width = size.width
-		canvas.height = size.height
-		paper.view.setViewSize(size.width, size.height)
 
-		paper.view.draw()
-		paper.view.update(true)
-	})
 
 	//planet = new paper.Raster("./mercury.png")
 
@@ -341,7 +272,6 @@ window.addEventListener("load", () => {
 	carbon = new paper.Raster("./img/Carbon1.png")
 	graphene.scale(-1,1)
 	
-	resize.pluck("width").toProperty().map(v => v - 100).onValue(set(graphene.position,"x"))
 	carbon.position.x = 100
 
 	carbon.scale(0.8,0.8)
@@ -384,34 +314,55 @@ window.addEventListener("load", () => {
 	})
 
 
-	resize.pluck("width").toProperty().map(v => v - 100).onValue(set(g_text.position,"x"))
 
 	c_text.position.x = 100
 
-	center.onValue((center) => {
+
+	resize.onValue(size => {
+
+
+		canvas.width = size.width
+		canvas.height = size.height
+		paper.view.setViewSize(size.width, size.height)
+
+
+		g_text.position.x = size.width - 100
+		graphene.position.x = size.width - 100
+
+		
+		dbuttons.calculate(size)
+
+		// update by center
+		let center = paper.view.center
+
 		carbon.position.y = center.y - 100
 		graphene.position.y = center.y - 100
 		g_text.position.y = center.y + 200
 		c_text.position.y = center.y + 200
 
+		//redraw
+
+		paper.view.update(true)
+		paper.view.draw()
 	})
 
 	center.map(point => new paper.Point(point.x, (point.y * 2) - 100)).onValue(set(talk_text, "point"))
 
-	
-
-	//planet.position = paper.view.center;
-	
 	paper.view.onMouseDown = () => {
 		window.next()
 	}
 	
-	//center.onValue(set(planet, "position"))
-
 	video = show()
 	toggleCharacters(false)
 	
-	window.createVolumeCtrl()
+	let volCtrl = new VolumeCtrl(volume.get())
+
+	volume.onValue(value => {
+		if(video != null){
+			video.volume = value
+		}
+		volCtrl.update(value)
+	})
 
 	console.log("Loaded")
 }, false )

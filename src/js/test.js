@@ -160,6 +160,7 @@ class App extends React.Component
 				</Alert> )
 		case 2:			
 			return ( 
+				//TODO: Return the setTimout but check if it was alreathy set
 				<Alert bsStyle="success">
 					Браво вие преминахте теста!
 					<img className="alert_img" src="./img/HappyEnd.png" onClick={this.openEnding.bind(this)}/>
