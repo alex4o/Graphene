@@ -8,8 +8,9 @@ var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin")
 
 module.exports = {
 	entry: {
-		main: "./js/main.js", 
-		test: "./js/test.js"
+		game: "./js/game.js", 
+		test: "./js/test.js",
+		main: "./js/main.js"
 	},
 	devtool: "source-map",
 	output: {
@@ -42,13 +43,13 @@ module.exports = {
 	plugins: [
 		new CommonsChunkPlugin("commons.chunk.js"),
 		new webpack.optimize.DedupePlugin(),
-		new webpack.optimize.UglifyJsPlugin({
+		/*new webpack.optimize.UglifyJsPlugin({
 			compress: {
 				warnings: false
 			},
 			beautify: true,
 		//	mangle: false
-		}),
+		}),*/
 		new webpack.optimize.OccurrenceOrderPlugin()
 	],
 	postcss: function () {
