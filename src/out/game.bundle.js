@@ -13,36 +13,36 @@ webpackJsonp([2],{
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _paper = __webpack_require__(169);
+	var _paper = __webpack_require__(171);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
-	var _story = __webpack_require__(229);
+	var _story = __webpack_require__(232);
 	
 	var _story2 = _interopRequireDefault(_story);
 	
-	var _VolumeCtrl = __webpack_require__(227);
+	var _VolumeCtrl = __webpack_require__(230);
 	
 	var _VolumeCtrl2 = _interopRequireDefault(_VolumeCtrl);
 	
-	var _kefir = __webpack_require__(152);
+	var _kefir = __webpack_require__(154);
 	
-	var _kefir2 = __webpack_require__(292);
+	var _kefir2 = __webpack_require__(293);
 	
 	var _kefir3 = _interopRequireDefault(_kefir2);
 	
-	var _ramda = __webpack_require__(49);
+	var _ramda = __webpack_require__(48);
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(226);
+	__webpack_require__(229);
 	
 	window.R = _ramda2.default;
 	window.p = _paper2.default;
 	
-	__webpack_require__(456);
+	__webpack_require__(478);
 	
 	_kefir.Kefir.Observable.prototype.pluck = function (prop) {
 		return this.map(_ramda2.default.view(_ramda2.default.lensProp(prop)));
@@ -155,7 +155,7 @@ webpackJsonp([2],{
 	
 	var talk_text = null;
 	
-	var font_size = 18;
+	var font_size = 21;
 	
 	var g_text = null;
 	var c_text = null;
@@ -426,6 +426,104 @@ webpackJsonp([2],{
 
 /***/ },
 
+/***/ 4:
+/***/ function(module, exports) {
+
+	// shim for using process in browser
+	
+	var process = module.exports = {};
+	var queue = [];
+	var draining = false;
+	var currentQueue;
+	var queueIndex = -1;
+	
+	function cleanUpNextTick() {
+	    draining = false;
+	    if (currentQueue.length) {
+	        queue = currentQueue.concat(queue);
+	    } else {
+	        queueIndex = -1;
+	    }
+	    if (queue.length) {
+	        drainQueue();
+	    }
+	}
+	
+	function drainQueue() {
+	    if (draining) {
+	        return;
+	    }
+	    var timeout = setTimeout(cleanUpNextTick);
+	    draining = true;
+	
+	    var len = queue.length;
+	    while(len) {
+	        currentQueue = queue;
+	        queue = [];
+	        while (++queueIndex < len) {
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
+	        }
+	        queueIndex = -1;
+	        len = queue.length;
+	    }
+	    currentQueue = null;
+	    draining = false;
+	    clearTimeout(timeout);
+	}
+	
+	process.nextTick = function (fun) {
+	    var args = new Array(arguments.length - 1);
+	    if (arguments.length > 1) {
+	        for (var i = 1; i < arguments.length; i++) {
+	            args[i - 1] = arguments[i];
+	        }
+	    }
+	    queue.push(new Item(fun, args));
+	    if (queue.length === 1 && !draining) {
+	        setTimeout(drainQueue, 0);
+	    }
+	};
+	
+	// v8 likes predictible objects
+	function Item(fun, array) {
+	    this.fun = fun;
+	    this.array = array;
+	}
+	Item.prototype.run = function () {
+	    this.fun.apply(null, this.array);
+	};
+	process.title = 'browser';
+	process.browser = true;
+	process.env = {};
+	process.argv = [];
+	process.version = ''; // empty string to avoid regexp issues
+	process.versions = {};
+	
+	function noop() {}
+	
+	process.on = noop;
+	process.addListener = noop;
+	process.once = noop;
+	process.off = noop;
+	process.removeListener = noop;
+	process.removeAllListeners = noop;
+	process.emit = noop;
+	
+	process.binding = function (name) {
+	    throw new Error('process.binding is not supported');
+	};
+	
+	process.cwd = function () { return '/' };
+	process.chdir = function (dir) {
+	    throw new Error('process.chdir is not supported');
+	};
+	process.umask = function() { return 0; };
+
+
+/***/ },
+
 /***/ 21:
 /***/ function(module, exports) {
 
@@ -467,7 +565,7 @@ webpackJsonp([2],{
 	
 	exports.__esModule = true;
 	
-	var _defineProperty = __webpack_require__(78);
+	var _defineProperty = __webpack_require__(79);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
@@ -493,10 +591,10 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 49:
+/***/ 48:
 /***/ function(module, exports, __webpack_require__) {
 
-	//  Ramda v0.19.1
+	//  Ramda v0.21.0
 	//  https://github.com/ramda/ramda
 	//  (c) 2013-2016 Scott Sauyet, Michael Hurley, and David Chambers
 	//  Ramda may be freely distributed under the MIT license.
@@ -595,6 +693,10 @@ webpackJsonp([2],{
 	        return list;
 	    };
 	
+	    var _arrayOf = function _arrayOf() {
+	        return Array.prototype.slice.call(arguments);
+	    };
+	
 	    var _cloneRegExp = function _cloneRegExp(pattern) {
 	        return new RegExp(pattern.source, (pattern.global ? 'g' : '') + (pattern.ignoreCase ? 'i' : '') + (pattern.multiline ? 'm' : '') + (pattern.sticky ? 'y' : '') + (pattern.unicode ? 'u' : ''));
 	    };
@@ -668,6 +770,13 @@ webpackJsonp([2],{
 	        };
 	    };
 	
+	    // String(x => x) evaluates to "x => x", so the pattern may not match.
+	    var _functionName = function _functionName(f) {
+	        // String(x => x) evaluates to "x => x", so the pattern may not match.
+	        var match = String(f).match(/^function (\w*)/);
+	        return match == null ? '' : match[1];
+	    };
+	
 	    var _has = function _has(prop, obj) {
 	        return Object.prototype.hasOwnProperty.call(obj, prop);
 	    };
@@ -699,6 +808,10 @@ webpackJsonp([2],{
 	     */
 	    var _isArray = Array.isArray || function _isArray(val) {
 	        return val != null && val.length >= 0 && Object.prototype.toString.call(val) === '[object Array]';
+	    };
+	
+	    var _isFunction = function _isNumber(x) {
+	        return Object.prototype.toString.call(x) === '[object Function]';
 	    };
 	
 	    /**
@@ -746,6 +859,28 @@ webpackJsonp([2],{
 	            idx += 1;
 	        }
 	        return result;
+	    };
+	
+	    // Based on https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Object/assign
+	    var _objectAssign = function _objectAssign(target) {
+	        if (target == null) {
+	            throw new TypeError('Cannot convert undefined or null to object');
+	        }
+	        var output = Object(target);
+	        var idx = 1;
+	        var length = arguments.length;
+	        while (idx < length) {
+	            var source = arguments[idx];
+	            if (source != null) {
+	                for (var nextKey in source) {
+	                    if (_has(nextKey, source)) {
+	                        output[nextKey] = source[nextKey];
+	                    }
+	                }
+	            }
+	            idx += 1;
+	        }
+	        return output;
 	    };
 	
 	    var _of = function _of(x) {
@@ -867,6 +1002,8 @@ webpackJsonp([2],{
 	        }
 	        return acc;
 	    };
+	
+	    var _assign = typeof Object.assign === 'function' ? Object.assign : _objectAssign;
 	
 	    /**
 	     * Similar to hasMethod, this checks whether a function has a [methodname]
@@ -1397,7 +1534,7 @@ webpackJsonp([2],{
 	    }();
 	
 	    /**
-	     * Adds two numbers. Equivalent to `a + b` but curried.
+	     * Adds two values.
 	     *
 	     * @func
 	     * @memberOf R
@@ -1414,7 +1551,7 @@ webpackJsonp([2],{
 	     *      R.add(7)(10);      //=> 17
 	     */
 	    var add = _curry2(function add(a, b) {
-	        return a + b;
+	        return Number(a) + Number(b);
 	    });
 	
 	    /**
@@ -1726,33 +1863,30 @@ webpackJsonp([2],{
 	    });
 	
 	    /**
-	     * A function wrapping calls to the two functions in an `&&` operation,
-	     * returning the result of the first function if it is false-y and the result
-	     * of the second function otherwise. Note that this is short-circuited,
-	     * meaning that the second function will not be invoked if the first returns a
-	     * false-y value.
+	     * Restricts a number to be within a range.
+	     *
+	     * Also works for other ordered types such as Strings and Dates.
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since v0.12.0
-	     * @category Logic
-	     * @sig (*... -> Boolean) -> (*... -> Boolean) -> (*... -> Boolean)
-	     * @param {Function} f a predicate
-	     * @param {Function} g another predicate
-	     * @return {Function} a function that applies its arguments to `f` and `g` and `&&`s their outputs together.
-	     * @see R.and
+	     * @since v0.20.0
+	     * @category Relation
+	     * @sig Ord a => a -> a -> a -> a
+	     * @param {Number} minimum number
+	     * @param {Number} maximum number
+	     * @param {Number} value to be clamped
+	     * @return {Number} Returns the clamped value
 	     * @example
 	     *
-	     *      var gt10 = x => x > 10;
-	     *      var even = x => x % 2 === 0;
-	     *      var f = R.both(gt10, even);
-	     *      f(100); //=> true
-	     *      f(101); //=> false
+	     *      R.clamp(1, 10, -1) // => 1
+	     *      R.clamp(1, 10, 11) // => 10
+	     *      R.clamp(1, 10, 4)  // => 4
 	     */
-	    var both = _curry2(function both(f, g) {
-	        return function _both() {
-	            return f.apply(this, arguments) && g.apply(this, arguments);
-	        };
+	    var clamp = _curry3(function clamp(min, max, value) {
+	        if (min > max) {
+	            throw new Error('min must not be greater than max in clamp(min, max, value)');
+	        }
+	        return value < min ? min : value > max ? max : value;
 	    });
 	
 	    /**
@@ -1778,77 +1912,6 @@ webpackJsonp([2],{
 	        return function (a, b) {
 	            return pred(a, b) ? -1 : pred(b, a) ? 1 : 0;
 	        };
-	    });
-	
-	    /**
-	     * Returns a function, `fn`, which encapsulates if/else-if/else logic.
-	     * `R.cond` takes a list of [predicate, transform] pairs. All of the arguments
-	     * to `fn` are applied to each of the predicates in turn until one returns a
-	     * "truthy" value, at which point `fn` returns the result of applying its
-	     * arguments to the corresponding transformer. If none of the predicates
-	     * matches, `fn` returns undefined.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since v0.6.0
-	     * @category Logic
-	     * @sig [[(*... -> Boolean),(*... -> *)]] -> (*... -> *)
-	     * @param {Array} pairs
-	     * @return {Function}
-	     * @example
-	     *
-	     *      var fn = R.cond([
-	     *        [R.equals(0),   R.always('water freezes at 0°C')],
-	     *        [R.equals(100), R.always('water boils at 100°C')],
-	     *        [R.T,           temp => 'nothing special happens at ' + temp + '°C']
-	     *      ]);
-	     *      fn(0); //=> 'water freezes at 0°C'
-	     *      fn(50); //=> 'nothing special happens at 50°C'
-	     *      fn(100); //=> 'water boils at 100°C'
-	     */
-	    var cond = _curry1(function cond(pairs) {
-	        return function () {
-	            var idx = 0;
-	            while (idx < pairs.length) {
-	                if (pairs[idx][0].apply(this, arguments)) {
-	                    return pairs[idx][1].apply(this, arguments);
-	                }
-	                idx += 1;
-	            }
-	        };
-	    });
-	
-	    /**
-	     * Counts the elements of a list according to how many match each value of a
-	     * key generated by the supplied function. Returns an object mapping the keys
-	     * produced by `fn` to the number of occurrences in the list. Note that all
-	     * keys are coerced to strings because of how JavaScript objects work.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since v0.1.0
-	     * @category Relation
-	     * @sig (a -> String) -> [a] -> {*}
-	     * @param {Function} fn The function used to map values to keys.
-	     * @param {Array} list The list to count elements from.
-	     * @return {Object} An object mapping keys to number of occurrences in the list.
-	     * @example
-	     *
-	     *      var numbers = [1.0, 1.1, 1.2, 2.0, 3.0, 2.2];
-	     *      var letters = R.split('', 'abcABCaaaBBc');
-	     *      R.countBy(Math.floor)(numbers);    //=> {'1': 3, '2': 2, '3': 1}
-	     *      R.countBy(R.toLower)(letters);   //=> {'a': 5, 'b': 4, 'c': 3}
-	     */
-	    var countBy = _curry2(function countBy(fn, list) {
-	        var counts = {};
-	        var len = list.length;
-	        var idx = 0;
-	        while (idx < len) {
-	            var key = fn(list[idx]);
-	            counts[key] = (_has(key, counts) ? counts[key] : 0) + 1;
-	            idx += 1;
-	        }
-	        return counts;
 	    });
 	
 	    /**
@@ -1959,7 +2022,7 @@ webpackJsonp([2],{
 	     * @see R.difference
 	     * @example
 	     *
-	     *      function cmp(x, y) => x.a === y.a;
+	     *      var cmp = (x, y) => x.a === y.a;
 	     *      var l1 = [{a: 1}, {a: 2}, {a: 3}];
 	     *      var l2 = [{a: 3}, {a: 4}];
 	     *      R.differenceWith(cmp, l1, l2); //=> [{a: 1}, {a: 2}]
@@ -2093,36 +2156,6 @@ webpackJsonp([2],{
 	        }
 	        return _slice(list, idx);
 	    }));
-	
-	    /**
-	     * A function wrapping calls to the two functions in an `||` operation,
-	     * returning the result of the first function if it is truth-y and the result
-	     * of the second function otherwise. Note that this is short-circuited,
-	     * meaning that the second function will not be invoked if the first returns a
-	     * truth-y value.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since v0.12.0
-	     * @category Logic
-	     * @sig (*... -> Boolean) -> (*... -> Boolean) -> (*... -> Boolean)
-	     * @param {Function} f a predicate
-	     * @param {Function} g another predicate
-	     * @return {Function} a function that applies its arguments to `f` and `g` and `||`s their outputs together.
-	     * @see R.or
-	     * @example
-	     *
-	     *      var gt10 = x => x > 10;
-	     *      var even = x => x % 2 === 0;
-	     *      var f = R.either(gt10, even);
-	     *      f(101); //=> true
-	     *      f(8); //=> true
-	     */
-	    var either = _curry2(function either(f, g) {
-	        return function _either() {
-	            return f.apply(this, arguments) || g.apply(this, arguments);
-	        };
-	    });
 	
 	    /**
 	     * Returns the empty value of its argument's type. Ramda defines the empty
@@ -2401,6 +2434,47 @@ webpackJsonp([2],{
 	            idx += 1;
 	        }
 	        return out;
+	    });
+	
+	    /**
+	     * Takes a list and returns a list of lists where each sublist's elements are
+	     * all "equal" according to the provided equality function.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.21.0
+	     * @category List
+	     * @sig (a, a -> Boolean) -> [a] -> [[a]]
+	     * @param {Function} fn Function for determining whether two given (adjacent)
+	     *        elements should be in the same group
+	     * @param {Array} list The array to group. Also accepts a string, which will be
+	     *        treated as a list of characters.
+	     * @return {List} A list that contains sublists of equal elements,
+	     *         whose concatenations is equal to the original list.
+	     * @example
+	     *
+	     *    groupWith(R.equals, [0, 1, 1, 2, 3, 5, 8, 13, 21])
+	     *    // [[0], [1, 1], [2, 3, 5, 8, 13, 21]]
+	     *
+	     *    groupWith((a, b) => a % 2 === b % 2, [0, 1, 1, 2, 3, 5, 8, 13, 21])
+	     *    // [[0], [1, 1], [2], [3, 5], [8], [13, 21]]
+	     *
+	     *    R.groupWith(R.eqBy(isVowel), 'aestiou')
+	     *    // ['ae', 'st', 'iou']
+	     */
+	    var groupWith = _curry2(function (fn, list) {
+	        var res = [];
+	        var idx = 0;
+	        var len = list.length;
+	        while (idx < len) {
+	            var nextidx = idx + 1;
+	            while (nextidx < len && fn(list[idx], list[nextidx])) {
+	                nextidx += 1;
+	            }
+	            res.push(list.slice(idx, nextidx));
+	            idx = nextidx;
+	        }
+	        return res;
 	    });
 	
 	    /**
@@ -2982,9 +3056,9 @@ webpackJsonp([2],{
 	     * @example
 	     *
 	     *      var digits = ['1', '2', '3', '4'];
-	     *      var append = (a, b) => [a + b, a + b];
+	     *      var appender = (a, b) => [a + b, a + b];
 	     *
-	     *      R.mapAccum(append, 0, digits); //=> ['01234', ['01', '012', '0123', '01234']]
+	     *      R.mapAccum(appender, 0, digits); //=> ['01234', ['01', '012', '0123', '01234']]
 	     */
 	    var mapAccum = _curry3(function mapAccum(fn, acc, list) {
 	        var idx = 0;
@@ -3163,6 +3237,52 @@ webpackJsonp([2],{
 	    });
 	
 	    /**
+	     * Create a new object with the own properties of the first object merged with
+	     * the own properties of the second object. If a key exists in both objects,
+	     * the value from the second object will be used.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.1.0
+	     * @category Object
+	     * @sig {k: v} -> {k: v} -> {k: v}
+	     * @param {Object} l
+	     * @param {Object} r
+	     * @return {Object}
+	     * @see R.mergeWith, R.mergeWithKey
+	     * @example
+	     *
+	     *      R.merge({ 'name': 'fred', 'age': 10 }, { 'age': 40 });
+	     *      //=> { 'name': 'fred', 'age': 40 }
+	     *
+	     *      var resetToDefault = R.merge(R.__, {x: 0});
+	     *      resetToDefault({x: 5, y: 2}); //=> {x: 0, y: 2}
+	     */
+	    var merge = _curry2(function merge(l, r) {
+	        return _assign({}, l, r);
+	    });
+	
+	    /**
+	     * Merges a list of objects together into one object.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.10.0
+	     * @category List
+	     * @sig [{k: v}] -> {k: v}
+	     * @param {Array} list An array of objects
+	     * @return {Object} A merged object.
+	     * @see R.reduce
+	     * @example
+	     *
+	     *      R.mergeAll([{foo:1},{bar:2},{baz:3}]); //=> {foo:1,bar:2,baz:3}
+	     *      R.mergeAll([{foo:1},{foo:2},{bar:2}]); //=> {foo:2,bar:2}
+	     */
+	    var mergeAll = _curry1(function mergeAll(list) {
+	        return _assign.apply(null, [{}].concat(list));
+	    });
+	
+	    /**
 	     * Creates a new object with the own properties of the two provided objects. If
 	     * a key exists in both objects, the provided function is applied to the key
 	     * and the values associated with the key in each object, with the result being
@@ -3172,8 +3292,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category Object
 	     * @sig (String -> a -> a -> a) -> {a} -> {a} -> {a}
 	     * @param {Function} fn
@@ -3469,8 +3588,8 @@ webpackJsonp([2],{
 	     *      R.nth(-1, list); //=> 'quux'
 	     *      R.nth(-99, list); //=> undefined
 	     *
-	     *      R.nth('abc', 2); //=> 'c'
-	     *      R.nth('abc', 3); //=> ''
+	     *      R.nth(2, 'abc'); //=> 'c'
+	     *      R.nth(3, 'abc'); //=> ''
 	     */
 	    var nth = _curry2(function nth(offset, list) {
 	        var idx = offset < 0 ? list.length + offset : offset;
@@ -3622,7 +3741,14 @@ webpackJsonp([2],{
 	     *
 	     *      R.over(headLens, R.toUpper, ['foo', 'bar', 'baz']); //=> ['FOO', 'bar', 'baz']
 	     */
+	    // `Identity` is a functor that holds a single value, where `map` simply
+	    // transforms the held value with the provided function.
+	    // The value returned by the getter function is first transformed with `f`,
+	    // then set as the value of an `Identity`. This is then mapped over with the
+	    // setter function of the lens.
 	    var over = function () {
+	        // `Identity` is a functor that holds a single value, where `map` simply
+	        // transforms the held value with the provided function.
 	        var Identity = function (x) {
 	            return {
 	                value: x,
@@ -3632,6 +3758,9 @@ webpackJsonp([2],{
 	            };
 	        };
 	        return _curry3(function over(lens, f, x) {
+	            // The value returned by the getter function is first transformed with `f`,
+	            // then set as the value of an `Identity`. This is then mapped over with the
+	            // setter function of the lens.
 	            return lens(function (y) {
 	                return Identity(f(y));
 	            })(x).value;
@@ -3649,7 +3778,7 @@ webpackJsonp([2],{
 	     * @param {*} fst
 	     * @param {*} snd
 	     * @return {Array}
-	     * @see R.createMapEntry, R.of
+	     * @see R.objOf, R.of
 	     * @example
 	     *
 	     *      R.pair('foo', 'bar'); //=> ['foo', 'bar']
@@ -3718,8 +3847,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category Logic
 	     * @sig (a -> Boolean) -> [String] -> Object -> Boolean
 	     * @param {Function} pred
@@ -4275,8 +4403,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category List
 	     * @sig Number -> [a] -> [[a], [a]]
 	     * @sig Number -> String -> [String, String]
@@ -4334,8 +4461,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category List
 	     * @sig (a -> Boolean) -> [a] -> [[a], [a]]
 	     * @param {Function} pred The predicate that determines where the array is split.
@@ -4360,7 +4486,7 @@ webpackJsonp([2],{
 	    });
 	
 	    /**
-	     * Subtracts two numbers. Equivalent to `a - b` but curried.
+	     * Subtracts its second argument from its first argument.
 	     *
 	     * @func
 	     * @memberOf R
@@ -4383,7 +4509,7 @@ webpackJsonp([2],{
 	     *      complementaryAngle(72); //=> 18
 	     */
 	    var subtract = _curry2(function subtract(a, b) {
-	        return a - b;
+	        return Number(a) - Number(b);
 	    });
 	
 	    /**
@@ -4650,8 +4776,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category List
 	     * @sig [[a]] -> [[a]]
 	     * @param {Array} list A 2D list
@@ -4714,6 +4839,37 @@ webpackJsonp([2],{
 	            });
 	        }
 	    }();
+	
+	    /**
+	     * `tryCatch` takes two functions, a `tryer` and a `catcher`. The returned
+	     * function evaluates the `tryer`; if it does not throw, it simply returns the
+	     * result. If the `tryer` *does* throw, the returned function evaluates the
+	     * `catcher` function and returns its result. Note that for effective
+	     * composition with this function, both the `tryer` and `catcher` functions
+	     * must return the same type of results.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.20.0
+	     * @category Function
+	     * @sig (...x -> a) -> ((e, ...x) -> a) -> (...x -> a)
+	     * @param {Function} tryer The function that may throw.
+	     * @param {Function} catcher The function that will be evaluated if `tryer` throws.
+	     * @return {Function} A new function that will catch exceptions and send then to the catcher.
+	     * @example
+	     *
+	     *      R.tryCatch(R.prop('x'), R.F, {x: true}); //=> true
+	     *      R.tryCatch(R.prop('x'), R.F, null);      //=> false
+	     */
+	    var tryCatch = _curry2(function _tryCatch(tryer, catcher) {
+	        return _arity(tryer.length, function () {
+	            try {
+	                return tryer.apply(this, arguments);
+	            } catch (e) {
+	                return catcher.apply(this, _concat([e], arguments));
+	            }
+	        });
+	    });
 	
 	    /**
 	     * Gives a single-word string description of the (native) type of a value,
@@ -4937,6 +5093,33 @@ webpackJsonp([2],{
 	    });
 	
 	    /**
+	     * Takes a predicate, a transformation function, and an initial value,
+	     * and returns a value of the same type as the initial value.
+	     * It does so by applying the transformation until the predicate is satisfied,
+	     * at which point it returns the satisfactory value.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.20.0
+	     * @category Logic
+	     * @sig (a -> Boolean) -> (a -> a) -> a -> a
+	     * @param {Function} pred A predicate function
+	     * @param {Function} fn The iterator function
+	     * @param {*} init Initial value
+	     * @return {*} Final value that satisfies predicate
+	     * @example
+	     *
+	     *      R.until(R.gt(R.__, 100), R.multiply(2))(1) // => 128
+	     */
+	    var until = _curry3(function until(pred, fn, init) {
+	        var val = init;
+	        while (!pred(val)) {
+	            val = fn(val);
+	        }
+	        return val;
+	    });
+	
+	    /**
 	     * Returns a new copy of the array with the element at the provided index
 	     * replaced with the given value.
 	     *
@@ -5076,7 +5259,11 @@ webpackJsonp([2],{
 	     *      R.view(xLens, {x: 1, y: 2});  //=> 1
 	     *      R.view(xLens, {x: 4, y: 2});  //=> 4
 	     */
+	    // `Const` is a functor that effectively ignores the function given to `map`.
+	    // Using `Const` effectively ignores the setter function of the `lens`,
+	    // leaving the value returned by the getter function unmodified.
 	    var view = function () {
+	        // `Const` is a functor that effectively ignores the function given to `map`.
 	        var Const = function (x) {
 	            return {
 	                value: x,
@@ -5086,6 +5273,8 @@ webpackJsonp([2],{
 	            };
 	        };
 	        return _curry2(function view(lens, x) {
+	            // Using `Const` effectively ignores the setter function of the `lens`,
+	            // leaving the value returned by the getter function unmodified.
 	            return lens(Const)(x).value;
 	        });
 	    }();
@@ -5270,6 +5459,8 @@ webpackJsonp([2],{
 	
 	    /**
 	     * Creates a new object out of a list of keys and a list of values.
+	     * Key/value pairing is truncated to the length of the shorter of the two lists.
+	     * Note: `zipObj` is equivalent to `pipe(zipWith(pair), fromPairs)`.
 	     *
 	     * @func
 	     * @memberOf R
@@ -5285,7 +5476,7 @@ webpackJsonp([2],{
 	     */
 	    var zipObj = _curry2(function zipObj(keys, values) {
 	        var idx = 0;
-	        var len = keys.length;
+	        var len = Math.min(keys.length, values.length);
 	        var out = {};
 	        while (idx < len) {
 	            out[keys[idx]] = values[idx];
@@ -5369,9 +5560,10 @@ webpackJsonp([2],{
 	     * @param {*} value The value to be copied
 	     * @param {Array} refFrom Array containing the source references
 	     * @param {Array} refTo Array containing the copied source references
+	     * @param {Boolean} deep Whether or not to perform deep cloning.
 	     * @return {*} The copied value.
 	     */
-	    var _clone = function _clone(value, refFrom, refTo) {
+	    var _clone = function _clone(value, refFrom, refTo, deep) {
 	        var copy = function copy(copiedValue) {
 	            var len = refFrom.length;
 	            var idx = 0;
@@ -5384,7 +5576,7 @@ webpackJsonp([2],{
 	            refFrom[idx + 1] = value;
 	            refTo[idx + 1] = copiedValue;
 	            for (var key in value) {
-	                copiedValue[key] = _clone(value[key], refFrom, refTo);
+	                copiedValue[key] = deep ? _clone(value[key], refFrom, refTo, true) : value[key];
 	            }
 	            return copiedValue;
 	        };
@@ -5432,6 +5624,9 @@ webpackJsonp([2],{
 	        case 'Arguments':
 	        case 'Array':
 	        case 'Object':
+	            if (typeof a.constructor === 'function' && _functionName(a.constructor) === 'Promise') {
+	                return a === b;
+	            }
 	            break;
 	        case 'Boolean':
 	        case 'Number':
@@ -5577,6 +5772,46 @@ webpackJsonp([2],{
 	                return _iterableReduce(fn, acc, list);
 	            }
 	            throw new TypeError('reduce: list must be array or iterable');
+	        };
+	    }();
+	
+	    var _stepCat = function () {
+	        var _stepCatArray = {
+	            '@@transducer/init': Array,
+	            '@@transducer/step': function (xs, x) {
+	                xs.push(x);
+	                return xs;
+	            },
+	            '@@transducer/result': _identity
+	        };
+	        var _stepCatString = {
+	            '@@transducer/init': String,
+	            '@@transducer/step': function (a, b) {
+	                return a + b;
+	            },
+	            '@@transducer/result': _identity
+	        };
+	        var _stepCatObject = {
+	            '@@transducer/init': Object,
+	            '@@transducer/step': function (result, input) {
+	                return _assign(result, isArrayLike(input) ? objOf(input[0], input[1]) : input);
+	            },
+	            '@@transducer/result': _identity
+	        };
+	        return function _stepCat(obj) {
+	            if (_isTransformer(obj)) {
+	                return obj;
+	            }
+	            if (isArrayLike(obj)) {
+	                return _stepCatArray;
+	            }
+	            if (typeof obj === 'string') {
+	                return _stepCatString;
+	            }
+	            if (typeof obj === 'object') {
+	                return _stepCatObject;
+	            }
+	            throw new Error('Cannot create transformer for ' + obj);
 	        };
 	    }();
 	
@@ -5736,7 +5971,7 @@ webpackJsonp([2],{
 	     *      objects[0] === objectsClone[0]; //=> false
 	     */
 	    var clone = _curry1(function clone(value) {
-	        return value != null && typeof value.clone === 'function' ? value.clone() : _clone(value, [], []);
+	        return value != null && typeof value.clone === 'function' ? value.clone() : _clone(value, [], [], true);
 	    });
 	
 	    /**
@@ -5972,54 +6207,6 @@ webpackJsonp([2],{
 	    });
 	
 	    /**
-	     * Splits a list into sub-lists stored in an object, based on the result of
-	     * calling a String-returning function on each element, and grouping the
-	     * results according to values returned.
-	     *
-	     * Dispatches to the `groupBy` method of the second argument, if present.
-	     *
-	     * Acts as a transducer if a transformer is given in list position.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since v0.1.0
-	     * @category List
-	     * @sig (a -> String) -> [a] -> {String: [a]}
-	     * @param {Function} fn Function :: a -> String
-	     * @param {Array} list The array to group
-	     * @return {Object} An object with the output of `fn` for keys, mapped to arrays of elements
-	     *         that produced that key when passed to `fn`.
-	     * @see R.transduce
-	     * @example
-	     *
-	     *      var byGrade = R.groupBy(function(student) {
-	     *        var score = student.score;
-	     *        return score < 65 ? 'F' :
-	     *               score < 70 ? 'D' :
-	     *               score < 80 ? 'C' :
-	     *               score < 90 ? 'B' : 'A';
-	     *      });
-	     *      var students = [{name: 'Abby', score: 84},
-	     *                      {name: 'Eddy', score: 58},
-	     *                      // ...
-	     *                      {name: 'Jack', score: 69}];
-	     *      byGrade(students);
-	     *      // {
-	     *      //   'A': [{name: 'Dianne', score: 99}],
-	     *      //   'B': [{name: 'Abby', score: 84}]
-	     *      //   // ...,
-	     *      //   'F': [{name: 'Eddy', score: 58}]
-	     *      // }
-	     */
-	    var groupBy = _curry2(_dispatchable('groupBy', _xgroupBy, function groupBy(fn, list) {
-	        return _reduce(function (acc, elt) {
-	            var key = fn(elt);
-	            acc[key] = append(elt, acc[key] || (acc[key] = []));
-	            return acc;
-	        }, {}, list);
-	    }));
-	
-	    /**
 	     * Returns the first element of the given list or string. In some libraries
 	     * this function is named `first`.
 	     *
@@ -6041,35 +6228,6 @@ webpackJsonp([2],{
 	     *      R.head(''); //=> ''
 	     */
 	    var head = nth(0);
-	
-	    /**
-	     * Given a function that generates a key, turns a list of objects into an
-	     * object indexing the objects by the given key. Note that if multiple
-	     * objects generate the same value for the indexing key only the last value
-	     * will be included in the generated object.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
-	     * @category List
-	     * @sig (a -> String) -> [{k: v}] -> {k: {k: v}}
-	     * @param {Function} fn Function :: a -> String
-	     * @param {Array} array The array of objects to index
-	     * @return {Object} An object indexing each array element by the given property.
-	     * @example
-	     *
-	     *      var list = [{id: 'xyz', title: 'A'}, {id: 'abc', title: 'B'}];
-	     *      R.indexBy(R.prop('id'), list);
-	     *      //=> {abc: {id: 'abc', title: 'B'}, xyz: {id: 'xyz', title: 'A'}}
-	     */
-	    var indexBy = _curry2(function indexBy(fn, list) {
-	        return _reduce(function (acc, elem) {
-	            var key = fn(elem);
-	            acc[key] = elem;
-	            return acc;
-	        }, {}, list);
-	    });
 	
 	    /**
 	     * Returns all but the last element of the given list or string.
@@ -6133,15 +6291,64 @@ webpackJsonp([2],{
 	     *      //=> [{id: 456, name: 'Stephen Stills'}, {id: 177, name: 'Neil Young'}]
 	     */
 	    var intersectionWith = _curry3(function intersectionWith(pred, list1, list2) {
+	        var lookupList, filteredList;
+	        if (list1.length > list2.length) {
+	            lookupList = list1;
+	            filteredList = list2;
+	        } else {
+	            lookupList = list2;
+	            filteredList = list1;
+	        }
 	        var results = [];
 	        var idx = 0;
-	        while (idx < list1.length) {
-	            if (_containsWith(pred, list1[idx], list2)) {
-	                results[results.length] = list1[idx];
+	        while (idx < filteredList.length) {
+	            if (_containsWith(pred, filteredList[idx], lookupList)) {
+	                results[results.length] = filteredList[idx];
 	            }
 	            idx += 1;
 	        }
 	        return uniqWith(pred, results);
+	    });
+	
+	    /**
+	     * Transforms the items of the list with the transducer and appends the
+	     * transformed items to the accumulator using an appropriate iterator function
+	     * based on the accumulator type.
+	     *
+	     * The accumulator can be an array, string, object or a transformer. Iterated
+	     * items will be appended to arrays and concatenated to strings. Objects will
+	     * be merged directly or 2-item arrays will be merged as key, value pairs.
+	     *
+	     * The accumulator can also be a transformer object that provides a 2-arity
+	     * reducing iterator function, step, 0-arity initial value function, init, and
+	     * 1-arity result extraction function result. The step function is used as the
+	     * iterator function in reduce. The result function is used to convert the
+	     * final accumulator into the return type and in most cases is R.identity. The
+	     * init function is used to provide the initial accumulator.
+	     *
+	     * The iteration is performed with R.reduce after initializing the transducer.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.12.0
+	     * @category List
+	     * @sig a -> (b -> b) -> [c] -> a
+	     * @param {*} acc The initial accumulator value.
+	     * @param {Function} xf The transducer function. Receives a transformer and returns a transformer.
+	     * @param {Array} list The list to iterate over.
+	     * @return {*} The final, accumulated value.
+	     * @example
+	     *
+	     *      var numbers = [1, 2, 3, 4];
+	     *      var transducer = R.compose(R.map(R.add(1)), R.take(2));
+	     *
+	     *      R.into([], transducer, numbers); //=> [2, 3]
+	     *
+	     *      var intoArray = R.into([]);
+	     *      intoArray(transducer, numbers); //=> [2, 3]
+	     */
+	    var into = _curry3(function into(acc, xf, list) {
+	        return _isTransformer(acc) ? _reduce(xf(acc), acc['@@transducer/init'](), list) : _reduce(xf(_stepCat(acc)), _clone(acc, [], [], false), list);
 	    });
 	
 	    /**
@@ -6386,8 +6593,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category Object
 	     * @sig (a -> a -> a) -> {a} -> {a} -> {a}
 	     * @param {Function} fn
@@ -6461,36 +6667,6 @@ webpackJsonp([2],{
 	     *      greetMsJaneJones('Hello'); //=> 'Hello, Ms. Jane Jones!'
 	     */
 	    var partialRight = _createPartialApplicator(flip(_concat));
-	
-	    /**
-	     * Takes a predicate and a list and returns the pair of lists of elements which
-	     * do and do not satisfy the predicate, respectively.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since v0.1.4
-	     * @category List
-	     * @sig (a -> Boolean) -> [a] -> [[a],[a]]
-	     * @param {Function} pred A predicate to determine which array the element belongs to.
-	     * @param {Array} list The array to partition.
-	     * @return {Array} A nested array, containing first an array of elements that satisfied the predicate,
-	     *         and second an array of elements that did not satisfy.
-	     * @see R.filter, R.reject
-	     * @example
-	     *
-	     *      R.partition(R.contains('s'), ['sss', 'ttt', 'foo', 'bars']);
-	     *      //=> [ [ 'sss', 'bars' ],  [ 'ttt', 'foo' ] ]
-	     */
-	    var partition = _curry2(function partition(pred, list) {
-	        return _reduce(function (acc, elt) {
-	            var xs = acc[pred(elt) ? 0 : 1];
-	            xs[xs.length] = elt;
-	            return acc;
-	        }, [
-	            [],
-	            []
-	        ], list);
-	    });
 	
 	    /**
 	     * Determines whether a nested path on an object has a specific value, in
@@ -6652,6 +6828,56 @@ webpackJsonp([2],{
 	     *      R.reduce(add, 10, numbers); //=> 16
 	     */
 	    var reduce = _curry3(_reduce);
+	
+	    /**
+	     * Groups the elements of the list according to the result of calling
+	     * the String-returning function `keyFn` on each element and reduces the elements
+	     * of each group to a single value via the reducer function `valueFn`.
+	     *
+	     * This function is basically a more general `groupBy` function.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.20.0
+	     * @category List
+	     * @sig ((a, b) -> a) -> a -> (b -> String) -> [b] -> {String: a}
+	     * @param {Function} valueFn The function that reduces the elements of each group to a single
+	     *        value. Receives two values, accumulator for a particular group and the current element.
+	     * @param {*} acc The (initial) accumulator value for each group.
+	     * @param {Function} keyFn The function that maps the list's element into a key.
+	     * @param {Array} list The array to group.
+	     * @return {Object} An object with the output of `keyFn` for keys, mapped to the output of
+	     *         `valueFn` for elements which produced that key when passed to `keyFn`.
+	     * @see R.groupBy, R.reduce
+	     * @example
+	     *
+	     *      var reduceToNamesBy = R.reduceBy((acc, student) => acc.concat(student.name), []);
+	     *      var namesByGrade = reduceToNamesBy(function(student) {
+	     *        var score = student.score;
+	     *        return score < 65 ? 'F' :
+	     *               score < 70 ? 'D' :
+	     *               score < 80 ? 'C' :
+	     *               score < 90 ? 'B' : 'A';
+	     *      });
+	     *      var students = [{name: 'Lucy', score: 92},
+	     *                      {name: 'Drew', score: 85},
+	     *                      // ...
+	     *                      {name: 'Bart', score: 62}];
+	     *      namesByGrade(students);
+	     *      // {
+	     *      //   'A': ['Lucy'],
+	     *      //   'B': ['Drew']
+	     *      //   // ...,
+	     *      //   'F': ['Bart']
+	     *      // }
+	     */
+	    var reduceBy = _curryN(4, [], function reduceBy(valueFn, valueAcc, keyFn, list) {
+	        return _reduce(function (acc, elt) {
+	            var key = keyFn(elt);
+	            acc[key] = valueFn(_has(key, acc) ? acc[key] : valueAcc, elt);
+	            return acc;
+	        }, {}, list);
+	    });
 	
 	    /**
 	     * The complement of `filter`.
@@ -6991,6 +7217,7 @@ webpackJsonp([2],{
 	     * @sig [a] -> Boolean
 	     * @param {Array} list The array to consider.
 	     * @return {Boolean} `true` if all elements are unique, else `false`.
+	     * @deprecated since v0.20.0
 	     * @example
 	     *
 	     *      R.allUniq(['1', 1]); //=> true
@@ -7076,6 +7303,42 @@ webpackJsonp([2],{
 	    });
 	
 	    /**
+	     * Given a spec object recursively mapping properties to functions, creates a
+	     * function producing an object of the same structure, by mapping each property
+	     * to the result of calling its associated function with the supplied arguments.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.20.0
+	     * @category Function
+	     * @sig {k: ((a, b, ..., m) -> v)} -> ((a, b, ..., m) -> {k: v})
+	     * @param {Object} spec an object recursively mapping properties to functions for
+	     *        producing the values for these properties.
+	     * @return {Function} A function that returns an object of the same structure
+	     * as `spec', with each property set to the value returned by calling its
+	     * associated function with the supplied arguments.
+	     * @see R.juxt
+	     * @example
+	     *
+	     *      var getMetrics = R.applySpec({
+	     *                                      sum: R.add,
+	     *                                      nested: { mul: R.multiply }
+	     *                                   });
+	     *      getMetrics(2, 4); // => { sum: 6, nested: { mul: 8 } }
+	     */
+	    var applySpec = _curry1(function applySpec(spec) {
+	        spec = map(function (v) {
+	            return typeof v == 'function' ? v : applySpec(v);
+	        }, spec);
+	        return curryN(reduce(max, 0, pluck('length', values(spec))), function () {
+	            var args = arguments;
+	            return map(function (f) {
+	                return apply(f, args);
+	            }, spec);
+	        });
+	    });
+	
+	    /**
 	     * Returns the result of calling its first argument with the remaining
 	     * arguments. This is occasionally useful as a converging function for
 	     * `R.converge`: the left branch can produce a function while the right branch
@@ -7136,40 +7399,44 @@ webpackJsonp([2],{
 	    }));
 	
 	    /**
-	     * Turns a list of Functors into a Functor of a list, applying a mapping
-	     * function to the elements of the list along the way.
+	     * Returns a function, `fn`, which encapsulates if/else-if/else logic.
+	     * `R.cond` takes a list of [predicate, transform] pairs. All of the arguments
+	     * to `fn` are applied to each of the predicates in turn until one returns a
+	     * "truthy" value, at which point `fn` returns the result of applying its
+	     * arguments to the corresponding transformer. If none of the predicates
+	     * matches, `fn` returns undefined.
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since v0.8.0
-	     * @category List
-	     * @sig Functor f => (a -> f b) -> (x -> f x) -> [a] -> f [b]
-	     * @param {Function} fn The transformation function
-	     * @param {Function} of A function that returns the data type to return
-	     * @param {Array} list An array of functors of the same type
-	     * @return {*}
-	     * @see R.traverse
-	     * @deprecated since v0.19.0
+	     * @since v0.6.0
+	     * @category Logic
+	     * @sig [[(*... -> Boolean),(*... -> *)]] -> (*... -> *)
+	     * @param {Array} pairs
+	     * @return {Function}
 	     * @example
 	     *
-	     *      var add10 = R.map(R.add(10));
-	     *      R.commuteMap(add10, R.of, [[1], [2, 3]]);   //=> [[11, 12], [11, 13]]
-	     *      R.commuteMap(add10, R.of, [[1, 2], [3]]);   //=> [[11, 13], [12, 13]]
-	     *      R.commuteMap(add10, R.of, [[1], [2], [3]]); //=> [[11, 12, 13]]
-	     *      R.commuteMap(add10, Maybe.of, [Just(1), Just(2), Just(3)]);   //=> Just([11, 12, 13])
-	     *      R.commuteMap(add10, Maybe.of, [Just(1), Just(2), Nothing()]); //=> Nothing()
-	     *
-	     *      var fetch = url => Future((rej, res) => http.get(url, res).on('error', rej));
-	     *      R.commuteMap(fetch, Future.of, [
-	     *        'http://ramdajs.com',
-	     *        'http://github.com/ramda'
-	     *      ]); //=> Future([IncomingMessage, IncomingMessage])
+	     *      var fn = R.cond([
+	     *        [R.equals(0),   R.always('water freezes at 0°C')],
+	     *        [R.equals(100), R.always('water boils at 100°C')],
+	     *        [R.T,           temp => 'nothing special happens at ' + temp + '°C']
+	     *      ]);
+	     *      fn(0); //=> 'water freezes at 0°C'
+	     *      fn(50); //=> 'nothing special happens at 50°C'
+	     *      fn(100); //=> 'water boils at 100°C'
 	     */
-	    var commuteMap = _curry3(function commuteMap(fn, of, list) {
-	        function consF(acc, x) {
-	            return ap(map(prepend, fn(x)), acc);
-	        }
-	        return reduceRight(consF, of([]), list);
+	    var cond = _curry1(function cond(pairs) {
+	        var arity = reduce(max, 0, map(function (pair) {
+	            return pair[0].length;
+	        }, pairs));
+	        return _arity(arity, function () {
+	            var idx = 0;
+	            while (idx < pairs.length) {
+	                if (pairs[idx][0].apply(this, arguments)) {
+	                    return pairs[idx][1].apply(this, arguments);
+	                }
+	                idx += 1;
+	            }
+	        });
 	    });
 	
 	    /**
@@ -7264,7 +7531,7 @@ webpackJsonp([2],{
 	     *      R.converge(add3, [multiply, add, subtract])(1, 2); //=> 4
 	     */
 	    var converge = _curry2(function converge(after, fns) {
-	        return curryN(Math.max.apply(Math, pluck('length', fns)), function () {
+	        return curryN(reduce(max, 0, pluck('length', fns)), function () {
 	            var args = arguments;
 	            var context = this;
 	            return after.apply(context, _map(function (fn) {
@@ -7272,6 +7539,31 @@ webpackJsonp([2],{
 	            }, fns));
 	        });
 	    });
+	
+	    /**
+	     * Counts the elements of a list according to how many match each value of a
+	     * key generated by the supplied function. Returns an object mapping the keys
+	     * produced by `fn` to the number of occurrences in the list. Note that all
+	     * keys are coerced to strings because of how JavaScript objects work.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.1.0
+	     * @category Relation
+	     * @sig (a -> String) -> [a] -> {*}
+	     * @param {Function} fn The function used to map values to keys.
+	     * @param {Array} list The list to count elements from.
+	     * @return {Object} An object mapping keys to number of occurrences in the list.
+	     * @example
+	     *
+	     *      var numbers = [1.0, 1.1, 1.2, 2.0, 3.0, 2.2];
+	     *      var letters = R.split('', 'abcABCaaaBBc');
+	     *      R.countBy(Math.floor)(numbers);    //=> {'1': 3, '2': 2, '3': 1}
+	     *      R.countBy(R.toLower)(letters);   //=> {'a': 5, 'b': 4, 'c': 3}
+	     */
+	    var countBy = reduceBy(function (acc, elem) {
+	        return acc + 1;
+	    }, 0);
 	
 	    /**
 	     * Returns a new list without any consecutively repeating elements. Equality is
@@ -7293,7 +7585,6 @@ webpackJsonp([2],{
 	     * @see R.transduce
 	     * @example
 	     *
-	     *      var lengthEq = (x, y) => Math.abs(x) === Math.abs(y);
 	     *      var l = [1, -1, 1, 3, 4, -4, -4, -5, 5, 3, 3];
 	     *      R.dropRepeatsWith(R.eqBy(Math.abs), l); //=> [1, 3, 4, -5, 3]
 	     */
@@ -7360,6 +7651,78 @@ webpackJsonp([2],{
 	    });
 	
 	    /**
+	     * Splits a list into sub-lists stored in an object, based on the result of
+	     * calling a String-returning function on each element, and grouping the
+	     * results according to values returned.
+	     *
+	     * Dispatches to the `groupBy` method of the second argument, if present.
+	     *
+	     * Acts as a transducer if a transformer is given in list position.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.1.0
+	     * @category List
+	     * @sig (a -> String) -> [a] -> {String: [a]}
+	     * @param {Function} fn Function :: a -> String
+	     * @param {Array} list The array to group
+	     * @return {Object} An object with the output of `fn` for keys, mapped to arrays of elements
+	     *         that produced that key when passed to `fn`.
+	     * @see R.transduce
+	     * @example
+	     *
+	     *      var byGrade = R.groupBy(function(student) {
+	     *        var score = student.score;
+	     *        return score < 65 ? 'F' :
+	     *               score < 70 ? 'D' :
+	     *               score < 80 ? 'C' :
+	     *               score < 90 ? 'B' : 'A';
+	     *      });
+	     *      var students = [{name: 'Abby', score: 84},
+	     *                      {name: 'Eddy', score: 58},
+	     *                      // ...
+	     *                      {name: 'Jack', score: 69}];
+	     *      byGrade(students);
+	     *      // {
+	     *      //   'A': [{name: 'Dianne', score: 99}],
+	     *      //   'B': [{name: 'Abby', score: 84}]
+	     *      //   // ...,
+	     *      //   'F': [{name: 'Eddy', score: 58}]
+	     *      // }
+	     */
+	    var groupBy = _curry2(_dispatchable('groupBy', _xgroupBy, reduceBy(function (acc, item) {
+	        if (acc == null) {
+	            acc = [];
+	        }
+	        acc.push(item);
+	        return acc;
+	    }, null)));
+	
+	    /**
+	     * Given a function that generates a key, turns a list of objects into an
+	     * object indexing the objects by the given key. Note that if multiple
+	     * objects generate the same value for the indexing key only the last value
+	     * will be included in the generated object.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.19.0
+	     * @category List
+	     * @sig (a -> String) -> [{k: v}] -> {k: {k: v}}
+	     * @param {Function} fn Function :: a -> String
+	     * @param {Array} array The array of objects to index
+	     * @return {Object} An object indexing each array element by the given property.
+	     * @example
+	     *
+	     *      var list = [{id: 'xyz', title: 'A'}, {id: 'abc', title: 'B'}];
+	     *      R.indexBy(R.prop('id'), list);
+	     *      //=> {abc: {id: 'abc', title: 'B'}, xyz: {id: 'xyz', title: 'A'}}
+	     */
+	    var indexBy = reduceBy(function (acc, elem) {
+	        return elem;
+	    }, null);
+	
+	    /**
 	     * Returns the position of the first occurrence of an item in an array, or -1
 	     * if the item is not included in the array. `R.equals` is used to determine
 	     * equality.
@@ -7387,21 +7750,19 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category Function
 	     * @sig [(a, b, ..., m) -> n] -> ((a, b, ..., m) -> [n])
 	     * @param {Array} fns An array of functions
 	     * @return {Function} A function that returns a list of values after applying each of the original `fns` to its parameters.
+	     * @see R.applySpec
 	     * @example
 	     *
 	     *      var range = R.juxt([Math.min, Math.max]);
 	     *      range(3, 4, 9, -3); //=> [-3, 9]
 	     */
 	    var juxt = _curry1(function juxt(fns) {
-	        return function () {
-	            return map(apply(__, arguments), fns);
-	        };
+	        return converge(_arrayOf, fns);
 	    });
 	
 	    /**
@@ -7428,11 +7789,11 @@ webpackJsonp([2],{
 	     *      R.over(xLens, R.negate, {x: 1, y: 2});  //=> {x: -1, y: 2}
 	     */
 	    var lens = _curry2(function lens(getter, setter) {
-	        return function (f) {
-	            return function (s) {
-	                return map(function (v) {
-	                    return setter(v, s);
-	                }, f(getter(s)));
+	        return function (toFunctorFn) {
+	            return function (target) {
+	                return map(function (focus) {
+	                    return setter(focus, target);
+	                }, toFunctorFn(getter(target)));
 	            };
 	        };
 	    });
@@ -7466,8 +7827,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category Object
 	     * @typedefn Lens s a = Functor f => (a -> f a) -> s -> f s
 	     * @sig [String] -> Lens s a
@@ -7512,7 +7872,7 @@ webpackJsonp([2],{
 	
 	    /**
 	     * "lifts" a function to be the specified arity, so that it may "map over" that
-	     * many lists (or other objects that satisfies the [FantasyLand Apply spec](https://github.com/fantasyland/fantasy-land#apply)).
+	     * many lists, Functions or other objects that satisfy the [FantasyLand Apply spec](https://github.com/fantasyland/fantasy-land#apply).
 	     *
 	     * @func
 	     * @memberOf R
@@ -7521,7 +7881,7 @@ webpackJsonp([2],{
 	     * @sig Number -> (*... -> *) -> ([*]... -> [*])
 	     * @param {Function} fn The function to lift into higher context
 	     * @return {Function} The lifted function.
-	     * @see R.lift
+	     * @see R.lift, R.ap
 	     * @example
 	     *
 	     *      var madd3 = R.liftN(3, R.curryN(3, (...args) => R.sum(args)));
@@ -7582,56 +7942,40 @@ webpackJsonp([2],{
 	    });
 	
 	    /**
-	     * Create a new object with the own properties of the first object merged with
-	     * the own properties of the second object. If a key exists in both objects,
-	     * the value from the second object will be used.
+	     * Takes a predicate and a list or other "filterable" object and returns the
+	     * pair of filterable objects of the same type of elements which do and do not
+	     * satisfy, the predicate, respectively.
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since v0.1.0
-	     * @category Object
-	     * @sig {k: v} -> {k: v} -> {k: v}
-	     * @param {Object} l
-	     * @param {Object} r
-	     * @return {Object}
-	     * @see R.mergeWith, R.mergeWithKey
-	     * @example
-	     *
-	     *      R.merge({ 'name': 'fred', 'age': 10 }, { 'age': 40 });
-	     *      //=> { 'name': 'fred', 'age': 40 }
-	     *
-	     *      var resetToDefault = R.merge(R.__, {x: 0});
-	     *      resetToDefault({x: 5, y: 2}); //=> {x: 0, y: 2}
-	     */
-	    var merge = mergeWith(function (l, r) {
-	        return r;
-	    });
-	
-	    /**
-	     * Merges a list of objects together into one object.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since v0.10.0
+	     * @since v0.1.4
 	     * @category List
-	     * @sig [{k: v}] -> {k: v}
-	     * @param {Array} list An array of objects
-	     * @return {Object} A merged object.
-	     * @see R.reduce
+	     * @sig Filterable f => (a -> Boolean) -> f a -> [f a, f a]
+	     * @param {Function} pred A predicate to determine which side the element belongs to.
+	     * @param {Array} filterable the list (or other filterable) to partition.
+	     * @return {Array} An array, containing first the subset of elements that satisfy the
+	     *         predicate, and second the subset of elements that do not satisfy.
+	     * @see R.filter, R.reject
 	     * @example
 	     *
-	     *      R.mergeAll([{foo:1},{bar:2},{baz:3}]); //=> {foo:1,bar:2,baz:3}
-	     *      R.mergeAll([{foo:1},{foo:2},{bar:2}]); //=> {foo:2,bar:2}
+	     *      R.partition(R.contains('s'), ['sss', 'ttt', 'foo', 'bars']);
+	     *      // => [ [ 'sss', 'bars' ],  [ 'ttt', 'foo' ] ]
+	     *
+	     *      R.partition(R.contains('s'), { a: 'sss', b: 'ttt', foo: 'bars' });
+	     *      // => [ { a: 'sss', foo: 'bars' }, { b: 'ttt' }  ]
 	     */
-	    var mergeAll = _curry1(function mergeAll(list) {
-	        return reduce(merge, {}, list);
-	    });
+	    var partition = juxt([
+	        filter,
+	        reject
+	    ]);
 	
 	    /**
 	     * Performs left-to-right function composition. The leftmost function may have
 	     * any arity; the remaining functions must be unary.
 	     *
 	     * In some libraries this function is named `sequence`.
+	     *
+	     * **Note:** The result of pipe is not automatically curried.
 	     *
 	     * @func
 	     * @memberOf R
@@ -7705,8 +8049,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category List
 	     * @sig (Applicative f, Traversable t) => (a -> f a) -> t (f a) -> f (t a)
 	     * @param {Function} of
@@ -7737,8 +8080,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category List
 	     * @sig (Applicative f, Traversable t) => (a -> f a) -> (a -> f b) -> t a -> f (t b)
 	     * @param {Function} of
@@ -7748,11 +8090,11 @@ webpackJsonp([2],{
 	     * @see R.sequence
 	     * @example
 	     *
-	     *      R.traverse(Maybe.of, R.negate, [Just(1), Just(2), Just(3)]);   //=> Just([-1, -2, -3])
-	     *      R.traverse(Maybe.of, R.negate, [Just(1), Just(2), Nothing()]); //=> Nothing()
+	     *      // Returns `Nothing` if the given divisor is `0`
+	     *      safeDiv = n => d => d === 0 ? Nothing() : Just(n / d)
 	     *
-	     *      R.traverse(R.of, R.negate, Just([1, 2, 3])); //=> [Just(-1), Just(-2), Just(-3)]
-	     *      R.traverse(R.of, R.negate, Nothing());       //=> [Nothing()]
+	     *      R.traverse(Maybe.of, safeDiv(10), [2, 4, 5]); //=> Just([5, 2.5, 2])
+	     *      R.traverse(Maybe.of, safeDiv(10), [2, 0, 5]); //=> Nothing
 	     */
 	    var traverse = _curry3(function traverse(of, f, traversable) {
 	        return sequence(of, map(f, traversable));
@@ -7780,45 +8122,6 @@ webpackJsonp([2],{
 	    var _contains = function _contains(a, list) {
 	        return _indexOf(list, a, 0) >= 0;
 	    };
-	
-	    var _stepCat = function () {
-	        var _stepCatArray = {
-	            '@@transducer/init': Array,
-	            '@@transducer/step': function (xs, x) {
-	                return _concat(xs, [x]);
-	            },
-	            '@@transducer/result': _identity
-	        };
-	        var _stepCatString = {
-	            '@@transducer/init': String,
-	            '@@transducer/step': function (a, b) {
-	                return a + b;
-	            },
-	            '@@transducer/result': _identity
-	        };
-	        var _stepCatObject = {
-	            '@@transducer/init': Object,
-	            '@@transducer/step': function (result, input) {
-	                return merge(result, isArrayLike(input) ? objOf(input[0], input[1]) : input);
-	            },
-	            '@@transducer/result': _identity
-	        };
-	        return function _stepCat(obj) {
-	            if (_isTransformer(obj)) {
-	                return obj;
-	            }
-	            if (isArrayLike(obj)) {
-	                return _stepCatArray;
-	            }
-	            if (typeof obj === 'string') {
-	                return _stepCatString;
-	            }
-	            if (typeof obj === 'object') {
-	                return _stepCatObject;
-	            }
-	            throw new Error('Cannot create transformer for ' + obj);
-	        };
-	    }();
 	
 	    //  mapPairs :: (Object, [String]) -> [String]
 	    var _toString = function _toString(x, seen) {
@@ -7863,31 +8166,10 @@ webpackJsonp([2],{
 	    };
 	
 	    /**
-	     * Turns a list of Functors into a Functor of a list.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since v0.8.0
-	     * @category List
-	     * @sig Functor f => (x -> f x) -> [f a] -> f [a]
-	     * @param {Function} of A function that returns the data type to return
-	     * @param {Array} list An array of functors of the same type
-	     * @return {*}
-	     * @see R.sequence
-	     * @deprecated since v0.19.0
-	     * @example
-	     *
-	     *      R.commute(R.of, [[1], [2, 3]]);   //=> [[1, 2], [1, 3]]
-	     *      R.commute(R.of, [[1, 2], [3]]);   //=> [[1, 3], [2, 3]]
-	     *      R.commute(R.of, [[1], [2], [3]]); //=> [[1, 2, 3]]
-	     *      R.commute(Maybe.of, [Just(1), Just(2), Just(3)]);   //=> Just([1, 2, 3])
-	     *      R.commute(Maybe.of, [Just(1), Just(2), Nothing()]); //=> Nothing()
-	     */
-	    var commute = commuteMap(identity);
-	
-	    /**
 	     * Performs right-to-left function composition. The rightmost function may have
 	     * any arity; the remaining functions must be unary.
+	     *
+	     * **Note:** The result of compose is not automatically curried.
 	     *
 	     * @func
 	     * @memberOf R
@@ -8076,48 +8358,7 @@ webpackJsonp([2],{
 	    var dropRepeats = _curry1(_dispatchable('dropRepeats', _xdropRepeatsWith(equals), dropRepeatsWith(equals)));
 	
 	    /**
-	     * Transforms the items of the list with the transducer and appends the
-	     * transformed items to the accumulator using an appropriate iterator function
-	     * based on the accumulator type.
-	     *
-	     * The accumulator can be an array, string, object or a transformer. Iterated
-	     * items will be appended to arrays and concatenated to strings. Objects will
-	     * be merged directly or 2-item arrays will be merged as key, value pairs.
-	     *
-	     * The accumulator can also be a transformer object that provides a 2-arity
-	     * reducing iterator function, step, 0-arity initial value function, init, and
-	     * 1-arity result extraction function result. The step function is used as the
-	     * iterator function in reduce. The result function is used to convert the
-	     * final accumulator into the return type and in most cases is R.identity. The
-	     * init function is used to provide the initial accumulator.
-	     *
-	     * The iteration is performed with R.reduce after initializing the transducer.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since v0.12.0
-	     * @category List
-	     * @sig a -> (b -> b) -> [c] -> a
-	     * @param {*} acc The initial accumulator value.
-	     * @param {Function} xf The transducer function. Receives a transformer and returns a transformer.
-	     * @param {Array} list The list to iterate over.
-	     * @return {*} The final, accumulated value.
-	     * @example
-	     *
-	     *      var numbers = [1, 2, 3, 4];
-	     *      var transducer = R.compose(R.map(R.add(1)), R.take(2));
-	     *
-	     *      R.into([], transducer, numbers); //=> [2, 3]
-	     *
-	     *      var intoArray = R.into([]);
-	     *      intoArray(transducer, numbers); //=> [2, 3]
-	     */
-	    var into = _curry3(function into(acc, xf, list) {
-	        return _isTransformer(acc) ? _reduce(xf(acc), acc['@@transducer/init'](), list) : _reduce(xf(_stepCat(acc)), acc, list);
-	    });
-	
-	    /**
-	     * "lifts" a function of arity > 1 so that it may "map over" an Array or other
+	     * "lifts" a function of arity > 1 so that it may "map over" a list, Function or other
 	     * object that satisfies the [FantasyLand Apply spec](https://github.com/fantasyland/fantasy-land#apply).
 	     *
 	     * @func
@@ -8246,102 +8487,6 @@ webpackJsonp([2],{
 	    });
 	
 	    /**
-	     * Returns a new list containing only one copy of each element in the original
-	     * list, based upon the value returned by applying the supplied function to
-	     * each list element. Prefers the first item if the supplied function produces
-	     * the same value on two items. `R.equals` is used for comparison.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since v0.16.0
-	     * @category List
-	     * @sig (a -> b) -> [a] -> [a]
-	     * @param {Function} fn A function used to produce a value to use during comparisons.
-	     * @param {Array} list The array to consider.
-	     * @return {Array} The list of unique items.
-	     * @example
-	     *
-	     *      R.uniqBy(Math.abs, [-1, -5, 2, 10, 1, 2]); //=> [-1, -5, 2, 10]
-	     */
-	    /* globals Set */
-	    // distinguishing between +0 and -0 is not supported by Set
-	    /* falls through */
-	    // these types can all utilise Set
-	    // prevent scan for null by tracking as a boolean
-	    /* falls through */
-	    // scan through all previously applied items
-	    var uniqBy = _curry2(/* globals Set */
-	    typeof Set === 'undefined' ? function uniqBy(fn, list) {
-	        var idx = 0;
-	        var applied = [];
-	        var result = [];
-	        var appliedItem, item;
-	        while (idx < list.length) {
-	            item = list[idx];
-	            appliedItem = fn(item);
-	            if (!_contains(appliedItem, applied)) {
-	                result.push(item);
-	                applied.push(appliedItem);
-	            }
-	            idx += 1;
-	        }
-	        return result;
-	    } : function uniqBySet(fn, list) {
-	        var set = new Set();
-	        var applied = [];
-	        var prevSetSize = 0;
-	        var result = [];
-	        var nullExists = false;
-	        var negZeroExists = false;
-	        var idx = 0;
-	        var appliedItem, item, newSetSize;
-	        while (idx < list.length) {
-	            item = list[idx];
-	            appliedItem = fn(item);
-	            switch (typeof appliedItem) {
-	            case 'number':
-	                // distinguishing between +0 and -0 is not supported by Set
-	                if (appliedItem === 0 && !negZeroExists && 1 / appliedItem === -Infinity) {
-	                    negZeroExists = true;
-	                    result.push(item);
-	                    break;
-	                }
-	            /* falls through */
-	            case 'string':
-	            case 'boolean':
-	            case 'function':
-	            case 'undefined':
-	                // these types can all utilise Set
-	                set.add(appliedItem);
-	                newSetSize = set.size;
-	                if (newSetSize > prevSetSize) {
-	                    result.push(item);
-	                    prevSetSize = newSetSize;
-	                }
-	                break;
-	            case 'object':
-	                if (appliedItem === null) {
-	                    if (!nullExists) {
-	                        // prevent scan for null by tracking as a boolean
-	                        nullExists = true;
-	                        result.push(null);
-	                    }
-	                    break;
-	                }
-	            /* falls through */
-	            default:
-	                // scan through all previously applied items
-	                if (!_contains(appliedItem, applied)) {
-	                    applied.push(appliedItem);
-	                    result.push(item);
-	                }
-	            }
-	            idx += 1;
-	        }
-	        return result;
-	    });
-	
-	    /**
 	     * Returns a new list without values in the first argument.
 	     * `R.equals` is used to determine equality.
 	     *
@@ -8349,8 +8494,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category List
 	     * @sig [a] -> [a] -> [a]
 	     * @param {Array} list1 The values to be removed from `list2`.
@@ -8363,6 +8507,221 @@ webpackJsonp([2],{
 	     */
 	    var without = _curry2(function (xs, list) {
 	        return reject(flip(_contains)(xs), list);
+	    });
+	
+	    // A simple Set type that honours R.equals semantics
+	    /* globals Set */
+	    /**
+	       * Combines the logic for checking whether an item is a member of the set and
+	       * for adding a new item to the set.
+	       *
+	       * @param item       The item to check or add to the Set instance.
+	       * @param shouldAdd  If true, the item will be added to the set if it doesn't
+	       *                   already exist.
+	       * @param set        The set instance to check or add to.
+	       * @return {boolean} When shouldAdd is true, this will return true when a new
+	       *                   item was added otherwise false. When shouldAdd is false,
+	       *                   this will return true if the item already exists, otherwise
+	       *                   false.
+	       */
+	    // distinguish between +0 and -0
+	    // these types can all utilise Set
+	    // set._items['boolean'] holds a two element array
+	    // representing [ falseExists, trueExists ]
+	    // compare functions for reference equality
+	    /* falls through */
+	    // reduce the search size of heterogeneous sets by creating buckets
+	    // for each type.
+	    // scan through all previously applied items
+	    var _Set = function () {
+	        function _Set() {
+	            /* globals Set */
+	            this._nativeSet = typeof Set === 'function' ? new Set() : null;
+	            this._items = {};
+	        }
+	        _Set.prototype.add = function (item) {
+	            return hasOrAdd(item, true, this);
+	        };
+	        _Set.prototype.has = function (item) {
+	            return hasOrAdd(item, false, this);
+	        };
+	        /**
+	       * Combines the logic for checking whether an item is a member of the set and
+	       * for adding a new item to the set.
+	       *
+	       * @param item       The item to check or add to the Set instance.
+	       * @param shouldAdd  If true, the item will be added to the set if it doesn't
+	       *                   already exist.
+	       * @param set        The set instance to check or add to.
+	       * @return {boolean} When shouldAdd is true, this will return true when a new
+	       *                   item was added otherwise false. When shouldAdd is false,
+	       *                   this will return true if the item already exists, otherwise
+	       *                   false.
+	       */
+	        function hasOrAdd(item, shouldAdd, set) {
+	            var type = typeof item;
+	            var prevSize, newSize;
+	            switch (type) {
+	            case 'string':
+	            case 'number':
+	                // distinguish between +0 and -0
+	                if (item === 0 && !set._items['-0'] && 1 / item === -Infinity) {
+	                    if (shouldAdd) {
+	                        set._items['-0'] = true;
+	                    }
+	                    return shouldAdd;
+	                }
+	                // these types can all utilise Set
+	                if (set._nativeSet !== null) {
+	                    if (shouldAdd) {
+	                        prevSize = set._nativeSet.size;
+	                        set._nativeSet.add(item);
+	                        newSize = set._nativeSet.size;
+	                        return newSize > prevSize;
+	                    } else {
+	                        return set._nativeSet.has(item);
+	                    }
+	                } else {
+	                    if (!(type in set._items)) {
+	                        if (shouldAdd) {
+	                            set._items[type] = {};
+	                            set._items[type][item] = true;
+	                        }
+	                        return shouldAdd;
+	                    } else if (item in set._items[type]) {
+	                        return !shouldAdd;
+	                    } else {
+	                        if (shouldAdd) {
+	                            set._items[type][item] = true;
+	                        }
+	                        return shouldAdd;
+	                    }
+	                }
+	            case 'boolean':
+	                // set._items['boolean'] holds a two element array
+	                // representing [ falseExists, trueExists ]
+	                if (type in set._items) {
+	                    var bIdx = item ? 1 : 0;
+	                    if (set._items[type][bIdx]) {
+	                        return !shouldAdd;
+	                    } else {
+	                        if (shouldAdd) {
+	                            set._items[type][bIdx] = true;
+	                        }
+	                        return shouldAdd;
+	                    }
+	                } else {
+	                    if (shouldAdd) {
+	                        set._items[type] = item ? [
+	                            false,
+	                            true
+	                        ] : [
+	                            true,
+	                            false
+	                        ];
+	                    }
+	                    return shouldAdd;
+	                }
+	            case 'function':
+	                // compare functions for reference equality
+	                if (set._nativeSet !== null) {
+	                    if (shouldAdd) {
+	                        prevSize = set._nativeSet.size;
+	                        set._nativeSet.add(item);
+	                        newSize = set._nativeSet.size;
+	                        return newSize > prevSize;
+	                    } else {
+	                        return set._nativeSet.has(item);
+	                    }
+	                } else {
+	                    if (!(type in set._items)) {
+	                        if (shouldAdd) {
+	                            set._items[type] = [item];
+	                        }
+	                        return shouldAdd;
+	                    }
+	                    if (!_contains(item, set._items[type])) {
+	                        if (shouldAdd) {
+	                            set._items[type].push(item);
+	                        }
+	                        return shouldAdd;
+	                    }
+	                }
+	                return !shouldAdd;
+	            case 'undefined':
+	                if (set._items[type]) {
+	                    return !shouldAdd;
+	                } else {
+	                    if (shouldAdd) {
+	                        set._items[type] = true;
+	                    }
+	                    return shouldAdd;
+	                }
+	            case 'object':
+	                if (item === null) {
+	                    if (!set._items['null']) {
+	                        if (shouldAdd) {
+	                            set._items['null'] = true;
+	                        }
+	                        return shouldAdd;
+	                    }
+	                    return !shouldAdd;
+	                }
+	            /* falls through */
+	            default:
+	                // reduce the search size of heterogeneous sets by creating buckets
+	                // for each type.
+	                type = Object.prototype.toString.call(item);
+	                if (!(type in set._items)) {
+	                    if (shouldAdd) {
+	                        set._items[type] = [item];
+	                    }
+	                    return shouldAdd;
+	                }
+	                // scan through all previously applied items
+	                if (!_contains(item, set._items[type])) {
+	                    if (shouldAdd) {
+	                        set._items[type].push(item);
+	                    }
+	                    return shouldAdd;
+	                }
+	                return !shouldAdd;
+	            }
+	        }
+	        return _Set;
+	    }();
+	
+	    /**
+	     * A function wrapping calls to the two functions in an `&&` operation,
+	     * returning the result of the first function if it is false-y and the result
+	     * of the second function otherwise. Note that this is short-circuited,
+	     * meaning that the second function will not be invoked if the first returns a
+	     * false-y value.
+	     *
+	     * In addition to functions, `R.both` also accepts any fantasy-land compatible
+	     * applicative functor.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.12.0
+	     * @category Logic
+	     * @sig (*... -> Boolean) -> (*... -> Boolean) -> (*... -> Boolean)
+	     * @param {Function} f a predicate
+	     * @param {Function} g another predicate
+	     * @return {Function} a function that applies its arguments to `f` and `g` and `&&`s their outputs together.
+	     * @see R.and
+	     * @example
+	     *
+	     *      var gt10 = x => x > 10;
+	     *      var even = x => x % 2 === 0;
+	     *      var f = R.both(gt10, even);
+	     *      f(100); //=> true
+	     *      f(101); //=> false
+	     */
+	    var both = _curry2(function both(f, g) {
+	        return _isFunction(f) ? function _both() {
+	            return f.apply(this, arguments) && g.apply(this, arguments);
+	        } : lift(and)(f, g);
 	    });
 	
 	    /**
@@ -8392,6 +8751,39 @@ webpackJsonp([2],{
 	     *      isOdd(42); //=> false
 	     */
 	    var complement = lift(not);
+	
+	    /**
+	     * A function wrapping calls to the two functions in an `||` operation,
+	     * returning the result of the first function if it is truth-y and the result
+	     * of the second function otherwise. Note that this is short-circuited,
+	     * meaning that the second function will not be invoked if the first returns a
+	     * truth-y value.
+	     *
+	     * In addition to functions, `R.either` also accepts any fantasy-land compatible
+	     * applicative functor.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.12.0
+	     * @category Logic
+	     * @sig (*... -> Boolean) -> (*... -> Boolean) -> (*... -> Boolean)
+	     * @param {Function} f a predicate
+	     * @param {Function} g another predicate
+	     * @return {Function} a function that applies its arguments to `f` and `g` and `||`s their outputs together.
+	     * @see R.or
+	     * @example
+	     *
+	     *      var gt10 = x => x > 10;
+	     *      var even = x => x % 2 === 0;
+	     *      var f = R.either(gt10, even);
+	     *      f(101); //=> true
+	     *      f(8); //=> true
+	     */
+	    var either = _curry2(function either(f, g) {
+	        return _isFunction(f) ? function _either() {
+	            return f.apply(this, arguments) || g.apply(this, arguments);
+	        } : lift(or)(f, g);
+	    });
 	
 	    /**
 	     * Turns a named method with a specified arity into a function that can be
@@ -8566,27 +8958,42 @@ webpackJsonp([2],{
 	
 	    /**
 	     * Returns a new list containing only one copy of each element in the original
-	     * list. `R.equals` is used to determine equality.
+	     * list, based upon the value returned by applying the supplied function to
+	     * each list element. Prefers the first item if the supplied function produces
+	     * the same value on two items. `R.equals` is used for comparison.
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since v0.1.0
+	     * @since v0.16.0
 	     * @category List
-	     * @sig [a] -> [a]
+	     * @sig (a -> b) -> [a] -> [a]
+	     * @param {Function} fn A function used to produce a value to use during comparisons.
 	     * @param {Array} list The array to consider.
 	     * @return {Array} The list of unique items.
 	     * @example
 	     *
-	     *      R.uniq([1, 1, 2, 1]); //=> [1, 2]
-	     *      R.uniq([1, '1']);     //=> [1, '1']
-	     *      R.uniq([[42], [42]]); //=> [[42]]
+	     *      R.uniqBy(Math.abs, [-1, -5, 2, 10, 1, 2]); //=> [-1, -5, 2, 10]
 	     */
-	    var uniq = uniqBy(identity);
+	    var uniqBy = _curry2(function uniqBy(fn, list) {
+	        var set = new _Set();
+	        var result = [];
+	        var idx = 0;
+	        var appliedItem, item;
+	        while (idx < list.length) {
+	            item = list[idx];
+	            appliedItem = fn(item);
+	            if (set.add(appliedItem)) {
+	                result.push(item);
+	            }
+	            idx += 1;
+	        }
+	        return result;
+	    });
 	
 	    /**
 	     * Returns the result of concatenating the given lists or strings.
 	     *
-	     * Dispatches to the `concat` method of the second argument, if present.
+	     * Dispatches to the `concat` method of the first argument, if present.
 	     *
 	     * @func
 	     * @memberOf R
@@ -8607,34 +9014,12 @@ webpackJsonp([2],{
 	    var concat = flip(invoker(1, 'concat'));
 	
 	    /**
-	     * Combines two lists into a set (i.e. no duplicates) composed of those
-	     * elements common to both lists.
-	     *
-	     * @func
-	     * @memberOf R
-	     * @since v0.1.0
-	     * @category Relation
-	     * @sig [*] -> [*] -> [*]
-	     * @param {Array} list1 The first list.
-	     * @param {Array} list2 The second list.
-	     * @return {Array} The list of elements found in both `list1` and `list2`.
-	     * @see R.intersectionWith
-	     * @example
-	     *
-	     *      R.intersection([1,2,3,4], [7,6,5,4,3]); //=> [4, 3]
-	     */
-	    var intersection = _curry2(function intersection(list1, list2) {
-	        return uniq(_filter(flip(_contains)(list1), list2));
-	    });
-	
-	    /**
 	     * Finds the set (i.e. no duplicates) of all elements contained in the first or
 	     * second list, but not both.
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category Relation
 	     * @sig [*] -> [*] -> [*]
 	     * @param {Array} list1 The first list.
@@ -8657,8 +9042,7 @@ webpackJsonp([2],{
 	     *
 	     * @func
 	     * @memberOf R
-	     * @since 0.19.1
-	     * @since 0.19.0
+	     * @since v0.19.0
 	     * @category Relation
 	     * @sig (a -> a -> Boolean) -> [a] -> [a] -> [a]
 	     * @param {Function} pred A predicate used to test whether two items are equal.
@@ -8675,6 +9059,54 @@ webpackJsonp([2],{
 	     */
 	    var symmetricDifferenceWith = _curry3(function symmetricDifferenceWith(pred, list1, list2) {
 	        return concat(differenceWith(pred, list1, list2), differenceWith(pred, list2, list1));
+	    });
+	
+	    /**
+	     * Returns a new list containing only one copy of each element in the original
+	     * list. `R.equals` is used to determine equality.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.1.0
+	     * @category List
+	     * @sig [a] -> [a]
+	     * @param {Array} list The array to consider.
+	     * @return {Array} The list of unique items.
+	     * @example
+	     *
+	     *      R.uniq([1, 1, 2, 1]); //=> [1, 2]
+	     *      R.uniq([1, '1']);     //=> [1, '1']
+	     *      R.uniq([[42], [42]]); //=> [[42]]
+	     */
+	    var uniq = uniqBy(identity);
+	
+	    /**
+	     * Combines two lists into a set (i.e. no duplicates) composed of those
+	     * elements common to both lists.
+	     *
+	     * @func
+	     * @memberOf R
+	     * @since v0.1.0
+	     * @category Relation
+	     * @sig [*] -> [*] -> [*]
+	     * @param {Array} list1 The first list.
+	     * @param {Array} list2 The second list.
+	     * @return {Array} The list of elements found in both `list1` and `list2`.
+	     * @see R.intersectionWith
+	     * @example
+	     *
+	     *      R.intersection([1,2,3,4], [7,6,5,4,3]); //=> [4, 3]
+	     */
+	    var intersection = _curry2(function intersection(list1, list2) {
+	        var lookupList, filteredList;
+	        if (list1.length > list2.length) {
+	            lookupList = list1;
+	            filteredList = list2;
+	        } else {
+	            lookupList = list2;
+	            filteredList = list1;
+	        }
+	        return uniq(_filter(flip(_contains)(lookupList), filteredList));
 	    });
 	
 	    /**
@@ -8714,6 +9146,7 @@ webpackJsonp([2],{
 	        aperture: aperture,
 	        append: append,
 	        apply: apply,
+	        applySpec: applySpec,
 	        assoc: assoc,
 	        assocPath: assocPath,
 	        binary: binary,
@@ -8721,9 +9154,8 @@ webpackJsonp([2],{
 	        both: both,
 	        call: call,
 	        chain: chain,
+	        clamp: clamp,
 	        clone: clone,
-	        commute: commute,
-	        commuteMap: commuteMap,
 	        comparator: comparator,
 	        complement: complement,
 	        compose: compose,
@@ -8767,6 +9199,7 @@ webpackJsonp([2],{
 	        forEach: forEach,
 	        fromPairs: fromPairs,
 	        groupBy: groupBy,
+	        groupWith: groupWith,
 	        gt: gt,
 	        gte: gte,
 	        has: has,
@@ -8864,6 +9297,7 @@ webpackJsonp([2],{
 	        props: props,
 	        range: range,
 	        reduce: reduce,
+	        reduceBy: reduceBy,
 	        reduceRight: reduceRight,
 	        reduced: reduced,
 	        reject: reject,
@@ -8902,6 +9336,7 @@ webpackJsonp([2],{
 	        transpose: transpose,
 	        traverse: traverse,
 	        trim: trim,
+	        tryCatch: tryCatch,
 	        type: type,
 	        unapply: unapply,
 	        unary: unary,
@@ -8914,6 +9349,7 @@ webpackJsonp([2],{
 	        uniqWith: uniqWith,
 	        unless: unless,
 	        unnest: unnest,
+	        until: until,
 	        update: update,
 	        useWith: useWith,
 	        values: values,
@@ -8946,14 +9382,14 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 78:
+/***/ 79:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(79), __esModule: true };
+	module.exports = { "default": __webpack_require__(80), __esModule: true };
 
 /***/ },
 
-/***/ 79:
+/***/ 80:
 /***/ function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(21);
@@ -8963,3316 +9399,3347 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 152:
+/***/ 154:
 /***/ function(module, exports, __webpack_require__) {
 
-	/*! Kefir.js v3.2.1
+	/* WEBPACK VAR INJECTION */(function(global) {/*! Kefir.js v3.2.2
 	 *  https://github.com/rpominov/kefir
 	 */
 	
 	(function (global, factory) {
-	   true ? factory(exports) :
-	  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-	  (factory((global.Kefir = global.Kefir || {})));
+		 true ? factory(exports) :
+		typeof define === 'function' && define.amd ? define(['exports'], factory) :
+		(factory((global.Kefir = global.Kefir || {})));
 	}(this, function (exports) { 'use strict';
 	
-	  function createObj(proto) {
-	    var F = function () {};
-	    F.prototype = proto;
-	    return new F();
-	  }
-	
-	  function extend(target /*, mixin1, mixin2...*/) {
-	    var length = arguments.length,
-	        i = undefined,
-	        prop = undefined;
-	    for (i = 1; i < length; i++) {
-	      for (prop in arguments[i]) {
-	        target[prop] = arguments[i][prop];
-	      }
-	    }
-	    return target;
-	  }
-	
-	  function inherit(Child, Parent /*, mixin1, mixin2...*/) {
-	    var length = arguments.length,
-	        i = undefined;
-	    Child.prototype = createObj(Parent.prototype);
-	    Child.prototype.constructor = Child;
-	    for (i = 2; i < length; i++) {
-	      extend(Child.prototype, arguments[i]);
-	    }
-	    return Child;
-	  }
-	
-	  var NOTHING = ['<nothing>'];
-	  var END = 'end';
-	  var VALUE = 'value';
-	  var ERROR = 'error';
-	  var ANY = 'any';
-	
-	  function concat(a, b) {
-	    var result = undefined,
-	        length = undefined,
-	        i = undefined,
-	        j = undefined;
-	    if (a.length === 0) {
-	      return b;
-	    }
-	    if (b.length === 0) {
-	      return a;
-	    }
-	    j = 0;
-	    result = new Array(a.length + b.length);
-	    length = a.length;
-	    for (i = 0; i < length; i++, j++) {
-	      result[j] = a[i];
-	    }
-	    length = b.length;
-	    for (i = 0; i < length; i++, j++) {
-	      result[j] = b[i];
-	    }
-	    return result;
-	  }
-	
-	  function find(arr, value) {
-	    var length = arr.length,
-	        i = undefined;
-	    for (i = 0; i < length; i++) {
-	      if (arr[i] === value) {
-	        return i;
-	      }
-	    }
-	    return -1;
-	  }
-	
-	  function findByPred(arr, pred) {
-	    var length = arr.length,
-	        i = undefined;
-	    for (i = 0; i < length; i++) {
-	      if (pred(arr[i])) {
-	        return i;
-	      }
-	    }
-	    return -1;
-	  }
-	
-	  function cloneArray(input) {
-	    var length = input.length,
-	        result = new Array(length),
-	        i = undefined;
-	    for (i = 0; i < length; i++) {
-	      result[i] = input[i];
-	    }
-	    return result;
-	  }
-	
-	  function remove(input, index) {
-	    var length = input.length,
-	        result = undefined,
-	        i = undefined,
-	        j = undefined;
-	    if (index >= 0 && index < length) {
-	      if (length === 1) {
-	        return [];
-	      } else {
-	        result = new Array(length - 1);
-	        for (i = 0, j = 0; i < length; i++) {
-	          if (i !== index) {
-	            result[j] = input[i];
-	            j++;
-	          }
-	        }
-	        return result;
-	      }
-	    } else {
-	      return input;
-	    }
-	  }
-	
-	  function map(input, fn) {
-	    var length = input.length,
-	        result = new Array(length),
-	        i = undefined;
-	    for (i = 0; i < length; i++) {
-	      result[i] = fn(input[i]);
-	    }
-	    return result;
-	  }
-	
-	  function forEach(arr, fn) {
-	    var length = arr.length,
-	        i = undefined;
-	    for (i = 0; i < length; i++) {
-	      fn(arr[i]);
-	    }
-	  }
-	
-	  function fillArray(arr, value) {
-	    var length = arr.length,
-	        i = undefined;
-	    for (i = 0; i < length; i++) {
-	      arr[i] = value;
-	    }
-	  }
-	
-	  function contains(arr, value) {
-	    return find(arr, value) !== -1;
-	  }
-	
-	  function slide(cur, next, max) {
-	    var length = Math.min(max, cur.length + 1),
-	        offset = cur.length - length + 1,
-	        result = new Array(length),
-	        i = undefined;
-	    for (i = offset; i < length; i++) {
-	      result[i - offset] = cur[i];
-	    }
-	    result[length - 1] = next;
-	    return result;
-	  }
-	
-	  function callSubscriber(type, fn, event) {
-	    if (type === ANY) {
-	      fn(event);
-	    } else if (type === event.type) {
-	      if (type === VALUE || type === ERROR) {
-	        fn(event.value);
-	      } else {
-	        fn();
-	      }
-	    }
-	  }
-	
-	  function Dispatcher() {
-	    this._items = [];
-	    this._inLoop = 0;
-	    this._removedItems = null;
-	  }
-	
-	  extend(Dispatcher.prototype, {
-	    add: function (type, fn) {
-	      this._items = concat(this._items, [{ type: type, fn: fn }]);
-	      return this._items.length;
-	    },
-	    remove: function (type, fn) {
-	      var index = findByPred(this._items, function (x) {
-	        return x.type === type && x.fn === fn;
-	      });
-	
-	      // if we're currently in a notification loop,
-	      // remember this subscriber was removed
-	      if (this._inLoop !== 0 && index !== -1) {
-	        if (this._removedItems === null) {
-	          this._removedItems = [];
-	        }
-	        this._removedItems.push(this._items[index]);
-	      }
-	
-	      this._items = remove(this._items, index);
-	      return this._items.length;
-	    },
-	    dispatch: function (event) {
-	      this._inLoop++;
-	      for (var i = 0, items = this._items; i < items.length; i++) {
-	
-	        // cleanup was called
-	        if (this._items === null) {
-	          break;
-	        }
-	
-	        // this subscriber was removed
-	        if (this._removedItems !== null && contains(this._removedItems, items[i])) {
-	          continue;
-	        }
-	
-	        callSubscriber(items[i].type, items[i].fn, event);
-	      }
-	      this._inLoop--;
-	      if (this._inLoop === 0) {
-	        this._removedItems = null;
-	      }
-	    },
-	    cleanup: function () {
-	      this._items = null;
-	    }
-	  });
-	
-	  function Observable() {
-	    this._dispatcher = new Dispatcher();
-	    this._active = false;
-	    this._alive = true;
-	    this._activating = false;
-	    this._logHandlers = null;
-	  }
-	
-	  extend(Observable.prototype, {
-	
-	    _name: 'observable',
-	
-	    _onActivation: function () {},
-	    _onDeactivation: function () {},
-	    _setActive: function (active) {
-	      if (this._active !== active) {
-	        this._active = active;
-	        if (active) {
-	          this._activating = true;
-	          this._onActivation();
-	          this._activating = false;
-	        } else {
-	          this._onDeactivation();
-	        }
-	      }
-	    },
-	    _clear: function () {
-	      this._setActive(false);
-	      this._dispatcher.cleanup();
-	      this._dispatcher = null;
-	      this._logHandlers = null;
-	    },
-	    _emit: function (type, x) {
-	      switch (type) {
-	        case VALUE:
-	          return this._emitValue(x);
-	        case ERROR:
-	          return this._emitError(x);
-	        case END:
-	          return this._emitEnd();
-	      }
-	    },
-	    _emitValue: function (value) {
-	      if (this._alive) {
-	        this._dispatcher.dispatch({ type: VALUE, value: value });
-	      }
-	    },
-	    _emitError: function (value) {
-	      if (this._alive) {
-	        this._dispatcher.dispatch({ type: ERROR, value: value });
-	      }
-	    },
-	    _emitEnd: function () {
-	      if (this._alive) {
-	        this._alive = false;
-	        this._dispatcher.dispatch({ type: END });
-	        this._clear();
-	      }
-	    },
-	    _on: function (type, fn) {
-	      if (this._alive) {
-	        this._dispatcher.add(type, fn);
-	        this._setActive(true);
-	      } else {
-	        callSubscriber(type, fn, { type: END });
-	      }
-	      return this;
-	    },
-	    _off: function (type, fn) {
-	      if (this._alive) {
-	        var count = this._dispatcher.remove(type, fn);
-	        if (count === 0) {
-	          this._setActive(false);
-	        }
-	      }
-	      return this;
-	    },
-	    onValue: function (fn) {
-	      return this._on(VALUE, fn);
-	    },
-	    onError: function (fn) {
-	      return this._on(ERROR, fn);
-	    },
-	    onEnd: function (fn) {
-	      return this._on(END, fn);
-	    },
-	    onAny: function (fn) {
-	      return this._on(ANY, fn);
-	    },
-	    offValue: function (fn) {
-	      return this._off(VALUE, fn);
-	    },
-	    offError: function (fn) {
-	      return this._off(ERROR, fn);
-	    },
-	    offEnd: function (fn) {
-	      return this._off(END, fn);
-	    },
-	    offAny: function (fn) {
-	      return this._off(ANY, fn);
-	    },
-	
-	
-	    // A and B must be subclasses of Stream and Property (order doesn't matter)
-	    _ofSameType: function (A, B) {
-	      return A.prototype.getType() === this.getType() ? A : B;
-	    },
-	    setName: function (sourceObs /* optional */, selfName) {
-	      this._name = selfName ? sourceObs._name + '.' + selfName : sourceObs;
-	      return this;
-	    },
-	    log: function () {
-	      var name = arguments.length <= 0 || arguments[0] === undefined ? this.toString() : arguments[0];
-	
-	
-	      var isCurrent = undefined;
-	      var handler = function (event) {
-	        var type = '<' + event.type + (isCurrent ? ':current' : '') + '>';
-	        if (event.type === END) {
-	          console.log(name, type);
-	        } else {
-	          console.log(name, type, event.value);
-	        }
-	      };
-	
-	      if (this._alive) {
-	        if (!this._logHandlers) {
-	          this._logHandlers = [];
-	        }
-	        this._logHandlers.push({ name: name, handler: handler });
-	      }
-	
-	      isCurrent = true;
-	      this.onAny(handler);
-	      isCurrent = false;
-	
-	      return this;
-	    },
-	    offLog: function () {
-	      var name = arguments.length <= 0 || arguments[0] === undefined ? this.toString() : arguments[0];
-	
-	
-	      if (this._logHandlers) {
-	        var handlerIndex = findByPred(this._logHandlers, function (obj) {
-	          return obj.name === name;
-	        });
-	        if (handlerIndex !== -1) {
-	          this.offAny(this._logHandlers[handlerIndex].handler);
-	          this._logHandlers.splice(handlerIndex, 1);
-	        }
-	      }
-	
-	      return this;
-	    }
-	  });
-	
-	  // extend() can't handle `toString` in IE8
-	  Observable.prototype.toString = function () {
-	    return '[' + this._name + ']';
-	  };
-	
-	  function Stream() {
-	    Observable.call(this);
-	  }
-	
-	  inherit(Stream, Observable, {
-	
-	    _name: 'stream',
-	
-	    getType: function () {
-	      return 'stream';
-	    }
-	  });
-	
-	  function Property() {
-	    Observable.call(this);
-	    this._currentEvent = null;
-	  }
-	
-	  inherit(Property, Observable, {
-	
-	    _name: 'property',
-	
-	    _emitValue: function (value) {
-	      if (this._alive) {
-	        this._currentEvent = { type: VALUE, value: value };
-	        if (!this._activating) {
-	          this._dispatcher.dispatch({ type: VALUE, value: value });
-	        }
-	      }
-	    },
-	    _emitError: function (value) {
-	      if (this._alive) {
-	        this._currentEvent = { type: ERROR, value: value };
-	        if (!this._activating) {
-	          this._dispatcher.dispatch({ type: ERROR, value: value });
-	        }
-	      }
-	    },
-	    _emitEnd: function () {
-	      if (this._alive) {
-	        this._alive = false;
-	        if (!this._activating) {
-	          this._dispatcher.dispatch({ type: END });
-	        }
-	        this._clear();
-	      }
-	    },
-	    _on: function (type, fn) {
-	      if (this._alive) {
-	        this._dispatcher.add(type, fn);
-	        this._setActive(true);
-	      }
-	      if (this._currentEvent !== null) {
-	        callSubscriber(type, fn, this._currentEvent);
-	      }
-	      if (!this._alive) {
-	        callSubscriber(type, fn, { type: END });
-	      }
-	      return this;
-	    },
-	    getType: function () {
-	      return 'property';
-	    }
-	  });
-	
-	  var neverS = new Stream();
-	  neverS._emitEnd();
-	  neverS._name = 'never';
-	
-	  function never() {
-	    return neverS;
-	  }
-	
-	  function timeBased(mixin) {
-	
-	    function AnonymousStream(wait, options) {
-	      var _this = this;
-	
-	      Stream.call(this);
-	      this._wait = wait;
-	      this._intervalId = null;
-	      this._$onTick = function () {
-	        return _this._onTick();
-	      };
-	      this._init(options);
-	    }
-	
-	    inherit(AnonymousStream, Stream, {
-	      _init: function () {},
-	      _free: function () {},
-	      _onTick: function () {},
-	      _onActivation: function () {
-	        this._intervalId = setInterval(this._$onTick, this._wait);
-	      },
-	      _onDeactivation: function () {
-	        if (this._intervalId !== null) {
-	          clearInterval(this._intervalId);
-	          this._intervalId = null;
-	        }
-	      },
-	      _clear: function () {
-	        Stream.prototype._clear.call(this);
-	        this._$onTick = null;
-	        this._free();
-	      }
-	    }, mixin);
-	
-	    return AnonymousStream;
-	  }
-	
-	  var S = timeBased({
-	
-	    _name: 'later',
-	
-	    _init: function (_ref) {
-	      var x = _ref.x;
-	
-	      this._x = x;
-	    },
-	    _free: function () {
-	      this._x = null;
-	    },
-	    _onTick: function () {
-	      this._emitValue(this._x);
-	      this._emitEnd();
-	    }
-	  });
-	
-	  function later(wait, x) {
-	    return new S(wait, { x: x });
-	  }
-	
-	  var S$1 = timeBased({
-	
-	    _name: 'interval',
-	
-	    _init: function (_ref) {
-	      var x = _ref.x;
-	
-	      this._x = x;
-	    },
-	    _free: function () {
-	      this._x = null;
-	    },
-	    _onTick: function () {
-	      this._emitValue(this._x);
-	    }
-	  });
-	
-	  function interval(wait, x) {
-	    return new S$1(wait, { x: x });
-	  }
-	
-	  var S$2 = timeBased({
-	
-	    _name: 'sequentially',
-	
-	    _init: function (_ref) {
-	      var xs = _ref.xs;
-	
-	      this._xs = cloneArray(xs);
-	    },
-	    _free: function () {
-	      this._xs = null;
-	    },
-	    _onTick: function () {
-	      if (this._xs.length === 1) {
-	        this._emitValue(this._xs[0]);
-	        this._emitEnd();
-	      } else {
-	        this._emitValue(this._xs.shift());
-	      }
-	    }
-	  });
-	
-	  function sequentially(wait, xs) {
-	    return xs.length === 0 ? never() : new S$2(wait, { xs: xs });
-	  }
-	
-	  var S$3 = timeBased({
-	
-	    _name: 'fromPoll',
-	
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _onTick: function () {
-	      var fn = this._fn;
-	      this._emitValue(fn());
-	    }
-	  });
-	
-	  function fromPoll(wait, fn) {
-	    return new S$3(wait, { fn: fn });
-	  }
-	
-	  function emitter(obs) {
-	
-	    function value(x) {
-	      obs._emitValue(x);
-	      return obs._active;
-	    }
-	
-	    function error(x) {
-	      obs._emitError(x);
-	      return obs._active;
-	    }
-	
-	    function end() {
-	      obs._emitEnd();
-	      return obs._active;
-	    }
-	
-	    function event(e) {
-	      obs._emit(e.type, e.value);
-	      return obs._active;
-	    }
-	
-	    return { value: value, error: error, end: end, event: event, emit: value, emitEvent: event };
-	  }
-	
-	  var S$4 = timeBased({
-	
-	    _name: 'withInterval',
-	
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	      this._emitter = emitter(this);
-	    },
-	    _free: function () {
-	      this._fn = null;
-	      this._emitter = null;
-	    },
-	    _onTick: function () {
-	      var fn = this._fn;
-	      fn(this._emitter);
-	    }
-	  });
-	
-	  function withInterval(wait, fn) {
-	    return new S$4(wait, { fn: fn });
-	  }
-	
-	  function S$5(fn) {
-	    Stream.call(this);
-	    this._fn = fn;
-	    this._unsubscribe = null;
-	  }
-	
-	  inherit(S$5, Stream, {
-	
-	    _name: 'stream',
-	
-	    _onActivation: function () {
-	      var fn = this._fn;
-	      var unsubscribe = fn(emitter(this));
-	      this._unsubscribe = typeof unsubscribe === 'function' ? unsubscribe : null;
-	
-	      // fix https://github.com/rpominov/kefir/issues/35
-	      if (!this._active) {
-	        this._callUnsubscribe();
-	      }
-	    },
-	    _callUnsubscribe: function () {
-	      if (this._unsubscribe !== null) {
-	        this._unsubscribe();
-	        this._unsubscribe = null;
-	      }
-	    },
-	    _onDeactivation: function () {
-	      this._callUnsubscribe();
-	    },
-	    _clear: function () {
-	      Stream.prototype._clear.call(this);
-	      this._fn = null;
-	    }
-	  });
-	
-	  function stream(fn) {
-	    return new S$5(fn);
-	  }
-	
-	  function fromCallback(callbackConsumer) {
-	
-	    var called = false;
-	
-	    return stream(function (emitter) {
-	
-	      if (!called) {
-	        callbackConsumer(function (x) {
-	          emitter.emit(x);
-	          emitter.end();
-	        });
-	        called = true;
-	      }
-	    }).setName('fromCallback');
-	  }
-	
-	  function fromNodeCallback(callbackConsumer) {
-	
-	    var called = false;
-	
-	    return stream(function (emitter) {
-	
-	      if (!called) {
-	        callbackConsumer(function (error, x) {
-	          if (error) {
-	            emitter.error(error);
-	          } else {
-	            emitter.emit(x);
-	          }
-	          emitter.end();
-	        });
-	        called = true;
-	      }
-	    }).setName('fromNodeCallback');
-	  }
-	
-	  function spread(fn, length) {
-	    switch (length) {
-	      case 0:
-	        return function () {
-	          return fn();
-	        };
-	      case 1:
-	        return function (a) {
-	          return fn(a[0]);
-	        };
-	      case 2:
-	        return function (a) {
-	          return fn(a[0], a[1]);
-	        };
-	      case 3:
-	        return function (a) {
-	          return fn(a[0], a[1], a[2]);
-	        };
-	      case 4:
-	        return function (a) {
-	          return fn(a[0], a[1], a[2], a[3]);
-	        };
-	      default:
-	        return function (a) {
-	          return fn.apply(null, a);
-	        };
-	    }
-	  }
-	
-	  function apply(fn, c, a) {
-	    var aLength = a ? a.length : 0;
-	    if (c == null) {
-	      switch (aLength) {
-	        case 0:
-	          return fn();
-	        case 1:
-	          return fn(a[0]);
-	        case 2:
-	          return fn(a[0], a[1]);
-	        case 3:
-	          return fn(a[0], a[1], a[2]);
-	        case 4:
-	          return fn(a[0], a[1], a[2], a[3]);
-	        default:
-	          return fn.apply(null, a);
-	      }
-	    } else {
-	      switch (aLength) {
-	        case 0:
-	          return fn.call(c);
-	        default:
-	          return fn.apply(c, a);
-	      }
-	    }
-	  }
-	
-	  function fromSubUnsub(sub, unsub, transformer /* Function | falsey */) {
-	    return stream(function (emitter) {
-	
-	      var handler = transformer ? function () {
-	        emitter.emit(apply(transformer, this, arguments));
-	      } : function (x) {
-	        emitter.emit(x);
-	      };
-	
-	      sub(handler);
-	      return function () {
-	        return unsub(handler);
-	      };
-	    }).setName('fromSubUnsub');
-	  }
-	
-	  var pairs = [['addEventListener', 'removeEventListener'], ['addListener', 'removeListener'], ['on', 'off']];
-	
-	  function fromEvents(target, eventName, transformer) {
-	    var sub = undefined,
-	        unsub = undefined;
-	
-	    for (var i = 0; i < pairs.length; i++) {
-	      if (typeof target[pairs[i][0]] === 'function' && typeof target[pairs[i][1]] === 'function') {
-	        sub = pairs[i][0];
-	        unsub = pairs[i][1];
-	        break;
-	      }
-	    }
-	
-	    if (sub === undefined) {
-	      throw new Error('target don\'t support any of ' + 'addEventListener/removeEventListener, addListener/removeListener, on/off method pair');
-	    }
-	
-	    return fromSubUnsub(function (handler) {
-	      return target[sub](eventName, handler);
-	    }, function (handler) {
-	      return target[unsub](eventName, handler);
-	    }, transformer).setName('fromEvents');
-	  }
-	
-	  // HACK:
-	  //   We don't call parent Class constructor, but instead putting all necessary
-	  //   properties into prototype to simulate ended Property
-	  //   (see Propperty and Observable classes).
-	
-	  function P(value) {
-	    this._currentEvent = { type: 'value', value: value, current: true };
-	  }
-	
-	  inherit(P, Property, {
-	    _name: 'constant',
-	    _active: false,
-	    _activating: false,
-	    _alive: false,
-	    _dispatcher: null,
-	    _logHandlers: null
-	  });
-	
-	  function constant(x) {
-	    return new P(x);
-	  }
-	
-	  // HACK:
-	  //   We don't call parent Class constructor, but instead putting all necessary
-	  //   properties into prototype to simulate ended Property
-	  //   (see Propperty and Observable classes).
-	
-	  function P$1(value) {
-	    this._currentEvent = { type: 'error', value: value, current: true };
-	  }
-	
-	  inherit(P$1, Property, {
-	    _name: 'constantError',
-	    _active: false,
-	    _activating: false,
-	    _alive: false,
-	    _dispatcher: null,
-	    _logHandlers: null
-	  });
-	
-	  function constantError(x) {
-	    return new P$1(x);
-	  }
-	
-	  function createConstructor(BaseClass, name) {
-	    return function AnonymousObservable(source, options) {
-	      var _this = this;
-	
-	      BaseClass.call(this);
-	      this._source = source;
-	      this._name = source._name + '.' + name;
-	      this._init(options);
-	      this._$handleAny = function (event) {
-	        return _this._handleAny(event);
-	      };
-	    };
-	  }
-	
-	  function createClassMethods(BaseClass) {
-	    return {
-	      _init: function () {},
-	      _free: function () {},
-	      _handleValue: function (x) {
-	        this._emitValue(x);
-	      },
-	      _handleError: function (x) {
-	        this._emitError(x);
-	      },
-	      _handleEnd: function () {
-	        this._emitEnd();
-	      },
-	      _handleAny: function (event) {
-	        switch (event.type) {
-	          case VALUE:
-	            return this._handleValue(event.value);
-	          case ERROR:
-	            return this._handleError(event.value);
-	          case END:
-	            return this._handleEnd();
-	        }
-	      },
-	      _onActivation: function () {
-	        this._source.onAny(this._$handleAny);
-	      },
-	      _onDeactivation: function () {
-	        this._source.offAny(this._$handleAny);
-	      },
-	      _clear: function () {
-	        BaseClass.prototype._clear.call(this);
-	        this._source = null;
-	        this._$handleAny = null;
-	        this._free();
-	      }
-	    };
-	  }
-	
-	  function createStream(name, mixin) {
-	    var S = createConstructor(Stream, name);
-	    inherit(S, Stream, createClassMethods(Stream), mixin);
-	    return S;
-	  }
-	
-	  function createProperty(name, mixin) {
-	    var P = createConstructor(Property, name);
-	    inherit(P, Property, createClassMethods(Property), mixin);
-	    return P;
-	  }
-	
-	  var P$2 = createProperty('toProperty', {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._getInitialCurrent = fn;
-	    },
-	    _onActivation: function () {
-	      if (this._getInitialCurrent !== null) {
-	        var getInitial = this._getInitialCurrent;
-	        this._emitValue(getInitial());
-	      }
-	      this._source.onAny(this._$handleAny); // copied from patterns/one-source
-	    }
-	  });
-	
-	  function toProperty(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-	
-	    if (fn !== null && typeof fn !== 'function') {
-	      throw new Error('You should call toProperty() with a function or no arguments.');
-	    }
-	    return new P$2(obs, { fn: fn });
-	  }
-	
-	  var S$6 = createStream('changes', {
-	    _handleValue: function (x) {
-	      if (!this._activating) {
-	        this._emitValue(x);
-	      }
-	    },
-	    _handleError: function (x) {
-	      if (!this._activating) {
-	        this._emitError(x);
-	      }
-	    }
-	  });
-	
-	  function changes(obs) {
-	    return new S$6(obs);
-	  }
-	
-	  function fromPromise(promise) {
-	
-	    var called = false;
-	
-	    var result = stream(function (emitter) {
-	      if (!called) {
-	        var onValue = function (x) {
-	          emitter.emit(x);
-	          emitter.end();
-	        };
-	        var onError = function (x) {
-	          emitter.error(x);
-	          emitter.end();
-	        };
-	        var _promise = promise.then(onValue, onError);
-	
-	        // prevent libraries like 'Q' or 'when' from swallowing exceptions
-	        if (_promise && typeof _promise.done === 'function') {
-	          _promise.done();
-	        }
-	
-	        called = true;
-	      }
-	    });
-	
-	    return toProperty(result, null).setName('fromPromise');
-	  }
-	
-	  function getGlodalPromise() {
-	    if (typeof Promise === 'function') {
-	      return Promise;
-	    } else {
-	      throw new Error('There isn\'t default Promise, use shim or parameter');
-	    }
-	  }
-	
-	  function toPromise (obs) {
-	    var Promise = arguments.length <= 1 || arguments[1] === undefined ? getGlodalPromise() : arguments[1];
-	
-	    var last = null;
-	    return new Promise(function (resolve, reject) {
-	      obs.onAny(function (event) {
-	        if (event.type === END && last !== null) {
-	          (last.type === VALUE ? resolve : reject)(last.value);
-	          last = null;
-	        } else {
-	          last = event;
-	        }
-	      });
-	    });
-	  }
-	
-	  function symbol_ (key) {
-	    if (typeof Symbol !== 'undefined' && Symbol[key]) {
-	      return Symbol[key];
-	    } else if (typeof Symbol !== 'undefined' && typeof Symbol.for === 'function') {
-	      return Symbol.for(key);
-	    } else {
-	      return '@@' + key;
-	    }
-	  }
-	
-	  var symbol = symbol_('observable');
-	
-	  function fromESObservable(_observable) {
-	    var observable = _observable[symbol] ? _observable[symbol]() : _observable;
-	    return stream(function (emitter) {
-	      var unsub = observable.subscribe({
-	        error: function (error) {
-	          emitter.error(error);
-	          emitter.end();
-	        },
-	        next: function (value) {
-	          emitter.emit(value);
-	        },
-	        complete: function () {
-	          emitter.end();
-	        }
-	      });
-	
-	      if (unsub.unsubscribe) {
-	        return function () {
-	          unsub.unsubscribe();
-	        };
-	      } else {
-	        return unsub;
-	      }
-	    }).setName('fromESObservable');
-	  }
-	
-	  function ESObservable(observable) {
-	    this._observable = observable.takeErrors(1);
-	  }
-	
-	  extend(ESObservable.prototype, {
-	    subscribe: function (observer) {
-	      var _this = this;
-	
-	      var fn = function (event) {
-	        if (event.type === VALUE && observer.next) {
-	          observer.next(event.value);
-	        } else if (event.type === ERROR && observer.error) {
-	          observer.error(event.value);
-	        } else if (event.type === END && observer.complete) {
-	          observer.complete(event.value);
-	        }
-	      };
-	
-	      this._observable.onAny(fn);
-	      return function () {
-	        return _this._observable.offAny(fn);
-	      };
-	    }
-	  });
-	
-	  function toESObservable() {
-	    return new ESObservable(this);
-	  }
-	
-	  var mixin = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _handleValue: function (x) {
-	      var fn = this._fn;
-	      this._emitValue(fn(x));
-	    }
-	  };
-	
-	  var S$7 = createStream('map', mixin);
-	  var P$3 = createProperty('map', mixin);
-	
-	  var id = function (x) {
-	    return x;
-	  };
-	
-	  function map$1(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? id : arguments[1];
-	
-	    return new (obs._ofSameType(S$7, P$3))(obs, { fn: fn });
-	  }
-	
-	  var mixin$1 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _handleValue: function (x) {
-	      var fn = this._fn;
-	      if (fn(x)) {
-	        this._emitValue(x);
-	      }
-	    }
-	  };
-	
-	  var S$8 = createStream('filter', mixin$1);
-	  var P$4 = createProperty('filter', mixin$1);
-	
-	  var id$1 = function (x) {
-	    return x;
-	  };
-	
-	  function filter(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? id$1 : arguments[1];
-	
-	    return new (obs._ofSameType(S$8, P$4))(obs, { fn: fn });
-	  }
-	
-	  var mixin$2 = {
-	    _init: function (_ref) {
-	      var n = _ref.n;
-	
-	      this._n = n;
-	      if (n <= 0) {
-	        this._emitEnd();
-	      }
-	    },
-	    _handleValue: function (x) {
-	      this._n--;
-	      this._emitValue(x);
-	      if (this._n === 0) {
-	        this._emitEnd();
-	      }
-	    }
-	  };
-	
-	  var S$9 = createStream('take', mixin$2);
-	  var P$5 = createProperty('take', mixin$2);
-	
-	  function take(obs, n) {
-	    return new (obs._ofSameType(S$9, P$5))(obs, { n: n });
-	  }
-	
-	  var mixin$3 = {
-	    _init: function (_ref) {
-	      var n = _ref.n;
-	
-	      this._n = n;
-	      if (n <= 0) {
-	        this._emitEnd();
-	      }
-	    },
-	    _handleError: function (x) {
-	      this._n--;
-	      this._emitError(x);
-	      if (this._n === 0) {
-	        this._emitEnd();
-	      }
-	    }
-	  };
-	
-	  var S$10 = createStream('takeErrors', mixin$3);
-	  var P$6 = createProperty('takeErrors', mixin$3);
-	
-	  function takeErrors(obs, n) {
-	    return new (obs._ofSameType(S$10, P$6))(obs, { n: n });
-	  }
-	
-	  var mixin$4 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _handleValue: function (x) {
-	      var fn = this._fn;
-	      if (fn(x)) {
-	        this._emitValue(x);
-	      } else {
-	        this._emitEnd();
-	      }
-	    }
-	  };
-	
-	  var S$11 = createStream('takeWhile', mixin$4);
-	  var P$7 = createProperty('takeWhile', mixin$4);
-	
-	  var id$2 = function (x) {
-	    return x;
-	  };
-	
-	  function takeWhile(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? id$2 : arguments[1];
-	
-	    return new (obs._ofSameType(S$11, P$7))(obs, { fn: fn });
-	  }
-	
-	  var mixin$5 = {
-	    _init: function () {
-	      this._lastValue = NOTHING;
-	    },
-	    _free: function () {
-	      this._lastValue = null;
-	    },
-	    _handleValue: function (x) {
-	      this._lastValue = x;
-	    },
-	    _handleEnd: function () {
-	      if (this._lastValue !== NOTHING) {
-	        this._emitValue(this._lastValue);
-	      }
-	      this._emitEnd();
-	    }
-	  };
-	
-	  var S$12 = createStream('last', mixin$5);
-	  var P$8 = createProperty('last', mixin$5);
-	
-	  function last(obs) {
-	    return new (obs._ofSameType(S$12, P$8))(obs);
-	  }
-	
-	  var mixin$6 = {
-	    _init: function (_ref) {
-	      var n = _ref.n;
-	
-	      this._n = Math.max(0, n);
-	    },
-	    _handleValue: function (x) {
-	      if (this._n === 0) {
-	        this._emitValue(x);
-	      } else {
-	        this._n--;
-	      }
-	    }
-	  };
-	
-	  var S$13 = createStream('skip', mixin$6);
-	  var P$9 = createProperty('skip', mixin$6);
-	
-	  function skip(obs, n) {
-	    return new (obs._ofSameType(S$13, P$9))(obs, { n: n });
-	  }
-	
-	  var mixin$7 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _handleValue: function (x) {
-	      var fn = this._fn;
-	      if (this._fn !== null && !fn(x)) {
-	        this._fn = null;
-	      }
-	      if (this._fn === null) {
-	        this._emitValue(x);
-	      }
-	    }
-	  };
-	
-	  var S$14 = createStream('skipWhile', mixin$7);
-	  var P$10 = createProperty('skipWhile', mixin$7);
-	
-	  var id$3 = function (x) {
-	    return x;
-	  };
-	
-	  function skipWhile(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? id$3 : arguments[1];
-	
-	    return new (obs._ofSameType(S$14, P$10))(obs, { fn: fn });
-	  }
-	
-	  var mixin$8 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	      this._prev = NOTHING;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	      this._prev = null;
-	    },
-	    _handleValue: function (x) {
-	      var fn = this._fn;
-	      if (this._prev === NOTHING || !fn(this._prev, x)) {
-	        this._prev = x;
-	        this._emitValue(x);
-	      }
-	    }
-	  };
-	
-	  var S$15 = createStream('skipDuplicates', mixin$8);
-	  var P$11 = createProperty('skipDuplicates', mixin$8);
-	
-	  var eq = function (a, b) {
-	    return a === b;
-	  };
-	
-	  function skipDuplicates(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? eq : arguments[1];
-	
-	    return new (obs._ofSameType(S$15, P$11))(obs, { fn: fn });
-	  }
-	
-	  var mixin$9 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	      var seed = _ref.seed;
-	
-	      this._fn = fn;
-	      this._prev = seed;
-	    },
-	    _free: function () {
-	      this._prev = null;
-	      this._fn = null;
-	    },
-	    _handleValue: function (x) {
-	      if (this._prev !== NOTHING) {
-	        var fn = this._fn;
-	        this._emitValue(fn(this._prev, x));
-	      }
-	      this._prev = x;
-	    }
-	  };
-	
-	  var S$16 = createStream('diff', mixin$9);
-	  var P$12 = createProperty('diff', mixin$9);
-	
-	  function defaultFn(a, b) {
-	    return [a, b];
-	  }
-	
-	  function diff(obs, fn) {
-	    var seed = arguments.length <= 2 || arguments[2] === undefined ? NOTHING : arguments[2];
-	
-	    return new (obs._ofSameType(S$16, P$12))(obs, { fn: fn || defaultFn, seed: seed });
-	  }
-	
-	  var P$13 = createProperty('scan', {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	      var seed = _ref.seed;
-	
-	      this._fn = fn;
-	      this._seed = seed;
-	      if (seed !== NOTHING) {
-	        this._emitValue(seed);
-	      }
-	    },
-	    _free: function () {
-	      this._fn = null;
-	      this._seed = null;
-	    },
-	    _handleValue: function (x) {
-	      var fn = this._fn;
-	      if (this._currentEvent === null || this._currentEvent.type === ERROR) {
-	        this._emitValue(this._seed === NOTHING ? x : fn(this._seed, x));
-	      } else {
-	        this._emitValue(fn(this._currentEvent.value, x));
-	      }
-	    }
-	  });
-	
-	  function scan(obs, fn) {
-	    var seed = arguments.length <= 2 || arguments[2] === undefined ? NOTHING : arguments[2];
-	
-	    return new P$13(obs, { fn: fn, seed: seed });
-	  }
-	
-	  var mixin$10 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _handleValue: function (x) {
-	      var fn = this._fn;
-	      var xs = fn(x);
-	      for (var i = 0; i < xs.length; i++) {
-	        this._emitValue(xs[i]);
-	      }
-	    }
-	  };
-	
-	  var S$17 = createStream('flatten', mixin$10);
-	
-	  var id$4 = function (x) {
-	    return x;
-	  };
-	
-	  function flatten(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? id$4 : arguments[1];
-	
-	    return new S$17(obs, { fn: fn });
-	  }
-	
-	  var END_MARKER = {};
-	
-	  var mixin$11 = {
-	    _init: function (_ref) {
-	      var _this = this;
-	
-	      var wait = _ref.wait;
-	
-	      this._wait = Math.max(0, wait);
-	      this._buff = [];
-	      this._$shiftBuff = function () {
-	        var value = _this._buff.shift();
-	        if (value === END_MARKER) {
-	          _this._emitEnd();
-	        } else {
-	          _this._emitValue(value);
-	        }
-	      };
-	    },
-	    _free: function () {
-	      this._buff = null;
-	      this._$shiftBuff = null;
-	    },
-	    _handleValue: function (x) {
-	      if (this._activating) {
-	        this._emitValue(x);
-	      } else {
-	        this._buff.push(x);
-	        setTimeout(this._$shiftBuff, this._wait);
-	      }
-	    },
-	    _handleEnd: function () {
-	      if (this._activating) {
-	        this._emitEnd();
-	      } else {
-	        this._buff.push(END_MARKER);
-	        setTimeout(this._$shiftBuff, this._wait);
-	      }
-	    }
-	  };
-	
-	  var S$18 = createStream('delay', mixin$11);
-	  var P$14 = createProperty('delay', mixin$11);
-	
-	  function delay(obs, wait) {
-	    return new (obs._ofSameType(S$18, P$14))(obs, { wait: wait });
-	  }
-	
-	  var now = Date.now ? function () {
-	    return Date.now();
-	  } : function () {
-	    return new Date().getTime();
-	  };
-	
-	  var mixin$12 = {
-	    _init: function (_ref) {
-	      var _this = this;
-	
-	      var wait = _ref.wait;
-	      var leading = _ref.leading;
-	      var trailing = _ref.trailing;
-	
-	      this._wait = Math.max(0, wait);
-	      this._leading = leading;
-	      this._trailing = trailing;
-	      this._trailingValue = null;
-	      this._timeoutId = null;
-	      this._endLater = false;
-	      this._lastCallTime = 0;
-	      this._$trailingCall = function () {
-	        return _this._trailingCall();
-	      };
-	    },
-	    _free: function () {
-	      this._trailingValue = null;
-	      this._$trailingCall = null;
-	    },
-	    _handleValue: function (x) {
-	      if (this._activating) {
-	        this._emitValue(x);
-	      } else {
-	        var curTime = now();
-	        if (this._lastCallTime === 0 && !this._leading) {
-	          this._lastCallTime = curTime;
-	        }
-	        var remaining = this._wait - (curTime - this._lastCallTime);
-	        if (remaining <= 0) {
-	          this._cancelTrailing();
-	          this._lastCallTime = curTime;
-	          this._emitValue(x);
-	        } else if (this._trailing) {
-	          this._cancelTrailing();
-	          this._trailingValue = x;
-	          this._timeoutId = setTimeout(this._$trailingCall, remaining);
-	        }
-	      }
-	    },
-	    _handleEnd: function () {
-	      if (this._activating) {
-	        this._emitEnd();
-	      } else {
-	        if (this._timeoutId) {
-	          this._endLater = true;
-	        } else {
-	          this._emitEnd();
-	        }
-	      }
-	    },
-	    _cancelTrailing: function () {
-	      if (this._timeoutId !== null) {
-	        clearTimeout(this._timeoutId);
-	        this._timeoutId = null;
-	      }
-	    },
-	    _trailingCall: function () {
-	      this._emitValue(this._trailingValue);
-	      this._timeoutId = null;
-	      this._trailingValue = null;
-	      this._lastCallTime = !this._leading ? 0 : now();
-	      if (this._endLater) {
-	        this._emitEnd();
-	      }
-	    }
-	  };
-	
-	  var S$19 = createStream('throttle', mixin$12);
-	  var P$15 = createProperty('throttle', mixin$12);
-	
-	  function throttle(obs, wait) {
-	    var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-	
-	    var _ref2$leading = _ref2.leading;
-	    var leading = _ref2$leading === undefined ? true : _ref2$leading;
-	    var _ref2$trailing = _ref2.trailing;
-	    var trailing = _ref2$trailing === undefined ? true : _ref2$trailing;
-	
-	    return new (obs._ofSameType(S$19, P$15))(obs, { wait: wait, leading: leading, trailing: trailing });
-	  }
-	
-	  var mixin$13 = {
-	    _init: function (_ref) {
-	      var _this = this;
-	
-	      var wait = _ref.wait;
-	      var immediate = _ref.immediate;
-	
-	      this._wait = Math.max(0, wait);
-	      this._immediate = immediate;
-	      this._lastAttempt = 0;
-	      this._timeoutId = null;
-	      this._laterValue = null;
-	      this._endLater = false;
-	      this._$later = function () {
-	        return _this._later();
-	      };
-	    },
-	    _free: function () {
-	      this._laterValue = null;
-	      this._$later = null;
-	    },
-	    _handleValue: function (x) {
-	      if (this._activating) {
-	        this._emitValue(x);
-	      } else {
-	        this._lastAttempt = now();
-	        if (this._immediate && !this._timeoutId) {
-	          this._emitValue(x);
-	        }
-	        if (!this._timeoutId) {
-	          this._timeoutId = setTimeout(this._$later, this._wait);
-	        }
-	        if (!this._immediate) {
-	          this._laterValue = x;
-	        }
-	      }
-	    },
-	    _handleEnd: function () {
-	      if (this._activating) {
-	        this._emitEnd();
-	      } else {
-	        if (this._timeoutId && !this._immediate) {
-	          this._endLater = true;
-	        } else {
-	          this._emitEnd();
-	        }
-	      }
-	    },
-	    _later: function () {
-	      var last = now() - this._lastAttempt;
-	      if (last < this._wait && last >= 0) {
-	        this._timeoutId = setTimeout(this._$later, this._wait - last);
-	      } else {
-	        this._timeoutId = null;
-	        if (!this._immediate) {
-	          this._emitValue(this._laterValue);
-	          this._laterValue = null;
-	        }
-	        if (this._endLater) {
-	          this._emitEnd();
-	        }
-	      }
-	    }
-	  };
-	
-	  var S$20 = createStream('debounce', mixin$13);
-	  var P$16 = createProperty('debounce', mixin$13);
-	
-	  function debounce(obs, wait) {
-	    var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-	
-	    var _ref2$immediate = _ref2.immediate;
-	    var immediate = _ref2$immediate === undefined ? false : _ref2$immediate;
-	
-	    return new (obs._ofSameType(S$20, P$16))(obs, { wait: wait, immediate: immediate });
-	  }
-	
-	  var mixin$14 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _handleError: function (x) {
-	      var fn = this._fn;
-	      this._emitError(fn(x));
-	    }
-	  };
-	
-	  var S$21 = createStream('mapErrors', mixin$14);
-	  var P$17 = createProperty('mapErrors', mixin$14);
-	
-	  var id$5 = function (x) {
-	    return x;
-	  };
-	
-	  function mapErrors(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? id$5 : arguments[1];
-	
-	    return new (obs._ofSameType(S$21, P$17))(obs, { fn: fn });
-	  }
-	
-	  var mixin$15 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _handleError: function (x) {
-	      var fn = this._fn;
-	      if (fn(x)) {
-	        this._emitError(x);
-	      }
-	    }
-	  };
-	
-	  var S$22 = createStream('filterErrors', mixin$15);
-	  var P$18 = createProperty('filterErrors', mixin$15);
-	
-	  var id$6 = function (x) {
-	    return x;
-	  };
-	
-	  function filterErrors(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? id$6 : arguments[1];
-	
-	    return new (obs._ofSameType(S$22, P$18))(obs, { fn: fn });
-	  }
-	
-	  var mixin$16 = {
-	    _handleValue: function () {}
-	  };
-	
-	  var S$23 = createStream('ignoreValues', mixin$16);
-	  var P$19 = createProperty('ignoreValues', mixin$16);
-	
-	  function ignoreValues(obs) {
-	    return new (obs._ofSameType(S$23, P$19))(obs);
-	  }
-	
-	  var mixin$17 = {
-	    _handleError: function () {}
-	  };
-	
-	  var S$24 = createStream('ignoreErrors', mixin$17);
-	  var P$20 = createProperty('ignoreErrors', mixin$17);
-	
-	  function ignoreErrors(obs) {
-	    return new (obs._ofSameType(S$24, P$20))(obs);
-	  }
-	
-	  var mixin$18 = {
-	    _handleEnd: function () {}
-	  };
-	
-	  var S$25 = createStream('ignoreEnd', mixin$18);
-	  var P$21 = createProperty('ignoreEnd', mixin$18);
-	
-	  function ignoreEnd(obs) {
-	    return new (obs._ofSameType(S$25, P$21))(obs);
-	  }
-	
-	  var mixin$19 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _handleEnd: function () {
-	      var fn = this._fn;
-	      this._emitValue(fn());
-	      this._emitEnd();
-	    }
-	  };
-	
-	  var S$26 = createStream('beforeEnd', mixin$19);
-	  var P$22 = createProperty('beforeEnd', mixin$19);
-	
-	  function beforeEnd(obs, fn) {
-	    return new (obs._ofSameType(S$26, P$22))(obs, { fn: fn });
-	  }
-	
-	  var mixin$20 = {
-	    _init: function (_ref) {
-	      var min = _ref.min;
-	      var max = _ref.max;
-	
-	      this._max = max;
-	      this._min = min;
-	      this._buff = [];
-	    },
-	    _free: function () {
-	      this._buff = null;
-	    },
-	    _handleValue: function (x) {
-	      this._buff = slide(this._buff, x, this._max);
-	      if (this._buff.length >= this._min) {
-	        this._emitValue(this._buff);
-	      }
-	    }
-	  };
-	
-	  var S$27 = createStream('slidingWindow', mixin$20);
-	  var P$23 = createProperty('slidingWindow', mixin$20);
-	
-	  function slidingWindow(obs, max) {
-	    var min = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-	
-	    return new (obs._ofSameType(S$27, P$23))(obs, { min: min, max: max });
-	  }
-	
-	  var mixin$21 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	      var flushOnEnd = _ref.flushOnEnd;
-	
-	      this._fn = fn;
-	      this._flushOnEnd = flushOnEnd;
-	      this._buff = [];
-	    },
-	    _free: function () {
-	      this._buff = null;
-	    },
-	    _flush: function () {
-	      if (this._buff !== null && this._buff.length !== 0) {
-	        this._emitValue(this._buff);
-	        this._buff = [];
-	      }
-	    },
-	    _handleValue: function (x) {
-	      this._buff.push(x);
-	      var fn = this._fn;
-	      if (!fn(x)) {
-	        this._flush();
-	      }
-	    },
-	    _handleEnd: function () {
-	      if (this._flushOnEnd) {
-	        this._flush();
-	      }
-	      this._emitEnd();
-	    }
-	  };
-	
-	  var S$28 = createStream('bufferWhile', mixin$21);
-	  var P$24 = createProperty('bufferWhile', mixin$21);
-	
-	  var id$7 = function (x) {
-	    return x;
-	  };
-	
-	  function bufferWhile(obs, fn) {
-	    var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-	
-	    var _ref2$flushOnEnd = _ref2.flushOnEnd;
-	    var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
-	
-	    return new (obs._ofSameType(S$28, P$24))(obs, { fn: fn || id$7, flushOnEnd: flushOnEnd });
-	  }
-	
-	  var mixin$22 = {
-	    _init: function (_ref) {
-	      var count = _ref.count;
-	      var flushOnEnd = _ref.flushOnEnd;
-	
-	      this._count = count;
-	      this._flushOnEnd = flushOnEnd;
-	      this._buff = [];
-	    },
-	    _free: function () {
-	      this._buff = null;
-	    },
-	    _flush: function () {
-	      if (this._buff !== null && this._buff.length !== 0) {
-	        this._emitValue(this._buff);
-	        this._buff = [];
-	      }
-	    },
-	    _handleValue: function (x) {
-	      this._buff.push(x);
-	      if (this._buff.length >= this._count) {
-	        this._flush();
-	      }
-	    },
-	    _handleEnd: function () {
-	      if (this._flushOnEnd) {
-	        this._flush();
-	      }
-	      this._emitEnd();
-	    }
-	  };
-	
-	  var S$29 = createStream('bufferWithCount', mixin$22);
-	  var P$25 = createProperty('bufferWithCount', mixin$22);
-	
-	  function bufferWhile$1(obs, count) {
-	    var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-	
-	    var _ref2$flushOnEnd = _ref2.flushOnEnd;
-	    var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
-	
-	    return new (obs._ofSameType(S$29, P$25))(obs, { count: count, flushOnEnd: flushOnEnd });
-	  }
-	
-	  var mixin$23 = {
-	    _init: function (_ref) {
-	      var _this = this;
-	
-	      var wait = _ref.wait;
-	      var count = _ref.count;
-	      var flushOnEnd = _ref.flushOnEnd;
-	
-	      this._wait = wait;
-	      this._count = count;
-	      this._flushOnEnd = flushOnEnd;
-	      this._intervalId = null;
-	      this._$onTick = function () {
-	        return _this._flush();
-	      };
-	      this._buff = [];
-	    },
-	    _free: function () {
-	      this._$onTick = null;
-	      this._buff = null;
-	    },
-	    _flush: function () {
-	      if (this._buff !== null) {
-	        this._emitValue(this._buff);
-	        this._buff = [];
-	      }
-	    },
-	    _handleValue: function (x) {
-	      this._buff.push(x);
-	      if (this._buff.length >= this._count) {
-	        clearInterval(this._intervalId);
-	        this._flush();
-	        this._intervalId = setInterval(this._$onTick, this._wait);
-	      }
-	    },
-	    _handleEnd: function () {
-	      if (this._flushOnEnd && this._buff.length !== 0) {
-	        this._flush();
-	      }
-	      this._emitEnd();
-	    },
-	    _onActivation: function () {
-	      this._source.onAny(this._$handleAny); // copied from patterns/one-source
-	      this._intervalId = setInterval(this._$onTick, this._wait);
-	    },
-	    _onDeactivation: function () {
-	      if (this._intervalId !== null) {
-	        clearInterval(this._intervalId);
-	        this._intervalId = null;
-	      }
-	      this._source.offAny(this._$handleAny); // copied from patterns/one-source
-	    }
-	  };
-	
-	  var S$30 = createStream('bufferWithTimeOrCount', mixin$23);
-	  var P$26 = createProperty('bufferWithTimeOrCount', mixin$23);
-	
-	  function bufferWithTimeOrCount(obs, wait, count) {
-	    var _ref2 = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
-	
-	    var _ref2$flushOnEnd = _ref2.flushOnEnd;
-	    var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
-	
-	    return new (obs._ofSameType(S$30, P$26))(obs, { wait: wait, count: count, flushOnEnd: flushOnEnd });
-	  }
-	
-	  function xformForObs(obs) {
-	    return {
-	      '@@transducer/step': function (res, input) {
-	        obs._emitValue(input);
-	        return null;
-	      },
-	      '@@transducer/result': function () {
-	        obs._emitEnd();
-	        return null;
-	      }
-	    };
-	  }
-	
-	  var mixin$24 = {
-	    _init: function (_ref) {
-	      var transducer = _ref.transducer;
-	
-	      this._xform = transducer(xformForObs(this));
-	    },
-	    _free: function () {
-	      this._xform = null;
-	    },
-	    _handleValue: function (x) {
-	      if (this._xform['@@transducer/step'](null, x) !== null) {
-	        this._xform['@@transducer/result'](null);
-	      }
-	    },
-	    _handleEnd: function () {
-	      this._xform['@@transducer/result'](null);
-	    }
-	  };
-	
-	  var S$31 = createStream('transduce', mixin$24);
-	  var P$27 = createProperty('transduce', mixin$24);
-	
-	  function transduce(obs, transducer) {
-	    return new (obs._ofSameType(S$31, P$27))(obs, { transducer: transducer });
-	  }
-	
-	  var mixin$25 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._handler = fn;
-	      this._emitter = emitter(this);
-	    },
-	    _free: function () {
-	      this._handler = null;
-	      this._emitter = null;
-	    },
-	    _handleAny: function (event) {
-	      this._handler(this._emitter, event);
-	    }
-	  };
-	
-	  var S$32 = createStream('withHandler', mixin$25);
-	  var P$28 = createProperty('withHandler', mixin$25);
-	
-	  function withHandler(obs, fn) {
-	    return new (obs._ofSameType(S$32, P$28))(obs, { fn: fn });
-	  }
-	
-	  function defaultErrorsCombinator(errors) {
-	    var latestError = undefined;
-	    for (var i = 0; i < errors.length; i++) {
-	      if (errors[i] !== undefined) {
-	        if (latestError === undefined || latestError.index < errors[i].index) {
-	          latestError = errors[i];
-	        }
-	      }
-	    }
-	    return latestError.error;
-	  }
-	
-	  function Combine(active, passive, combinator) {
-	    var _this = this;
-	
-	    Stream.call(this);
-	    this._activeCount = active.length;
-	    this._sources = concat(active, passive);
-	    this._combinator = combinator ? spread(combinator, this._sources.length) : function (x) {
-	      return x;
-	    };
-	    this._aliveCount = 0;
-	    this._latestValues = new Array(this._sources.length);
-	    this._latestErrors = new Array(this._sources.length);
-	    fillArray(this._latestValues, NOTHING);
-	    this._emitAfterActivation = false;
-	    this._endAfterActivation = false;
-	    this._latestErrorIndex = 0;
-	
-	    this._$handlers = [];
-	
-	    var _loop = function (i) {
-	      _this._$handlers.push(function (event) {
-	        return _this._handleAny(i, event);
-	      });
-	    };
-	
-	    for (var i = 0; i < this._sources.length; i++) {
-	      _loop(i);
-	    }
-	  }
-	
-	  inherit(Combine, Stream, {
-	
-	    _name: 'combine',
-	
-	    _onActivation: function () {
-	      this._aliveCount = this._activeCount;
-	
-	      // we need to suscribe to _passive_ sources before _active_
-	      // (see https://github.com/rpominov/kefir/issues/98)
-	      for (var i = this._activeCount; i < this._sources.length; i++) {
-	        this._sources[i].onAny(this._$handlers[i]);
-	      }
-	      for (var i = 0; i < this._activeCount; i++) {
-	        this._sources[i].onAny(this._$handlers[i]);
-	      }
-	
-	      if (this._emitAfterActivation) {
-	        this._emitAfterActivation = false;
-	        this._emitIfFull();
-	      }
-	      if (this._endAfterActivation) {
-	        this._emitEnd();
-	      }
-	    },
-	    _onDeactivation: function () {
-	      var length = this._sources.length,
-	          i = undefined;
-	      for (i = 0; i < length; i++) {
-	        this._sources[i].offAny(this._$handlers[i]);
-	      }
-	    },
-	    _emitIfFull: function () {
-	      var hasAllValues = true;
-	      var hasErrors = false;
-	      var length = this._latestValues.length;
-	      var valuesCopy = new Array(length);
-	      var errorsCopy = new Array(length);
-	
-	      for (var i = 0; i < length; i++) {
-	        valuesCopy[i] = this._latestValues[i];
-	        errorsCopy[i] = this._latestErrors[i];
-	
-	        if (valuesCopy[i] === NOTHING) {
-	          hasAllValues = false;
-	        }
-	
-	        if (errorsCopy[i] !== undefined) {
-	          hasErrors = true;
-	        }
-	      }
-	
-	      if (hasAllValues) {
-	        var combinator = this._combinator;
-	        this._emitValue(combinator(valuesCopy));
-	      }
-	      if (hasErrors) {
-	        this._emitError(defaultErrorsCombinator(errorsCopy));
-	      }
-	    },
-	    _handleAny: function (i, event) {
-	
-	      if (event.type === VALUE || event.type === ERROR) {
-	
-	        if (event.type === VALUE) {
-	          this._latestValues[i] = event.value;
-	          this._latestErrors[i] = undefined;
-	        }
-	        if (event.type === ERROR) {
-	          this._latestValues[i] = NOTHING;
-	          this._latestErrors[i] = {
-	            index: this._latestErrorIndex++,
-	            error: event.value
-	          };
-	        }
-	
-	        if (i < this._activeCount) {
-	          if (this._activating) {
-	            this._emitAfterActivation = true;
-	          } else {
-	            this._emitIfFull();
-	          }
-	        }
-	      } else {
-	        // END
-	
-	        if (i < this._activeCount) {
-	          this._aliveCount--;
-	          if (this._aliveCount === 0) {
-	            if (this._activating) {
-	              this._endAfterActivation = true;
-	            } else {
-	              this._emitEnd();
-	            }
-	          }
-	        }
-	      }
-	    },
-	    _clear: function () {
-	      Stream.prototype._clear.call(this);
-	      this._sources = null;
-	      this._latestValues = null;
-	      this._latestErrors = null;
-	      this._combinator = null;
-	      this._$handlers = null;
-	    }
-	  });
-	
-	  function combine(active) {
-	    var passive = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
-	    var combinator = arguments[2];
-	
-	    if (typeof passive === 'function') {
-	      combinator = passive;
-	      passive = [];
-	    }
-	    return active.length === 0 ? never() : new Combine(active, passive, combinator);
-	  }
-	
-	  var isArray = Array.isArray || function (xs) {
-	    return Object.prototype.toString.call(xs) === '[object Array]';
-	  };
-	
-	  function Zip(sources, combinator) {
-	    var _this = this;
-	
-	    Stream.call(this);
-	
-	    this._buffers = map(sources, function (source) {
-	      return isArray(source) ? cloneArray(source) : [];
-	    });
-	    this._sources = map(sources, function (source) {
-	      return isArray(source) ? never() : source;
-	    });
-	
-	    this._combinator = combinator ? spread(combinator, this._sources.length) : function (x) {
-	      return x;
-	    };
-	    this._aliveCount = 0;
-	
-	    this._$handlers = [];
-	
-	    var _loop = function (i) {
-	      _this._$handlers.push(function (event) {
-	        return _this._handleAny(i, event);
-	      });
-	    };
-	
-	    for (var i = 0; i < this._sources.length; i++) {
-	      _loop(i);
-	    }
-	  }
-	
-	  inherit(Zip, Stream, {
-	
-	    _name: 'zip',
-	
-	    _onActivation: function () {
-	
-	      // if all sources are arrays
-	      while (this._isFull()) {
-	        this._emit();
-	      }
-	
-	      var length = this._sources.length;
-	      this._aliveCount = length;
-	      for (var i = 0; i < length && this._active; i++) {
-	        this._sources[i].onAny(this._$handlers[i]);
-	      }
-	    },
-	    _onDeactivation: function () {
-	      for (var i = 0; i < this._sources.length; i++) {
-	        this._sources[i].offAny(this._$handlers[i]);
-	      }
-	    },
-	    _emit: function () {
-	      var values = new Array(this._buffers.length);
-	      for (var i = 0; i < this._buffers.length; i++) {
-	        values[i] = this._buffers[i].shift();
-	      }
-	      var combinator = this._combinator;
-	      this._emitValue(combinator(values));
-	    },
-	    _isFull: function () {
-	      for (var i = 0; i < this._buffers.length; i++) {
-	        if (this._buffers[i].length === 0) {
-	          return false;
-	        }
-	      }
-	      return true;
-	    },
-	    _handleAny: function (i, event) {
-	      if (event.type === VALUE) {
-	        this._buffers[i].push(event.value);
-	        if (this._isFull()) {
-	          this._emit();
-	        }
-	      }
-	      if (event.type === ERROR) {
-	        this._emitError(event.value);
-	      }
-	      if (event.type === END) {
-	        this._aliveCount--;
-	        if (this._aliveCount === 0) {
-	          this._emitEnd();
-	        }
-	      }
-	    },
-	    _clear: function () {
-	      Stream.prototype._clear.call(this);
-	      this._sources = null;
-	      this._buffers = null;
-	      this._combinator = null;
-	      this._$handlers = null;
-	    }
-	  });
-	
-	  function zip(observables, combinator /* Function | falsey */) {
-	    return observables.length === 0 ? never() : new Zip(observables, combinator);
-	  }
-	
-	  var id$8 = function (x) {
-	    return x;
-	  };
-	
-	  function AbstractPool() {
-	    var _this = this;
-	
-	    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
-	    var _ref$queueLim = _ref.queueLim;
-	    var queueLim = _ref$queueLim === undefined ? 0 : _ref$queueLim;
-	    var _ref$concurLim = _ref.concurLim;
-	    var concurLim = _ref$concurLim === undefined ? -1 : _ref$concurLim;
-	    var _ref$drop = _ref.drop;
-	    var drop = _ref$drop === undefined ? 'new' : _ref$drop;
-	
-	    Stream.call(this);
-	
-	    this._queueLim = queueLim < 0 ? -1 : queueLim;
-	    this._concurLim = concurLim < 0 ? -1 : concurLim;
-	    this._drop = drop;
-	    this._queue = [];
-	    this._curSources = [];
-	    this._$handleSubAny = function (event) {
-	      return _this._handleSubAny(event);
-	    };
-	    this._$endHandlers = [];
-	    this._currentlyAdding = null;
-	
-	    if (this._concurLim === 0) {
-	      this._emitEnd();
-	    }
-	  }
-	
-	  inherit(AbstractPool, Stream, {
-	
-	    _name: 'abstractPool',
-	
-	    _add: function (obj, toObs /* Function | falsey */) {
-	      toObs = toObs || id$8;
-	      if (this._concurLim === -1 || this._curSources.length < this._concurLim) {
-	        this._addToCur(toObs(obj));
-	      } else {
-	        if (this._queueLim === -1 || this._queue.length < this._queueLim) {
-	          this._addToQueue(toObs(obj));
-	        } else if (this._drop === 'old') {
-	          this._removeOldest();
-	          this._add(obj, toObs);
-	        }
-	      }
-	    },
-	    _addAll: function (obss) {
-	      var _this2 = this;
-	
-	      forEach(obss, function (obs) {
-	        return _this2._add(obs);
-	      });
-	    },
-	    _remove: function (obs) {
-	      if (this._removeCur(obs) === -1) {
-	        this._removeQueue(obs);
-	      }
-	    },
-	    _addToQueue: function (obs) {
-	      this._queue = concat(this._queue, [obs]);
-	    },
-	    _addToCur: function (obs) {
-	      if (this._active) {
-	
-	        // HACK:
-	        //
-	        // We have two optimizations for cases when `obs` is ended. We don't want
-	        // to add such observable to the list, but only want to emit events
-	        // from it (if it has some).
-	        //
-	        // Instead of this hacks, we could just did following,
-	        // but it would be 5-8 times slower:
-	        //
-	        //     this._curSources = concat(this._curSources, [obs]);
-	        //     this._subscribe(obs);
-	        //
-	
-	        // #1
-	        // This one for cases when `obs` already ended
-	        // e.g., Kefir.constant() or Kefir.never()
-	        if (!obs._alive) {
-	          if (obs._currentEvent) {
-	            this._emit(obs._currentEvent.type, obs._currentEvent.value);
-	          }
-	          return;
-	        }
-	
-	        // #2
-	        // This one is for cases when `obs` going to end synchronously on
-	        // first subscriber e.g., Kefir.stream(em => {em.emit(1); em.end()})
-	        this._currentlyAdding = obs;
-	        obs.onAny(this._$handleSubAny);
-	        this._currentlyAdding = null;
-	        if (obs._alive) {
-	          this._curSources = concat(this._curSources, [obs]);
-	          if (this._active) {
-	            this._subToEnd(obs);
-	          }
-	        }
-	      } else {
-	        this._curSources = concat(this._curSources, [obs]);
-	      }
-	    },
-	    _subToEnd: function (obs) {
-	      var _this3 = this;
-	
-	      var onEnd = function () {
-	        return _this3._removeCur(obs);
-	      };
-	      this._$endHandlers.push({ obs: obs, handler: onEnd });
-	      obs.onEnd(onEnd);
-	    },
-	    _subscribe: function (obs) {
-	      obs.onAny(this._$handleSubAny);
-	
-	      // it can become inactive in responce of subscribing to `obs.onAny` above
-	      if (this._active) {
-	        this._subToEnd(obs);
-	      }
-	    },
-	    _unsubscribe: function (obs) {
-	      obs.offAny(this._$handleSubAny);
-	
-	      var onEndI = findByPred(this._$endHandlers, function (obj) {
-	        return obj.obs === obs;
-	      });
-	      if (onEndI !== -1) {
-	        obs.offEnd(this._$endHandlers[onEndI].handler);
-	        this._$endHandlers.splice(onEndI, 1);
-	      }
-	    },
-	    _handleSubAny: function (event) {
-	      if (event.type === VALUE) {
-	        this._emitValue(event.value);
-	      } else if (event.type === ERROR) {
-	        this._emitError(event.value);
-	      }
-	    },
-	    _removeQueue: function (obs) {
-	      var index = find(this._queue, obs);
-	      this._queue = remove(this._queue, index);
-	      return index;
-	    },
-	    _removeCur: function (obs) {
-	      if (this._active) {
-	        this._unsubscribe(obs);
-	      }
-	      var index = find(this._curSources, obs);
-	      this._curSources = remove(this._curSources, index);
-	      if (index !== -1) {
-	        if (this._queue.length !== 0) {
-	          this._pullQueue();
-	        } else if (this._curSources.length === 0) {
-	          this._onEmpty();
-	        }
-	      }
-	      return index;
-	    },
-	    _removeOldest: function () {
-	      this._removeCur(this._curSources[0]);
-	    },
-	    _pullQueue: function () {
-	      if (this._queue.length !== 0) {
-	        this._queue = cloneArray(this._queue);
-	        this._addToCur(this._queue.shift());
-	      }
-	    },
-	    _onActivation: function () {
-	      for (var i = 0, sources = this._curSources; i < sources.length && this._active; i++) {
-	        this._subscribe(sources[i]);
-	      }
-	    },
-	    _onDeactivation: function () {
-	      for (var i = 0, sources = this._curSources; i < sources.length; i++) {
-	        this._unsubscribe(sources[i]);
-	      }
-	      if (this._currentlyAdding !== null) {
-	        this._unsubscribe(this._currentlyAdding);
-	      }
-	    },
-	    _isEmpty: function () {
-	      return this._curSources.length === 0;
-	    },
-	    _onEmpty: function () {},
-	    _clear: function () {
-	      Stream.prototype._clear.call(this);
-	      this._queue = null;
-	      this._curSources = null;
-	      this._$handleSubAny = null;
-	      this._$endHandlers = null;
-	    }
-	  });
-	
-	  function Merge(sources) {
-	    AbstractPool.call(this);
-	    this._addAll(sources);
-	    this._initialised = true;
-	  }
-	
-	  inherit(Merge, AbstractPool, {
-	
-	    _name: 'merge',
-	
-	    _onEmpty: function () {
-	      if (this._initialised) {
-	        this._emitEnd();
-	      }
-	    }
-	  });
-	
-	  function merge(observables) {
-	    return observables.length === 0 ? never() : new Merge(observables);
-	  }
-	
-	  function S$33(generator) {
-	    var _this = this;
-	
-	    Stream.call(this);
-	    this._generator = generator;
-	    this._source = null;
-	    this._inLoop = false;
-	    this._iteration = 0;
-	    this._$handleAny = function (event) {
-	      return _this._handleAny(event);
-	    };
-	  }
-	
-	  inherit(S$33, Stream, {
-	
-	    _name: 'repeat',
-	
-	    _handleAny: function (event) {
-	      if (event.type === END) {
-	        this._source = null;
-	        this._getSource();
-	      } else {
-	        this._emit(event.type, event.value);
-	      }
-	    },
-	    _getSource: function () {
-	      if (!this._inLoop) {
-	        this._inLoop = true;
-	        var generator = this._generator;
-	        while (this._source === null && this._alive && this._active) {
-	          this._source = generator(this._iteration++);
-	          if (this._source) {
-	            this._source.onAny(this._$handleAny);
-	          } else {
-	            this._emitEnd();
-	          }
-	        }
-	        this._inLoop = false;
-	      }
-	    },
-	    _onActivation: function () {
-	      if (this._source) {
-	        this._source.onAny(this._$handleAny);
-	      } else {
-	        this._getSource();
-	      }
-	    },
-	    _onDeactivation: function () {
-	      if (this._source) {
-	        this._source.offAny(this._$handleAny);
-	      }
-	    },
-	    _clear: function () {
-	      Stream.prototype._clear.call(this);
-	      this._generator = null;
-	      this._source = null;
-	      this._$handleAny = null;
-	    }
-	  });
-	
-	  function repeat (generator) {
-	    return new S$33(generator);
-	  }
-	
-	  function concat$1(observables) {
-	    return repeat(function (index) {
-	      return observables.length > index ? observables[index] : false;
-	    }).setName('concat');
-	  }
-	
-	  function Pool() {
-	    AbstractPool.call(this);
-	  }
-	
-	  inherit(Pool, AbstractPool, {
-	
-	    _name: 'pool',
-	
-	    plug: function (obs) {
-	      this._add(obs);
-	      return this;
-	    },
-	    unplug: function (obs) {
-	      this._remove(obs);
-	      return this;
-	    }
-	  });
-	
-	  function FlatMap(source, fn, options) {
-	    var _this = this;
-	
-	    AbstractPool.call(this, options);
-	    this._source = source;
-	    this._fn = fn;
-	    this._mainEnded = false;
-	    this._lastCurrent = null;
-	    this._$handleMain = function (event) {
-	      return _this._handleMain(event);
-	    };
-	  }
-	
-	  inherit(FlatMap, AbstractPool, {
-	    _onActivation: function () {
-	      AbstractPool.prototype._onActivation.call(this);
-	      if (this._active) {
-	        this._source.onAny(this._$handleMain);
-	      }
-	    },
-	    _onDeactivation: function () {
-	      AbstractPool.prototype._onDeactivation.call(this);
-	      this._source.offAny(this._$handleMain);
-	      this._hadNoEvSinceDeact = true;
-	    },
-	    _handleMain: function (event) {
-	
-	      if (event.type === VALUE) {
-	        // Is latest value before deactivation survived, and now is 'current' on this activation?
-	        // We don't want to handle such values, to prevent to constantly add
-	        // same observale on each activation/deactivation when our main source
-	        // is a `Kefir.conatant()` for example.
-	        var sameCurr = this._activating && this._hadNoEvSinceDeact && this._lastCurrent === event.value;
-	        if (!sameCurr) {
-	          this._add(event.value, this._fn);
-	        }
-	        this._lastCurrent = event.value;
-	        this._hadNoEvSinceDeact = false;
-	      }
-	
-	      if (event.type === ERROR) {
-	        this._emitError(event.value);
-	      }
-	
-	      if (event.type === END) {
-	        if (this._isEmpty()) {
-	          this._emitEnd();
-	        } else {
-	          this._mainEnded = true;
-	        }
-	      }
-	    },
-	    _onEmpty: function () {
-	      if (this._mainEnded) {
-	        this._emitEnd();
-	      }
-	    },
-	    _clear: function () {
-	      AbstractPool.prototype._clear.call(this);
-	      this._source = null;
-	      this._lastCurrent = null;
-	      this._$handleMain = null;
-	    }
-	  });
-	
-	  function FlatMapErrors(source, fn) {
-	    FlatMap.call(this, source, fn);
-	  }
-	
-	  inherit(FlatMapErrors, FlatMap, {
-	
-	    // Same as in FlatMap, only VALUE/ERROR flipped
-	
-	    _handleMain: function (event) {
-	
-	      if (event.type === ERROR) {
-	        var sameCurr = this._activating && this._hadNoEvSinceDeact && this._lastCurrent === event.value;
-	        if (!sameCurr) {
-	          this._add(event.value, this._fn);
-	        }
-	        this._lastCurrent = event.value;
-	        this._hadNoEvSinceDeact = false;
-	      }
-	
-	      if (event.type === VALUE) {
-	        this._emitValue(event.value);
-	      }
-	
-	      if (event.type === END) {
-	        if (this._isEmpty()) {
-	          this._emitEnd();
-	        } else {
-	          this._mainEnded = true;
-	        }
-	      }
-	    }
-	  });
-	
-	  function createConstructor$1(BaseClass, name) {
-	    return function AnonymousObservable(primary, secondary, options) {
-	      var _this = this;
-	
-	      BaseClass.call(this);
-	      this._primary = primary;
-	      this._secondary = secondary;
-	      this._name = primary._name + '.' + name;
-	      this._lastSecondary = NOTHING;
-	      this._$handleSecondaryAny = function (event) {
-	        return _this._handleSecondaryAny(event);
-	      };
-	      this._$handlePrimaryAny = function (event) {
-	        return _this._handlePrimaryAny(event);
-	      };
-	      this._init(options);
-	    };
-	  }
-	
-	  function createClassMethods$1(BaseClass) {
-	    return {
-	      _init: function () {},
-	      _free: function () {},
-	      _handlePrimaryValue: function (x) {
-	        this._emitValue(x);
-	      },
-	      _handlePrimaryError: function (x) {
-	        this._emitError(x);
-	      },
-	      _handlePrimaryEnd: function () {
-	        this._emitEnd();
-	      },
-	      _handleSecondaryValue: function (x) {
-	        this._lastSecondary = x;
-	      },
-	      _handleSecondaryError: function (x) {
-	        this._emitError(x);
-	      },
-	      _handleSecondaryEnd: function () {},
-	      _handlePrimaryAny: function (event) {
-	        switch (event.type) {
-	          case VALUE:
-	            return this._handlePrimaryValue(event.value);
-	          case ERROR:
-	            return this._handlePrimaryError(event.value);
-	          case END:
-	            return this._handlePrimaryEnd(event.value);
-	        }
-	      },
-	      _handleSecondaryAny: function (event) {
-	        switch (event.type) {
-	          case VALUE:
-	            return this._handleSecondaryValue(event.value);
-	          case ERROR:
-	            return this._handleSecondaryError(event.value);
-	          case END:
-	            this._handleSecondaryEnd(event.value);
-	            this._removeSecondary();
-	        }
-	      },
-	      _removeSecondary: function () {
-	        if (this._secondary !== null) {
-	          this._secondary.offAny(this._$handleSecondaryAny);
-	          this._$handleSecondaryAny = null;
-	          this._secondary = null;
-	        }
-	      },
-	      _onActivation: function () {
-	        if (this._secondary !== null) {
-	          this._secondary.onAny(this._$handleSecondaryAny);
-	        }
-	        if (this._active) {
-	          this._primary.onAny(this._$handlePrimaryAny);
-	        }
-	      },
-	      _onDeactivation: function () {
-	        if (this._secondary !== null) {
-	          this._secondary.offAny(this._$handleSecondaryAny);
-	        }
-	        this._primary.offAny(this._$handlePrimaryAny);
-	      },
-	      _clear: function () {
-	        BaseClass.prototype._clear.call(this);
-	        this._primary = null;
-	        this._secondary = null;
-	        this._lastSecondary = null;
-	        this._$handleSecondaryAny = null;
-	        this._$handlePrimaryAny = null;
-	        this._free();
-	      }
-	    };
-	  }
-	
-	  function createStream$1(name, mixin) {
-	    var S = createConstructor$1(Stream, name);
-	    inherit(S, Stream, createClassMethods$1(Stream), mixin);
-	    return S;
-	  }
-	
-	  function createProperty$1(name, mixin) {
-	    var P = createConstructor$1(Property, name);
-	    inherit(P, Property, createClassMethods$1(Property), mixin);
-	    return P;
-	  }
-	
-	  var mixin$26 = {
-	    _handlePrimaryValue: function (x) {
-	      if (this._lastSecondary !== NOTHING && this._lastSecondary) {
-	        this._emitValue(x);
-	      }
-	    },
-	    _handleSecondaryEnd: function () {
-	      if (this._lastSecondary === NOTHING || !this._lastSecondary) {
-	        this._emitEnd();
-	      }
-	    }
-	  };
-	
-	  var S$34 = createStream$1('filterBy', mixin$26);
-	  var P$29 = createProperty$1('filterBy', mixin$26);
-	
-	  function filterBy(primary, secondary) {
-	    return new (primary._ofSameType(S$34, P$29))(primary, secondary);
-	  }
-	
-	  var id2 = function (_, x) {
-	    return x;
-	  };
-	
-	  function sampledBy(passive, active, combinator) {
-	    var _combinator = combinator ? function (a, b) {
-	      return combinator(b, a);
-	    } : id2;
-	    return combine([active], [passive], _combinator).setName(passive, 'sampledBy');
-	  }
-	
-	  var mixin$27 = {
-	    _handlePrimaryValue: function (x) {
-	      if (this._lastSecondary !== NOTHING) {
-	        this._emitValue(x);
-	      }
-	    },
-	    _handleSecondaryEnd: function () {
-	      if (this._lastSecondary === NOTHING) {
-	        this._emitEnd();
-	      }
-	    }
-	  };
-	
-	  var S$35 = createStream$1('skipUntilBy', mixin$27);
-	  var P$30 = createProperty$1('skipUntilBy', mixin$27);
-	
-	  function skipUntilBy(primary, secondary) {
-	    return new (primary._ofSameType(S$35, P$30))(primary, secondary);
-	  }
-	
-	  var mixin$28 = {
-	    _handleSecondaryValue: function () {
-	      this._emitEnd();
-	    }
-	  };
-	
-	  var S$36 = createStream$1('takeUntilBy', mixin$28);
-	  var P$31 = createProperty$1('takeUntilBy', mixin$28);
-	
-	  function takeUntilBy(primary, secondary) {
-	    return new (primary._ofSameType(S$36, P$31))(primary, secondary);
-	  }
-	
-	  var mixin$29 = {
-	    _init: function () {
-	      var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
-	      var _ref$flushOnEnd = _ref.flushOnEnd;
-	      var flushOnEnd = _ref$flushOnEnd === undefined ? true : _ref$flushOnEnd;
-	
-	      this._buff = [];
-	      this._flushOnEnd = flushOnEnd;
-	    },
-	    _free: function () {
-	      this._buff = null;
-	    },
-	    _flush: function () {
-	      if (this._buff !== null) {
-	        this._emitValue(this._buff);
-	        this._buff = [];
-	      }
-	    },
-	    _handlePrimaryEnd: function () {
-	      if (this._flushOnEnd) {
-	        this._flush();
-	      }
-	      this._emitEnd();
-	    },
-	    _onActivation: function () {
-	      this._primary.onAny(this._$handlePrimaryAny);
-	      if (this._alive && this._secondary !== null) {
-	        this._secondary.onAny(this._$handleSecondaryAny);
-	      }
-	    },
-	    _handlePrimaryValue: function (x) {
-	      this._buff.push(x);
-	    },
-	    _handleSecondaryValue: function () {
-	      this._flush();
-	    },
-	    _handleSecondaryEnd: function () {
-	      if (!this._flushOnEnd) {
-	        this._emitEnd();
-	      }
-	    }
-	  };
-	
-	  var S$37 = createStream$1('bufferBy', mixin$29);
-	  var P$32 = createProperty$1('bufferBy', mixin$29);
-	
-	  function bufferBy(primary, secondary, options /* optional */) {
-	    return new (primary._ofSameType(S$37, P$32))(primary, secondary, options);
-	  }
-	
-	  var mixin$30 = {
-	    _init: function () {
-	      var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
-	      var _ref$flushOnEnd = _ref.flushOnEnd;
-	      var flushOnEnd = _ref$flushOnEnd === undefined ? true : _ref$flushOnEnd;
-	      var _ref$flushOnChange = _ref.flushOnChange;
-	      var flushOnChange = _ref$flushOnChange === undefined ? false : _ref$flushOnChange;
-	
-	      this._buff = [];
-	      this._flushOnEnd = flushOnEnd;
-	      this._flushOnChange = flushOnChange;
-	    },
-	    _free: function () {
-	      this._buff = null;
-	    },
-	    _flush: function () {
-	      if (this._buff !== null) {
-	        this._emitValue(this._buff);
-	        this._buff = [];
-	      }
-	    },
-	    _handlePrimaryEnd: function () {
-	      if (this._flushOnEnd) {
-	        this._flush();
-	      }
-	      this._emitEnd();
-	    },
-	    _handlePrimaryValue: function (x) {
-	      this._buff.push(x);
-	      if (this._lastSecondary !== NOTHING && !this._lastSecondary) {
-	        this._flush();
-	      }
-	    },
-	    _handleSecondaryEnd: function () {
-	      if (!this._flushOnEnd && (this._lastSecondary === NOTHING || this._lastSecondary)) {
-	        this._emitEnd();
-	      }
-	    },
-	    _handleSecondaryValue: function (x) {
-	      if (this._flushOnChange && !x) {
-	        this._flush();
-	      }
-	
-	      // from default _handleSecondaryValue
-	      this._lastSecondary = x;
-	    }
-	  };
-	
-	  var S$38 = createStream$1('bufferWhileBy', mixin$30);
-	  var P$33 = createProperty$1('bufferWhileBy', mixin$30);
-	
-	  function bufferWhileBy(primary, secondary, options /* optional */) {
-	    return new (primary._ofSameType(S$38, P$33))(primary, secondary, options);
-	  }
-	
-	  var f = function () {
-	    return false;
-	  };
-	  var t = function () {
-	    return true;
-	  };
-	
-	  function awaiting(a, b) {
-	    var result = merge([map$1(a, t), map$1(b, f)]);
-	    result = skipDuplicates(result);
-	    result = toProperty(result, f);
-	    return result.setName(a, 'awaiting');
-	  }
-	
-	  var mixin$31 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _handleValue: function (x) {
-	      var fn = this._fn;
-	      var result = fn(x);
-	      if (result.convert) {
-	        this._emitError(result.error);
-	      } else {
-	        this._emitValue(x);
-	      }
-	    }
-	  };
-	
-	  var S$39 = createStream('valuesToErrors', mixin$31);
-	  var P$34 = createProperty('valuesToErrors', mixin$31);
-	
-	  var defFn = function (x) {
-	    return { convert: true, error: x };
-	  };
-	
-	  function valuesToErrors(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? defFn : arguments[1];
-	
-	    return new (obs._ofSameType(S$39, P$34))(obs, { fn: fn });
-	  }
-	
-	  var mixin$32 = {
-	    _init: function (_ref) {
-	      var fn = _ref.fn;
-	
-	      this._fn = fn;
-	    },
-	    _free: function () {
-	      this._fn = null;
-	    },
-	    _handleError: function (x) {
-	      var fn = this._fn;
-	      var result = fn(x);
-	      if (result.convert) {
-	        this._emitValue(result.value);
-	      } else {
-	        this._emitError(x);
-	      }
-	    }
-	  };
-	
-	  var S$40 = createStream('errorsToValues', mixin$32);
-	  var P$35 = createProperty('errorsToValues', mixin$32);
-	
-	  var defFn$1 = function (x) {
-	    return { convert: true, value: x };
-	  };
-	
-	  function errorsToValues(obs) {
-	    var fn = arguments.length <= 1 || arguments[1] === undefined ? defFn$1 : arguments[1];
-	
-	    return new (obs._ofSameType(S$40, P$35))(obs, { fn: fn });
-	  }
-	
-	  var mixin$33 = {
-	    _handleError: function (x) {
-	      this._emitError(x);
-	      this._emitEnd();
-	    }
-	  };
-	
-	  var S$41 = createStream('endOnError', mixin$33);
-	  var P$36 = createProperty('endOnError', mixin$33);
-	
-	  function endOnError(obs) {
-	    return new (obs._ofSameType(S$41, P$36))(obs);
-	  }
-	
-	  Observable.prototype.toProperty = function (fn) {
-	    return toProperty(this, fn);
-	  };
-	
-	  Observable.prototype.changes = function () {
-	    return changes(this);
-	  };
-	
-	  Observable.prototype.toPromise = function (Promise) {
-	    return toPromise(this, Promise);
-	  };
-	
-	  Observable.prototype.toESObservable = toESObservable;
-	  Observable.prototype[symbol_('observable')] = toESObservable;
-	
-	  Observable.prototype.map = function (fn) {
-	    return map$1(this, fn);
-	  };
-	
-	  Observable.prototype.filter = function (fn) {
-	    return filter(this, fn);
-	  };
-	
-	  Observable.prototype.take = function (n) {
-	    return take(this, n);
-	  };
-	
-	  Observable.prototype.takeErrors = function (n) {
-	    return takeErrors(this, n);
-	  };
-	
-	  Observable.prototype.takeWhile = function (fn) {
-	    return takeWhile(this, fn);
-	  };
-	
-	  Observable.prototype.last = function () {
-	    return last(this);
-	  };
-	
-	  Observable.prototype.skip = function (n) {
-	    return skip(this, n);
-	  };
-	
-	  Observable.prototype.skipWhile = function (fn) {
-	    return skipWhile(this, fn);
-	  };
-	
-	  Observable.prototype.skipDuplicates = function (fn) {
-	    return skipDuplicates(this, fn);
-	  };
-	
-	  Observable.prototype.diff = function (fn, seed) {
-	    return diff(this, fn, seed);
-	  };
-	
-	  Observable.prototype.scan = function (fn, seed) {
-	    return scan(this, fn, seed);
-	  };
-	
-	  Observable.prototype.flatten = function (fn) {
-	    return flatten(this, fn);
-	  };
-	
-	  Observable.prototype.delay = function (wait) {
-	    return delay(this, wait);
-	  };
-	
-	  Observable.prototype.throttle = function (wait, options) {
-	    return throttle(this, wait, options);
-	  };
-	
-	  Observable.prototype.debounce = function (wait, options) {
-	    return debounce(this, wait, options);
-	  };
-	
-	  Observable.prototype.mapErrors = function (fn) {
-	    return mapErrors(this, fn);
-	  };
-	
-	  Observable.prototype.filterErrors = function (fn) {
-	    return filterErrors(this, fn);
-	  };
-	
-	  Observable.prototype.ignoreValues = function () {
-	    return ignoreValues(this);
-	  };
-	
-	  Observable.prototype.ignoreErrors = function () {
-	    return ignoreErrors(this);
-	  };
-	
-	  Observable.prototype.ignoreEnd = function () {
-	    return ignoreEnd(this);
-	  };
-	
-	  Observable.prototype.beforeEnd = function (fn) {
-	    return beforeEnd(this, fn);
-	  };
-	
-	  Observable.prototype.slidingWindow = function (max, min) {
-	    return slidingWindow(this, max, min);
-	  };
-	
-	  Observable.prototype.bufferWhile = function (fn, options) {
-	    return bufferWhile(this, fn, options);
-	  };
-	
-	  Observable.prototype.bufferWithCount = function (count, options) {
-	    return bufferWhile$1(this, count, options);
-	  };
-	
-	  Observable.prototype.bufferWithTimeOrCount = function (wait, count, options) {
-	    return bufferWithTimeOrCount(this, wait, count, options);
-	  };
-	
-	  Observable.prototype.transduce = function (transducer) {
-	    return transduce(this, transducer);
-	  };
-	
-	  Observable.prototype.withHandler = function (fn) {
-	    return withHandler(this, fn);
-	  };
-	
-	  Observable.prototype.combine = function (other, combinator) {
-	    return combine([this, other], combinator);
-	  };
-	
-	  Observable.prototype.zip = function (other, combinator) {
-	    return zip([this, other], combinator);
-	  };
-	
-	  Observable.prototype.merge = function (other) {
-	    return merge([this, other]);
-	  };
-	
-	  Observable.prototype.concat = function (other) {
-	    return concat$1([this, other]);
-	  };
-	
-	  var pool = function () {
-	    return new Pool();
-	  };
-	
-	  Observable.prototype.flatMap = function (fn) {
-	    return new FlatMap(this, fn).setName(this, 'flatMap');
-	  };
-	  Observable.prototype.flatMapLatest = function (fn) {
-	    return new FlatMap(this, fn, { concurLim: 1, drop: 'old' }).setName(this, 'flatMapLatest');
-	  };
-	  Observable.prototype.flatMapFirst = function (fn) {
-	    return new FlatMap(this, fn, { concurLim: 1 }).setName(this, 'flatMapFirst');
-	  };
-	  Observable.prototype.flatMapConcat = function (fn) {
-	    return new FlatMap(this, fn, { queueLim: -1, concurLim: 1 }).setName(this, 'flatMapConcat');
-	  };
-	  Observable.prototype.flatMapConcurLimit = function (fn, limit) {
-	    return new FlatMap(this, fn, { queueLim: -1, concurLim: limit }).setName(this, 'flatMapConcurLimit');
-	  };
-	
-	  Observable.prototype.flatMapErrors = function (fn) {
-	    return new FlatMapErrors(this, fn).setName(this, 'flatMapErrors');
-	  };
-	
-	  Observable.prototype.filterBy = function (other) {
-	    return filterBy(this, other);
-	  };
-	
-	  Observable.prototype.sampledBy = function (other, combinator) {
-	    return sampledBy(this, other, combinator);
-	  };
-	
-	  Observable.prototype.skipUntilBy = function (other) {
-	    return skipUntilBy(this, other);
-	  };
-	
-	  Observable.prototype.takeUntilBy = function (other) {
-	    return takeUntilBy(this, other);
-	  };
-	
-	  Observable.prototype.bufferBy = function (other, options) {
-	    return bufferBy(this, other, options);
-	  };
-	
-	  Observable.prototype.bufferWhileBy = function (other, options) {
-	    return bufferWhileBy(this, other, options);
-	  };
-	
-	  // Deprecated
-	  // -----------------------------------------------------------------------------
-	
-	  function warn(msg) {
-	    if (Kefir.DEPRECATION_WARNINGS !== false && console && typeof console.warn === 'function') {
-	      var msg2 = '\nHere is an Error object for you containing the call stack:';
-	      console.warn(msg, msg2, new Error());
-	    }
-	  }
-	
-	  Observable.prototype.awaiting = function (other) {
-	    warn('You are using deprecated .awaiting() method, see https://github.com/rpominov/kefir/issues/145');
-	    return awaiting(this, other);
-	  };
-	
-	  Observable.prototype.valuesToErrors = function (fn) {
-	    warn('You are using deprecated .valuesToErrors() method, see https://github.com/rpominov/kefir/issues/149');
-	    return valuesToErrors(this, fn);
-	  };
-	
-	  Observable.prototype.errorsToValues = function (fn) {
-	    warn('You are using deprecated .errorsToValues() method, see https://github.com/rpominov/kefir/issues/149');
-	    return errorsToValues(this, fn);
-	  };
-	
-	  Observable.prototype.endOnError = function () {
-	    warn('You are using deprecated .endOnError() method, see https://github.com/rpominov/kefir/issues/150');
-	    return endOnError(this);
-	  };
-	
-	  // Exports
-	  // --------------------------------------------------------------------------
-	
-	  var Kefir = { Observable: Observable, Stream: Stream, Property: Property, never: never, later: later, interval: interval, sequentially: sequentially,
-	    fromPoll: fromPoll, withInterval: withInterval, fromCallback: fromCallback, fromNodeCallback: fromNodeCallback, fromEvents: fromEvents, stream: stream,
-	    constant: constant, constantError: constantError, fromPromise: fromPromise, fromESObservable: fromESObservable, combine: combine, zip: zip, merge: merge,
-	    concat: concat$1, Pool: Pool, pool: pool, repeat: repeat };
-	
-	  Kefir.Kefir = Kefir;
-	
-	  exports.Kefir = Kefir;
-	  exports.Observable = Observable;
-	  exports.Stream = Stream;
-	  exports.Property = Property;
-	  exports.never = never;
-	  exports.later = later;
-	  exports.interval = interval;
-	  exports.sequentially = sequentially;
-	  exports.fromPoll = fromPoll;
-	  exports.withInterval = withInterval;
-	  exports.fromCallback = fromCallback;
-	  exports.fromNodeCallback = fromNodeCallback;
-	  exports.fromEvents = fromEvents;
-	  exports.stream = stream;
-	  exports.constant = constant;
-	  exports.constantError = constantError;
-	  exports.fromPromise = fromPromise;
-	  exports.fromESObservable = fromESObservable;
-	  exports.combine = combine;
-	  exports.zip = zip;
-	  exports.merge = merge;
-	  exports.concat = concat$1;
-	  exports.Pool = Pool;
-	  exports.pool = pool;
-	  exports.repeat = repeat;
-	  exports['default'] = Kefir;
+		var __commonjs_global = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
+		function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports, __commonjs_global), module.exports; }
+	
+		function createObj(proto) {
+		  var F = function () {};
+		  F.prototype = proto;
+		  return new F();
+		}
+	
+		function extend(target /*, mixin1, mixin2...*/) {
+		  var length = arguments.length,
+		      i = void 0,
+		      prop = void 0;
+		  for (i = 1; i < length; i++) {
+		    for (prop in arguments[i]) {
+		      target[prop] = arguments[i][prop];
+		    }
+		  }
+		  return target;
+		}
+	
+		function inherit(Child, Parent /*, mixin1, mixin2...*/) {
+		  var length = arguments.length,
+		      i = void 0;
+		  Child.prototype = createObj(Parent.prototype);
+		  Child.prototype.constructor = Child;
+		  for (i = 2; i < length; i++) {
+		    extend(Child.prototype, arguments[i]);
+		  }
+		  return Child;
+		}
+	
+		var NOTHING = ['<nothing>'];
+		var END = 'end';
+		var VALUE = 'value';
+		var ERROR = 'error';
+		var ANY = 'any';
+	
+		function concat(a, b) {
+		  var result = void 0,
+		      length = void 0,
+		      i = void 0,
+		      j = void 0;
+		  if (a.length === 0) {
+		    return b;
+		  }
+		  if (b.length === 0) {
+		    return a;
+		  }
+		  j = 0;
+		  result = new Array(a.length + b.length);
+		  length = a.length;
+		  for (i = 0; i < length; i++, j++) {
+		    result[j] = a[i];
+		  }
+		  length = b.length;
+		  for (i = 0; i < length; i++, j++) {
+		    result[j] = b[i];
+		  }
+		  return result;
+		}
+	
+		function find(arr, value) {
+		  var length = arr.length,
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    if (arr[i] === value) {
+		      return i;
+		    }
+		  }
+		  return -1;
+		}
+	
+		function findByPred(arr, pred) {
+		  var length = arr.length,
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    if (pred(arr[i])) {
+		      return i;
+		    }
+		  }
+		  return -1;
+		}
+	
+		function cloneArray(input) {
+		  var length = input.length,
+		      result = new Array(length),
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    result[i] = input[i];
+		  }
+		  return result;
+		}
+	
+		function remove(input, index) {
+		  var length = input.length,
+		      result = void 0,
+		      i = void 0,
+		      j = void 0;
+		  if (index >= 0 && index < length) {
+		    if (length === 1) {
+		      return [];
+		    } else {
+		      result = new Array(length - 1);
+		      for (i = 0, j = 0; i < length; i++) {
+		        if (i !== index) {
+		          result[j] = input[i];
+		          j++;
+		        }
+		      }
+		      return result;
+		    }
+		  } else {
+		    return input;
+		  }
+		}
+	
+		function map(input, fn) {
+		  var length = input.length,
+		      result = new Array(length),
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    result[i] = fn(input[i]);
+		  }
+		  return result;
+		}
+	
+		function forEach(arr, fn) {
+		  var length = arr.length,
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    fn(arr[i]);
+		  }
+		}
+	
+		function fillArray(arr, value) {
+		  var length = arr.length,
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    arr[i] = value;
+		  }
+		}
+	
+		function contains(arr, value) {
+		  return find(arr, value) !== -1;
+		}
+	
+		function slide(cur, next, max) {
+		  var length = Math.min(max, cur.length + 1),
+		      offset = cur.length - length + 1,
+		      result = new Array(length),
+		      i = void 0;
+		  for (i = offset; i < length; i++) {
+		    result[i - offset] = cur[i];
+		  }
+		  result[length - 1] = next;
+		  return result;
+		}
+	
+		function callSubscriber(type, fn, event) {
+		  if (type === ANY) {
+		    fn(event);
+		  } else if (type === event.type) {
+		    if (type === VALUE || type === ERROR) {
+		      fn(event.value);
+		    } else {
+		      fn();
+		    }
+		  }
+		}
+	
+		function Dispatcher() {
+		  this._items = [];
+		  this._inLoop = 0;
+		  this._removedItems = null;
+		}
+	
+		extend(Dispatcher.prototype, {
+		  add: function (type, fn) {
+		    this._items = concat(this._items, [{ type: type, fn: fn }]);
+		    return this._items.length;
+		  },
+		  remove: function (type, fn) {
+		    var index = findByPred(this._items, function (x) {
+		      return x.type === type && x.fn === fn;
+		    });
+	
+		    // if we're currently in a notification loop,
+		    // remember this subscriber was removed
+		    if (this._inLoop !== 0 && index !== -1) {
+		      if (this._removedItems === null) {
+		        this._removedItems = [];
+		      }
+		      this._removedItems.push(this._items[index]);
+		    }
+	
+		    this._items = remove(this._items, index);
+		    return this._items.length;
+		  },
+		  dispatch: function (event) {
+		    this._inLoop++;
+		    for (var i = 0, items = this._items; i < items.length; i++) {
+	
+		      // cleanup was called
+		      if (this._items === null) {
+		        break;
+		      }
+	
+		      // this subscriber was removed
+		      if (this._removedItems !== null && contains(this._removedItems, items[i])) {
+		        continue;
+		      }
+	
+		      callSubscriber(items[i].type, items[i].fn, event);
+		    }
+		    this._inLoop--;
+		    if (this._inLoop === 0) {
+		      this._removedItems = null;
+		    }
+		  },
+		  cleanup: function () {
+		    this._items = null;
+		  }
+		});
+	
+		function Observable() {
+		  this._dispatcher = new Dispatcher();
+		  this._active = false;
+		  this._alive = true;
+		  this._activating = false;
+		  this._logHandlers = null;
+		}
+	
+		extend(Observable.prototype, {
+	
+		  _name: 'observable',
+	
+		  _onActivation: function () {},
+		  _onDeactivation: function () {},
+		  _setActive: function (active) {
+		    if (this._active !== active) {
+		      this._active = active;
+		      if (active) {
+		        this._activating = true;
+		        this._onActivation();
+		        this._activating = false;
+		      } else {
+		        this._onDeactivation();
+		      }
+		    }
+		  },
+		  _clear: function () {
+		    this._setActive(false);
+		    this._dispatcher.cleanup();
+		    this._dispatcher = null;
+		    this._logHandlers = null;
+		  },
+		  _emit: function (type, x) {
+		    switch (type) {
+		      case VALUE:
+		        return this._emitValue(x);
+		      case ERROR:
+		        return this._emitError(x);
+		      case END:
+		        return this._emitEnd();
+		    }
+		  },
+		  _emitValue: function (value) {
+		    if (this._alive) {
+		      this._dispatcher.dispatch({ type: VALUE, value: value });
+		    }
+		  },
+		  _emitError: function (value) {
+		    if (this._alive) {
+		      this._dispatcher.dispatch({ type: ERROR, value: value });
+		    }
+		  },
+		  _emitEnd: function () {
+		    if (this._alive) {
+		      this._alive = false;
+		      this._dispatcher.dispatch({ type: END });
+		      this._clear();
+		    }
+		  },
+		  _on: function (type, fn) {
+		    if (this._alive) {
+		      this._dispatcher.add(type, fn);
+		      this._setActive(true);
+		    } else {
+		      callSubscriber(type, fn, { type: END });
+		    }
+		    return this;
+		  },
+		  _off: function (type, fn) {
+		    if (this._alive) {
+		      var count = this._dispatcher.remove(type, fn);
+		      if (count === 0) {
+		        this._setActive(false);
+		      }
+		    }
+		    return this;
+		  },
+		  onValue: function (fn) {
+		    return this._on(VALUE, fn);
+		  },
+		  onError: function (fn) {
+		    return this._on(ERROR, fn);
+		  },
+		  onEnd: function (fn) {
+		    return this._on(END, fn);
+		  },
+		  onAny: function (fn) {
+		    return this._on(ANY, fn);
+		  },
+		  offValue: function (fn) {
+		    return this._off(VALUE, fn);
+		  },
+		  offError: function (fn) {
+		    return this._off(ERROR, fn);
+		  },
+		  offEnd: function (fn) {
+		    return this._off(END, fn);
+		  },
+		  offAny: function (fn) {
+		    return this._off(ANY, fn);
+		  },
+	
+	
+		  // A and B must be subclasses of Stream and Property (order doesn't matter)
+		  _ofSameType: function (A, B) {
+		    return A.prototype.getType() === this.getType() ? A : B;
+		  },
+		  setName: function (sourceObs /* optional */, selfName) {
+		    this._name = selfName ? sourceObs._name + '.' + selfName : sourceObs;
+		    return this;
+		  },
+		  log: function () {
+		    var name = arguments.length <= 0 || arguments[0] === undefined ? this.toString() : arguments[0];
+	
+	
+		    var isCurrent = void 0;
+		    var handler = function (event) {
+		      var type = '<' + event.type + (isCurrent ? ':current' : '') + '>';
+		      if (event.type === END) {
+		        console.log(name, type);
+		      } else {
+		        console.log(name, type, event.value);
+		      }
+		    };
+	
+		    if (this._alive) {
+		      if (!this._logHandlers) {
+		        this._logHandlers = [];
+		      }
+		      this._logHandlers.push({ name: name, handler: handler });
+		    }
+	
+		    isCurrent = true;
+		    this.onAny(handler);
+		    isCurrent = false;
+	
+		    return this;
+		  },
+		  offLog: function () {
+		    var name = arguments.length <= 0 || arguments[0] === undefined ? this.toString() : arguments[0];
+	
+	
+		    if (this._logHandlers) {
+		      var handlerIndex = findByPred(this._logHandlers, function (obj) {
+		        return obj.name === name;
+		      });
+		      if (handlerIndex !== -1) {
+		        this.offAny(this._logHandlers[handlerIndex].handler);
+		        this._logHandlers.splice(handlerIndex, 1);
+		      }
+		    }
+	
+		    return this;
+		  }
+		});
+	
+		// extend() can't handle `toString` in IE8
+		Observable.prototype.toString = function () {
+		  return '[' + this._name + ']';
+		};
+	
+		function Stream() {
+		  Observable.call(this);
+		}
+	
+		inherit(Stream, Observable, {
+	
+		  _name: 'stream',
+	
+		  getType: function () {
+		    return 'stream';
+		  }
+		});
+	
+		function Property() {
+		  Observable.call(this);
+		  this._currentEvent = null;
+		}
+	
+		inherit(Property, Observable, {
+	
+		  _name: 'property',
+	
+		  _emitValue: function (value) {
+		    if (this._alive) {
+		      this._currentEvent = { type: VALUE, value: value };
+		      if (!this._activating) {
+		        this._dispatcher.dispatch({ type: VALUE, value: value });
+		      }
+		    }
+		  },
+		  _emitError: function (value) {
+		    if (this._alive) {
+		      this._currentEvent = { type: ERROR, value: value };
+		      if (!this._activating) {
+		        this._dispatcher.dispatch({ type: ERROR, value: value });
+		      }
+		    }
+		  },
+		  _emitEnd: function () {
+		    if (this._alive) {
+		      this._alive = false;
+		      if (!this._activating) {
+		        this._dispatcher.dispatch({ type: END });
+		      }
+		      this._clear();
+		    }
+		  },
+		  _on: function (type, fn) {
+		    if (this._alive) {
+		      this._dispatcher.add(type, fn);
+		      this._setActive(true);
+		    }
+		    if (this._currentEvent !== null) {
+		      callSubscriber(type, fn, this._currentEvent);
+		    }
+		    if (!this._alive) {
+		      callSubscriber(type, fn, { type: END });
+		    }
+		    return this;
+		  },
+		  getType: function () {
+		    return 'property';
+		  }
+		});
+	
+		var neverS = new Stream();
+		neverS._emitEnd();
+		neverS._name = 'never';
+	
+		function never() {
+		  return neverS;
+		}
+	
+		function timeBased(mixin) {
+	
+		  function AnonymousStream(wait, options) {
+		    var _this = this;
+	
+		    Stream.call(this);
+		    this._wait = wait;
+		    this._intervalId = null;
+		    this._$onTick = function () {
+		      return _this._onTick();
+		    };
+		    this._init(options);
+		  }
+	
+		  inherit(AnonymousStream, Stream, {
+		    _init: function () {},
+		    _free: function () {},
+		    _onTick: function () {},
+		    _onActivation: function () {
+		      this._intervalId = setInterval(this._$onTick, this._wait);
+		    },
+		    _onDeactivation: function () {
+		      if (this._intervalId !== null) {
+		        clearInterval(this._intervalId);
+		        this._intervalId = null;
+		      }
+		    },
+		    _clear: function () {
+		      Stream.prototype._clear.call(this);
+		      this._$onTick = null;
+		      this._free();
+		    }
+		  }, mixin);
+	
+		  return AnonymousStream;
+		}
+	
+		var S = timeBased({
+	
+		  _name: 'later',
+	
+		  _init: function (_ref) {
+		    var x = _ref.x;
+	
+		    this._x = x;
+		  },
+		  _free: function () {
+		    this._x = null;
+		  },
+		  _onTick: function () {
+		    this._emitValue(this._x);
+		    this._emitEnd();
+		  }
+		});
+	
+		function later(wait, x) {
+		  return new S(wait, { x: x });
+		}
+	
+		var S$1 = timeBased({
+	
+		  _name: 'interval',
+	
+		  _init: function (_ref) {
+		    var x = _ref.x;
+	
+		    this._x = x;
+		  },
+		  _free: function () {
+		    this._x = null;
+		  },
+		  _onTick: function () {
+		    this._emitValue(this._x);
+		  }
+		});
+	
+		function interval(wait, x) {
+		  return new S$1(wait, { x: x });
+		}
+	
+		var S$2 = timeBased({
+	
+		  _name: 'sequentially',
+	
+		  _init: function (_ref) {
+		    var xs = _ref.xs;
+	
+		    this._xs = cloneArray(xs);
+		  },
+		  _free: function () {
+		    this._xs = null;
+		  },
+		  _onTick: function () {
+		    if (this._xs.length === 1) {
+		      this._emitValue(this._xs[0]);
+		      this._emitEnd();
+		    } else {
+		      this._emitValue(this._xs.shift());
+		    }
+		  }
+		});
+	
+		function sequentially(wait, xs) {
+		  return xs.length === 0 ? never() : new S$2(wait, { xs: xs });
+		}
+	
+		var S$3 = timeBased({
+	
+		  _name: 'fromPoll',
+	
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _onTick: function () {
+		    var fn = this._fn;
+		    this._emitValue(fn());
+		  }
+		});
+	
+		function fromPoll(wait, fn) {
+		  return new S$3(wait, { fn: fn });
+		}
+	
+		function emitter(obs) {
+	
+		  function value(x) {
+		    obs._emitValue(x);
+		    return obs._active;
+		  }
+	
+		  function error(x) {
+		    obs._emitError(x);
+		    return obs._active;
+		  }
+	
+		  function end() {
+		    obs._emitEnd();
+		    return obs._active;
+		  }
+	
+		  function event(e) {
+		    obs._emit(e.type, e.value);
+		    return obs._active;
+		  }
+	
+		  return { value: value, error: error, end: end, event: event, emit: value, emitEvent: event };
+		}
+	
+		var S$4 = timeBased({
+	
+		  _name: 'withInterval',
+	
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		    this._emitter = emitter(this);
+		  },
+		  _free: function () {
+		    this._fn = null;
+		    this._emitter = null;
+		  },
+		  _onTick: function () {
+		    var fn = this._fn;
+		    fn(this._emitter);
+		  }
+		});
+	
+		function withInterval(wait, fn) {
+		  return new S$4(wait, { fn: fn });
+		}
+	
+		function S$5(fn) {
+		  Stream.call(this);
+		  this._fn = fn;
+		  this._unsubscribe = null;
+		}
+	
+		inherit(S$5, Stream, {
+	
+		  _name: 'stream',
+	
+		  _onActivation: function () {
+		    var fn = this._fn;
+		    var unsubscribe = fn(emitter(this));
+		    this._unsubscribe = typeof unsubscribe === 'function' ? unsubscribe : null;
+	
+		    // fix https://github.com/rpominov/kefir/issues/35
+		    if (!this._active) {
+		      this._callUnsubscribe();
+		    }
+		  },
+		  _callUnsubscribe: function () {
+		    if (this._unsubscribe !== null) {
+		      this._unsubscribe();
+		      this._unsubscribe = null;
+		    }
+		  },
+		  _onDeactivation: function () {
+		    this._callUnsubscribe();
+		  },
+		  _clear: function () {
+		    Stream.prototype._clear.call(this);
+		    this._fn = null;
+		  }
+		});
+	
+		function stream(fn) {
+		  return new S$5(fn);
+		}
+	
+		function fromCallback(callbackConsumer) {
+	
+		  var called = false;
+	
+		  return stream(function (emitter) {
+	
+		    if (!called) {
+		      callbackConsumer(function (x) {
+		        emitter.emit(x);
+		        emitter.end();
+		      });
+		      called = true;
+		    }
+		  }).setName('fromCallback');
+		}
+	
+		function fromNodeCallback(callbackConsumer) {
+	
+		  var called = false;
+	
+		  return stream(function (emitter) {
+	
+		    if (!called) {
+		      callbackConsumer(function (error, x) {
+		        if (error) {
+		          emitter.error(error);
+		        } else {
+		          emitter.emit(x);
+		        }
+		        emitter.end();
+		      });
+		      called = true;
+		    }
+		  }).setName('fromNodeCallback');
+		}
+	
+		function spread(fn, length) {
+		  switch (length) {
+		    case 0:
+		      return function () {
+		        return fn();
+		      };
+		    case 1:
+		      return function (a) {
+		        return fn(a[0]);
+		      };
+		    case 2:
+		      return function (a) {
+		        return fn(a[0], a[1]);
+		      };
+		    case 3:
+		      return function (a) {
+		        return fn(a[0], a[1], a[2]);
+		      };
+		    case 4:
+		      return function (a) {
+		        return fn(a[0], a[1], a[2], a[3]);
+		      };
+		    default:
+		      return function (a) {
+		        return fn.apply(null, a);
+		      };
+		  }
+		}
+	
+		function apply(fn, c, a) {
+		  var aLength = a ? a.length : 0;
+		  if (c == null) {
+		    switch (aLength) {
+		      case 0:
+		        return fn();
+		      case 1:
+		        return fn(a[0]);
+		      case 2:
+		        return fn(a[0], a[1]);
+		      case 3:
+		        return fn(a[0], a[1], a[2]);
+		      case 4:
+		        return fn(a[0], a[1], a[2], a[3]);
+		      default:
+		        return fn.apply(null, a);
+		    }
+		  } else {
+		    switch (aLength) {
+		      case 0:
+		        return fn.call(c);
+		      default:
+		        return fn.apply(c, a);
+		    }
+		  }
+		}
+	
+		function fromSubUnsub(sub, unsub, transformer /* Function | falsey */) {
+		  return stream(function (emitter) {
+	
+		    var handler = transformer ? function () {
+		      emitter.emit(apply(transformer, this, arguments));
+		    } : function (x) {
+		      emitter.emit(x);
+		    };
+	
+		    sub(handler);
+		    return function () {
+		      return unsub(handler);
+		    };
+		  }).setName('fromSubUnsub');
+		}
+	
+		var pairs = [['addEventListener', 'removeEventListener'], ['addListener', 'removeListener'], ['on', 'off']];
+	
+		function fromEvents(target, eventName, transformer) {
+		  var sub = void 0,
+		      unsub = void 0;
+	
+		  for (var i = 0; i < pairs.length; i++) {
+		    if (typeof target[pairs[i][0]] === 'function' && typeof target[pairs[i][1]] === 'function') {
+		      sub = pairs[i][0];
+		      unsub = pairs[i][1];
+		      break;
+		    }
+		  }
+	
+		  if (sub === undefined) {
+		    throw new Error('target don\'t support any of ' + 'addEventListener/removeEventListener, addListener/removeListener, on/off method pair');
+		  }
+	
+		  return fromSubUnsub(function (handler) {
+		    return target[sub](eventName, handler);
+		  }, function (handler) {
+		    return target[unsub](eventName, handler);
+		  }, transformer).setName('fromEvents');
+		}
+	
+		// HACK:
+		//   We don't call parent Class constructor, but instead putting all necessary
+		//   properties into prototype to simulate ended Property
+		//   (see Propperty and Observable classes).
+	
+		function P(value) {
+		  this._currentEvent = { type: 'value', value: value, current: true };
+		}
+	
+		inherit(P, Property, {
+		  _name: 'constant',
+		  _active: false,
+		  _activating: false,
+		  _alive: false,
+		  _dispatcher: null,
+		  _logHandlers: null
+		});
+	
+		function constant(x) {
+		  return new P(x);
+		}
+	
+		// HACK:
+		//   We don't call parent Class constructor, but instead putting all necessary
+		//   properties into prototype to simulate ended Property
+		//   (see Propperty and Observable classes).
+	
+		function P$1(value) {
+		  this._currentEvent = { type: 'error', value: value, current: true };
+		}
+	
+		inherit(P$1, Property, {
+		  _name: 'constantError',
+		  _active: false,
+		  _activating: false,
+		  _alive: false,
+		  _dispatcher: null,
+		  _logHandlers: null
+		});
+	
+		function constantError(x) {
+		  return new P$1(x);
+		}
+	
+		function createConstructor(BaseClass, name) {
+		  return function AnonymousObservable(source, options) {
+		    var _this = this;
+	
+		    BaseClass.call(this);
+		    this._source = source;
+		    this._name = source._name + '.' + name;
+		    this._init(options);
+		    this._$handleAny = function (event) {
+		      return _this._handleAny(event);
+		    };
+		  };
+		}
+	
+		function createClassMethods(BaseClass) {
+		  return {
+		    _init: function () {},
+		    _free: function () {},
+		    _handleValue: function (x) {
+		      this._emitValue(x);
+		    },
+		    _handleError: function (x) {
+		      this._emitError(x);
+		    },
+		    _handleEnd: function () {
+		      this._emitEnd();
+		    },
+		    _handleAny: function (event) {
+		      switch (event.type) {
+		        case VALUE:
+		          return this._handleValue(event.value);
+		        case ERROR:
+		          return this._handleError(event.value);
+		        case END:
+		          return this._handleEnd();
+		      }
+		    },
+		    _onActivation: function () {
+		      this._source.onAny(this._$handleAny);
+		    },
+		    _onDeactivation: function () {
+		      this._source.offAny(this._$handleAny);
+		    },
+		    _clear: function () {
+		      BaseClass.prototype._clear.call(this);
+		      this._source = null;
+		      this._$handleAny = null;
+		      this._free();
+		    }
+		  };
+		}
+	
+		function createStream(name, mixin) {
+		  var S = createConstructor(Stream, name);
+		  inherit(S, Stream, createClassMethods(Stream), mixin);
+		  return S;
+		}
+	
+		function createProperty(name, mixin) {
+		  var P = createConstructor(Property, name);
+		  inherit(P, Property, createClassMethods(Property), mixin);
+		  return P;
+		}
+	
+		var P$2 = createProperty('toProperty', {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._getInitialCurrent = fn;
+		  },
+		  _onActivation: function () {
+		    if (this._getInitialCurrent !== null) {
+		      var getInitial = this._getInitialCurrent;
+		      this._emitValue(getInitial());
+		    }
+		    this._source.onAny(this._$handleAny); // copied from patterns/one-source
+		  }
+		});
+	
+		function toProperty(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	
+		  if (fn !== null && typeof fn !== 'function') {
+		    throw new Error('You should call toProperty() with a function or no arguments.');
+		  }
+		  return new P$2(obs, { fn: fn });
+		}
+	
+		var S$6 = createStream('changes', {
+		  _handleValue: function (x) {
+		    if (!this._activating) {
+		      this._emitValue(x);
+		    }
+		  },
+		  _handleError: function (x) {
+		    if (!this._activating) {
+		      this._emitError(x);
+		    }
+		  }
+		});
+	
+		function changes(obs) {
+		  return new S$6(obs);
+		}
+	
+		function fromPromise(promise) {
+	
+		  var called = false;
+	
+		  var result = stream(function (emitter) {
+		    if (!called) {
+		      var onValue = function (x) {
+		        emitter.emit(x);
+		        emitter.end();
+		      };
+		      var onError = function (x) {
+		        emitter.error(x);
+		        emitter.end();
+		      };
+		      var _promise = promise.then(onValue, onError);
+	
+		      // prevent libraries like 'Q' or 'when' from swallowing exceptions
+		      if (_promise && typeof _promise.done === 'function') {
+		        _promise.done();
+		      }
+	
+		      called = true;
+		    }
+		  });
+	
+		  return toProperty(result, null).setName('fromPromise');
+		}
+	
+		function getGlodalPromise() {
+		  if (typeof Promise === 'function') {
+		    return Promise;
+		  } else {
+		    throw new Error('There isn\'t default Promise, use shim or parameter');
+		  }
+		}
+	
+		function toPromise (obs) {
+		  var Promise = arguments.length <= 1 || arguments[1] === undefined ? getGlodalPromise() : arguments[1];
+	
+		  var last = null;
+		  return new Promise(function (resolve, reject) {
+		    obs.onAny(function (event) {
+		      if (event.type === END && last !== null) {
+		        (last.type === VALUE ? resolve : reject)(last.value);
+		        last = null;
+		      } else {
+		        last = event;
+		      }
+		    });
+		  });
+		}
+	
+		var ponyfill = __commonjs(function (module) {
+		'use strict';
+	
+		module.exports = function symbolObservablePonyfill(root) {
+			var result;
+			var Symbol = root.Symbol;
+	
+			if (typeof Symbol === 'function') {
+				if (Symbol.observable) {
+					result = Symbol.observable;
+				} else {
+					result = Symbol('observable');
+					Symbol.observable = result;
+				}
+			} else {
+				result = '@@observable';
+			}
+	
+			return result;
+		};
+		});
+	
+		var require$$0 = (ponyfill && typeof ponyfill === 'object' && 'default' in ponyfill ? ponyfill['default'] : ponyfill);
+	
+		var index = __commonjs(function (module, exports, global) {
+		/* global window */
+		'use strict';
+	
+		module.exports = require$$0(global || window || __commonjs_global);
+		});
+	
+		var $$observable = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
+	
+		function fromESObservable(_observable) {
+		  var observable = _observable[$$observable] ? _observable[$$observable]() : _observable;
+		  return stream(function (emitter) {
+		    var unsub = observable.subscribe({
+		      error: function (error) {
+		        emitter.error(error);
+		        emitter.end();
+		      },
+		      next: function (value) {
+		        emitter.emit(value);
+		      },
+		      complete: function () {
+		        emitter.end();
+		      }
+		    });
+	
+		    if (unsub.unsubscribe) {
+		      return function () {
+		        unsub.unsubscribe();
+		      };
+		    } else {
+		      return unsub;
+		    }
+		  }).setName('fromESObservable');
+		}
+	
+		function ESObservable(observable) {
+		  this._observable = observable.takeErrors(1);
+		}
+	
+		extend(ESObservable.prototype, {
+		  subscribe: function (observer) {
+		    var _this = this;
+	
+		    var fn = function (event) {
+		      if (event.type === VALUE && observer.next) {
+		        observer.next(event.value);
+		      } else if (event.type === ERROR && observer.error) {
+		        observer.error(event.value);
+		      } else if (event.type === END && observer.complete) {
+		        observer.complete(event.value);
+		      }
+		    };
+	
+		    this._observable.onAny(fn);
+		    return function () {
+		      return _this._observable.offAny(fn);
+		    };
+		  }
+		});
+	
+		function toESObservable() {
+		  return new ESObservable(this);
+		}
+	
+		var mixin = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    this._emitValue(fn(x));
+		  }
+		};
+	
+		var S$7 = createStream('map', mixin);
+		var P$3 = createProperty('map', mixin);
+	
+		var id = function (x) {
+		  return x;
+		};
+	
+		function map$1(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id : arguments[1];
+	
+		  return new (obs._ofSameType(S$7, P$3))(obs, { fn: fn });
+		}
+	
+		var mixin$1 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    if (fn(x)) {
+		      this._emitValue(x);
+		    }
+		  }
+		};
+	
+		var S$8 = createStream('filter', mixin$1);
+		var P$4 = createProperty('filter', mixin$1);
+	
+		var id$1 = function (x) {
+		  return x;
+		};
+	
+		function filter(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$1 : arguments[1];
+	
+		  return new (obs._ofSameType(S$8, P$4))(obs, { fn: fn });
+		}
+	
+		var mixin$2 = {
+		  _init: function (_ref) {
+		    var n = _ref.n;
+	
+		    this._n = n;
+		    if (n <= 0) {
+		      this._emitEnd();
+		    }
+		  },
+		  _handleValue: function (x) {
+		    this._n--;
+		    this._emitValue(x);
+		    if (this._n === 0) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$9 = createStream('take', mixin$2);
+		var P$5 = createProperty('take', mixin$2);
+	
+		function take(obs, n) {
+		  return new (obs._ofSameType(S$9, P$5))(obs, { n: n });
+		}
+	
+		var mixin$3 = {
+		  _init: function (_ref) {
+		    var n = _ref.n;
+	
+		    this._n = n;
+		    if (n <= 0) {
+		      this._emitEnd();
+		    }
+		  },
+		  _handleError: function (x) {
+		    this._n--;
+		    this._emitError(x);
+		    if (this._n === 0) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$10 = createStream('takeErrors', mixin$3);
+		var P$6 = createProperty('takeErrors', mixin$3);
+	
+		function takeErrors(obs, n) {
+		  return new (obs._ofSameType(S$10, P$6))(obs, { n: n });
+		}
+	
+		var mixin$4 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    if (fn(x)) {
+		      this._emitValue(x);
+		    } else {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$11 = createStream('takeWhile', mixin$4);
+		var P$7 = createProperty('takeWhile', mixin$4);
+	
+		var id$2 = function (x) {
+		  return x;
+		};
+	
+		function takeWhile(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$2 : arguments[1];
+	
+		  return new (obs._ofSameType(S$11, P$7))(obs, { fn: fn });
+		}
+	
+		var mixin$5 = {
+		  _init: function () {
+		    this._lastValue = NOTHING;
+		  },
+		  _free: function () {
+		    this._lastValue = null;
+		  },
+		  _handleValue: function (x) {
+		    this._lastValue = x;
+		  },
+		  _handleEnd: function () {
+		    if (this._lastValue !== NOTHING) {
+		      this._emitValue(this._lastValue);
+		    }
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$12 = createStream('last', mixin$5);
+		var P$8 = createProperty('last', mixin$5);
+	
+		function last(obs) {
+		  return new (obs._ofSameType(S$12, P$8))(obs);
+		}
+	
+		var mixin$6 = {
+		  _init: function (_ref) {
+		    var n = _ref.n;
+	
+		    this._n = Math.max(0, n);
+		  },
+		  _handleValue: function (x) {
+		    if (this._n === 0) {
+		      this._emitValue(x);
+		    } else {
+		      this._n--;
+		    }
+		  }
+		};
+	
+		var S$13 = createStream('skip', mixin$6);
+		var P$9 = createProperty('skip', mixin$6);
+	
+		function skip(obs, n) {
+		  return new (obs._ofSameType(S$13, P$9))(obs, { n: n });
+		}
+	
+		var mixin$7 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    if (this._fn !== null && !fn(x)) {
+		      this._fn = null;
+		    }
+		    if (this._fn === null) {
+		      this._emitValue(x);
+		    }
+		  }
+		};
+	
+		var S$14 = createStream('skipWhile', mixin$7);
+		var P$10 = createProperty('skipWhile', mixin$7);
+	
+		var id$3 = function (x) {
+		  return x;
+		};
+	
+		function skipWhile(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$3 : arguments[1];
+	
+		  return new (obs._ofSameType(S$14, P$10))(obs, { fn: fn });
+		}
+	
+		var mixin$8 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		    this._prev = NOTHING;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		    this._prev = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    if (this._prev === NOTHING || !fn(this._prev, x)) {
+		      this._prev = x;
+		      this._emitValue(x);
+		    }
+		  }
+		};
+	
+		var S$15 = createStream('skipDuplicates', mixin$8);
+		var P$11 = createProperty('skipDuplicates', mixin$8);
+	
+		var eq = function (a, b) {
+		  return a === b;
+		};
+	
+		function skipDuplicates(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? eq : arguments[1];
+	
+		  return new (obs._ofSameType(S$15, P$11))(obs, { fn: fn });
+		}
+	
+		var mixin$9 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+		    var seed = _ref.seed;
+	
+		    this._fn = fn;
+		    this._prev = seed;
+		  },
+		  _free: function () {
+		    this._prev = null;
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    if (this._prev !== NOTHING) {
+		      var fn = this._fn;
+		      this._emitValue(fn(this._prev, x));
+		    }
+		    this._prev = x;
+		  }
+		};
+	
+		var S$16 = createStream('diff', mixin$9);
+		var P$12 = createProperty('diff', mixin$9);
+	
+		function defaultFn(a, b) {
+		  return [a, b];
+		}
+	
+		function diff(obs, fn) {
+		  var seed = arguments.length <= 2 || arguments[2] === undefined ? NOTHING : arguments[2];
+	
+		  return new (obs._ofSameType(S$16, P$12))(obs, { fn: fn || defaultFn, seed: seed });
+		}
+	
+		var P$13 = createProperty('scan', {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+		    var seed = _ref.seed;
+	
+		    this._fn = fn;
+		    this._seed = seed;
+		    if (seed !== NOTHING) {
+		      this._emitValue(seed);
+		    }
+		  },
+		  _free: function () {
+		    this._fn = null;
+		    this._seed = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    if (this._currentEvent === null || this._currentEvent.type === ERROR) {
+		      this._emitValue(this._seed === NOTHING ? x : fn(this._seed, x));
+		    } else {
+		      this._emitValue(fn(this._currentEvent.value, x));
+		    }
+		  }
+		});
+	
+		function scan(obs, fn) {
+		  var seed = arguments.length <= 2 || arguments[2] === undefined ? NOTHING : arguments[2];
+	
+		  return new P$13(obs, { fn: fn, seed: seed });
+		}
+	
+		var mixin$10 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    var xs = fn(x);
+		    for (var i = 0; i < xs.length; i++) {
+		      this._emitValue(xs[i]);
+		    }
+		  }
+		};
+	
+		var S$17 = createStream('flatten', mixin$10);
+	
+		var id$4 = function (x) {
+		  return x;
+		};
+	
+		function flatten(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$4 : arguments[1];
+	
+		  return new S$17(obs, { fn: fn });
+		}
+	
+		var END_MARKER = {};
+	
+		var mixin$11 = {
+		  _init: function (_ref) {
+		    var _this = this;
+	
+		    var wait = _ref.wait;
+	
+		    this._wait = Math.max(0, wait);
+		    this._buff = [];
+		    this._$shiftBuff = function () {
+		      var value = _this._buff.shift();
+		      if (value === END_MARKER) {
+		        _this._emitEnd();
+		      } else {
+		        _this._emitValue(value);
+		      }
+		    };
+		  },
+		  _free: function () {
+		    this._buff = null;
+		    this._$shiftBuff = null;
+		  },
+		  _handleValue: function (x) {
+		    if (this._activating) {
+		      this._emitValue(x);
+		    } else {
+		      this._buff.push(x);
+		      setTimeout(this._$shiftBuff, this._wait);
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._activating) {
+		      this._emitEnd();
+		    } else {
+		      this._buff.push(END_MARKER);
+		      setTimeout(this._$shiftBuff, this._wait);
+		    }
+		  }
+		};
+	
+		var S$18 = createStream('delay', mixin$11);
+		var P$14 = createProperty('delay', mixin$11);
+	
+		function delay(obs, wait) {
+		  return new (obs._ofSameType(S$18, P$14))(obs, { wait: wait });
+		}
+	
+		var now = Date.now ? function () {
+		  return Date.now();
+		} : function () {
+		  return new Date().getTime();
+		};
+	
+		var mixin$12 = {
+		  _init: function (_ref) {
+		    var _this = this;
+	
+		    var wait = _ref.wait;
+		    var leading = _ref.leading;
+		    var trailing = _ref.trailing;
+	
+		    this._wait = Math.max(0, wait);
+		    this._leading = leading;
+		    this._trailing = trailing;
+		    this._trailingValue = null;
+		    this._timeoutId = null;
+		    this._endLater = false;
+		    this._lastCallTime = 0;
+		    this._$trailingCall = function () {
+		      return _this._trailingCall();
+		    };
+		  },
+		  _free: function () {
+		    this._trailingValue = null;
+		    this._$trailingCall = null;
+		  },
+		  _handleValue: function (x) {
+		    if (this._activating) {
+		      this._emitValue(x);
+		    } else {
+		      var curTime = now();
+		      if (this._lastCallTime === 0 && !this._leading) {
+		        this._lastCallTime = curTime;
+		      }
+		      var remaining = this._wait - (curTime - this._lastCallTime);
+		      if (remaining <= 0) {
+		        this._cancelTrailing();
+		        this._lastCallTime = curTime;
+		        this._emitValue(x);
+		      } else if (this._trailing) {
+		        this._cancelTrailing();
+		        this._trailingValue = x;
+		        this._timeoutId = setTimeout(this._$trailingCall, remaining);
+		      }
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._activating) {
+		      this._emitEnd();
+		    } else {
+		      if (this._timeoutId) {
+		        this._endLater = true;
+		      } else {
+		        this._emitEnd();
+		      }
+		    }
+		  },
+		  _cancelTrailing: function () {
+		    if (this._timeoutId !== null) {
+		      clearTimeout(this._timeoutId);
+		      this._timeoutId = null;
+		    }
+		  },
+		  _trailingCall: function () {
+		    this._emitValue(this._trailingValue);
+		    this._timeoutId = null;
+		    this._trailingValue = null;
+		    this._lastCallTime = !this._leading ? 0 : now();
+		    if (this._endLater) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$19 = createStream('throttle', mixin$12);
+		var P$15 = createProperty('throttle', mixin$12);
+	
+		function throttle(obs, wait) {
+		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	
+		  var _ref2$leading = _ref2.leading;
+		  var leading = _ref2$leading === undefined ? true : _ref2$leading;
+		  var _ref2$trailing = _ref2.trailing;
+		  var trailing = _ref2$trailing === undefined ? true : _ref2$trailing;
+	
+		  return new (obs._ofSameType(S$19, P$15))(obs, { wait: wait, leading: leading, trailing: trailing });
+		}
+	
+		var mixin$13 = {
+		  _init: function (_ref) {
+		    var _this = this;
+	
+		    var wait = _ref.wait;
+		    var immediate = _ref.immediate;
+	
+		    this._wait = Math.max(0, wait);
+		    this._immediate = immediate;
+		    this._lastAttempt = 0;
+		    this._timeoutId = null;
+		    this._laterValue = null;
+		    this._endLater = false;
+		    this._$later = function () {
+		      return _this._later();
+		    };
+		  },
+		  _free: function () {
+		    this._laterValue = null;
+		    this._$later = null;
+		  },
+		  _handleValue: function (x) {
+		    if (this._activating) {
+		      this._emitValue(x);
+		    } else {
+		      this._lastAttempt = now();
+		      if (this._immediate && !this._timeoutId) {
+		        this._emitValue(x);
+		      }
+		      if (!this._timeoutId) {
+		        this._timeoutId = setTimeout(this._$later, this._wait);
+		      }
+		      if (!this._immediate) {
+		        this._laterValue = x;
+		      }
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._activating) {
+		      this._emitEnd();
+		    } else {
+		      if (this._timeoutId && !this._immediate) {
+		        this._endLater = true;
+		      } else {
+		        this._emitEnd();
+		      }
+		    }
+		  },
+		  _later: function () {
+		    var last = now() - this._lastAttempt;
+		    if (last < this._wait && last >= 0) {
+		      this._timeoutId = setTimeout(this._$later, this._wait - last);
+		    } else {
+		      this._timeoutId = null;
+		      if (!this._immediate) {
+		        this._emitValue(this._laterValue);
+		        this._laterValue = null;
+		      }
+		      if (this._endLater) {
+		        this._emitEnd();
+		      }
+		    }
+		  }
+		};
+	
+		var S$20 = createStream('debounce', mixin$13);
+		var P$16 = createProperty('debounce', mixin$13);
+	
+		function debounce(obs, wait) {
+		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	
+		  var _ref2$immediate = _ref2.immediate;
+		  var immediate = _ref2$immediate === undefined ? false : _ref2$immediate;
+	
+		  return new (obs._ofSameType(S$20, P$16))(obs, { wait: wait, immediate: immediate });
+		}
+	
+		var mixin$14 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleError: function (x) {
+		    var fn = this._fn;
+		    this._emitError(fn(x));
+		  }
+		};
+	
+		var S$21 = createStream('mapErrors', mixin$14);
+		var P$17 = createProperty('mapErrors', mixin$14);
+	
+		var id$5 = function (x) {
+		  return x;
+		};
+	
+		function mapErrors(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$5 : arguments[1];
+	
+		  return new (obs._ofSameType(S$21, P$17))(obs, { fn: fn });
+		}
+	
+		var mixin$15 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleError: function (x) {
+		    var fn = this._fn;
+		    if (fn(x)) {
+		      this._emitError(x);
+		    }
+		  }
+		};
+	
+		var S$22 = createStream('filterErrors', mixin$15);
+		var P$18 = createProperty('filterErrors', mixin$15);
+	
+		var id$6 = function (x) {
+		  return x;
+		};
+	
+		function filterErrors(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$6 : arguments[1];
+	
+		  return new (obs._ofSameType(S$22, P$18))(obs, { fn: fn });
+		}
+	
+		var mixin$16 = {
+		  _handleValue: function () {}
+		};
+	
+		var S$23 = createStream('ignoreValues', mixin$16);
+		var P$19 = createProperty('ignoreValues', mixin$16);
+	
+		function ignoreValues(obs) {
+		  return new (obs._ofSameType(S$23, P$19))(obs);
+		}
+	
+		var mixin$17 = {
+		  _handleError: function () {}
+		};
+	
+		var S$24 = createStream('ignoreErrors', mixin$17);
+		var P$20 = createProperty('ignoreErrors', mixin$17);
+	
+		function ignoreErrors(obs) {
+		  return new (obs._ofSameType(S$24, P$20))(obs);
+		}
+	
+		var mixin$18 = {
+		  _handleEnd: function () {}
+		};
+	
+		var S$25 = createStream('ignoreEnd', mixin$18);
+		var P$21 = createProperty('ignoreEnd', mixin$18);
+	
+		function ignoreEnd(obs) {
+		  return new (obs._ofSameType(S$25, P$21))(obs);
+		}
+	
+		var mixin$19 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleEnd: function () {
+		    var fn = this._fn;
+		    this._emitValue(fn());
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$26 = createStream('beforeEnd', mixin$19);
+		var P$22 = createProperty('beforeEnd', mixin$19);
+	
+		function beforeEnd(obs, fn) {
+		  return new (obs._ofSameType(S$26, P$22))(obs, { fn: fn });
+		}
+	
+		var mixin$20 = {
+		  _init: function (_ref) {
+		    var min = _ref.min;
+		    var max = _ref.max;
+	
+		    this._max = max;
+		    this._min = min;
+		    this._buff = [];
+		  },
+		  _free: function () {
+		    this._buff = null;
+		  },
+		  _handleValue: function (x) {
+		    this._buff = slide(this._buff, x, this._max);
+		    if (this._buff.length >= this._min) {
+		      this._emitValue(this._buff);
+		    }
+		  }
+		};
+	
+		var S$27 = createStream('slidingWindow', mixin$20);
+		var P$23 = createProperty('slidingWindow', mixin$20);
+	
+		function slidingWindow(obs, max) {
+		  var min = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+	
+		  return new (obs._ofSameType(S$27, P$23))(obs, { min: min, max: max });
+		}
+	
+		var mixin$21 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+		    var flushOnEnd = _ref.flushOnEnd;
+	
+		    this._fn = fn;
+		    this._flushOnEnd = flushOnEnd;
+		    this._buff = [];
+		  },
+		  _free: function () {
+		    this._buff = null;
+		  },
+		  _flush: function () {
+		    if (this._buff !== null && this._buff.length !== 0) {
+		      this._emitValue(this._buff);
+		      this._buff = [];
+		    }
+		  },
+		  _handleValue: function (x) {
+		    this._buff.push(x);
+		    var fn = this._fn;
+		    if (!fn(x)) {
+		      this._flush();
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._flushOnEnd) {
+		      this._flush();
+		    }
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$28 = createStream('bufferWhile', mixin$21);
+		var P$24 = createProperty('bufferWhile', mixin$21);
+	
+		var id$7 = function (x) {
+		  return x;
+		};
+	
+		function bufferWhile(obs, fn) {
+		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	
+		  var _ref2$flushOnEnd = _ref2.flushOnEnd;
+		  var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
+	
+		  return new (obs._ofSameType(S$28, P$24))(obs, { fn: fn || id$7, flushOnEnd: flushOnEnd });
+		}
+	
+		var mixin$22 = {
+		  _init: function (_ref) {
+		    var count = _ref.count;
+		    var flushOnEnd = _ref.flushOnEnd;
+	
+		    this._count = count;
+		    this._flushOnEnd = flushOnEnd;
+		    this._buff = [];
+		  },
+		  _free: function () {
+		    this._buff = null;
+		  },
+		  _flush: function () {
+		    if (this._buff !== null && this._buff.length !== 0) {
+		      this._emitValue(this._buff);
+		      this._buff = [];
+		    }
+		  },
+		  _handleValue: function (x) {
+		    this._buff.push(x);
+		    if (this._buff.length >= this._count) {
+		      this._flush();
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._flushOnEnd) {
+		      this._flush();
+		    }
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$29 = createStream('bufferWithCount', mixin$22);
+		var P$25 = createProperty('bufferWithCount', mixin$22);
+	
+		function bufferWhile$1(obs, count) {
+		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	
+		  var _ref2$flushOnEnd = _ref2.flushOnEnd;
+		  var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
+	
+		  return new (obs._ofSameType(S$29, P$25))(obs, { count: count, flushOnEnd: flushOnEnd });
+		}
+	
+		var mixin$23 = {
+		  _init: function (_ref) {
+		    var _this = this;
+	
+		    var wait = _ref.wait;
+		    var count = _ref.count;
+		    var flushOnEnd = _ref.flushOnEnd;
+	
+		    this._wait = wait;
+		    this._count = count;
+		    this._flushOnEnd = flushOnEnd;
+		    this._intervalId = null;
+		    this._$onTick = function () {
+		      return _this._flush();
+		    };
+		    this._buff = [];
+		  },
+		  _free: function () {
+		    this._$onTick = null;
+		    this._buff = null;
+		  },
+		  _flush: function () {
+		    if (this._buff !== null) {
+		      this._emitValue(this._buff);
+		      this._buff = [];
+		    }
+		  },
+		  _handleValue: function (x) {
+		    this._buff.push(x);
+		    if (this._buff.length >= this._count) {
+		      clearInterval(this._intervalId);
+		      this._flush();
+		      this._intervalId = setInterval(this._$onTick, this._wait);
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._flushOnEnd && this._buff.length !== 0) {
+		      this._flush();
+		    }
+		    this._emitEnd();
+		  },
+		  _onActivation: function () {
+		    this._intervalId = setInterval(this._$onTick, this._wait);
+		    this._source.onAny(this._$handleAny); // copied from patterns/one-source
+		  },
+		  _onDeactivation: function () {
+		    if (this._intervalId !== null) {
+		      clearInterval(this._intervalId);
+		      this._intervalId = null;
+		    }
+		    this._source.offAny(this._$handleAny); // copied from patterns/one-source
+		  }
+		};
+	
+		var S$30 = createStream('bufferWithTimeOrCount', mixin$23);
+		var P$26 = createProperty('bufferWithTimeOrCount', mixin$23);
+	
+		function bufferWithTimeOrCount(obs, wait, count) {
+		  var _ref2 = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+	
+		  var _ref2$flushOnEnd = _ref2.flushOnEnd;
+		  var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
+	
+		  return new (obs._ofSameType(S$30, P$26))(obs, { wait: wait, count: count, flushOnEnd: flushOnEnd });
+		}
+	
+		function xformForObs(obs) {
+		  return {
+		    '@@transducer/step': function (res, input) {
+		      obs._emitValue(input);
+		      return null;
+		    },
+		    '@@transducer/result': function () {
+		      obs._emitEnd();
+		      return null;
+		    }
+		  };
+		}
+	
+		var mixin$24 = {
+		  _init: function (_ref) {
+		    var transducer = _ref.transducer;
+	
+		    this._xform = transducer(xformForObs(this));
+		  },
+		  _free: function () {
+		    this._xform = null;
+		  },
+		  _handleValue: function (x) {
+		    if (this._xform['@@transducer/step'](null, x) !== null) {
+		      this._xform['@@transducer/result'](null);
+		    }
+		  },
+		  _handleEnd: function () {
+		    this._xform['@@transducer/result'](null);
+		  }
+		};
+	
+		var S$31 = createStream('transduce', mixin$24);
+		var P$27 = createProperty('transduce', mixin$24);
+	
+		function transduce(obs, transducer) {
+		  return new (obs._ofSameType(S$31, P$27))(obs, { transducer: transducer });
+		}
+	
+		var mixin$25 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._handler = fn;
+		    this._emitter = emitter(this);
+		  },
+		  _free: function () {
+		    this._handler = null;
+		    this._emitter = null;
+		  },
+		  _handleAny: function (event) {
+		    this._handler(this._emitter, event);
+		  }
+		};
+	
+		var S$32 = createStream('withHandler', mixin$25);
+		var P$28 = createProperty('withHandler', mixin$25);
+	
+		function withHandler(obs, fn) {
+		  return new (obs._ofSameType(S$32, P$28))(obs, { fn: fn });
+		}
+	
+		function defaultErrorsCombinator(errors) {
+		  var latestError = void 0;
+		  for (var i = 0; i < errors.length; i++) {
+		    if (errors[i] !== undefined) {
+		      if (latestError === undefined || latestError.index < errors[i].index) {
+		        latestError = errors[i];
+		      }
+		    }
+		  }
+		  return latestError.error;
+		}
+	
+		function Combine(active, passive, combinator) {
+		  var _this = this;
+	
+		  Stream.call(this);
+		  this._activeCount = active.length;
+		  this._sources = concat(active, passive);
+		  this._combinator = combinator ? spread(combinator, this._sources.length) : function (x) {
+		    return x;
+		  };
+		  this._aliveCount = 0;
+		  this._latestValues = new Array(this._sources.length);
+		  this._latestErrors = new Array(this._sources.length);
+		  fillArray(this._latestValues, NOTHING);
+		  this._emitAfterActivation = false;
+		  this._endAfterActivation = false;
+		  this._latestErrorIndex = 0;
+	
+		  this._$handlers = [];
+	
+		  var _loop = function (i) {
+		    _this._$handlers.push(function (event) {
+		      return _this._handleAny(i, event);
+		    });
+		  };
+	
+		  for (var i = 0; i < this._sources.length; i++) {
+		    _loop(i);
+		  }
+		}
+	
+		inherit(Combine, Stream, {
+	
+		  _name: 'combine',
+	
+		  _onActivation: function () {
+		    this._aliveCount = this._activeCount;
+	
+		    // we need to suscribe to _passive_ sources before _active_
+		    // (see https://github.com/rpominov/kefir/issues/98)
+		    for (var i = this._activeCount; i < this._sources.length; i++) {
+		      this._sources[i].onAny(this._$handlers[i]);
+		    }
+		    for (var i = 0; i < this._activeCount; i++) {
+		      this._sources[i].onAny(this._$handlers[i]);
+		    }
+	
+		    if (this._emitAfterActivation) {
+		      this._emitAfterActivation = false;
+		      this._emitIfFull();
+		    }
+		    if (this._endAfterActivation) {
+		      this._emitEnd();
+		    }
+		  },
+		  _onDeactivation: function () {
+		    var length = this._sources.length,
+		        i = void 0;
+		    for (i = 0; i < length; i++) {
+		      this._sources[i].offAny(this._$handlers[i]);
+		    }
+		  },
+		  _emitIfFull: function () {
+		    var hasAllValues = true;
+		    var hasErrors = false;
+		    var length = this._latestValues.length;
+		    var valuesCopy = new Array(length);
+		    var errorsCopy = new Array(length);
+	
+		    for (var i = 0; i < length; i++) {
+		      valuesCopy[i] = this._latestValues[i];
+		      errorsCopy[i] = this._latestErrors[i];
+	
+		      if (valuesCopy[i] === NOTHING) {
+		        hasAllValues = false;
+		      }
+	
+		      if (errorsCopy[i] !== undefined) {
+		        hasErrors = true;
+		      }
+		    }
+	
+		    if (hasAllValues) {
+		      var combinator = this._combinator;
+		      this._emitValue(combinator(valuesCopy));
+		    }
+		    if (hasErrors) {
+		      this._emitError(defaultErrorsCombinator(errorsCopy));
+		    }
+		  },
+		  _handleAny: function (i, event) {
+	
+		    if (event.type === VALUE || event.type === ERROR) {
+	
+		      if (event.type === VALUE) {
+		        this._latestValues[i] = event.value;
+		        this._latestErrors[i] = undefined;
+		      }
+		      if (event.type === ERROR) {
+		        this._latestValues[i] = NOTHING;
+		        this._latestErrors[i] = {
+		          index: this._latestErrorIndex++,
+		          error: event.value
+		        };
+		      }
+	
+		      if (i < this._activeCount) {
+		        if (this._activating) {
+		          this._emitAfterActivation = true;
+		        } else {
+		          this._emitIfFull();
+		        }
+		      }
+		    } else {
+		      // END
+	
+		      if (i < this._activeCount) {
+		        this._aliveCount--;
+		        if (this._aliveCount === 0) {
+		          if (this._activating) {
+		            this._endAfterActivation = true;
+		          } else {
+		            this._emitEnd();
+		          }
+		        }
+		      }
+		    }
+		  },
+		  _clear: function () {
+		    Stream.prototype._clear.call(this);
+		    this._sources = null;
+		    this._latestValues = null;
+		    this._latestErrors = null;
+		    this._combinator = null;
+		    this._$handlers = null;
+		  }
+		});
+	
+		function combine(active) {
+		  var passive = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+		  var combinator = arguments[2];
+	
+		  if (typeof passive === 'function') {
+		    combinator = passive;
+		    passive = [];
+		  }
+		  return active.length === 0 ? never() : new Combine(active, passive, combinator);
+		}
+	
+		var isArray = Array.isArray || function (xs) {
+		  return Object.prototype.toString.call(xs) === '[object Array]';
+		};
+	
+		function Zip(sources, combinator) {
+		  var _this = this;
+	
+		  Stream.call(this);
+	
+		  this._buffers = map(sources, function (source) {
+		    return isArray(source) ? cloneArray(source) : [];
+		  });
+		  this._sources = map(sources, function (source) {
+		    return isArray(source) ? never() : source;
+		  });
+	
+		  this._combinator = combinator ? spread(combinator, this._sources.length) : function (x) {
+		    return x;
+		  };
+		  this._aliveCount = 0;
+	
+		  this._$handlers = [];
+	
+		  var _loop = function (i) {
+		    _this._$handlers.push(function (event) {
+		      return _this._handleAny(i, event);
+		    });
+		  };
+	
+		  for (var i = 0; i < this._sources.length; i++) {
+		    _loop(i);
+		  }
+		}
+	
+		inherit(Zip, Stream, {
+	
+		  _name: 'zip',
+	
+		  _onActivation: function () {
+	
+		    // if all sources are arrays
+		    while (this._isFull()) {
+		      this._emit();
+		    }
+	
+		    var length = this._sources.length;
+		    this._aliveCount = length;
+		    for (var i = 0; i < length && this._active; i++) {
+		      this._sources[i].onAny(this._$handlers[i]);
+		    }
+		  },
+		  _onDeactivation: function () {
+		    for (var i = 0; i < this._sources.length; i++) {
+		      this._sources[i].offAny(this._$handlers[i]);
+		    }
+		  },
+		  _emit: function () {
+		    var values = new Array(this._buffers.length);
+		    for (var i = 0; i < this._buffers.length; i++) {
+		      values[i] = this._buffers[i].shift();
+		    }
+		    var combinator = this._combinator;
+		    this._emitValue(combinator(values));
+		  },
+		  _isFull: function () {
+		    for (var i = 0; i < this._buffers.length; i++) {
+		      if (this._buffers[i].length === 0) {
+		        return false;
+		      }
+		    }
+		    return true;
+		  },
+		  _handleAny: function (i, event) {
+		    if (event.type === VALUE) {
+		      this._buffers[i].push(event.value);
+		      if (this._isFull()) {
+		        this._emit();
+		      }
+		    }
+		    if (event.type === ERROR) {
+		      this._emitError(event.value);
+		    }
+		    if (event.type === END) {
+		      this._aliveCount--;
+		      if (this._aliveCount === 0) {
+		        this._emitEnd();
+		      }
+		    }
+		  },
+		  _clear: function () {
+		    Stream.prototype._clear.call(this);
+		    this._sources = null;
+		    this._buffers = null;
+		    this._combinator = null;
+		    this._$handlers = null;
+		  }
+		});
+	
+		function zip(observables, combinator /* Function | falsey */) {
+		  return observables.length === 0 ? never() : new Zip(observables, combinator);
+		}
+	
+		var id$8 = function (x) {
+		  return x;
+		};
+	
+		function AbstractPool() {
+		  var _this = this;
+	
+		  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+		  var _ref$queueLim = _ref.queueLim;
+		  var queueLim = _ref$queueLim === undefined ? 0 : _ref$queueLim;
+		  var _ref$concurLim = _ref.concurLim;
+		  var concurLim = _ref$concurLim === undefined ? -1 : _ref$concurLim;
+		  var _ref$drop = _ref.drop;
+		  var drop = _ref$drop === undefined ? 'new' : _ref$drop;
+	
+		  Stream.call(this);
+	
+		  this._queueLim = queueLim < 0 ? -1 : queueLim;
+		  this._concurLim = concurLim < 0 ? -1 : concurLim;
+		  this._drop = drop;
+		  this._queue = [];
+		  this._curSources = [];
+		  this._$handleSubAny = function (event) {
+		    return _this._handleSubAny(event);
+		  };
+		  this._$endHandlers = [];
+		  this._currentlyAdding = null;
+	
+		  if (this._concurLim === 0) {
+		    this._emitEnd();
+		  }
+		}
+	
+		inherit(AbstractPool, Stream, {
+	
+		  _name: 'abstractPool',
+	
+		  _add: function (obj, toObs /* Function | falsey */) {
+		    toObs = toObs || id$8;
+		    if (this._concurLim === -1 || this._curSources.length < this._concurLim) {
+		      this._addToCur(toObs(obj));
+		    } else {
+		      if (this._queueLim === -1 || this._queue.length < this._queueLim) {
+		        this._addToQueue(toObs(obj));
+		      } else if (this._drop === 'old') {
+		        this._removeOldest();
+		        this._add(obj, toObs);
+		      }
+		    }
+		  },
+		  _addAll: function (obss) {
+		    var _this2 = this;
+	
+		    forEach(obss, function (obs) {
+		      return _this2._add(obs);
+		    });
+		  },
+		  _remove: function (obs) {
+		    if (this._removeCur(obs) === -1) {
+		      this._removeQueue(obs);
+		    }
+		  },
+		  _addToQueue: function (obs) {
+		    this._queue = concat(this._queue, [obs]);
+		  },
+		  _addToCur: function (obs) {
+		    if (this._active) {
+	
+		      // HACK:
+		      //
+		      // We have two optimizations for cases when `obs` is ended. We don't want
+		      // to add such observable to the list, but only want to emit events
+		      // from it (if it has some).
+		      //
+		      // Instead of this hacks, we could just did following,
+		      // but it would be 5-8 times slower:
+		      //
+		      //     this._curSources = concat(this._curSources, [obs]);
+		      //     this._subscribe(obs);
+		      //
+	
+		      // #1
+		      // This one for cases when `obs` already ended
+		      // e.g., Kefir.constant() or Kefir.never()
+		      if (!obs._alive) {
+		        if (obs._currentEvent) {
+		          this._emit(obs._currentEvent.type, obs._currentEvent.value);
+		        }
+		        return;
+		      }
+	
+		      // #2
+		      // This one is for cases when `obs` going to end synchronously on
+		      // first subscriber e.g., Kefir.stream(em => {em.emit(1); em.end()})
+		      this._currentlyAdding = obs;
+		      obs.onAny(this._$handleSubAny);
+		      this._currentlyAdding = null;
+		      if (obs._alive) {
+		        this._curSources = concat(this._curSources, [obs]);
+		        if (this._active) {
+		          this._subToEnd(obs);
+		        }
+		      }
+		    } else {
+		      this._curSources = concat(this._curSources, [obs]);
+		    }
+		  },
+		  _subToEnd: function (obs) {
+		    var _this3 = this;
+	
+		    var onEnd = function () {
+		      return _this3._removeCur(obs);
+		    };
+		    this._$endHandlers.push({ obs: obs, handler: onEnd });
+		    obs.onEnd(onEnd);
+		  },
+		  _subscribe: function (obs) {
+		    obs.onAny(this._$handleSubAny);
+	
+		    // it can become inactive in responce of subscribing to `obs.onAny` above
+		    if (this._active) {
+		      this._subToEnd(obs);
+		    }
+		  },
+		  _unsubscribe: function (obs) {
+		    obs.offAny(this._$handleSubAny);
+	
+		    var onEndI = findByPred(this._$endHandlers, function (obj) {
+		      return obj.obs === obs;
+		    });
+		    if (onEndI !== -1) {
+		      obs.offEnd(this._$endHandlers[onEndI].handler);
+		      this._$endHandlers.splice(onEndI, 1);
+		    }
+		  },
+		  _handleSubAny: function (event) {
+		    if (event.type === VALUE) {
+		      this._emitValue(event.value);
+		    } else if (event.type === ERROR) {
+		      this._emitError(event.value);
+		    }
+		  },
+		  _removeQueue: function (obs) {
+		    var index = find(this._queue, obs);
+		    this._queue = remove(this._queue, index);
+		    return index;
+		  },
+		  _removeCur: function (obs) {
+		    if (this._active) {
+		      this._unsubscribe(obs);
+		    }
+		    var index = find(this._curSources, obs);
+		    this._curSources = remove(this._curSources, index);
+		    if (index !== -1) {
+		      if (this._queue.length !== 0) {
+		        this._pullQueue();
+		      } else if (this._curSources.length === 0) {
+		        this._onEmpty();
+		      }
+		    }
+		    return index;
+		  },
+		  _removeOldest: function () {
+		    this._removeCur(this._curSources[0]);
+		  },
+		  _pullQueue: function () {
+		    if (this._queue.length !== 0) {
+		      this._queue = cloneArray(this._queue);
+		      this._addToCur(this._queue.shift());
+		    }
+		  },
+		  _onActivation: function () {
+		    for (var i = 0, sources = this._curSources; i < sources.length && this._active; i++) {
+		      this._subscribe(sources[i]);
+		    }
+		  },
+		  _onDeactivation: function () {
+		    for (var i = 0, sources = this._curSources; i < sources.length; i++) {
+		      this._unsubscribe(sources[i]);
+		    }
+		    if (this._currentlyAdding !== null) {
+		      this._unsubscribe(this._currentlyAdding);
+		    }
+		  },
+		  _isEmpty: function () {
+		    return this._curSources.length === 0;
+		  },
+		  _onEmpty: function () {},
+		  _clear: function () {
+		    Stream.prototype._clear.call(this);
+		    this._queue = null;
+		    this._curSources = null;
+		    this._$handleSubAny = null;
+		    this._$endHandlers = null;
+		  }
+		});
+	
+		function Merge(sources) {
+		  AbstractPool.call(this);
+		  this._addAll(sources);
+		  this._initialised = true;
+		}
+	
+		inherit(Merge, AbstractPool, {
+	
+		  _name: 'merge',
+	
+		  _onEmpty: function () {
+		    if (this._initialised) {
+		      this._emitEnd();
+		    }
+		  }
+		});
+	
+		function merge(observables) {
+		  return observables.length === 0 ? never() : new Merge(observables);
+		}
+	
+		function S$33(generator) {
+		  var _this = this;
+	
+		  Stream.call(this);
+		  this._generator = generator;
+		  this._source = null;
+		  this._inLoop = false;
+		  this._iteration = 0;
+		  this._$handleAny = function (event) {
+		    return _this._handleAny(event);
+		  };
+		}
+	
+		inherit(S$33, Stream, {
+	
+		  _name: 'repeat',
+	
+		  _handleAny: function (event) {
+		    if (event.type === END) {
+		      this._source = null;
+		      this._getSource();
+		    } else {
+		      this._emit(event.type, event.value);
+		    }
+		  },
+		  _getSource: function () {
+		    if (!this._inLoop) {
+		      this._inLoop = true;
+		      var generator = this._generator;
+		      while (this._source === null && this._alive && this._active) {
+		        this._source = generator(this._iteration++);
+		        if (this._source) {
+		          this._source.onAny(this._$handleAny);
+		        } else {
+		          this._emitEnd();
+		        }
+		      }
+		      this._inLoop = false;
+		    }
+		  },
+		  _onActivation: function () {
+		    if (this._source) {
+		      this._source.onAny(this._$handleAny);
+		    } else {
+		      this._getSource();
+		    }
+		  },
+		  _onDeactivation: function () {
+		    if (this._source) {
+		      this._source.offAny(this._$handleAny);
+		    }
+		  },
+		  _clear: function () {
+		    Stream.prototype._clear.call(this);
+		    this._generator = null;
+		    this._source = null;
+		    this._$handleAny = null;
+		  }
+		});
+	
+		function repeat (generator) {
+		  return new S$33(generator);
+		}
+	
+		function concat$1(observables) {
+		  return repeat(function (index) {
+		    return observables.length > index ? observables[index] : false;
+		  }).setName('concat');
+		}
+	
+		function Pool() {
+		  AbstractPool.call(this);
+		}
+	
+		inherit(Pool, AbstractPool, {
+	
+		  _name: 'pool',
+	
+		  plug: function (obs) {
+		    this._add(obs);
+		    return this;
+		  },
+		  unplug: function (obs) {
+		    this._remove(obs);
+		    return this;
+		  }
+		});
+	
+		function FlatMap(source, fn, options) {
+		  var _this = this;
+	
+		  AbstractPool.call(this, options);
+		  this._source = source;
+		  this._fn = fn;
+		  this._mainEnded = false;
+		  this._lastCurrent = null;
+		  this._$handleMain = function (event) {
+		    return _this._handleMain(event);
+		  };
+		}
+	
+		inherit(FlatMap, AbstractPool, {
+		  _onActivation: function () {
+		    AbstractPool.prototype._onActivation.call(this);
+		    if (this._active) {
+		      this._source.onAny(this._$handleMain);
+		    }
+		  },
+		  _onDeactivation: function () {
+		    AbstractPool.prototype._onDeactivation.call(this);
+		    this._source.offAny(this._$handleMain);
+		    this._hadNoEvSinceDeact = true;
+		  },
+		  _handleMain: function (event) {
+	
+		    if (event.type === VALUE) {
+		      // Is latest value before deactivation survived, and now is 'current' on this activation?
+		      // We don't want to handle such values, to prevent to constantly add
+		      // same observale on each activation/deactivation when our main source
+		      // is a `Kefir.conatant()` for example.
+		      var sameCurr = this._activating && this._hadNoEvSinceDeact && this._lastCurrent === event.value;
+		      if (!sameCurr) {
+		        this._add(event.value, this._fn);
+		      }
+		      this._lastCurrent = event.value;
+		      this._hadNoEvSinceDeact = false;
+		    }
+	
+		    if (event.type === ERROR) {
+		      this._emitError(event.value);
+		    }
+	
+		    if (event.type === END) {
+		      if (this._isEmpty()) {
+		        this._emitEnd();
+		      } else {
+		        this._mainEnded = true;
+		      }
+		    }
+		  },
+		  _onEmpty: function () {
+		    if (this._mainEnded) {
+		      this._emitEnd();
+		    }
+		  },
+		  _clear: function () {
+		    AbstractPool.prototype._clear.call(this);
+		    this._source = null;
+		    this._lastCurrent = null;
+		    this._$handleMain = null;
+		  }
+		});
+	
+		function FlatMapErrors(source, fn) {
+		  FlatMap.call(this, source, fn);
+		}
+	
+		inherit(FlatMapErrors, FlatMap, {
+	
+		  // Same as in FlatMap, only VALUE/ERROR flipped
+	
+		  _handleMain: function (event) {
+	
+		    if (event.type === ERROR) {
+		      var sameCurr = this._activating && this._hadNoEvSinceDeact && this._lastCurrent === event.value;
+		      if (!sameCurr) {
+		        this._add(event.value, this._fn);
+		      }
+		      this._lastCurrent = event.value;
+		      this._hadNoEvSinceDeact = false;
+		    }
+	
+		    if (event.type === VALUE) {
+		      this._emitValue(event.value);
+		    }
+	
+		    if (event.type === END) {
+		      if (this._isEmpty()) {
+		        this._emitEnd();
+		      } else {
+		        this._mainEnded = true;
+		      }
+		    }
+		  }
+		});
+	
+		function createConstructor$1(BaseClass, name) {
+		  return function AnonymousObservable(primary, secondary, options) {
+		    var _this = this;
+	
+		    BaseClass.call(this);
+		    this._primary = primary;
+		    this._secondary = secondary;
+		    this._name = primary._name + '.' + name;
+		    this._lastSecondary = NOTHING;
+		    this._$handleSecondaryAny = function (event) {
+		      return _this._handleSecondaryAny(event);
+		    };
+		    this._$handlePrimaryAny = function (event) {
+		      return _this._handlePrimaryAny(event);
+		    };
+		    this._init(options);
+		  };
+		}
+	
+		function createClassMethods$1(BaseClass) {
+		  return {
+		    _init: function () {},
+		    _free: function () {},
+		    _handlePrimaryValue: function (x) {
+		      this._emitValue(x);
+		    },
+		    _handlePrimaryError: function (x) {
+		      this._emitError(x);
+		    },
+		    _handlePrimaryEnd: function () {
+		      this._emitEnd();
+		    },
+		    _handleSecondaryValue: function (x) {
+		      this._lastSecondary = x;
+		    },
+		    _handleSecondaryError: function (x) {
+		      this._emitError(x);
+		    },
+		    _handleSecondaryEnd: function () {},
+		    _handlePrimaryAny: function (event) {
+		      switch (event.type) {
+		        case VALUE:
+		          return this._handlePrimaryValue(event.value);
+		        case ERROR:
+		          return this._handlePrimaryError(event.value);
+		        case END:
+		          return this._handlePrimaryEnd(event.value);
+		      }
+		    },
+		    _handleSecondaryAny: function (event) {
+		      switch (event.type) {
+		        case VALUE:
+		          return this._handleSecondaryValue(event.value);
+		        case ERROR:
+		          return this._handleSecondaryError(event.value);
+		        case END:
+		          this._handleSecondaryEnd(event.value);
+		          this._removeSecondary();
+		      }
+		    },
+		    _removeSecondary: function () {
+		      if (this._secondary !== null) {
+		        this._secondary.offAny(this._$handleSecondaryAny);
+		        this._$handleSecondaryAny = null;
+		        this._secondary = null;
+		      }
+		    },
+		    _onActivation: function () {
+		      if (this._secondary !== null) {
+		        this._secondary.onAny(this._$handleSecondaryAny);
+		      }
+		      if (this._active) {
+		        this._primary.onAny(this._$handlePrimaryAny);
+		      }
+		    },
+		    _onDeactivation: function () {
+		      if (this._secondary !== null) {
+		        this._secondary.offAny(this._$handleSecondaryAny);
+		      }
+		      this._primary.offAny(this._$handlePrimaryAny);
+		    },
+		    _clear: function () {
+		      BaseClass.prototype._clear.call(this);
+		      this._primary = null;
+		      this._secondary = null;
+		      this._lastSecondary = null;
+		      this._$handleSecondaryAny = null;
+		      this._$handlePrimaryAny = null;
+		      this._free();
+		    }
+		  };
+		}
+	
+		function createStream$1(name, mixin) {
+		  var S = createConstructor$1(Stream, name);
+		  inherit(S, Stream, createClassMethods$1(Stream), mixin);
+		  return S;
+		}
+	
+		function createProperty$1(name, mixin) {
+		  var P = createConstructor$1(Property, name);
+		  inherit(P, Property, createClassMethods$1(Property), mixin);
+		  return P;
+		}
+	
+		var mixin$26 = {
+		  _handlePrimaryValue: function (x) {
+		    if (this._lastSecondary !== NOTHING && this._lastSecondary) {
+		      this._emitValue(x);
+		    }
+		  },
+		  _handleSecondaryEnd: function () {
+		    if (this._lastSecondary === NOTHING || !this._lastSecondary) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$34 = createStream$1('filterBy', mixin$26);
+		var P$29 = createProperty$1('filterBy', mixin$26);
+	
+		function filterBy(primary, secondary) {
+		  return new (primary._ofSameType(S$34, P$29))(primary, secondary);
+		}
+	
+		var id2 = function (_, x) {
+		  return x;
+		};
+	
+		function sampledBy(passive, active, combinator) {
+		  var _combinator = combinator ? function (a, b) {
+		    return combinator(b, a);
+		  } : id2;
+		  return combine([active], [passive], _combinator).setName(passive, 'sampledBy');
+		}
+	
+		var mixin$27 = {
+		  _handlePrimaryValue: function (x) {
+		    if (this._lastSecondary !== NOTHING) {
+		      this._emitValue(x);
+		    }
+		  },
+		  _handleSecondaryEnd: function () {
+		    if (this._lastSecondary === NOTHING) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$35 = createStream$1('skipUntilBy', mixin$27);
+		var P$30 = createProperty$1('skipUntilBy', mixin$27);
+	
+		function skipUntilBy(primary, secondary) {
+		  return new (primary._ofSameType(S$35, P$30))(primary, secondary);
+		}
+	
+		var mixin$28 = {
+		  _handleSecondaryValue: function () {
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$36 = createStream$1('takeUntilBy', mixin$28);
+		var P$31 = createProperty$1('takeUntilBy', mixin$28);
+	
+		function takeUntilBy(primary, secondary) {
+		  return new (primary._ofSameType(S$36, P$31))(primary, secondary);
+		}
+	
+		var mixin$29 = {
+		  _init: function () {
+		    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+		    var _ref$flushOnEnd = _ref.flushOnEnd;
+		    var flushOnEnd = _ref$flushOnEnd === undefined ? true : _ref$flushOnEnd;
+	
+		    this._buff = [];
+		    this._flushOnEnd = flushOnEnd;
+		  },
+		  _free: function () {
+		    this._buff = null;
+		  },
+		  _flush: function () {
+		    if (this._buff !== null) {
+		      this._emitValue(this._buff);
+		      this._buff = [];
+		    }
+		  },
+		  _handlePrimaryEnd: function () {
+		    if (this._flushOnEnd) {
+		      this._flush();
+		    }
+		    this._emitEnd();
+		  },
+		  _onActivation: function () {
+		    this._primary.onAny(this._$handlePrimaryAny);
+		    if (this._alive && this._secondary !== null) {
+		      this._secondary.onAny(this._$handleSecondaryAny);
+		    }
+		  },
+		  _handlePrimaryValue: function (x) {
+		    this._buff.push(x);
+		  },
+		  _handleSecondaryValue: function () {
+		    this._flush();
+		  },
+		  _handleSecondaryEnd: function () {
+		    if (!this._flushOnEnd) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$37 = createStream$1('bufferBy', mixin$29);
+		var P$32 = createProperty$1('bufferBy', mixin$29);
+	
+		function bufferBy(primary, secondary, options /* optional */) {
+		  return new (primary._ofSameType(S$37, P$32))(primary, secondary, options);
+		}
+	
+		var mixin$30 = {
+		  _init: function () {
+		    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+		    var _ref$flushOnEnd = _ref.flushOnEnd;
+		    var flushOnEnd = _ref$flushOnEnd === undefined ? true : _ref$flushOnEnd;
+		    var _ref$flushOnChange = _ref.flushOnChange;
+		    var flushOnChange = _ref$flushOnChange === undefined ? false : _ref$flushOnChange;
+	
+		    this._buff = [];
+		    this._flushOnEnd = flushOnEnd;
+		    this._flushOnChange = flushOnChange;
+		  },
+		  _free: function () {
+		    this._buff = null;
+		  },
+		  _flush: function () {
+		    if (this._buff !== null) {
+		      this._emitValue(this._buff);
+		      this._buff = [];
+		    }
+		  },
+		  _handlePrimaryEnd: function () {
+		    if (this._flushOnEnd) {
+		      this._flush();
+		    }
+		    this._emitEnd();
+		  },
+		  _handlePrimaryValue: function (x) {
+		    this._buff.push(x);
+		    if (this._lastSecondary !== NOTHING && !this._lastSecondary) {
+		      this._flush();
+		    }
+		  },
+		  _handleSecondaryEnd: function () {
+		    if (!this._flushOnEnd && (this._lastSecondary === NOTHING || this._lastSecondary)) {
+		      this._emitEnd();
+		    }
+		  },
+		  _handleSecondaryValue: function (x) {
+		    if (this._flushOnChange && !x) {
+		      this._flush();
+		    }
+	
+		    // from default _handleSecondaryValue
+		    this._lastSecondary = x;
+		  }
+		};
+	
+		var S$38 = createStream$1('bufferWhileBy', mixin$30);
+		var P$33 = createProperty$1('bufferWhileBy', mixin$30);
+	
+		function bufferWhileBy(primary, secondary, options /* optional */) {
+		  return new (primary._ofSameType(S$38, P$33))(primary, secondary, options);
+		}
+	
+		var f = function () {
+		  return false;
+		};
+		var t = function () {
+		  return true;
+		};
+	
+		function awaiting(a, b) {
+		  var result = merge([map$1(a, t), map$1(b, f)]);
+		  result = skipDuplicates(result);
+		  result = toProperty(result, f);
+		  return result.setName(a, 'awaiting');
+		}
+	
+		var mixin$31 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    var result = fn(x);
+		    if (result.convert) {
+		      this._emitError(result.error);
+		    } else {
+		      this._emitValue(x);
+		    }
+		  }
+		};
+	
+		var S$39 = createStream('valuesToErrors', mixin$31);
+		var P$34 = createProperty('valuesToErrors', mixin$31);
+	
+		var defFn = function (x) {
+		  return { convert: true, error: x };
+		};
+	
+		function valuesToErrors(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? defFn : arguments[1];
+	
+		  return new (obs._ofSameType(S$39, P$34))(obs, { fn: fn });
+		}
+	
+		var mixin$32 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleError: function (x) {
+		    var fn = this._fn;
+		    var result = fn(x);
+		    if (result.convert) {
+		      this._emitValue(result.value);
+		    } else {
+		      this._emitError(x);
+		    }
+		  }
+		};
+	
+		var S$40 = createStream('errorsToValues', mixin$32);
+		var P$35 = createProperty('errorsToValues', mixin$32);
+	
+		var defFn$1 = function (x) {
+		  return { convert: true, value: x };
+		};
+	
+		function errorsToValues(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? defFn$1 : arguments[1];
+	
+		  return new (obs._ofSameType(S$40, P$35))(obs, { fn: fn });
+		}
+	
+		var mixin$33 = {
+		  _handleError: function (x) {
+		    this._emitError(x);
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$41 = createStream('endOnError', mixin$33);
+		var P$36 = createProperty('endOnError', mixin$33);
+	
+		function endOnError(obs) {
+		  return new (obs._ofSameType(S$41, P$36))(obs);
+		}
+	
+		Observable.prototype.toProperty = function (fn) {
+		  return toProperty(this, fn);
+		};
+	
+		Observable.prototype.changes = function () {
+		  return changes(this);
+		};
+	
+		Observable.prototype.toPromise = function (Promise) {
+		  return toPromise(this, Promise);
+		};
+	
+		Observable.prototype.toESObservable = toESObservable;
+		Observable.prototype[$$observable] = toESObservable;
+	
+		Observable.prototype.map = function (fn) {
+		  return map$1(this, fn);
+		};
+	
+		Observable.prototype.filter = function (fn) {
+		  return filter(this, fn);
+		};
+	
+		Observable.prototype.take = function (n) {
+		  return take(this, n);
+		};
+	
+		Observable.prototype.takeErrors = function (n) {
+		  return takeErrors(this, n);
+		};
+	
+		Observable.prototype.takeWhile = function (fn) {
+		  return takeWhile(this, fn);
+		};
+	
+		Observable.prototype.last = function () {
+		  return last(this);
+		};
+	
+		Observable.prototype.skip = function (n) {
+		  return skip(this, n);
+		};
+	
+		Observable.prototype.skipWhile = function (fn) {
+		  return skipWhile(this, fn);
+		};
+	
+		Observable.prototype.skipDuplicates = function (fn) {
+		  return skipDuplicates(this, fn);
+		};
+	
+		Observable.prototype.diff = function (fn, seed) {
+		  return diff(this, fn, seed);
+		};
+	
+		Observable.prototype.scan = function (fn, seed) {
+		  return scan(this, fn, seed);
+		};
+	
+		Observable.prototype.flatten = function (fn) {
+		  return flatten(this, fn);
+		};
+	
+		Observable.prototype.delay = function (wait) {
+		  return delay(this, wait);
+		};
+	
+		Observable.prototype.throttle = function (wait, options) {
+		  return throttle(this, wait, options);
+		};
+	
+		Observable.prototype.debounce = function (wait, options) {
+		  return debounce(this, wait, options);
+		};
+	
+		Observable.prototype.mapErrors = function (fn) {
+		  return mapErrors(this, fn);
+		};
+	
+		Observable.prototype.filterErrors = function (fn) {
+		  return filterErrors(this, fn);
+		};
+	
+		Observable.prototype.ignoreValues = function () {
+		  return ignoreValues(this);
+		};
+	
+		Observable.prototype.ignoreErrors = function () {
+		  return ignoreErrors(this);
+		};
+	
+		Observable.prototype.ignoreEnd = function () {
+		  return ignoreEnd(this);
+		};
+	
+		Observable.prototype.beforeEnd = function (fn) {
+		  return beforeEnd(this, fn);
+		};
+	
+		Observable.prototype.slidingWindow = function (max, min) {
+		  return slidingWindow(this, max, min);
+		};
+	
+		Observable.prototype.bufferWhile = function (fn, options) {
+		  return bufferWhile(this, fn, options);
+		};
+	
+		Observable.prototype.bufferWithCount = function (count, options) {
+		  return bufferWhile$1(this, count, options);
+		};
+	
+		Observable.prototype.bufferWithTimeOrCount = function (wait, count, options) {
+		  return bufferWithTimeOrCount(this, wait, count, options);
+		};
+	
+		Observable.prototype.transduce = function (transducer) {
+		  return transduce(this, transducer);
+		};
+	
+		Observable.prototype.withHandler = function (fn) {
+		  return withHandler(this, fn);
+		};
+	
+		Observable.prototype.combine = function (other, combinator) {
+		  return combine([this, other], combinator);
+		};
+	
+		Observable.prototype.zip = function (other, combinator) {
+		  return zip([this, other], combinator);
+		};
+	
+		Observable.prototype.merge = function (other) {
+		  return merge([this, other]);
+		};
+	
+		Observable.prototype.concat = function (other) {
+		  return concat$1([this, other]);
+		};
+	
+		var pool = function () {
+		  return new Pool();
+		};
+	
+		Observable.prototype.flatMap = function (fn) {
+		  return new FlatMap(this, fn).setName(this, 'flatMap');
+		};
+		Observable.prototype.flatMapLatest = function (fn) {
+		  return new FlatMap(this, fn, { concurLim: 1, drop: 'old' }).setName(this, 'flatMapLatest');
+		};
+		Observable.prototype.flatMapFirst = function (fn) {
+		  return new FlatMap(this, fn, { concurLim: 1 }).setName(this, 'flatMapFirst');
+		};
+		Observable.prototype.flatMapConcat = function (fn) {
+		  return new FlatMap(this, fn, { queueLim: -1, concurLim: 1 }).setName(this, 'flatMapConcat');
+		};
+		Observable.prototype.flatMapConcurLimit = function (fn, limit) {
+		  return new FlatMap(this, fn, { queueLim: -1, concurLim: limit }).setName(this, 'flatMapConcurLimit');
+		};
+	
+		Observable.prototype.flatMapErrors = function (fn) {
+		  return new FlatMapErrors(this, fn).setName(this, 'flatMapErrors');
+		};
+	
+		Observable.prototype.filterBy = function (other) {
+		  return filterBy(this, other);
+		};
+	
+		Observable.prototype.sampledBy = function (other, combinator) {
+		  return sampledBy(this, other, combinator);
+		};
+	
+		Observable.prototype.skipUntilBy = function (other) {
+		  return skipUntilBy(this, other);
+		};
+	
+		Observable.prototype.takeUntilBy = function (other) {
+		  return takeUntilBy(this, other);
+		};
+	
+		Observable.prototype.bufferBy = function (other, options) {
+		  return bufferBy(this, other, options);
+		};
+	
+		Observable.prototype.bufferWhileBy = function (other, options) {
+		  return bufferWhileBy(this, other, options);
+		};
+	
+		// Deprecated
+		// -----------------------------------------------------------------------------
+	
+		var DEPRECATION_WARNINGS = true;
+		function dissableDeprecationWarnings() {
+		  DEPRECATION_WARNINGS = false;
+		}
+	
+		function warn(msg) {
+		  if (DEPRECATION_WARNINGS && console && typeof console.warn === 'function') {
+		    var msg2 = '\nHere is an Error object for you containing the call stack:';
+		    console.warn(msg, msg2, new Error());
+		  }
+		}
+	
+		Observable.prototype.awaiting = function (other) {
+		  warn('You are using deprecated .awaiting() method, see https://github.com/rpominov/kefir/issues/145');
+		  return awaiting(this, other);
+		};
+	
+		Observable.prototype.valuesToErrors = function (fn) {
+		  warn('You are using deprecated .valuesToErrors() method, see https://github.com/rpominov/kefir/issues/149');
+		  return valuesToErrors(this, fn);
+		};
+	
+		Observable.prototype.errorsToValues = function (fn) {
+		  warn('You are using deprecated .errorsToValues() method, see https://github.com/rpominov/kefir/issues/149');
+		  return errorsToValues(this, fn);
+		};
+	
+		Observable.prototype.endOnError = function () {
+		  warn('You are using deprecated .endOnError() method, see https://github.com/rpominov/kefir/issues/150');
+		  return endOnError(this);
+		};
+	
+		// Exports
+		// --------------------------------------------------------------------------
+	
+		var Kefir = { Observable: Observable, Stream: Stream, Property: Property, never: never, later: later, interval: interval, sequentially: sequentially,
+		  fromPoll: fromPoll, withInterval: withInterval, fromCallback: fromCallback, fromNodeCallback: fromNodeCallback, fromEvents: fromEvents, stream: stream,
+		  constant: constant, constantError: constantError, fromPromise: fromPromise, fromESObservable: fromESObservable, combine: combine, zip: zip, merge: merge,
+		  concat: concat$1, Pool: Pool, pool: pool, repeat: repeat };
+	
+		Kefir.Kefir = Kefir;
+	
+		exports.dissableDeprecationWarnings = dissableDeprecationWarnings;
+		exports.Kefir = Kefir;
+		exports.Observable = Observable;
+		exports.Stream = Stream;
+		exports.Property = Property;
+		exports.never = never;
+		exports.later = later;
+		exports.interval = interval;
+		exports.sequentially = sequentially;
+		exports.fromPoll = fromPoll;
+		exports.withInterval = withInterval;
+		exports.fromCallback = fromCallback;
+		exports.fromNodeCallback = fromNodeCallback;
+		exports.fromEvents = fromEvents;
+		exports.stream = stream;
+		exports.constant = constant;
+		exports.constantError = constantError;
+		exports.fromPromise = fromPromise;
+		exports.fromESObservable = fromESObservable;
+		exports.combine = combine;
+		exports.zip = zip;
+		exports.merge = merge;
+		exports.concat = concat$1;
+		exports.Pool = Pool;
+		exports.pool = pool;
+		exports.repeat = repeat;
+		exports['default'] = Kefir;
 	
 	}));
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
 
-/***/ 169:
+/***/ 171:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -25983,7 +26450,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 226:
+/***/ 229:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26075,7 +26542,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 227:
+/***/ 230:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26092,7 +26559,7 @@ webpackJsonp([2],{
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _paper = __webpack_require__(169);
+	var _paper = __webpack_require__(171);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
@@ -26198,7 +26665,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 228:
+/***/ 231:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26215,7 +26682,7 @@ webpackJsonp([2],{
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _ramda = __webpack_require__(49);
+	var _ramda = __webpack_require__(48);
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
@@ -26483,7 +26950,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 229:
+/***/ 232:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26500,11 +26967,11 @@ webpackJsonp([2],{
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _ramda = __webpack_require__(49);
+	var _ramda = __webpack_require__(48);
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
-	var _dialogue = __webpack_require__(228);
+	var _dialogue = __webpack_require__(231);
 	
 	var _dialogue2 = _interopRequireDefault(_dialogue);
 	
@@ -26785,10 +27252,10 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 258:
+/***/ 262:
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(82)();
+	exports = module.exports = __webpack_require__(83)();
 	// imports
 	
 	
@@ -26800,7 +27267,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 292:
+/***/ 293:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26812,19 +27279,19 @@ webpackJsonp([2],{
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _kefir = __webpack_require__(152);
+	var _kefir = __webpack_require__(154);
 	
-	var _kefir2 = _interopRequireDefault(_kefir);
+	var Kefir = _interopRequireWildcard(_kefir);
 	
-	var _partial = __webpack_require__(332);
+	var _ramda = __webpack_require__(48);
 	
-	var _partial2 = _interopRequireDefault(_partial);
+	var R = _interopRequireWildcard(_ramda);
 	
-	var _ramda = __webpack_require__(49);
+	var _partial = __webpack_require__(333);
 	
-	var _ramda2 = _interopRequireDefault(_ramda);
+	var L = _interopRequireWildcard(_partial);
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
@@ -26852,32 +27319,24 @@ webpackJsonp([2],{
 	    }
 	  }, {
 	    key: "lens",
-	    value: function lens(l) {
-	      for (var _len = arguments.length, ls = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	        ls[_key - 1] = arguments[_key];
-	      }
-	
-	      return new LensedAtom(this, ls.length === 0 ? l : _partial2.default.apply(undefined, [l].concat(ls)));
+	    value: function lens() {
+	      return new LensedAtom(this, L.default.apply(undefined, arguments));
 	    }
 	  }, {
 	    key: "view",
-	    value: function view(l) {
-	      for (var _len2 = arguments.length, ls = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-	        ls[_key2 - 1] = arguments[_key2];
-	      }
-	
-	      return this.lens.apply(this, [l].concat(ls));
+	    value: function view() {
+	      return new LensedAtom(this, L.default.apply(undefined, arguments));
 	    }
 	  }, {
 	    key: "_maybeEmitValue",
 	    value: function _maybeEmitValue(next) {
 	      var prev = this._currentEvent;
-	      if (!prev || !_ramda2.default.equals(prev.value, next)) this._emitValue(next);
+	      if (!prev || !R.equals(prev.value, next)) this._emitValue(next);
 	    }
 	  }]);
 	
 	  return AbstractMutable;
-	}(_kefir2.default.Property);
+	}(Kefir.Property);
 	
 	//
 	
@@ -26898,17 +27357,17 @@ webpackJsonp([2],{
 	  _createClass(LensedAtom, [{
 	    key: "get",
 	    value: function get() {
-	      return _partial2.default.view(this._lens, this._source.get());
+	      return L.get(this._lens, this._source.get());
 	    }
 	  }, {
 	    key: "modify",
 	    value: function modify(fn) {
-	      this._source.modify(_partial2.default.over(this._lens, fn));
+	      this._source.modify(L.modify(this._lens, fn));
 	    }
 	  }, {
 	    key: "_handleValue",
 	    value: function _handleValue(context) {
-	      this._maybeEmitValue(_partial2.default.view(this._lens, context));
+	      this._maybeEmitValue(L.get(this._lens, context));
 	    }
 	  }, {
 	    key: "_onActivation",
@@ -26967,29 +27426,27 @@ webpackJsonp([2],{
 	exports.default = function (value) {
 	  return new Atom(value);
 	};
-	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9rZWZpci5hdG9tLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7SUFNYTs7Ozs7Ozs7Ozs7d0JBQ1AsT0FBTztBQUNULFdBQUssTUFBTCxDQUFZO2VBQU07T0FBTixDQUFaLENBRFM7Ozs7eUJBR04sR0FBVTt3Q0FBSjs7T0FBSTs7QUFDYixhQUFPLElBQUksVUFBSixDQUFlLElBQWYsRUFBcUIsR0FBRyxNQUFILEtBQWMsQ0FBZCxHQUFrQixDQUFsQixHQUFzQixvQ0FBRSxVQUFNLEdBQVIsQ0FBdEIsQ0FBNUIsQ0FEYTs7Ozt5QkFHVixHQUFVO3lDQUFKOztPQUFJOztBQUNiLGFBQU8sS0FBSyxJQUFMLGNBQVUsVUFBTSxHQUFoQixDQUFQLENBRGE7Ozs7b0NBR0MsTUFBTTtBQUNwQixVQUFNLE9BQU8sS0FBSyxhQUFMLENBRE87QUFFcEIsVUFBSSxDQUFDLElBQUQsSUFBUyxDQUFDLGdCQUFFLE1BQUYsQ0FBUyxLQUFLLEtBQUwsRUFBWSxJQUFyQixDQUFELEVBQ1gsS0FBSyxVQUFMLENBQWdCLElBQWhCLEVBREY7Ozs7U0FaUztFQUF3QixnQkFBTSxRQUFOOzs7O0lBbUJ4Qjs7O0FBQ1gsV0FEVyxVQUNYLENBQVksTUFBWixFQUFvQixJQUFwQixFQUEwQjswQkFEZixZQUNlOzt3RUFEZix3QkFDZTs7QUFFeEIsV0FBSyxPQUFMLEdBQWUsTUFBZixDQUZ3QjtBQUd4QixXQUFLLEtBQUwsR0FBYSxJQUFiLENBSHdCO0FBSXhCLFdBQUssYUFBTCxHQUFxQixJQUFyQixDQUp3Qjs7R0FBMUI7O2VBRFc7OzBCQU9MO0FBQ0osYUFBTyxrQkFBRSxJQUFGLENBQU8sS0FBSyxLQUFMLEVBQVksS0FBSyxPQUFMLENBQWEsR0FBYixFQUFuQixDQUFQLENBREk7Ozs7MkJBR0MsSUFBSTtBQUNULFdBQUssT0FBTCxDQUFhLE1BQWIsQ0FBb0Isa0JBQUUsSUFBRixDQUFPLEtBQUssS0FBTCxFQUFZLEVBQW5CLENBQXBCLEVBRFM7Ozs7aUNBR0UsU0FBUztBQUNwQixXQUFLLGVBQUwsQ0FBcUIsa0JBQUUsSUFBRixDQUFPLEtBQUssS0FBTCxFQUFZLE9BQW5CLENBQXJCLEVBRG9COzs7O29DQUdOOzs7QUFDZCxVQUFNLGNBQWMsU0FBZCxXQUFjO2VBQVMsT0FBSyxZQUFMLENBQWtCLEtBQWxCO09BQVQsQ0FETjtBQUVkLFdBQUssYUFBTCxHQUFxQixXQUFyQixDQUZjO0FBR2QsV0FBSyxPQUFMLENBQWEsT0FBYixDQUFxQixXQUFyQixFQUhjOzs7O3NDQUtFO0FBQ2hCLFdBQUssT0FBTCxDQUFhLFFBQWIsQ0FBc0IsS0FBSyxhQUFMLENBQXRCLENBRGdCO0FBRWhCLFdBQUssYUFBTCxHQUFxQixJQUFyQixDQUZnQjtBQUdoQixXQUFLLGFBQUwsR0FBcUIsSUFBckIsQ0FIZ0I7Ozs7U0FyQlA7RUFBbUI7Ozs7SUE4Qm5COzs7QUFDWCxXQURXLElBQ1gsQ0FBWSxLQUFaLEVBQW1COzBCQURSLE1BQ1E7O3dFQURSLGtCQUNROztBQUVqQixXQUFLLFVBQUwsQ0FBZ0IsS0FBaEIsRUFGaUI7O0dBQW5COztlQURXOzswQkFLTDtBQUNKLGFBQU8sS0FBSyxhQUFMLENBQW1CLEtBQW5CLENBREg7Ozs7MkJBR0MsSUFBSTtBQUNULFdBQUssZUFBTCxDQUFxQixHQUFHLEtBQUssR0FBTCxFQUFILENBQXJCLEVBRFM7Ozs7U0FSQTtFQUFhOzs7O2tCQWVYO1NBQVMsSUFBSSxJQUFKLENBQVMsS0FBVDtDQUFUIiwiZmlsZSI6ImtlZmlyLmF0b20uanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgS2VmaXIgZnJvbSBcImtlZmlyXCJcbmltcG9ydCBMICAgICBmcm9tIFwicGFydGlhbC5sZW5zZXNcIlxuaW1wb3J0IFIgICAgIGZyb20gXCJyYW1kYVwiXG5cbi8vXG5cbmV4cG9ydCBjbGFzcyBBYnN0cmFjdE11dGFibGUgZXh0ZW5kcyBLZWZpci5Qcm9wZXJ0eSB7XG4gIHNldCh2YWx1ZSkge1xuICAgIHRoaXMubW9kaWZ5KCgpID0+IHZhbHVlKVxuICB9XG4gIGxlbnMobCwgLi4ubHMpIHtcbiAgICByZXR1cm4gbmV3IExlbnNlZEF0b20odGhpcywgbHMubGVuZ3RoID09PSAwID8gbCA6IEwobCwgLi4ubHMpKVxuICB9XG4gIHZpZXcobCwgLi4ubHMpIHtcbiAgICByZXR1cm4gdGhpcy5sZW5zKGwsIC4uLmxzKVxuICB9XG4gIF9tYXliZUVtaXRWYWx1ZShuZXh0KSB7XG4gICAgY29uc3QgcHJldiA9IHRoaXMuX2N1cnJlbnRFdmVudFxuICAgIGlmICghcHJldiB8fCAhUi5lcXVhbHMocHJldi52YWx1ZSwgbmV4dCkpXG4gICAgICB0aGlzLl9lbWl0VmFsdWUobmV4dClcbiAgfVxufVxuXG4vL1xuXG5leHBvcnQgY2xhc3MgTGVuc2VkQXRvbSBleHRlbmRzIEFic3RyYWN0TXV0YWJsZSB7XG4gIGNvbnN0cnVjdG9yKHNvdXJjZSwgbGVucykge1xuICAgIHN1cGVyKClcbiAgICB0aGlzLl9zb3VyY2UgPSBzb3VyY2VcbiAgICB0aGlzLl9sZW5zID0gbGVuc1xuICAgIHRoaXMuXyRoYW5kbGVWYWx1ZSA9IG51bGxcbiAgfVxuICBnZXQoKSB7XG4gICAgcmV0dXJuIEwudmlldyh0aGlzLl9sZW5zLCB0aGlzLl9zb3VyY2UuZ2V0KCkpXG4gIH1cbiAgbW9kaWZ5KGZuKSB7XG4gICAgdGhpcy5fc291cmNlLm1vZGlmeShMLm92ZXIodGhpcy5fbGVucywgZm4pKVxuICB9XG4gIF9oYW5kbGVWYWx1ZShjb250ZXh0KSB7XG4gICAgdGhpcy5fbWF5YmVFbWl0VmFsdWUoTC52aWV3KHRoaXMuX2xlbnMsIGNvbnRleHQpKVxuICB9XG4gIF9vbkFjdGl2YXRpb24oKSB7XG4gICAgY29uc3QgaGFuZGxlVmFsdWUgPSB2YWx1ZSA9PiB0aGlzLl9oYW5kbGVWYWx1ZSh2YWx1ZSlcbiAgICB0aGlzLl8kaGFuZGxlVmFsdWUgPSBoYW5kbGVWYWx1ZVxuICAgIHRoaXMuX3NvdXJjZS5vblZhbHVlKGhhbmRsZVZhbHVlKVxuICB9XG4gIF9vbkRlYWN0aXZhdGlvbigpIHtcbiAgICB0aGlzLl9zb3VyY2Uub2ZmVmFsdWUodGhpcy5fJGhhbmRsZVZhbHVlKVxuICAgIHRoaXMuXyRoYW5kbGVWYWx1ZSA9IG51bGxcbiAgICB0aGlzLl9jdXJyZW50RXZlbnQgPSBudWxsXG4gIH1cbn1cblxuLy9cblxuZXhwb3J0IGNsYXNzIEF0b20gZXh0ZW5kcyBBYnN0cmFjdE11dGFibGUge1xuICBjb25zdHJ1Y3Rvcih2YWx1ZSkge1xuICAgIHN1cGVyKClcbiAgICB0aGlzLl9lbWl0VmFsdWUodmFsdWUpXG4gIH1cbiAgZ2V0KCkge1xuICAgIHJldHVybiB0aGlzLl9jdXJyZW50RXZlbnQudmFsdWVcbiAgfVxuICBtb2RpZnkoZm4pIHtcbiAgICB0aGlzLl9tYXliZUVtaXRWYWx1ZShmbih0aGlzLmdldCgpKSlcbiAgfVxufVxuXG4vL1xuXG5leHBvcnQgZGVmYXVsdCB2YWx1ZSA9PiBuZXcgQXRvbSh2YWx1ZSlcbiJdfQ==
+	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9rZWZpci5hdG9tLmpzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7OztBQUFBOztJQUFZOztBQUNaOztJQUFZOztBQUNaOztJQUFlOzs7Ozs7Ozs7Ozs7SUFJRjs7Ozs7Ozs7Ozs7d0JBQ1AsT0FBTztBQUNULFdBQUssTUFBTCxDQUFZO2VBQU07T0FBTixDQUFaLENBRFM7Ozs7MkJBR0M7QUFDVixhQUFPLElBQUksVUFBSixDQUFlLElBQWYsRUFBcUIscUNBQXJCLENBQVAsQ0FEVTs7OzsyQkFHQTtBQUNWLGFBQU8sSUFBSSxVQUFKLENBQWUsSUFBZixFQUFxQixxQ0FBckIsQ0FBUCxDQURVOzs7O29DQUdJLE1BQU07QUFDcEIsVUFBTSxPQUFPLEtBQUssYUFBTCxDQURPO0FBRXBCLFVBQUksQ0FBQyxJQUFELElBQVMsQ0FBQyxFQUFFLE1BQUYsQ0FBUyxLQUFLLEtBQUwsRUFBWSxJQUFyQixDQUFELEVBQ1gsS0FBSyxVQUFMLENBQWdCLElBQWhCLEVBREY7Ozs7U0FaUztFQUF3QixNQUFNLFFBQU47Ozs7SUFtQnhCOzs7QUFDWCxXQURXLFVBQ1gsQ0FBWSxNQUFaLEVBQW9CLElBQXBCLEVBQTBCOzBCQURmLFlBQ2U7O3dFQURmLHdCQUNlOztBQUV4QixXQUFLLE9BQUwsR0FBZSxNQUFmLENBRndCO0FBR3hCLFdBQUssS0FBTCxHQUFhLElBQWIsQ0FId0I7QUFJeEIsV0FBSyxhQUFMLEdBQXFCLElBQXJCLENBSndCOztHQUExQjs7ZUFEVzs7MEJBT0w7QUFDSixhQUFPLEVBQUUsR0FBRixDQUFNLEtBQUssS0FBTCxFQUFZLEtBQUssT0FBTCxDQUFhLEdBQWIsRUFBbEIsQ0FBUCxDQURJOzs7OzJCQUdDLElBQUk7QUFDVCxXQUFLLE9BQUwsQ0FBYSxNQUFiLENBQW9CLEVBQUUsTUFBRixDQUFTLEtBQUssS0FBTCxFQUFZLEVBQXJCLENBQXBCLEVBRFM7Ozs7aUNBR0UsU0FBUztBQUNwQixXQUFLLGVBQUwsQ0FBcUIsRUFBRSxHQUFGLENBQU0sS0FBSyxLQUFMLEVBQVksT0FBbEIsQ0FBckIsRUFEb0I7Ozs7b0NBR047OztBQUNkLFVBQU0sY0FBYyxTQUFkLFdBQWM7ZUFBUyxPQUFLLFlBQUwsQ0FBa0IsS0FBbEI7T0FBVCxDQUROO0FBRWQsV0FBSyxhQUFMLEdBQXFCLFdBQXJCLENBRmM7QUFHZCxXQUFLLE9BQUwsQ0FBYSxPQUFiLENBQXFCLFdBQXJCLEVBSGM7Ozs7c0NBS0U7QUFDaEIsV0FBSyxPQUFMLENBQWEsUUFBYixDQUFzQixLQUFLLGFBQUwsQ0FBdEIsQ0FEZ0I7QUFFaEIsV0FBSyxhQUFMLEdBQXFCLElBQXJCLENBRmdCO0FBR2hCLFdBQUssYUFBTCxHQUFxQixJQUFyQixDQUhnQjs7OztTQXJCUDtFQUFtQjs7OztJQThCbkI7OztBQUNYLFdBRFcsSUFDWCxDQUFZLEtBQVosRUFBbUI7MEJBRFIsTUFDUTs7d0VBRFIsa0JBQ1E7O0FBRWpCLFdBQUssVUFBTCxDQUFnQixLQUFoQixFQUZpQjs7R0FBbkI7O2VBRFc7OzBCQUtMO0FBQ0osYUFBTyxLQUFLLGFBQUwsQ0FBbUIsS0FBbkIsQ0FESDs7OzsyQkFHQyxJQUFJO0FBQ1QsV0FBSyxlQUFMLENBQXFCLEdBQUcsS0FBSyxHQUFMLEVBQUgsQ0FBckIsRUFEUzs7OztTQVJBO0VBQWE7Ozs7a0JBZVg7U0FBUyxJQUFJLElBQUosQ0FBUyxLQUFUO0NBQVQiLCJmaWxlIjoia2VmaXIuYXRvbS5qcyIsInNvdXJjZXNDb250ZW50IjpbImltcG9ydCAqIGFzIEtlZmlyIGZyb20gXCJrZWZpclwiXG5pbXBvcnQgKiBhcyBSICAgICBmcm9tIFwicmFtZGFcIlxuaW1wb3J0IFAsICogYXMgTCAgZnJvbSBcInBhcnRpYWwubGVuc2VzXCJcblxuLy9cblxuZXhwb3J0IGNsYXNzIEFic3RyYWN0TXV0YWJsZSBleHRlbmRzIEtlZmlyLlByb3BlcnR5IHtcbiAgc2V0KHZhbHVlKSB7XG4gICAgdGhpcy5tb2RpZnkoKCkgPT4gdmFsdWUpXG4gIH1cbiAgbGVucyguLi5scykge1xuICAgIHJldHVybiBuZXcgTGVuc2VkQXRvbSh0aGlzLCBQKC4uLmxzKSlcbiAgfVxuICB2aWV3KC4uLmxzKSB7XG4gICAgcmV0dXJuIG5ldyBMZW5zZWRBdG9tKHRoaXMsIFAoLi4ubHMpKVxuICB9XG4gIF9tYXliZUVtaXRWYWx1ZShuZXh0KSB7XG4gICAgY29uc3QgcHJldiA9IHRoaXMuX2N1cnJlbnRFdmVudFxuICAgIGlmICghcHJldiB8fCAhUi5lcXVhbHMocHJldi52YWx1ZSwgbmV4dCkpXG4gICAgICB0aGlzLl9lbWl0VmFsdWUobmV4dClcbiAgfVxufVxuXG4vL1xuXG5leHBvcnQgY2xhc3MgTGVuc2VkQXRvbSBleHRlbmRzIEFic3RyYWN0TXV0YWJsZSB7XG4gIGNvbnN0cnVjdG9yKHNvdXJjZSwgbGVucykge1xuICAgIHN1cGVyKClcbiAgICB0aGlzLl9zb3VyY2UgPSBzb3VyY2VcbiAgICB0aGlzLl9sZW5zID0gbGVuc1xuICAgIHRoaXMuXyRoYW5kbGVWYWx1ZSA9IG51bGxcbiAgfVxuICBnZXQoKSB7XG4gICAgcmV0dXJuIEwuZ2V0KHRoaXMuX2xlbnMsIHRoaXMuX3NvdXJjZS5nZXQoKSlcbiAgfVxuICBtb2RpZnkoZm4pIHtcbiAgICB0aGlzLl9zb3VyY2UubW9kaWZ5KEwubW9kaWZ5KHRoaXMuX2xlbnMsIGZuKSlcbiAgfVxuICBfaGFuZGxlVmFsdWUoY29udGV4dCkge1xuICAgIHRoaXMuX21heWJlRW1pdFZhbHVlKEwuZ2V0KHRoaXMuX2xlbnMsIGNvbnRleHQpKVxuICB9XG4gIF9vbkFjdGl2YXRpb24oKSB7XG4gICAgY29uc3QgaGFuZGxlVmFsdWUgPSB2YWx1ZSA9PiB0aGlzLl9oYW5kbGVWYWx1ZSh2YWx1ZSlcbiAgICB0aGlzLl8kaGFuZGxlVmFsdWUgPSBoYW5kbGVWYWx1ZVxuICAgIHRoaXMuX3NvdXJjZS5vblZhbHVlKGhhbmRsZVZhbHVlKVxuICB9XG4gIF9vbkRlYWN0aXZhdGlvbigpIHtcbiAgICB0aGlzLl9zb3VyY2Uub2ZmVmFsdWUodGhpcy5fJGhhbmRsZVZhbHVlKVxuICAgIHRoaXMuXyRoYW5kbGVWYWx1ZSA9IG51bGxcbiAgICB0aGlzLl9jdXJyZW50RXZlbnQgPSBudWxsXG4gIH1cbn1cblxuLy9cblxuZXhwb3J0IGNsYXNzIEF0b20gZXh0ZW5kcyBBYnN0cmFjdE11dGFibGUge1xuICBjb25zdHJ1Y3Rvcih2YWx1ZSkge1xuICAgIHN1cGVyKClcbiAgICB0aGlzLl9lbWl0VmFsdWUodmFsdWUpXG4gIH1cbiAgZ2V0KCkge1xuICAgIHJldHVybiB0aGlzLl9jdXJyZW50RXZlbnQudmFsdWVcbiAgfVxuICBtb2RpZnkoZm4pIHtcbiAgICB0aGlzLl9tYXliZUVtaXRWYWx1ZShmbih0aGlzLmdldCgpKSlcbiAgfVxufVxuXG4vL1xuXG5leHBvcnQgZGVmYXVsdCB2YWx1ZSA9PiBuZXcgQXRvbSh2YWx1ZSlcbiJdfQ==
 
 /***/ },
 
-/***/ 332:
+/***/ 333:
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
 	
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.lift = undefined;
+	exports.sequence = exports.log = exports.props = exports.identity = exports.pick = exports.augment = exports.filter = exports.append = exports.index = exports.findWith = exports.find = exports.prop = exports.normalize = exports.define = exports.required = exports.defaults = exports.replace = exports.choice = exports.orElse = exports.nothing = exports.choose = exports.just = exports.chain = exports.get = exports.set = exports.modify = exports.lens = exports.removeAll = exports.remove = exports.compose = exports.toRamda = exports.fromRamda = undefined;
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	var _ramda = __webpack_require__(48);
 	
-	var _ramda = __webpack_require__(49);
+	var R = _interopRequireWildcard(_ramda);
 	
-	var _ramda2 = _interopRequireDefault(_ramda);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 	
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 	
@@ -26997,9 +27454,72 @@ webpackJsonp([2],{
 	
 	//
 	
+	function Identity(value) {
+	  this.value = value;
+	}
+	var Ident = function Ident(x) {
+	  return new Identity(x);
+	};
+	Identity.prototype.map = function (x2y) {
+	  return new Identity(x2y(this.value));
+	};
+	Identity.prototype.of = Ident;
+	Identity.prototype.ap = function (x) {
+	  return new Identity(this.value(x.value));
+	};
+	
+	//
+	
+	function Constant(value) {
+	  this.value = value;
+	}
+	var Const = function Const(x) {
+	  return new Constant(x);
+	};
+	Constant.prototype.map = function () {
+	  return this;
+	};
+	Constant.prototype.of = Const;
+	
+	//
+	
+	var warned = {};
+	
+	var warn = function warn(message) {
+	  if (!(message in warned)) {
+	    warned[message] = message;
+	    console.warn("partial.lenses:", message);
+	  }
+	};
+	
+	//
+	
+	var id = function id(x) {
+	  return x;
+	};
+	var snd = function snd(_, c) {
+	  return c;
+	};
+	
+	//
+	
+	var check = function check(expected, predicate) {
+	  return function (x) {
+	    if (predicate(x)) return x;else throw new Error("Expected " + expected + ", but got " + x + ".");
+	  };
+	};
+	
+	var assert = process.env.NODE_ENV === "production" ? function () {
+	  return id;
+	} : check;
+	
+	//
+	
+	var empty = {};
+	
 	var deleteKey = function deleteKey(k, o) {
 	  if (o === undefined || !(k in o)) return o;
-	  var r = undefined;
+	  var r = void 0;
 	  for (var p in o) {
 	    if (p !== k) {
 	      if (undefined === r) r = {};
@@ -27011,7 +27531,7 @@ webpackJsonp([2],{
 	
 	var setKey = function setKey(k, v, o) {
 	  if (o === undefined) return _defineProperty({}, k, v);
-	  if (k in o && _ramda2.default.equals(v, o[k])) return o;
+	  if (k in o && R.equals(v, o[k])) return o;
 	  var r = _defineProperty({}, k, v);
 	  for (var p in o) {
 	    if (p !== k) r[p] = o[p];
@@ -27034,130 +27554,182 @@ webpackJsonp([2],{
 	
 	//
 	
-	var conserve = function conserve(c0, c1) {
-	  return _ramda2.default.equals(c0, c1) ? c0 : c1;
+	var conserve = function conserve(c1, c0) {
+	  return R.equals(c1, c0) ? c0 : c1;
 	};
 	
 	var toConserve = function toConserve(f) {
 	  return function (y, c0) {
-	    return conserve(c0, f(y, c0));
+	    return conserve(f(y, c0), c0);
 	  };
 	};
 	
 	//
 	
-	var lift = exports.lift = function lift(l) {
-	  switch (typeof l === "undefined" ? "undefined" : _typeof(l)) {
-	    case "string":
-	      return L.prop(l);
-	    case "number":
-	      return L.index(l);
-	    default:
-	      return l;
-	  }
+	var seemsLens = function seemsLens(x) {
+	  return typeof x === "function" && x.length === 1;
 	};
 	
-	var L = function L(l) {
-	  for (var _len = arguments.length, ls = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	    ls[_key - 1] = arguments[_key];
-	  }
+	var fromRamda = exports.fromRamda = assert("a lens", seemsLens);
 	
-	  return ls.length === 0 ? lift(l) : _ramda2.default.compose.apply(_ramda2.default, [lift(l)].concat(_toConsumableArray(ls.map(lift))));
+	var toRamda = exports.toRamda = function toRamda(l) {
+	  if (isProp(l)) return toRamdaProp(l);
+	  if (isIndex(l)) return toRamdaIndex(l);
+	  return fromRamda(l);
 	};
 	
-	L.compose = L;
-	L.delete = _ramda2.default.curry(function (l, s) {
-	  return _ramda2.default.set(lift(l), undefined, s);
+	var compose = exports.compose = function compose() {
+	  for (var _len = arguments.length, ls = Array(_len), _key = 0; _key < _len; _key++) {
+	    ls[_key] = arguments[_key];
+	  }
+	
+	  return ls.length === 0 ? identity : ls.length === 1 ? ls[0] : R.compose.apply(R, _toConsumableArray(ls.map(toRamda)));
+	};
+	
+	var remove = exports.remove = R.curry(function (l, s) {
+	  return setI(toRamda(l), undefined, s);
 	});
-	L.deleteAll = _ramda2.default.curry(function (lens, data) {
-	  while (L.view(lens, data) !== undefined) {
-	    data = L.delete(lens, data);
+	
+	var removeAll = exports.removeAll = R.curry(function (lens, data) {
+	  warn("`removeAll` is deprecated and will be removed in next major version --- use a different approach.");
+	  while (get(lens, data) !== undefined) {
+	    data = remove(lens, data);
 	  }return data;
 	});
-	L.lens = _ramda2.default.lens;
-	L.over = _ramda2.default.curry(function (l, x2x, s) {
-	  return _ramda2.default.over(lift(l), x2x, s);
-	});
-	L.set = _ramda2.default.curry(function (l, x, s) {
-	  return _ramda2.default.set(lift(l), x, s);
-	});
-	L.view = _ramda2.default.curry(function (l, s) {
-	  return _ramda2.default.view(lift(l), s);
-	});
 	
-	L.choose = function (x2yL) {
-	  return function (toFunctor) {
+	var setI = function setI(l, x, s) {
+	  return l(function () {
+	    return Ident(x);
+	  })(s).value;
+	};
+	var getI = function getI(l, s) {
+	  return l(Const)(s).value;
+	};
+	var modifyI = function modifyI(l, x2x, s) {
+	  return l(function (y) {
+	    return Ident(x2x(y));
+	  })(s).value;
+	};
+	var lensI = function lensI(getter, setter) {
+	  return function (toFn) {
 	    return function (target) {
-	      var l = lift(x2yL(target));
-	      return _ramda2.default.map(function (focus) {
-	        return _ramda2.default.set(l, focus, target);
-	      }, toFunctor(_ramda2.default.view(l, target)));
+	      return toFn(getter(target)).map(function (focus) {
+	        return setter(focus, target);
+	      });
 	    };
 	  };
 	};
 	
-	L.firstOf = function (l) {
-	  for (var _len2 = arguments.length, ls = Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
-	    ls[_key2 - 1] = arguments[_key2];
-	  }
+	var lens = exports.lens = R.curry(lensI);
+	var modify = exports.modify = R.curry(function (l, x2x, s) {
+	  return modifyI(toRamda(l), x2x, s);
+	});
+	var set = exports.set = R.curry(function (l, x, s) {
+	  return setI(toRamda(l), x, s);
+	});
+	var get = exports.get = R.curry(function (l, s) {
+	  return getI(toRamda(l), s);
+	});
 	
-	  return L.choose(function (x) {
-	    var lls = [l].concat(ls);
-	    return lls[Math.max(0, lls.findIndex(function (l) {
-	      return L.view(l, x) !== undefined;
-	    }))];
-	  });
-	};
-	
-	L.replace = _ramda2.default.curry(function (inn, out) {
-	  return _ramda2.default.lens(function (x) {
-	    return _ramda2.default.equals(x, inn) ? out : x;
-	  }, toConserve(function (y) {
-	    return _ramda2.default.equals(y, out) ? inn : y;
+	var chain = exports.chain = R.curry(function (x2yL, xL) {
+	  return compose(xL, choose(function (xO) {
+	    return xO === undefined ? nothing : x2yL(xO);
 	  }));
 	});
 	
-	L.default = L.replace(undefined);
-	L.required = function (inn) {
-	  return L.replace(inn, undefined);
-	};
-	L.define = function (v) {
-	  return _ramda2.default.compose(L.required(v), L.default(v));
+	var just = exports.just = function just(x) {
+	  return lensI(R.always(x), snd);
 	};
 	
-	L.normalize = function (transform) {
-	  return _ramda2.default.lens(toPartial(transform), toConserve(toPartial(transform)));
+	var choose = exports.choose = function choose(x2yL) {
+	  return function (toFunctor) {
+	    return function (target) {
+	      var l = toRamda(x2yL(target));
+	      return R.map(function (focus) {
+	        return setI(l, focus, target);
+	      }, toFunctor(getI(l, target)));
+	    };
+	  };
 	};
 	
-	L.prop = function (k) {
-	  return _ramda2.default.lens(function (o) {
+	var nothing = exports.nothing = lensI(snd, snd);
+	
+	var orElse = exports.orElse = R.curry(function (d, l) {
+	  return choose(function (x) {
+	    return getI(toRamda(l), x) !== undefined ? l : d;
+	  });
+	});
+	
+	var choice = exports.choice = function choice() {
+	  for (var _len2 = arguments.length, ls = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	    ls[_key2] = arguments[_key2];
+	  }
+	
+	  return choose(function (x) {
+	    var i = ls.findIndex(function (l) {
+	      return getI(toRamda(l), x) !== undefined;
+	    });
+	    return 0 <= i ? ls[i] : nothing;
+	  });
+	};
+	
+	var replace = exports.replace = R.curry(function (inn, out) {
+	  return lensI(function (x) {
+	    return R.equals(x, inn) ? out : x;
+	  }, toConserve(function (y) {
+	    return R.equals(y, out) ? inn : y;
+	  }));
+	});
+	
+	var defaults = exports.defaults = replace(undefined);
+	var required = exports.required = function required(inn) {
+	  return replace(inn, undefined);
+	};
+	var define = exports.define = function define(v) {
+	  return R.compose(required(v), defaults(v));
+	};
+	
+	var normalize = exports.normalize = function normalize(transform) {
+	  return lensI(toPartial(transform), toConserve(toPartial(transform)));
+	};
+	
+	var isProp = function isProp(x) {
+	  return typeof x === "string";
+	};
+	
+	var prop = exports.prop = assert("a string", isProp);
+	
+	var toRamdaProp = function toRamdaProp(k) {
+	  return lensI(function (o) {
 	    return o && o[k];
 	  }, function (v, o) {
 	    return v === undefined ? deleteKey(k, o) : setKey(k, v, o);
 	  });
 	};
 	
-	L.find = function (predicate) {
-	  return L.choose(function (xs) {
-	    if (xs === undefined) return L.append;
+	var find = exports.find = function find(predicate) {
+	  return choose(function (xs) {
+	    if (xs === undefined) return append;
 	    var i = xs.findIndex(predicate);
-	    return i < 0 ? L.append : i;
+	    return i < 0 ? append : i;
 	  });
 	};
 	
-	L.findWith = function (l) {
-	  for (var _len3 = arguments.length, ls = Array(_len3 > 1 ? _len3 - 1 : 0), _key3 = 1; _key3 < _len3; _key3++) {
-	    ls[_key3 - 1] = arguments[_key3];
-	  }
-	
-	  var lls = L.apply(undefined, [l].concat(ls));
-	  return L(L.find(function (x) {
-	    return L.view(lls, x) !== undefined;
+	var findWith = exports.findWith = function findWith() {
+	  var lls = toRamda(compose.apply(undefined, arguments));
+	  return compose(find(function (x) {
+	    return getI(lls, x) !== undefined;
 	  }), lls);
 	};
 	
-	L.index = function (i) {
-	  return _ramda2.default.lens(function (xs) {
+	var isIndex = function isIndex(x) {
+	  return Number.isInteger(x) && 0 <= x;
+	};
+	
+	var index = exports.index = assert("a non-negative integer", isIndex);
+	
+	var toRamdaIndex = function toRamdaIndex(i) {
+	  return lensI(function (xs) {
 	    return xs && xs[i];
 	  }, function (x, xs) {
 	    if (x === undefined) {
@@ -27167,33 +27739,33 @@ webpackJsonp([2],{
 	    } else {
 	      if (xs === undefined) return Array(i).concat([x]);
 	      if (xs.length <= i) return xs.concat(Array(i - xs.length), [x]);
-	      if (_ramda2.default.equals(x, xs[i])) return xs;
+	      if (R.equals(x, xs[i])) return xs;
 	      return xs.slice(0, i).concat([x], xs.slice(i + 1));
 	    }
 	  });
 	};
 	
-	L.append = _ramda2.default.lens(function () {}, function (x, xs) {
+	var append = exports.append = lensI(snd, function (x, xs) {
 	  return x === undefined ? xs : xs === undefined ? [x] : xs.concat([x]);
 	});
 	
-	L.filter = function (p) {
-	  return _ramda2.default.lens(function (xs) {
+	var filter = exports.filter = function filter(p) {
+	  return lensI(function (xs) {
 	    return xs && xs.filter(p);
 	  }, function (ys, xs) {
-	    return conserve(xs, dropped(_ramda2.default.concat(ys || [], (xs || []).filter(_ramda2.default.complement(p)))));
+	    return conserve(dropped(R.concat(ys || [], (xs || []).filter(R.complement(p)))), xs);
 	  });
 	};
 	
-	L.augment = function (template) {
-	  return _ramda2.default.lens(toPartial(function (x) {
+	var augment = exports.augment = function augment(template) {
+	  return lensI(toPartial(function (x) {
 	    var z = _extends({}, x);
 	    for (var k in template) {
 	      z[k] = template[k](x);
 	    }return z;
 	  }), toConserve(function (y, c) {
 	    if (y === undefined) return undefined;
-	    var z = undefined;
+	    var z = void 0;
 	    var set = function set(k, v) {
 	      if (undefined === z) z = {};
 	      z[k] = v;
@@ -27205,21 +27777,82 @@ webpackJsonp([2],{
 	  }));
 	};
 	
-	exports.default = L;
-	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9wYXJ0aWFsLmxlbnNlcy5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7Ozs7Ozs7Ozs7Ozs7OztBQUlBLElBQU0sWUFBWSxTQUFaLFNBQVksQ0FBQyxDQUFELEVBQUksQ0FBSixFQUFVO0FBQzFCLE1BQUksTUFBTSxTQUFOLElBQW1CLEVBQUUsS0FBSyxDQUFMLENBQUYsRUFDckIsT0FBTyxDQUFQLENBREY7QUFFQSxNQUFJLGFBQUosQ0FIMEI7QUFJMUIsT0FBSyxJQUFNLENBQU4sSUFBVyxDQUFoQixFQUFtQjtBQUNqQixRQUFJLE1BQU0sQ0FBTixFQUFTO0FBQ1gsVUFBSSxjQUFjLENBQWQsRUFDRixJQUFJLEVBQUosQ0FERjtBQUVBLFFBQUUsQ0FBRixJQUFPLEVBQUUsQ0FBRixDQUFQLENBSFc7S0FBYjtHQURGO0FBT0EsU0FBTyxDQUFQLENBWDBCO0NBQVY7O0FBY2xCLElBQU0sU0FBUyxTQUFULE1BQVMsQ0FBQyxDQUFELEVBQUksQ0FBSixFQUFPLENBQVAsRUFBYTtBQUMxQixNQUFJLE1BQU0sU0FBTixFQUNGLDJCQUFTLEdBQUksRUFBYixDQURGO0FBRUEsTUFBSSxLQUFLLENBQUwsSUFBVSxnQkFBRSxNQUFGLENBQVMsQ0FBVCxFQUFZLEVBQUUsQ0FBRixDQUFaLENBQVYsRUFDRixPQUFPLENBQVAsQ0FERjtBQUVBLE1BQU0sd0JBQU0sR0FBSSxFQUFWLENBTG9CO0FBTTFCLE9BQUssSUFBTSxDQUFOLElBQVcsQ0FBaEI7QUFDRSxRQUFJLE1BQU0sQ0FBTixFQUNGLEVBQUUsQ0FBRixJQUFPLEVBQUUsQ0FBRixDQUFQLENBREY7R0FERixPQUdPLENBQVAsQ0FUMEI7Q0FBYjs7OztBQWNmLElBQU0sVUFBVSxTQUFWLE9BQVU7U0FBTSxPQUFPLElBQVAsQ0FBWSxFQUFaLEVBQWdCLE1BQWhCLEtBQTJCLENBQTNCLEdBQStCLFNBQS9CLEdBQTJDLEVBQTNDO0NBQU47Ozs7QUFJaEIsSUFBTSxZQUFZLFNBQVosU0FB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QUFFQSxRQUFJLGFBQUosQ0FIbUI7QUFJbkIsUUFBTSxNQUFNLFNBQU4sR0FBTSxDQUFDLENBQUQsRUFBSSxDQUFKLEVBQVU7QUFDcEIsVUFBSSxjQUFjLENBQWQsRUFDRixJQUFJLEVBQUosQ0FERjtBQUVBLFFBQUUsQ0FBRixJQUFPLENBQVAsQ0FIb0I7S0FBVixDQUpPO0FBU25CLFNBQUssSUFBTSxDQUFOLElBQVcsQ0FBaEIsRUFBbUI7QUFDakIsVUFBSSxFQUFFLEtBQUssUUFBTCxDQUFGLEVBQ0YsSUFBSSxDQUFKLEVBQU8sRUFBRSxDQUFGLENBQVAsRUFERixLQUdFLElBQUksS0FBSyxDQUFMLEVBQ0YsSUFBSSxDQUFKLEVBQU8sRUFBRSxDQUFGLENBQVAsRUFERjtLQUpKO0FBT0EsV0FBTyxDQUFQLENBaEJtQjtHQUFWLENBUFc7Q0FBWjs7a0JBMEJHIiwiZmlsZSI6InBhcnRpYWwubGVuc2VzLmpzIiwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IFIgZnJvbSBcInJhbWRhXCJcblxuLy9cblxuY29uc3QgZGVsZXRlS2V5ID0gKGssIG8pID0+IHtcbiAgaWYgKG8gPT09IHVuZGVmaW5lZCB8fCAhKGsgaW4gbykpXG4gICAgcmV0dXJuIG9cbiAgbGV0IHJcbiAgZm9yIChjb25zdCBwIGluIG8pIHtcbiAgICBpZiAocCAhPT0gaykge1xuICAgICAgaWYgKHVuZGVmaW5lZCA9PT0gcilcbiAgICAgICAgciA9IHt9XG4gICAgICByW3BdID0gb1twXVxuICAgIH1cbiAgfVxuICByZXR1cm4gclxufVxuXG5jb25zdCBzZXRLZXkgPSAoaywgdiwgbykgPT4ge1xuICBpZiAobyA9PT0gdW5kZWZpbmVkKVxuICAgIHJldHVybiB7W2tdOiB2fVxuICBpZiAoayBpbiBvICYmIFIuZXF1YWxzKHYsIG9ba10pKVxuICAgIHJldHVybiBvXG4gIGNvbnN0IHIgPSB7W2tdOiB2fVxuICBmb3IgKGNvbnN0IHAgaW4gbylcbiAgICBpZiAocCAhPT0gaylcbiAgICAgIHJbcF0gPSBvW3BdXG4gIHJldHVybiByXG59XG5cbi8vXG5cbmNvbnN0IGRyb3BwZWQgPSB4cyA9PiBPYmplY3Qua2V5cyh4cykubGVuZ3RoID09PSAwID8gdW5kZWZpbmVkIDogeHNcblxuLy9cblxuY29uc3QgdG9QYXJ0aWFsID0gdHJhbnNmb3JtID0+IHggPT4gdW5kZWZpbmVkID09PSB4ID8geCA6IHRyYW5zZm9ybSh4KVxuXG4vL1xuXG5jb25zdCBjb25zZXJ2ZSA9IChjMCwgYzEpID0+IFIuZXF1YWxzKGMwLCBjMSkgPyBjMCA6IGMxXG5cbmNvbnN0IHRvQ29uc2VydmUgPSBmID0+ICh5LCBjMCkgPT4gY29uc2VydmUoYzAsIGYoeSwgYzApKVxuXG4vL1xuXG5leHBvcnQgY29uc3QgbGlmdCA9IGwgPT4ge1xuICBzd2l0Y2ggKHR5cGVvZiBsKSB7XG4gIGNhc2UgXCJzdHJpbmdcIjogcmV0dXJuIEwucHJvcChsKVxuICBjYXNlIFwibnVtYmVyXCI6IHJldHVybiBMLmluZGV4KGwpXG4gIGRlZmF1bHQ6ICAgICAgIHJldHVybiBsXG4gIH1cbn1cblxuY29uc3QgTCA9IChsLCAuLi5scykgPT5cbiAgbHMubGVuZ3RoID09PSAwID8gbGlmdChsKSA6IFIuY29tcG9zZShsaWZ0KGwpLCAuLi5scy5tYXAobGlmdCkpXG5cbkwuY29tcG9zZSA9IExcbkwuZGVsZXRlID0gUi5jdXJyeSgobCwgcykgPT4gUi5zZXQobGlmdChsKSwgdW5kZWZpbmVkLCBzKSlcbkwuZGVsZXRlQWxsID0gUi5jdXJyeSgobGVucywgZGF0YSkgPT4ge1xuICB3aGlsZSAoTC52aWV3KGxlbnMsIGRhdGEpICE9PSB1bmRlZmluZWQpXG4gICAgZGF0YSA9IEwuZGVsZXRlKGxlbnMsIGRhdGEpXG4gIHJldHVybiBkYXRhXG59KVxuTC5sZW5zID0gUi5sZW5zXG5MLm92ZXIgPSBSLmN1cnJ5KChsLCB4MngsIHMpID0+IFIub3ZlcihsaWZ0KGwpLCB4MngsIHMpKVxuTC5zZXQgPSBSLmN1cnJ5KChsLCB4LCBzKSA9PiBSLnNldChsaWZ0KGwpLCB4LCBzKSlcbkwudmlldyA9IFIuY3VycnkoKGwsIHMpID0+IFIudmlldyhsaWZ0KGwpLCBzKSlcblxuTC5jaG9vc2UgPSB4MnlMID0+IHRvRnVuY3RvciA9PiB0YXJnZXQgPT4ge1xuICBjb25zdCBsID0gbGlmdCh4MnlMKHRhcmdldCkpXG4gIHJldHVybiBSLm1hcChmb2N1cyA9PiBSLnNldChsLCBmb2N1cywgdGFyZ2V0KSwgdG9GdW5jdG9yKFIudmlldyhsLCB0YXJnZXQpKSlcbn1cblxuTC5maXJzdE9mID0gKGwsIC4uLmxzKSA9PiBMLmNob29zZSh4ID0+IHtcbiAgY29uc3QgbGxzID0gW2wsIC4uLmxzXVxuICByZXR1cm4gbGxzW01hdGgubWF4KDAsIGxscy5maW5kSW5kZXgobCA9PiBMLnZpZXcobCwgeCkgIT09IHVuZGVmaW5lZCkpXVxufSlcblxuTC5yZXBsYWNlID0gUi5jdXJyeSgoaW5uLCBvdXQpID0+XG4gIFIubGVucyh4ID0+IFIuZXF1YWxzKHgsIGlubikgPyBvdXQgOiB4LFxuICAgICAgICAgdG9Db25zZXJ2ZSh5ID0+IFIuZXF1YWxzKHksIG91dCkgPyBpbm4gOiB5KSkpXG5cbkwuZGVmYXVsdCA9IEwucmVwbGFjZSh1bmRlZmluZWQpXG5MLnJlcXVpcmVkID0gaW5uID0+IEwucmVwbGFjZShpbm4sIHVuZGVmaW5lZClcbkwuZGVmaW5lID0gdiA9PiBSLmNvbXBvc2UoTC5yZXF1aXJlZCh2KSwgTC5kZWZhdWx0KHYpKVxuXG5MLm5vcm1hbGl6ZSA9IHRyYW5zZm9ybSA9PlxuICBSLmxlbnModG9QYXJ0aWFsKHRyYW5zZm9ybSksIHRvQ29uc2VydmUodG9QYXJ0aWFsKHRyYW5zZm9ybSkpKVxuXG5MLnByb3AgPSBrID0+XG4gIFIubGVucyhvID0+IG8gJiYgb1trXSxcbiAgICAgICAgICh2LCBvKSA9PiB2ID09PSB1bmRlZmluZWQgPyBkZWxldGVLZXkoaywgbykgOiBzZXRLZXkoaywgdiwgbykpXG5cbkwuZmluZCA9IHByZWRpY2F0ZSA9PiBMLmNob29zZSh4cyA9PiB7XG4gIGlmICh4cyA9PT0gdW5kZWZpbmVkKVxuICAgIHJldHVybiBMLmFwcGVuZFxuICBjb25zdCBpID0geHMuZmluZEluZGV4KHByZWRpY2F0ZSlcbiAgcmV0dXJuIGkgPCAwID8gTC5hcHBlbmQgOiBpXG59KVxuXG5MLmZpbmRXaXRoID0gKGwsIC4uLmxzKSA9PiB7XG4gIGNvbnN0IGxscyA9IEwobCwgLi4ubHMpXG4gIHJldHVybiBMKEwuZmluZCh4ID0+IEwudmlldyhsbHMsIHgpICE9PSB1bmRlZmluZWQpLCBsbHMpXG59XG5cbkwuaW5kZXggPSBpID0+IFIubGVucyh4cyA9PiB4cyAmJiB4c1tpXSwgKHgsIHhzKSA9PiB7XG4gIGlmICh4ID09PSB1bmRlZmluZWQpIHtcbiAgICBpZiAoeHMgPT09IHVuZGVmaW5lZClcbiAgICAgIHJldHVybiB1bmRlZmluZWRcbiAgICBpZiAoaSA8IHhzLmxlbmd0aClcbiAgICAgIHJldHVybiBkcm9wcGVkKHhzLnNsaWNlKDAsIGkpLmNvbmNhdCh4cy5zbGljZShpKzEpKSlcbiAgICByZXR1cm4geHNcbiAgfSBlbHNlIHtcbiAgICBpZiAoeHMgPT09IHVuZGVmaW5lZClcbiAgICAgIHJldHVybiBBcnJheShpKS5jb25jYXQoW3hdKVxuICAgIGlmICh4cy5sZW5ndGggPD0gaSlcbiAgICAgIHJldHVybiB4cy5jb25jYXQoQXJyYXkoaSAtIHhzLmxlbmd0aCksIFt4XSlcbiAgICBpZiAoUi5lcXVhbHMoeCwgeHNbaV0pKVxuICAgICAgcmV0dXJuIHhzXG4gICAgcmV0dXJuIHhzLnNsaWNlKDAsIGkpLmNvbmNhdChbeF0sIHhzLnNsaWNlKGkrMSkpXG4gIH1cbn0pXG5cbkwuYXBwZW5kID0gUi5sZW5zKCgpID0+IHt9LCAoeCwgeHMpID0+XG4gIHggPT09IHVuZGVmaW5lZCA/IHhzIDogeHMgPT09IHVuZGVmaW5lZCA/IFt4XSA6IHhzLmNvbmNhdChbeF0pKVxuXG5MLmZpbHRlciA9IHAgPT4gUi5sZW5zKHhzID0+IHhzICYmIHhzLmZpbHRlcihwKSwgKHlzLCB4cykgPT5cbiAgY29uc2VydmUoeHMsIGRyb3BwZWQoUi5jb25jYXQoeXMgfHwgW10sICh4cyB8fCBbXSkuZmlsdGVyKFIuY29tcGxlbWVudChwKSkpKSkpXG5cbkwuYXVnbWVudCA9IHRlbXBsYXRlID0+IFIubGVucyhcbiAgdG9QYXJ0aWFsKHggPT4ge1xuICAgIGNvbnN0IHogPSB7Li4ueH1cbiAgICBmb3IgKGNvbnN0IGsgaW4gdGVtcGxhdGUpXG4gICAgICB6W2tdID0gdGVtcGxhdGVba10oeClcbiAgICByZXR1cm4gelxuICB9KSxcbiAgdG9Db25zZXJ2ZSgoeSwgYykgPT4ge1xuICAgIGlmICh5ID09PSB1bmRlZmluZWQpXG4gICAgICByZXR1cm4gdW5kZWZpbmVkXG4gICAgbGV0IHpcbiAgICBjb25zdCBzZXQgPSAoaywgdikgPT4ge1xuICAgICAgaWYgKHVuZGVmaW5lZCA9PT0geilcbiAgICAgICAgeiA9IHt9XG4gICAgICB6W2tdID0gdlxuICAgIH1cbiAgICBmb3IgKGNvbnN0IGsgaW4geSkge1xuICAgICAgaWYgKCEoayBpbiB0ZW1wbGF0ZSkpXG4gICAgICAgIHNldChrLCB5W2tdKVxuICAgICAgZWxzZVxuICAgICAgICBpZiAoayBpbiBjKVxuICAgICAgICAgIHNldChrLCBjW2tdKVxuICAgIH1cbiAgICByZXR1cm4gelxuICB9KSlcblxuZXhwb3J0IGRlZmF1bHQgTFxuIl19
+	var pick = exports.pick = function pick(template) {
+	  return lensI(function (c) {
+	    var r = void 0;
+	    for (var k in template) {
+	      var v = getI(toRamda(template[k]), c);
+	      if (v !== undefined) {
+	        if (r === undefined) r = {};
+	        r[k] = v;
+	      }
+	    }
+	    return r;
+	  }, function () {
+	    var o = arguments.length <= 0 || arguments[0] === undefined ? empty : arguments[0];
+	    var cIn = arguments[1];
+	
+	    var c = cIn;
+	    for (var k in template) {
+	      c = setI(toRamda(template[k]), o[k], c);
+	    }return c;
+	  });
+	};
+	
+	var identity = exports.identity = lensI(id, conserve);
+	
+	var props = exports.props = function props() {
+	  for (var _len3 = arguments.length, ks = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+	    ks[_key3] = arguments[_key3];
+	  }
+	
+	  return pick(R.zipObj(ks, ks));
+	};
+	
+	var show = function show() {
+	  for (var _len4 = arguments.length, labels = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+	    labels[_key4] = arguments[_key4];
+	  }
+	
+	  return function (x) {
+	    var _console;
+	
+	    return (_console = console).log.apply(_console, labels.concat([x])) || x;
+	  };
+	};
+	
+	var log = exports.log = function log() {
+	  for (var _len5 = arguments.length, labels = Array(_len5), _key5 = 0; _key5 < _len5; _key5++) {
+	    labels[_key5] = arguments[_key5];
+	  }
+	
+	  return lensI(show.apply(undefined, labels.concat(["get"])), show.apply(undefined, labels.concat(["set"])));
+	};
+	
+	var sequence = exports.sequence = function sequence(toApplicative) {
+	  return function (target) {
+	    return warn("`sequence` is experimental and might be removed, renamed or changed semantically before next major release") || R.sequence(Ident, R.map(toApplicative, target)).map(R.pipe(R.filter(function (x) {
+	      return x !== undefined;
+	    }), dropped));
+	  };
+	};
+	
+	exports.default = compose;
+	//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbIi4uL3NyYy9wYXJ0aWFsLmxlbnNlcy5qcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7Ozs7QUFBQTs7SUFBWTs7Ozs7Ozs7OztBQUlaLFNBQVMsUUFBVCxDQUFrQixLQUFsQixFQUF5QjtBQUFDLE9BQUssS0FBTCxHQUFhLEtBQWIsQ0FBRDtDQUF6QjtBQUNBLElBQU0sUUFBUSxTQUFSLEtBQVE7U0FBSyxJQUFJLFFBQUosQ0FBYSxDQUFiO0NBQUw7QUFDZCxTQUFTLFNBQVQsQ0FBbUIsR0FBbkIsR0FBeUIsVUFBVSxHQUFWLEVBQWU7QUFBQyxTQUFPLElBQUksUUFBSixDQUFhLElBQUksS0FBSyxLQUFMLENBQWpCLENBQVAsQ0FBRDtDQUFmO0FBQ3pCLFNBQVMsU0FBVCxDQUFtQixFQUFuQixHQUF3QixLQUF4QjtBQUNBLFNBQVMsU0FBVCxDQUFtQixFQUFuQixHQUF3QixVQUFVLENBQVYsRUFBYTtBQUFDLFNBQU8sSUFBSSxRQUFKLENBQWEsS0FBSyxLQUFMLENBQVcsRUFBRSxLQUFGLENBQXhCLENBQVAsQ0FBRDtDQUFiOzs7O0FBSXhCLFNBQVMsUUFBVCxDQUFrQixLQUFsQixFQUF5QjtBQUFDLE9BQUssS0FBTCxHQUFhLEtBQWIsQ0FBRDtDQUF6QjtBQUNBLElBQU0sUUFBUSxTQUFSLEtBQVE7U0FBSyxJQUFJLFFBQUosQ0FBYSxDQUFiO0NBQUw7QUFDZCxTQUFTLFNBQVQsQ0FBbUIsR0FBbkIsR0FBeUIsWUFBWTtBQUFDLFNBQU8sSUFBUCxDQUFEO0NBQVo7QUFDekIsU0FBUyxTQUFULENBQW1CLEVBQW5CLEdBQXdCLEtBQXhCOzs7O0FBSUEsSUFBTSxTQUFTLEVBQVQ7O0FBRU4sSUFBTSxPQUFPLFNBQVAsSUFBTyxVQUFXO0FBQ3RCLE1BQUksRUFBRSxXQUFXLE1BQVgsQ0FBRixFQUFzQjtBQUN4QixXQUFPLE9BQVAsSUFBa0IsT0FBbEIsQ0FEd0I7QUFFeEIsWUFBUSxJQUFSLENBQWEsaUJBQWIsRUFBZ0MsT0FBaEMsRUFGd0I7R0FB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IjoicGFydGlhbC5sZW5zZXMuanMiLCJzb3VyY2VzQ29udGVudCI6WyJpbXBvcnQgKiBhcyBSIGZyb20gXCJyYW1kYVwiXG5cbi8vXG5cbmZ1bmN0aW9uIElkZW50aXR5KHZhbHVlKSB7dGhpcy52YWx1ZSA9IHZhbHVlfVxuY29uc3QgSWRlbnQgPSB4ID0+IG5ldyBJZGVudGl0eSh4KVxuSWRlbnRpdHkucHJvdG90eXBlLm1hcCA9IGZ1bmN0aW9uICh4MnkpIHtyZXR1cm4gbmV3IElkZW50aXR5KHgyeSh0aGlzLnZhbHVlKSl9XG5JZGVudGl0eS5wcm90b3R5cGUub2YgPSBJZGVudFxuSWRlbnRpdHkucHJvdG90eXBlLmFwID0gZnVuY3Rpb24gKHgpIHtyZXR1cm4gbmV3IElkZW50aXR5KHRoaXMudmFsdWUoeC52YWx1ZSkpfVxuXG4vL1xuXG5mdW5jdGlvbiBDb25zdGFudCh2YWx1ZSkge3RoaXMudmFsdWUgPSB2YWx1ZX1cbmNvbnN0IENvbnN0ID0geCA9PiBuZXcgQ29uc3RhbnQoeClcbkNvbnN0YW50LnByb3RvdHlwZS5tYXAgPSBmdW5jdGlvbiAoKSB7cmV0dXJuIHRoaXN9XG5Db25zdGFudC5wcm90b3R5cGUub2YgPSBDb25zdFxuXG4vL1xuXG5jb25zdCB3YXJuZWQgPSB7fVxuXG5jb25zdCB3YXJuID0gbWVzc2FnZSA9PiB7XG4gIGlmICghKG1lc3NhZ2UgaW4gd2FybmVkKSkge1xuICAgIHdhcm5lZFttZXNzYWdlXSA9IG1lc3NhZ2VcbiAgICBjb25zb2xlLndhcm4oXCJwYXJ0aWFsLmxlbnNlczpcIiwgbWVzc2FnZSlcbiAgfVxufVxuXG4vL1xuXG5jb25zdCBpZCA9IHggPT4geFxuY29uc3Qgc25kID0gKF8sIGMpID0+IGNcblxuLy9cblxuY29uc3QgY2hlY2sgPSAoZXhwZWN0ZWQsIHByZWRpY2F0ZSkgPT4geCA9PiB7XG4gIGlmIChwcmVkaWNhdGUoeCkpXG4gICAgcmV0dXJuIHhcbiAgZWxzZVxuICAgIHRocm93IG5ldyBFcnJvcihgRXhwZWN0ZWQgJHtleHBlY3RlZH0sIGJ1dCBnb3QgJHt4fS5gKVxufVxuXG5jb25zdCBhc3NlcnQgPSBwcm9jZXNzLmVudi5OT0RFX0VOViA9PT0gXCJwcm9kdWN0aW9uXCIgPyAoKSA9PiBpZCA6IGNoZWNrXG5cbi8vXG5cbmNvbnN0IGVtcHR5ID0ge31cblxuY29uc3QgZGVsZXRlS2V5ID0gKGssIG8pID0+IHtcbiAgaWYgKG8gPT09IHVuZGVmaW5lZCB8fCAhKGsgaW4gbykpXG4gICAgcmV0dXJuIG9cbiAgbGV0IHJcbiAgZm9yIChjb25zdCBwIGluIG8pIHtcbiAgICBpZiAocCAhPT0gaykge1xuICAgICAgaWYgKHVuZGVmaW5lZCA9PT0gcilcbiAgICAgICAgciA9IHt9XG4gICAgICByW3BdID0gb1twXVxuICAgIH1cbiAgfVxuICByZXR1cm4gclxufVxuXG5jb25zdCBzZXRLZXkgPSAoaywgdiwgbykgPT4ge1xuICBpZiAobyA9PT0gdW5kZWZpbmVkKVxuICAgIHJldHVybiB7W2tdOiB2fVxuICBpZiAoayBpbiBvICYmIFIuZXF1YWxzKHYsIG9ba10pKVxuICAgIHJldHVybiBvXG4gIGNvbnN0IHIgPSB7W2tdOiB2fVxuICBmb3IgKGNvbnN0IHAgaW4gbylcbiAgICBpZiAocCAhPT0gaylcbiAgICAgIHJbcF0gPSBvW3BdXG4gIHJldHVybiByXG59XG5cbi8vXG5cbmNvbnN0IGRyb3BwZWQgPSB4cyA9PiBPYmplY3Qua2V5cyh4cykubGVuZ3RoID09PSAwID8gdW5kZWZpbmVkIDogeHNcblxuLy9cblxuY29uc3QgdG9QYXJ0aWFsID0gdHJhbnNmb3JtID0+IHggPT4gdW5kZWZpbmVkID09PSB4ID8geCA6IHRyYW5zZm9ybSh4KVxuXG4vL1xuXG5jb25zdCBjb25zZXJ2ZSA9IChjMSwgYzApID0+IFIuZXF1YWxzKGMxLCBjMCkgPyBjMCA6IGMxXG5cbmNvbnN0IHRvQ29uc2VydmUgPSBmID0+ICh5LCBjMCkgPT4gY29uc2VydmUoZih5LCBjMCksIGMwKVxuXG4vL1xuXG5jb25zdCBzZWVtc0xlbnMgPSB4ID0+IHR5cGVvZiB4ID09PSBcImZ1bmN0aW9uXCIgJiYgeC5sZW5ndGggPT09IDFcblxuZXhwb3J0IGNvbnN0IGZyb21SYW1kYSA9IGFzc2VydChcImEgbGVuc1wiLCBzZWVtc0xlbnMpXG5cbmV4cG9ydCBjb25zdCB0b1JhbWRhID0gbCA9PiB7XG4gIGlmIChpc1Byb3AobCkpICByZXR1cm4gdG9SYW1kYVByb3AobClcbiAgaWYgKGlzSW5kZXgobCkpIHJldHVybiB0b1JhbWRhSW5kZXgobClcbiAgcmV0dXJuIGZyb21SYW1kYShsKVxufVxuXG5leHBvcnQgY29uc3QgY29tcG9zZSA9ICguLi5scykgPT5cbiAgbHMubGVuZ3RoID09PSAwID8gaWRlbnRpdHkgOlxuICBscy5sZW5ndGggPT09IDEgPyBsc1swXSA6XG4gIFIuY29tcG9zZSguLi5scy5tYXAodG9SYW1kYSkpXG5cbmV4cG9ydCBjb25zdCByZW1vdmUgPSBSLmN1cnJ5KChsLCBzKSA9PiBzZXRJKHRvUmFtZGEobCksIHVuZGVmaW5lZCwgcykpXG5cbmV4cG9ydCBjb25zdCByZW1vdmVBbGwgPSBSLmN1cnJ5KChsZW5zLCBkYXRhKSA9PiB7XG4gIHdhcm4oXCJgcmVtb3ZlQWxsYCBpcyBkZXByZWNhdGVkIGFuZCB3aWxsIGJlIHJlbW92ZWQgaW4gbmV4dCBtYWpvciB2ZXJzaW9uIC0tLSB1c2UgYSBkaWZmZXJlbnQgYXBwcm9hY2guXCIpXG4gIHdoaWxlIChnZXQobGVucywgZGF0YSkgIT09IHVuZGVmaW5lZClcbiAgICBkYXRhID0gcmVtb3ZlKGxlbnMsIGRhdGEpXG4gIHJldHVybiBkYXRhXG59KVxuXG5jb25zdCBzZXRJID0gKGwsIHgsIHMpID0+IGwoKCkgPT4gSWRlbnQoeCkpKHMpLnZhbHVlXG5jb25zdCBnZXRJID0gKGwsIHMpID0+IGwoQ29uc3QpKHMpLnZhbHVlXG5jb25zdCBtb2RpZnlJID0gKGwsIHgyeCwgcykgPT4gbCh5ID0+IElkZW50KHgyeCh5KSkpKHMpLnZhbHVlXG5jb25zdCBsZW5zSSA9IChnZXR0ZXIsIHNldHRlcikgPT4gdG9GbiA9PiB0YXJnZXQgPT5cbiAgdG9GbihnZXR0ZXIodGFyZ2V0KSkubWFwKGZvY3VzID0+IHNldHRlcihmb2N1cywgdGFyZ2V0KSlcblxuZXhwb3J0IGNvbnN0IGxlbnMgPSBSLmN1cnJ5KGxlbnNJKVxuZXhwb3J0IGNvbnN0IG1vZGlmeSA9IFIuY3VycnkoKGwsIHgyeCwgcykgPT4gbW9kaWZ5SSh0b1JhbWRhKGwpLCB4MngsIHMpKVxuZXhwb3J0IGNvbnN0IHNldCA9IFIuY3VycnkoKGwsIHgsIHMpID0+IHNldEkodG9SYW1kYShsKSwgeCwgcykpXG5leHBvcnQgY29uc3QgZ2V0ID0gUi5jdXJyeSgobCwgcykgPT4gZ2V0SSh0b1JhbWRhKGwpLCBzKSlcblxuZXhwb3J0IGNvbnN0IGNoYWluID0gUi5jdXJyeSgoeDJ5TCwgeEwpID0+XG4gIGNvbXBvc2UoeEwsIGNob29zZSh4TyA9PiB4TyA9PT0gdW5kZWZpbmVkID8gbm90aGluZyA6IHgyeUwoeE8pKSkpXG5cbmV4cG9ydCBjb25zdCBqdXN0ID0geCA9PiBsZW5zSShSLmFsd2F5cyh4KSwgc25kKVxuXG5leHBvcnQgY29uc3QgY2hvb3NlID0geDJ5TCA9PiB0b0Z1bmN0b3IgPT4gdGFyZ2V0ID0+IHtcbiAgY29uc3QgbCA9IHRvUmFtZGEoeDJ5TCh0YXJnZXQpKVxuICByZXR1cm4gUi5tYXAoZm9jdXMgPT4gc2V0SShsLCBmb2N1cywgdGFyZ2V0KSwgdG9GdW5jdG9yKGdldEkobCwgdGFyZ2V0KSkpXG59XG5cbmV4cG9ydCBjb25zdCBub3RoaW5nID0gbGVuc0koc25kLCBzbmQpXG5cbmV4cG9ydCBjb25zdCBvckVsc2UgPVxuICBSLmN1cnJ5KChkLCBsKSA9PiBjaG9vc2UoeCA9PiBnZXRJKHRvUmFtZGEobCksIHgpICE9PSB1bmRlZmluZWQgPyBsIDogZCkpXG5cbmV4cG9ydCBjb25zdCBjaG9pY2UgPSAoLi4ubHMpID0+IGNob29zZSh4ID0+IHtcbiAgY29uc3QgaSA9IGxzLmZpbmRJbmRleChsID0+IGdldEkodG9SYW1kYShsKSwgeCkgIT09IHVuZGVmaW5lZClcbiAgcmV0dXJuIDAgPD0gaSA/IGxzW2ldIDogbm90aGluZ1xufSlcblxuZXhwb3J0IGNvbnN0IHJlcGxhY2UgPSBSLmN1cnJ5KChpbm4sIG91dCkgPT5cbiAgbGVuc0koeCA9PiBSLmVxdWFscyh4LCBpbm4pID8gb3V0IDogeCxcbiAgICAgICAgdG9Db25zZXJ2ZSh5ID0+IFIuZXF1YWxzKHksIG91dCkgPyBpbm4gOiB5KSkpXG5cbmV4cG9ydCBjb25zdCBkZWZhdWx0cyA9IHJlcGxhY2UodW5kZWZpbmVkKVxuZXhwb3J0IGNvbnN0IHJlcXVpcmVkID0gaW5uID0+IHJlcGxhY2UoaW5uLCB1bmRlZmluZWQpXG5leHBvcnQgY29uc3QgZGVmaW5lID0gdiA9PiBSLmNvbXBvc2UocmVxdWlyZWQodiksIGRlZmF1bHRzKHYpKVxuXG5leHBvcnQgY29uc3Qgbm9ybWFsaXplID0gdHJhbnNmb3JtID0+XG4gIGxlbnNJKHRvUGFydGlhbCh0cmFuc2Zvcm0pLCB0b0NvbnNlcnZlKHRvUGFydGlhbCh0cmFuc2Zvcm0pKSlcblxuY29uc3QgaXNQcm9wID0geCA9PiB0eXBlb2YgeCA9PT0gXCJzdHJpbmdcIlxuXG5leHBvcnQgY29uc3QgcHJvcCA9IGFzc2VydChcImEgc3RyaW5nXCIsIGlzUHJvcClcblxuY29uc3QgdG9SYW1kYVByb3AgPSBrID0+XG4gIGxlbnNJKG8gPT4gbyAmJiBvW2tdLFxuICAgICAgICAodiwgbykgPT4gdiA9PT0gdW5kZWZpbmVkID8gZGVsZXRlS2V5KGssIG8pIDogc2V0S2V5KGssIHYsIG8pKVxuXG5leHBvcnQgY29uc3QgZmluZCA9IHByZWRpY2F0ZSA9PiBjaG9vc2UoeHMgPT4ge1xuICBpZiAoeHMgPT09IHVuZGVmaW5lZClcbiAgICByZXR1cm4gYXBwZW5kXG4gIGNvbnN0IGkgPSB4cy5maW5kSW5kZXgocHJlZGljYXRlKVxuICByZXR1cm4gaSA8IDAgPyBhcHBlbmQgOiBpXG59KVxuXG5leHBvcnQgY29uc3QgZmluZFdpdGggPSAoLi4ubHMpID0+IHtcbiAgY29uc3QgbGxzID0gdG9SYW1kYShjb21wb3NlKC4uLmxzKSlcbiAgcmV0dXJuIGNvbXBvc2UoZmluZCh4ID0+IGdldEkobGxzLCB4KSAhPT0gdW5kZWZpbmVkKSwgbGxzKVxufVxuXG5jb25zdCBpc0luZGV4ID0geCA9PiBOdW1iZXIuaXNJbnRlZ2VyKHgpICYmIDAgPD0geFxuXG5leHBvcnQgY29uc3QgaW5kZXggPSBhc3NlcnQoXCJhIG5vbi1uZWdhdGl2ZSBpbnRlZ2VyXCIsIGlzSW5kZXgpXG5cbmNvbnN0IHRvUmFtZGFJbmRleCA9IGkgPT4gbGVuc0koeHMgPT4geHMgJiYgeHNbaV0sICh4LCB4cykgPT4ge1xuICBpZiAoeCA9PT0gdW5kZWZpbmVkKSB7XG4gICAgaWYgKHhzID09PSB1bmRlZmluZWQpXG4gICAgICByZXR1cm4gdW5kZWZpbmVkXG4gICAgaWYgKGkgPCB4cy5sZW5ndGgpXG4gICAgICByZXR1cm4gZHJvcHBlZCh4cy5zbGljZSgwLCBpKS5jb25jYXQoeHMuc2xpY2UoaSsxKSkpXG4gICAgcmV0dXJuIHhzXG4gIH0gZWxzZSB7XG4gICAgaWYgKHhzID09PSB1bmRlZmluZWQpXG4gICAgICByZXR1cm4gQXJyYXkoaSkuY29uY2F0KFt4XSlcbiAgICBpZiAoeHMubGVuZ3RoIDw9IGkpXG4gICAgICByZXR1cm4geHMuY29uY2F0KEFycmF5KGkgLSB4cy5sZW5ndGgpLCBbeF0pXG4gICAgaWYgKFIuZXF1YWxzKHgsIHhzW2ldKSlcbiAgICAgIHJldHVybiB4c1xuICAgIHJldHVybiB4cy5zbGljZSgwLCBpKS5jb25jYXQoW3hdLCB4cy5zbGljZShpKzEpKVxuICB9XG59KVxuXG5leHBvcnQgY29uc3QgYXBwZW5kID0gbGVuc0koc25kLCAoeCwgeHMpID0+XG4gIHggPT09IHVuZGVmaW5lZCA/IHhzIDogeHMgPT09IHVuZGVmaW5lZCA/IFt4XSA6IHhzLmNvbmNhdChbeF0pKVxuXG5leHBvcnQgY29uc3QgZmlsdGVyID0gcCA9PiBsZW5zSSh4cyA9PiB4cyAmJiB4cy5maWx0ZXIocCksICh5cywgeHMpID0+XG4gIGNvbnNlcnZlKGRyb3BwZWQoUi5jb25jYXQoeXMgfHwgW10sICh4cyB8fCBbXSkuZmlsdGVyKFIuY29tcGxlbWVudChwKSkpKSwgeHMpKVxuXG5leHBvcnQgY29uc3QgYXVnbWVudCA9IHRlbXBsYXRlID0+IGxlbnNJKFxuICB0b1BhcnRpYWwoeCA9PiB7XG4gICAgY29uc3QgeiA9IHsuLi54fVxuICAgIGZvciAoY29uc3QgayBpbiB0ZW1wbGF0ZSlcbiAgICAgIHpba10gPSB0ZW1wbGF0ZVtrXSh4KVxuICAgIHJldHVybiB6XG4gIH0pLFxuICB0b0NvbnNlcnZlKCh5LCBjKSA9PiB7XG4gICAgaWYgKHkgPT09IHVuZGVmaW5lZClcbiAgICAgIHJldHVybiB1bmRlZmluZWRcbiAgICBsZXQgelxuICAgIGNvbnN0IHNldCA9IChrLCB2KSA9PiB7XG4gICAgICBpZiAodW5kZWZpbmVkID09PSB6KVxuICAgICAgICB6ID0ge31cbiAgICAgIHpba10gPSB2XG4gICAgfVxuICAgIGZvciAoY29uc3QgayBpbiB5KSB7XG4gICAgICBpZiAoIShrIGluIHRlbXBsYXRlKSlcbiAgICAgICAgc2V0KGssIHlba10pXG4gICAgICBlbHNlXG4gICAgICAgIGlmIChrIGluIGMpXG4gICAgICAgICAgc2V0KGssIGNba10pXG4gICAgfVxuICAgIHJldHVybiB6XG4gIH0pKVxuXG5leHBvcnQgY29uc3QgcGljayA9IHRlbXBsYXRlID0+IGxlbnNJKFxuICBjID0+IHtcbiAgICBsZXQgclxuICAgIGZvciAoY29uc3QgayBpbiB0ZW1wbGF0ZSkge1xuICAgICAgY29uc3QgdiA9IGdldEkodG9SYW1kYSh0ZW1wbGF0ZVtrXSksIGMpXG4gICAgICBpZiAodiAhPT0gdW5kZWZpbmVkKSB7XG4gICAgICAgIGlmIChyID09PSB1bmRlZmluZWQpXG4gICAgICAgICAgciA9IHt9XG4gICAgICAgIHJba10gPSB2XG4gICAgICB9XG4gICAgfVxuICAgIHJldHVybiByXG4gIH0sXG4gIChvID0gZW1wdHksIGNJbikgPT4ge1xuICAgIGxldCBjID0gY0luXG4gICAgZm9yIChjb25zdCBrIGluIHRlbXBsYXRlKVxuICAgICAgYyA9IHNldEkodG9SYW1kYSh0ZW1wbGF0ZVtrXSksIG9ba10sIGMpXG4gICAgcmV0dXJuIGNcbiAgfSlcblxuZXhwb3J0IGNvbnN0IGlkZW50aXR5ID0gbGVuc0koaWQsIGNvbnNlcnZlKVxuXG5leHBvcnQgY29uc3QgcHJvcHMgPSAoLi4ua3MpID0+IHBpY2soUi56aXBPYmooa3MsIGtzKSlcblxuY29uc3Qgc2hvdyA9ICguLi5sYWJlbHMpID0+IHggPT4gY29uc29sZS5sb2coLi4ubGFiZWxzLCB4KSB8fCB4XG5cbmV4cG9ydCBjb25zdCBsb2cgPSAoLi4ubGFiZWxzKSA9PlxuICBsZW5zSShzaG93KC4uLmxhYmVscywgXCJnZXRcIiksIHNob3coLi4ubGFiZWxzLCBcInNldFwiKSlcblxuZXhwb3J0IGNvbnN0IHNlcXVlbmNlID0gdG9BcHBsaWNhdGl2ZSA9PiB0YXJnZXQgPT5cbiAgd2FybihcImBzZXF1ZW5jZWAgaXMgZXhwZXJpbWVudGFsIGFuZCBtaWdodCBiZSByZW1vdmVkLCByZW5hbWVkIG9yIGNoYW5nZWQgc2VtYW50aWNhbGx5IGJlZm9yZSBuZXh0IG1ham9yIHJlbGVhc2VcIikgfHxcbiAgUi5zZXF1ZW5jZShJZGVudCwgUi5tYXAodG9BcHBsaWNhdGl2ZSwgdGFyZ2V0KSlcbiAgLm1hcChSLnBpcGUoUi5maWx0ZXIoeCA9PiB4ICE9PSB1bmRlZmluZWQpLCBkcm9wcGVkKSlcblxuZXhwb3J0IGRlZmF1bHQgY29tcG9zZVxuIl19
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ },
 
-/***/ 456:
+/***/ 478:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(258);
+	var content = __webpack_require__(262);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(122)(content, {});
+	var update = __webpack_require__(124)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {

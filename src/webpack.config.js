@@ -4,13 +4,11 @@ var lost 			= require("lost")
 var cssnext 		= require("postcss-cssnext")
 var webpack 		= require("webpack")
 
-var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin")
-
 module.exports = {
 	entry: {
+		main: "./js/main.js",
 		game: "./js/game.js", 
-		test: "./js/test.js",
-		main: "./js/main.js"
+		test: "./js/test.js"
 	},
 	devtool: "source-map",
 	output: {
@@ -41,7 +39,7 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new CommonsChunkPlugin("commons.chunk.js"),
+		new webpack.optimize.CommonsChunkPlugin("commons.chunk.js"),
 		new webpack.optimize.DedupePlugin(),
 		/*new webpack.optimize.UglifyJsPlugin({
 			compress: {

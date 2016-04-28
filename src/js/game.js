@@ -102,7 +102,7 @@ var dbuttons = new DialogueButtons()
 
 var talk_text = null
 
-var font_size = 18
+const font_size = 21
 
 
 var g_text = null

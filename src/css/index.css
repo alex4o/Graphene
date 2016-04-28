@@ -1,63 +1,74 @@
-@font-face {
-	font-family:"TeXGyreAdventor";
-	src:url("./fnt/texgyreadventor-regular.woff") format("woff"),url("./fnt/texgyreadventor-regular.ttf") format("truetype");
-	font-weight:normal;
-	font-style:normal;
-}
-
-
 section {
 	width: 100%;
 	height: 100vh;
 	display: flex;
 }
 
-.landing {
-	background-image: url("./img/Background.jpg");
+
+.row {
+	display: flex;
+	justify-content: center;
+
+	 > * {
+	 }
 }
 
-#static {
+.static {
 	> * {
 		position: fixed;
 	}
 
-	> .to-game {
-		right: 20px;
-		top: 20px;
-		border-radius: 3px;
-		padding: 4px;
+	> #to-game {
+		right: 50px;
+		bottom: 40px;
+		/* border-radius: 3px; */
+		padding: 6px 12px 6px 12px;
+		display: none;
+		font-size: 1.2em;
+		color: black;
+		background-color: white;
+		transition: color 0.1s;
+		text-decoration: none;
+		font-family: Helvetica;
+		border-bottom: 2px black solid;
+		perspective: 800px;
 
-		font-size: 1.5em;
-		color: white;
-		transition: color 0.1s ;
+		&:before {
+			content: "";
+			position: absolute;
+			background: #CCC;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			top: 0;
+			z-index: -1;
+			/* border-radius: 3px; */
+			transform: rotatex( 90deg );
+			transform-origin: bottom;
+			transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1);
 
-		:hover {
-			color: black;
 		}
-	}
 
-	
+		&:hover:before {
+			right: 0;
+			transform: rotatex( 0deg );
 
-	> .to-game:before {
-		content: "";
-		position: absolute;
-		background: white;
-		bottom: 0;
-		left: 0;
-		right: 100%;
-		top: 0;
-		z-index: -1;
-		transition: right 0.11s cubic-bezier(0, 0, 0.2, 1);
+		} 
 
 	}
-
-	> .to-game:hover:before {
-		right: 0;
-
-	} 
 }
 
-.landing {
+#landing {
+	background-image: url("./img/Background.jpg");
+
+	img {
+		margin: 0px;
+		transform: rotate(180deg);
+		position: relative;
+
+		top: 20vh;
+	}
+
 	h1, h2{
 		font-family: TeXGyreAdventor,Verdana, sans-serif;
 		color: white;
@@ -73,6 +84,7 @@ section {
 	}
 
 	.button {
+		font-weight: bold;
 		text-decoration: inherit;
 
 		margin: 10px;
