@@ -221,7 +221,6 @@ window.next = (arg) => {
 	if(story.hasDialogue()){
 		
 		showDialogue()
-
 		toggleCharacters(true)
 	}else{
 		if(!guz){

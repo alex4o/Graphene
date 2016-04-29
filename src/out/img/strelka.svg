@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X7 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1.66666in" height="1.66666in" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 1667 1667"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str1 {stroke:#848688;stroke-width:6.94488}
+    .str0 {stroke:#727376;stroke-width:6.94488}
+    .fil1 {fill:#E6E7E8}
+    .fil0 {fill:#727376}
+   ]]>
+  </style>
+    <clipPath id="id0">
+     <path d="M284 536l1103 0 0 524 -1103 0 0 -524z"/>
+    </clipPath>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_406748047680">
+   <g style="clip-path:url(#id0)">
+    <image x="284" y="536" width="1103" height="524" xlink:href="strelka_Images\strelka_ImgID1.png"/>
+   </g>
+  </g>
+  <g id="_406748049184">
+   <path class="fil0 str0" d="M833 574l257 147 257 148 -171 0 -80 -46 -257 -147 -257 147 -79 46 -184 0 257 -148 257 -147zm4 154l257 147 257 148 -173 0 -94 -54 -257 -148 -257 148 -93 54 -154 0 257 -148 257 -147z"/>
+   <polygon class="fil1 str1" points="833,587 1010,686 1186,786 1067,786 1003,749 827,650 650,749 586,786 481,786 657,686 "/>
+   <polygon class="fil1 str1" points="833,733 1010,832 1186,931 1067,931 1003,895 827,796 650,895 586,931 481,931 657,832 "/>
+  </g>
+ </g>
+</svg>

@@ -1,7 +1,29 @@
+@font-face {
+	font-family:"TeXGyreAdventor";
+	src:url("./fnt/texgyreadventor-regular.woff") format("woff"),url("./fnt/texgyreadventor-regular.ttf") format("truetype");
+	font-weight:normal;
+	font-style:normal;
+}
+
+@font-face {
+	font-family:"Droid-sans";
+	src:url("./fnt/DroidSans.ttf") format("truetype"),url("./fnt/DroidSans-Bold.ttf") format("truetype");
+	font-weight:normal;
+	font-style:normal;
+}
+
+
 section {
 	width: 100%;
-	height: 100vh;
 	display: flex;
+	height: 80vh;
+
+	> .content {
+		/*background-color: white;*/
+		margin: auto;
+		flex: 1 1;
+		text-align: center;
+	}
 }
 
 
@@ -14,24 +36,31 @@ section {
 }
 
 .static {
+
 	> * {
 		position: fixed;
 	}
 
 	> #to-game {
 		right: 50px;
-		bottom: 40px;
-		/* border-radius: 3px; */
+		bottom: -34px;
 		padding: 6px 12px 6px 12px;
-		display: none;
+		display: block;
 		font-size: 1.2em;
 		color: black;
-		background-color: white;
+		/* background-color: white; */
 		transition: color 0.1s;
 		text-decoration: none;
-		font-family: Helvetica;
 		border-bottom: 2px black solid;
 		perspective: 800px;
+		transition: all 0.5s;
+		opacity: 0;
+	
+
+		&.show{
+			bottom: 40px;
+			opacity: 1;
+		}
 
 		&:before {
 			content: "";
@@ -45,7 +74,7 @@ section {
 			/* border-radius: 3px; */
 			transform: rotatex( 90deg );
 			transform-origin: bottom;
-			transition: transform 0.2s cubic-bezier(0, 0, 0.2, 1);
+			transition: transform 0.15s ease-in;
 
 		}
 
@@ -59,6 +88,8 @@ section {
 }
 
 #landing {
+	height: 100vh;
+
 	background-image: url("./img/Background.jpg");
 
 	img {
@@ -70,7 +101,7 @@ section {
 	}
 
 	h1, h2{
-		font-family: TeXGyreAdventor,Verdana, sans-serif;
+		font-family: Helvetica, Verdana, sans-serif;
 		color: white;
 	}
 
@@ -165,15 +196,10 @@ section {
 	background-color: blue;
 }
 
-section > .content {
-	/*background-color: white;*/
-	margin: auto;
-	flex: 1 1;
-	text-align: center;
-}
-
 body {
 	width: 100%;
 	margin: 0px;
 	padding: 0px;
+	font-family: Droid-sans; 
+
 }

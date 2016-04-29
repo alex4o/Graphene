@@ -5,32 +5,44 @@ require("../css/index.css")
 import scrollTo from "./util/scrollTo"
 
 
+// for eslint, couldn't find a way not to polute the environement
 
+let Waypoint = window.Waypoint
 
 let arrow = document.getElementById("scroll-arrow")
 
-let info = document.getElementById("info");
-let landing = document.getElementById("landing");
+let info = document.getElementById("info")
+let landing = document.getElementById("landing")
 
-let to_game = document.getElementById("to-game");
+let to_game = document.getElementById("to-game")
 
-arrow.addEventListener("click", e => {
+arrow.addEventListener("click", () => {
 	scrollTo(window.innerHeight, 800)
 })
 
-let waypoint = new Waypoint({
+let landingWaypoint = new Waypoint({
 	element: landing,
 	handler: (dir) => {
 		//console.log(landing + " " + dir)
 		if(dir == "up"){
-			to_game.style.display = "none"
+			to_game.classList.remove("show")
 
 		}else{ // dir == "down"
-			to_game.style.display = "block"
+			to_game.classList.add("show")
 		}
 		//to_game.style.color = "black";
 	},
-	offset: -100
+	offset: -250
+})
+
+let infoWaypoint = new Waypoint({
+	element: info,
+	handler: (dir) => {
+		if(dir == "down"){
+
+		}
+	},
+	offset: 0
 })
 
 //smoothScroll.init()

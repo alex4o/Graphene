@@ -27,7 +27,7 @@ webpackJsonp([2],{
 	
 	var _kefir = __webpack_require__(154);
 	
-	var _kefir2 = __webpack_require__(293);
+	var _kefir2 = __webpack_require__(297);
 	
 	var _kefir3 = _interopRequireDefault(_kefir2);
 	
@@ -42,7 +42,7 @@ webpackJsonp([2],{
 	window.R = _ramda2.default;
 	window.p = _paper2.default;
 	
-	__webpack_require__(478);
+	__webpack_require__(482);
 	
 	_kefir.Kefir.Observable.prototype.pluck = function (prop) {
 		return this.map(_ramda2.default.view(_ramda2.default.lensProp(prop)));
@@ -279,7 +279,6 @@ webpackJsonp([2],{
 		if (story.hasDialogue()) {
 	
 			showDialogue();
-	
 			toggleCharacters(true);
 		} else {
 			if (!guz) {
@@ -27267,7 +27266,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 293:
+/***/ 297:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27287,7 +27286,7 @@ webpackJsonp([2],{
 	
 	var R = _interopRequireWildcard(_ramda);
 	
-	var _partial = __webpack_require__(333);
+	var _partial = __webpack_require__(337);
 	
 	var L = _interopRequireWildcard(_partial);
 	
@@ -27430,7 +27429,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 333:
+/***/ 337:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -27843,7 +27842,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 478:
+/***/ 482:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag

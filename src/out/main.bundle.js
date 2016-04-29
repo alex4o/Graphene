@@ -11,11 +11,15 @@ webpackJsonp([3],{
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(483);
+	__webpack_require__(487);
 	
-	__webpack_require__(479);
+	__webpack_require__(483);
 	// found that code on github
 	
+	
+	// for eslint, couldn't find a way not to polute the environement
+	
+	var Waypoint = window.Waypoint;
 	
 	var arrow = document.getElementById("scroll-arrow");
 	
@@ -24,23 +28,31 @@ webpackJsonp([3],{
 	
 	var to_game = document.getElementById("to-game");
 	
-	arrow.addEventListener("click", function (e) {
+	arrow.addEventListener("click", function () {
 		(0, _scrollTo2.default)(window.innerHeight, 800);
 	});
 	
-	var waypoint = new Waypoint({
+	var landingWaypoint = new Waypoint({
 		element: landing,
 		handler: function handler(dir) {
 			//console.log(landing + " " + dir)
 			if (dir == "up") {
-				to_game.style.display = "none";
+				to_game.classList.remove("show");
 			} else {
 				// dir == "down"
-				to_game.style.display = "block";
+				to_game.classList.add("show");
 			}
 			//to_game.style.color = "black";
 		},
-		offset: -100
+		offset: -250
+	});
+	
+	var infoWaypoint = new Waypoint({
+		element: info,
+		handler: function handler(dir) {
+			if (dir == "down") {}
+		},
+		offset: 0
 	});
 	
 	//smoothScroll.init()
@@ -127,14 +139,42 @@ webpackJsonp([3],{
 	
 	
 	// module
-	exports.push([module.id, "section {\n\twidth: 100%;\n\theight: 100vh;\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n}\n\n\n.row {\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\t-webkit-box-pack: center;\n\t-webkit-justify-content: center;\n\t    -ms-flex-pack: center;\n\t        justify-content: center;\n}\n\n\n.row > * {}\n\n.static > * {\n\tposition: fixed;\n}\n\n.static > #to-game {\n\tright: 50px;\n\tbottom: 40px;\n\t\n\n\t/* border-radius: 3px; */\n\tpadding: 6px 12px 6px 12px;\n\tdisplay: none;\n\tfont-size: 1.2em;\n\tcolor: black;\n\tbackground-color: white;\n\t-webkit-transition: color 0.1s;\n\ttransition: color 0.1s;\n\ttext-decoration: none;\n\tfont-family: Helvetica;\n\tborder-bottom: 2px black solid;\n\t-webkit-perspective: 800px;\n\t        perspective: 800px\n}\n\n.static > #to-game:before {\n\tcontent: \"\";\n\tposition: absolute;\n\tbackground: #CCC;\n\tbottom: 0;\n\tleft: 0;\n\tright: 0;\n\ttop: 0;\n\tz-index: -1;\n\t\n\n\t/* border-radius: 3px; */\n\t-webkit-transform: rotatex( 90deg );\n\t        transform: rotatex( 90deg );\n\t-webkit-transform-origin: bottom;\n\t        transform-origin: bottom;\n\t-webkit-transition: -webkit-transform 0.2s cubic-bezier(0, 0, 0.2, 1);\n\ttransition: -webkit-transform 0.2s cubic-bezier(0, 0, 0.2, 1);\n\ttransition: transform 0.2s cubic-bezier(0, 0, 0.2, 1);\n\ttransition: transform 0.2s cubic-bezier(0, 0, 0.2, 1), -webkit-transform 0.2s cubic-bezier(0, 0, 0.2, 1);\n}\n\n.static > #to-game:hover:before {\n\tright: 0;\n\t-webkit-transform: rotatex( 0deg );\n\t        transform: rotatex( 0deg );\n}\n\n#landing {\n\tbackground-image: url(" + __webpack_require__(85) + ");\n\t\n\n/*\t.button:before {\n\t\tcontent: \"\";\n\t\tposition: absolute;\n\t\tbackground: white;\n\t\tbottom: 0;\n\t\tleft: 0;\n\t\tright: 0;\n\t\ttop: 100%;\n\t\tz-index: -1;\n\t\ttransition: top 0.09s ease-in;\n\t}\n\n\t.button:hover:before {\n\t\ttop: 0;\n\n\t} */\n\n}\n\n#landing img {\n\tmargin: 0px;\n\t-webkit-transform: rotate(180deg);\n\t        transform: rotate(180deg);\n\tposition: relative;\n\ttop: 20vh;\n}\n\n#landing h1, #landing h2{\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n\tcolor: white;\n}\n\n#landing h1 {\n\tfont-size: 4em;\n\tmargin: 0px;\n}\n\n#landing h2 {}\n\n#landing .button {\n\tfont-weight: bold;\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: white 3px solid;\n\tdisplay: inline-block;\n\twidth: 200px;\n\tcolor: white;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition: background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n}\n\n#landing .button:hover{\n\tbackground-color: #FFF;\n\tcolor: #000;\n}\n\n#landing .button-slide {\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: white 3px solid;\n\tdisplay: inline-block;\n\twidth: 200px;\n\tcolor: white;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\tbackground-image: -webkit-linear-gradient(white, white);\n\tbackground-image: linear-gradient(white, white);\n\tbackground-position: 50% 50%;\n\tbackground-size: 100% 0%;\n\tbackground-repeat: no-repeat;\n\t-webkit-transition: background-size .3s, color .3s;\n\ttransition: background-size .3s, color .3s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n}\n\n#landing .button-slide:hover{\n\tbackground-size: 100% 100%;\n\tcolor: #000;\n}\n\n.text {\n\tbackground-color: blue;\n}\n\nsection > .content {\n\t/*background-color: white;*/\n\tmargin: auto;\n\t-webkit-box-flex: 1;\n\t-webkit-flex: 1 1;\n\t    -ms-flex: 1 1;\n\t        flex: 1 1;\n\ttext-align: center;\n}\n\nbody {\n\twidth: 100%;\n\tmargin: 0px;\n\tpadding: 0px;\n}\n", ""]);
+	exports.push([module.id, "@font-face {\n\tfont-family:\"TeXGyreAdventor\";\n\tsrc:url(" + __webpack_require__(296) + ") format(\"woff\"),url(" + __webpack_require__(295) + ") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n@font-face {\n\tfont-family:\"Droid-sans\";\n\tsrc:url(" + __webpack_require__(294) + ") format(\"truetype\"),url(" + __webpack_require__(293) + ") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n\nsection {\n\twidth: 100%;\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\theight: 80vh;\n}\n\n\nsection > .content {\n\t\n\n\t/*background-color: white;*/\n\tmargin: auto;\n\t-webkit-box-flex: 1;\n\t-webkit-flex: 1 1;\n\t    -ms-flex: 1 1;\n\t        flex: 1 1;\n\ttext-align: center;\n}\n\n\n.row {\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\t-webkit-box-pack: center;\n\t-webkit-justify-content: center;\n\t    -ms-flex-pack: center;\n\t        justify-content: center;\n}\n\n\n.row > * {}\n\n.static > * {\n\tposition: fixed;\n}\n\n.static > #to-game {\n\tright: 50px;\n\tbottom: -34px;\n\tpadding: 6px 12px 6px 12px;\n\tdisplay: block;\n\tfont-size: 1.2em;\n\tcolor: black;\n\t\n\n\t/* background-color: white; */\n\t-webkit-transition:color 0.1s;\n\ttransition: color 0.1s;\n\ttext-decoration: none;\n\tborder-bottom: 2px black solid;\n\t-webkit-perspective: 800px;\n\t        perspective: 800px;\n\t-webkit-transition:all 0.5s;\n\ttransition: all 0.5s;\n\topacity: 0\n}\n\n.static > #to-game.show {\n\tbottom:40px;\n\topacity:1;\n}\n\n.static > #to-game:before {\n\tcontent:\"\";\n\tposition:absolute;\n\tbackground:#CCC;\n\tbottom:0;\n\tleft:0;\n\tright:0;\n\ttop:0;\n\tz-index:-1;\n\t\n\n\t/* border-radius: 3px; */\n\t-webkit-transform:rotatex( 90deg );\n\t        transform:rotatex( 90deg );\n\t-webkit-transform-origin:bottom;\n\t        transform-origin:bottom;\n\t-webkit-transition:-webkit-transform 0.15s ease-in;\n\ttransition:-webkit-transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in, -webkit-transform 0.15s ease-in;\n}\n\n.static > #to-game:hover:before {\n\tright:0;\n\t-webkit-transform:rotatex( 0deg );\n\t        transform:rotatex( 0deg );\n}\n\n#landing {\n\theight: 100vh;\n\n\tbackground-image: url(" + __webpack_require__(85) + ");\n\t\n\n/*\t.button:before {\n\t\tcontent: \"\";\n\t\tposition: absolute;\n\t\tbackground: white;\n\t\tbottom: 0;\n\t\tleft: 0;\n\t\tright: 0;\n\t\ttop: 100%;\n\t\tz-index: -1;\n\t\ttransition: top 0.09s ease-in;\n\t}\n\n\t.button:hover:before {\n\t\ttop: 0;\n\n\t} */\n\n}\n\n#landing img {\n\tmargin: 0px;\n\t-webkit-transform: rotate(180deg);\n\t        transform: rotate(180deg);\n\tposition: relative;\n\ttop: 20vh;\n}\n\n#landing h1, #landing h2{\n\tfont-family: Helvetica, Verdana, sans-serif;\n\tcolor: white;\n}\n\n#landing h1 {\n\tfont-size: 4em;\n\tmargin: 0px;\n}\n\n#landing h2 {}\n\n#landing .button {\n\tfont-weight: bold;\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: white 3px solid;\n\tdisplay: inline-block;\n\twidth: 200px;\n\tcolor: white;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition:background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n}\n\n#landing .button:hover{\n\tbackground-color: #FFF;\n\tcolor: #000;\n}\n\n#landing .button-slide {\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: white 3px solid;\n\tdisplay: inline-block;\n\twidth: 200px;\n\tcolor: white;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\tbackground-image: -webkit-linear-gradient(white, white);\n\tbackground-image: linear-gradient(white, white);\n\tbackground-position: 50% 50%;\n\tbackground-size: 100% 0%;\n\tbackground-repeat: no-repeat;\n\t-webkit-transition:background-size .3s, color .3s;\n\ttransition: background-size .3s, color .3s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n}\n\n#landing .button-slide:hover{\n\tbackground-size: 100% 100%;\n\tcolor: #000;\n}\n\n.text {\n\tbackground-color: blue;\n}\n\nbody {\n\twidth: 100%;\n\tmargin: 0px;\n\tpadding: 0px;\n\tfont-family: Droid-sans; \n\n}\n", ""]);
 	
 	// exports
 
 
 /***/ },
 
-/***/ 479:
+/***/ 293:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "3c0f650c88f1dd66abf4e2d86b2789b8.ttf";
+
+/***/ },
+
+/***/ 294:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "9e94decf013d3e2c9adcc0b97cc5ce44.ttf";
+
+/***/ },
+
+/***/ 295:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "3a18a6db9f9af0992340589c30592a82.ttf";
+
+/***/ },
+
+/***/ 296:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "aa28063bb43c617cef178a26a2fe9d42.woff";
+
+/***/ },
+
+/***/ 483:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
@@ -161,7 +201,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 483:
+/***/ 487:
 /***/ function(module, exports) {
 
 	/*!

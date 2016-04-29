@@ -1,5 +1,4 @@
 var app = require("app")
-
 var BrowserWindow = require("browser-window")
 
 app.on("ready", function(){
@@ -8,6 +7,7 @@ app.on("ready", function(){
 		height: 1080,
 		"auto-hide-menu-bar": true
 	})
+
 
 	win.loadURL("file://" + __dirname + "/out/index.html")
 	win.openDevTools()
