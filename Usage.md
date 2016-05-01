@@ -1,7 +1,7 @@
 Използване на графена:
 ----------------------
 
-1. Super capacitors [ http://link.springer.com/article/10.1007/s12039-008-0002-7 ]
+1. Super capacitors [ http://link.springer.com/article/10.1007/s12039-008-0002-7 http://pubs.acs.org/doi/abs/10.1021/nl802558y ]
 2. Water distilation And Purification [ http://www.sciencedirect.com/science/article/pii/S0376738815001878 ]
 3. Mobile phones [ http://onlinelibrary.wiley.com/doi/10.1002/adfm.201402547/abstract ]
 4. Speakers [ http://arxiv.org/ftp/arxiv/papers/1303/1303.2391.pdf ]
