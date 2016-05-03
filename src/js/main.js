@@ -39,7 +39,7 @@ let infoWaypoint = new Waypoint({
 	element: info,
 	handler: (dir) => {
 		if(dir == "down"){
-
+				
 		}
 	},
 	offset: 0

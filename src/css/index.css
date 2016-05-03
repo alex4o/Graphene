@@ -28,9 +28,7 @@ body {
 	margin: 0px;
 	padding: 0px;
 	font-family: Droid-sans; 
-	perspective: 300px;
-	overflow-x: hidden;
-    overflow-y: auto;
+
 }
 
 
@@ -52,8 +50,8 @@ section {
 
 	> .content {
 		/*background-color: white;*/
-		border-top: 2px solid black;
-		border-bottom: 2px solid black;
+		/* border-top: 2px solid black;
+		border-bottom: 2px solid black; */
 
 		margin: auto;
 		flex: 1 1;
@@ -135,7 +133,7 @@ a {
 	height: 100vh;
 
 	background-image: url("./img/Background.jpg");
-
+	background-attachment: fixed;
 	img {
 		margin: 0px;
 		transform: rotate(180deg);

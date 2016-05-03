@@ -1,6 +1,12 @@
 import R from "ramda"
 import Dialogue from "./dialogue"
 
+
+
+
+
+
+
 var story = [
 	{
 		"scene": "intro",
