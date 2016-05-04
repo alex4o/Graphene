@@ -12,13 +12,6 @@
 	font-style:normal;
 }
 
-@font-face {
-	font-family:"kelvinch";
-	src:url("./fnt/kelvinch-roman.otf") format("opentype"),url("./fnt/kelvinch-bold.otf") format("opentype");
-	font-weight:normal;
-	font-style:normal;
-}
-
 @media (max-width: 1000px) {
 	.row {
 		flex-direction: column;
