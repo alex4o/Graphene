@@ -2,7 +2,8 @@ import R from "ramda"
 
 var participants = [
 	"Graphene",
-	"Carbon"
+	"Carbon",
+	"Silver"
 ]
 
 var dialogue = [
@@ -125,7 +126,7 @@ var dialogue = [
 				who: "Графен",
 				say: "С моята невероятната здравина от 1100 GPa ще спра метеорита летящ към земята!",
 				loc: 13 
-			},
+			}
 		]
 	},
 	{
@@ -181,7 +182,7 @@ var dialogue = [
 
 		]
 	},
-		{
+	{
 		name: "good_dialog",
 		array: [
 			{ //loc: 0
@@ -199,7 +200,7 @@ var dialogue = [
 				who: "Графен",
 				say: "А виж какво мога, благодарение на моята електропроводимост от 1738 siemens/m.",
 				scene: "conductivity_2"
-			},
+			}
 		]
 	},
 	{
@@ -209,7 +210,7 @@ var dialogue = [
 				who: "Графен",
 				say: "А виж какво мога, благодарение на моята енергийна плътност от 75 F/g и 31·9 Wh/kg.\n Заради нея, могат да се направят много по издържливи батерии и акумулатори.",
 				scene: "electrical_density_2"
-			},
+			}
 		]
 	},
 	{
@@ -240,7 +241,7 @@ window.d = dialogue
 
 export default class Dialogue {
 	constructor(){
-		this.dialogue = dialogue;
+		this.dialogue = dialogue
 	}
 
 	select(name){
@@ -248,13 +249,13 @@ export default class Dialogue {
 		this.currentPhrase = this.currentDialogue.array[0]
 	}
 
-	phrase(loc){
-		return this.currentDialogue.array[loc];
+	phrase(loc){ // gives a specific phrase
+		return this.currentDialogue.array[loc]
 	}
 
 
 	choices(){
-		return this.currentPhrase.answer.map(o => o.say);
+		return this.currentPhrase.answer.map(o => o.say)
 	}
 
 	hasChoices(){
@@ -264,7 +265,7 @@ export default class Dialogue {
 		return false
 	}
 
-	say(){
+	say(){ // Gives the current Phrase
 		return this.currentPhrase
 	}
 
@@ -280,8 +281,9 @@ export default class Dialogue {
 						return this.currentPhrase.answer[choice].scene
 					}
 					this.loc = this.currentPhrase.answer[choice].loc
-					this.currentPhrase = this.phrase(this.currentPhrase.answer[choice].loc);
-
+					this.currentPhrase = this.phrase(this.currentPhrase.answer[choice].loc)
+					
+					return null
 				}else{
 					throw "This answer does not exists"
 				}
@@ -290,13 +292,11 @@ export default class Dialogue {
 			}
 		}else if(this.currentPhrase.loc){
 			this.loc = this.currentPhrase.loc
-			this.currentPhrase = this.phrase(this.currentPhrase.loc);
+			this.currentPhrase = this.phrase(this.currentPhrase.loc)
+			
+			return null
 		}else if(this.currentPhrase.scene){
 			return this.currentPhrase.scene
 		}
-		
-		console.log(this.loc)
-
-
 	}
 }

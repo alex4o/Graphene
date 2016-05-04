@@ -3,7 +3,19 @@ export default class EndScene {
 
 	}
 
-	destructor(){
+	position(width, height, center){
+
+	}
+
+	hide(){
+
+	}
+
+	show(){
+
+	}
+
+	destructor(story){
 		
 	}
 }

@@ -1,112 +1,130 @@
 import R from "ramda"
 import Dialogue from "./dialogue"
 
-
-
-
-
-
-
 var story = [
 	{
 		"scene": "intro",
 		"src": "vid/Intro.mp4",
-		"next": "conflict"
+		"next": "conflict",
+		"type": "Video"
 	},	
 	{
 		"scene": "conflict",
 		"src": "vid/Background.mp4",
 		"dialogue": "intro_dialog",
+		"type": "Dialogue"
+
 	},
 	{
 		"scene": "mech_force",
 		"src": "vid/Meteor.mp4",
-		"next": "mech_force_dialog"
+		"next": "mech_force_dialog",
+		"type": "Video"
+
 	},
 	{
 		"scene": "mech_force_dialog",
 		"src": "vid/Background.mp4",
 		"dialogue": "asteroid_dialog",
+		"type": "Dialogue"
+
 	},
 	{
 		"scene": "compete_kind",
 		"src": "vid/Background.mp4",
-		"dialogue": "compete_kind_dialog"
+		"dialogue": "compete_kind_dialog",
+		"type": "Dialogue"
+
 	},
 	{
 		"scene": "compete_hard",
 		"src": "vid/Background.mp4",
-		"dialogue": "compete_hard_dialog"
+		"dialogue": "compete_hard_dialog",
+		"type": "Dialogue"
+
 	},
 	{
 		"scene": "electrical_density",
 		"src": "vid/Cars.mp4",
-		"next": "ed_dialog"
-
+		"next": "ed_dialog",
+		"type": "Video"
 	},
 	{
 		"scene": "conductivity",
 		"src": "vid/Phone.mp4",
-		"next": "c_dialog"
+		"next": "c_dialog",
+		"type": "Video"
+
 	},
 	{
 		"scene": "ed_dialog",
 		"src": "vid/Background.mp4",
-		"dialogue": "ed_c_dialog"
+		"dialogue": "ed_c_dialog",
+		"type": "Dialogue"
 	},	
 	{
 		"scene": "c_dialog",
 		"src": "vid/Background.mp4",
-		"dialogue": "c_c_dialog"
+		"dialogue": "c_c_dialog",
+		"type": "Dialogue"
 	},
-		{
+	{
 		"scene": "electrical_density_2",
 		"src": "vid/Cars.mp4",
-		"next": "end1"
+		"next": "end1",
+		"type": "Video"
 
 	},
 	{
 		"scene": "conductivity_2",
 		"src": "vid/Phone.mp4",
-		"next": "end1"
+		"next": "end1",
+		"type": "Video"
 	},
 
 	{
 		"scene": "electrical_density_good",
 		"src": "vid/Cars.mp4",
-		"next": "end2"
-
+		"next": "end2",
+		"type": "Video"
 	},
 	{
 		"scene": "conductivity_good",
 		"src": "vid/Phone.mp4",
-		"next": "good_mid"
+		"next": "good_mid",
+		"type": "Video"
 	},
 
 	{
 		"scene": "good_mid",
 		"src": "vid/Background.mp4",
-		"dialogue": "good_dialog"
+		"dialogue": "good_dialog",
+		"type": "Dialogue"
 	},
 
 	{
 		"src": "vid/Background.mp4",
 		"scene": "end1",
-		"dialogue": "ending_dialog_1"
+		"dialogue": "ending_dialog_1",
+		"type": "Dialogue"
 	},
 	{
 		"src": "vid/Background.mp4",
 		"dialogue": "ending_dialog_2",
-		"scene": "end2"
+		"scene": "end2",
+		"type": "Dialogue"
+
 	},
 	{
 		"src": "vid/Background.mp4",
 		"scene": "end_true",
-		"next": "test"
+		"next": "test",
+		"type": "End"
 	},
 	{
 		"src": "vid/Background.mp4",
-		"scene": "test"
+		"scene": "test",
+		"type": "End"
 	}	
 ]
 
@@ -123,26 +141,56 @@ function createVideo(element){
 	}else{
 		let vid = document.createElement("video")
 		if(element.src == "vid/Background.mp4"){
-			vid.loop = true;
+			vid.loop = true
 		}
-		vid.src = element.src;
+		vid.src = element.src
 		cache.push({src: element.src, video: vid})
-		element.video = vid;
+		element.video = vid
 	}
 	
 }
 
 export default class Story {
-	constructor(){
-		this.story = story;
-		this.showDialogue = false;
-		this.dialogue = new Dialogue();
-		this.current = this.story[0];
+	constructor(types, update){
+		this.update = update
+
+		this.story = story
+		this.showDialogue = false
+		this.dialogue = new Dialogue()
+		this.current = {
+			"next" : this.story[0].scene
+		}
+
 		this.story.forEach(createVideo)
-		console.log(cache)
+		console.log("Loaded videos:", cache)
+		this.types = {}
+
+		for(let t in types){
+			this.types[t] = new types[t](this)
+			this.types[t].hide()
+		}
+
+		this.sceneUi = {
+			hide: () => {},
+			show: () => {},
+			position: () => {}
+		}
+
+		this.old = {}
 	}
 
-	defaultVideo(){
+	ui(type){
+		this.sceneUi = this.types[type]
+		this.sceneUi.show()
+	}
+
+	uiCalc(width, height, center){
+		this.old  = {width, height, center}
+		this.sceneUi.position(width, height, center)
+		this.update()
+	}
+
+	defaultVideo(){ //TODO: write to be more flexible
 		return R.find(R.propEq("src", "vid/Background.mp4"))(cache)
 	}
 
@@ -175,11 +223,6 @@ export default class Story {
 		return this.current.choice != null || this.dialogue.hasChoices()
 	}
 
-
-	setHasDialogue(bool /* bool */){
-		this.showDialogue = bool
-	}
-
 	hasDialogue(){
 		return this.showDialogue
 	}
@@ -192,67 +235,57 @@ export default class Story {
 		}
 	}
 
-	//events for the scene
-
-	onBefore(scene, fn){
-		if(this.exists(scene)){
-			this.scene(scene).onBefore = fn
-		}
+	onVideo(callback){
+		this.onvideo = callback
 	}
-
-	offBefore(scene){
-		if(this.exists(scene)){
-			delete this.scene(scene).onBefore
-		}
-	}
-
-	onAfter(scene, fn){
-		if(this.exists(scene)){
-			this.scene(scene).onAfter = fn
-		}
-	}
-
-	offAfetr(scene){
-		if(this.exists(scene)){
-			delete this.scene(scene).onAfter
-		}
-	}
-
-
 
 	switchTo(scene){
-		if(scene != null){
-			if(this.current.onAfter != null){ // calls onAfter just before switching the video
-				this.current.onAfter()
-			}
-
-			this.current = this.scene(scene); // switch the video with the next one
-
-			if(this.current.dialogue != null){
-				this.dialogue.select(this.current.dialogue)
-				this.showDialogue = true;
-			}else{
-				this.showDialogue = false;
-			}
-
-			if(this.current.onBefore != null){ // call onBefore for the the next video 
-				this.current.onBefore()
-			}
-
-
+		//Before the switch
+		let oldVideo = this.current.video
+		this.current = this.scene(scene) // switch the video with the next one
+		if(oldVideo != this.current.video){
+			this.onvideo(this.current.video)
 		}
+
+		this.sceneUi.hide()
+
+		this.ui(this.current.type)
+
+		if(this.current.dialogue != null){
+			this.dialogue.select(this.current.dialogue)
+			this.showDialogue = true
+		}else{
+			this.showDialogue = false
+		}
+
+		//After the switch
 	}
+
+
 
 	next(choice){
 		if(this.current.dialogue != null){
+
 			var scene = this.dialogue.next(choice)
-			this.switchTo(scene)
+
+			if(scene != null){
+				this.switchTo(scene)
+			}
 		
 		}else{
 			this.switchTo(this.current.next)
 
 		}
+		
+		if(this.showDialogue){
+			if(this.dialogue.hasChoices()){
+				this.sceneUi.dialogue(null, this.dialogue.choices())
+			}else{
+				this.sceneUi.dialogue(this.dialogue.say(), null)
+			}
+		}
 
-
+		let {width, height, center} = this.old
+		this.uiCalc(width, height, center)
 	}
 }

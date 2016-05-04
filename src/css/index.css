@@ -12,6 +12,13 @@
 	font-style:normal;
 }
 
+@font-face {
+	font-family:"kelvinch";
+	src:url("./fnt/kelvinch-roman.otf") format("opentype"),url("./fnt/kelvinch-bold.otf") format("opentype");
+	font-weight:normal;
+	font-style:normal;
+}
+
 @media (max-width: 1000px) {
 	.row {
 		flex-direction: column;
@@ -27,7 +34,7 @@ body {
 	width: 100%;
 	margin: 0px;
 	padding: 0px;
-	font-family: Droid-sans; 
+	font-family: kelvinch; 
 
 }
 
@@ -143,7 +150,7 @@ a {
 	}
 
 	h1, h2{
-		font-family: Helvetica, Verdana, sans-serif;
+		font-family: kelvinch, Verdana, sans-serif;
 		color: white;
 	}
 
