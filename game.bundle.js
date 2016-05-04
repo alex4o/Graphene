@@ -5,19 +5,11 @@ webpackJsonp([2],{
 
 	"use strict";
 	
-	var _classCallCheck2 = __webpack_require__(41);
-	
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-	
-	var _createClass2 = __webpack_require__(42);
-	
-	var _createClass3 = _interopRequireDefault(_createClass2);
-	
-	var _paper = __webpack_require__(171);
+	var _paper = __webpack_require__(66);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
-	var _story = __webpack_require__(232);
+	var _story = __webpack_require__(235);
 	
 	var _story2 = _interopRequireDefault(_story);
 	
@@ -25,15 +17,27 @@ webpackJsonp([2],{
 	
 	var _VolumeCtrl2 = _interopRequireDefault(_VolumeCtrl);
 	
-	var _kefir = __webpack_require__(154);
+	var _kefir = __webpack_require__(155);
 	
-	var _kefir2 = __webpack_require__(297);
+	var _kefir2 = __webpack_require__(302);
 	
 	var _kefir3 = _interopRequireDefault(_kefir2);
 	
-	var _ramda = __webpack_require__(48);
+	var _ramda = __webpack_require__(45);
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
+	
+	var _Dialogue = __webpack_require__(232);
+	
+	var _Dialogue2 = _interopRequireDefault(_Dialogue);
+	
+	var _Video = __webpack_require__(234);
+	
+	var _Video2 = _interopRequireDefault(_Video);
+	
+	var _End = __webpack_require__(233);
+	
+	var _End2 = _interopRequireDefault(_End);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
@@ -42,265 +46,57 @@ webpackJsonp([2],{
 	window.R = _ramda2.default;
 	window.p = _paper2.default;
 	
-	__webpack_require__(482);
+	__webpack_require__(487);
 	
-	_kefir.Kefir.Observable.prototype.pluck = function (prop) {
-		return this.map(_ramda2.default.view(_ramda2.default.lensProp(prop)));
-	};
 	// TODO: move to new file and find better name
 	
-	function _ref(rect) {
-		var res_rect = _ramda2.default.clone(rect);
-		var margin = 10;
-		res_rect.x -= margin / 2;
-		res_rect.y -= margin / 2;
-		res_rect.width += margin;
-		res_rect.height += margin;
-	
-		return res_rect;
-	}
-	
-	function _ref2(size) {
-		//(re)calculate dialogue buttons
-		var rem = size.width - this.width;
-		var padding = rem / (this.list.length + 1);
-		var cur = padding;
-		for (var i = 0; i < this.list.length; i++) {
-			var group = this.list[i];
-			group.bounds.x = cur;
-			group.bounds.y = size.height - 75;
-	
-			cur += group.bounds.width + padding;
-		}
-	}
-	
-	function _ref4(button) {
-		return button.remove();
-	}
-	
-	function _ref3() {
-		this.list.forEach(_ref4);
-		this.list = [];
-		this.width = 0;
-	}
-	
-	var DialogueButtons = function () {
-		function DialogueButtons() {
-			(0, _classCallCheck3.default)(this, DialogueButtons);
-	
-			this.list = [];
-			this.width = 0;
-		}
-	
-		(0, _createClass3.default)(DialogueButtons, [{
-			key: "create",
-			value: function create(choices) {
-				var _this = this;
-	
-				this.remove();
-	
-				this.list = choices.map(function (choice, n) {
-					var group = new _paper2.default.Group();
-	
-					var text = new _paper2.default.PointText({
-						//	point: point,
-						content: choice,
-						fillColor: "#AEE1F9",
-						fontFamily: "Verdana",
-						fontWeight: "bold",
-						fontSize: font_size,
-						justification: "left"
-					});
-					text.onClick = function () {
-						return window.next(n);
-					};
-	
-					var button = main_button.clone();
-					button.visible = true;
-					button.setBounds(_this.calculateButtonSize(text.bounds));
-	
-					group.addChild(button);
-					group.addChild(text);
-	
-					_this.width += group.getBounds().width;
-	
-					return group;
-				});
-			}
-		}, {
-			key: "calculateButtonSize",
-			value: _ref
-		}, {
-			key: "calculate",
-			value: _ref2
-		}, {
-			key: "remove",
-			value: _ref3
-		}]);
-		return DialogueButtons;
-	}();
-	
-	var story = new _story2.default();
+	var volumeModifier = 0.05;
 	
 	var canvas = null;
 	var container = null;
 	
-	//var planet = null;
-	var graphene = null;
-	var carbon = null;
-	
-	var video = null;
-	
-	var dbuttons = new DialogueButtons();
-	
-	var talk_text = null;
-	
-	var font_size = 21;
-	
-	var g_text = null;
-	var c_text = null;
-	
-	var timeout_id = 0;
-	
-	var main_button = null;
-	
 	var volume = new _kefir3.default(0.5);
 	
-	var guz = false;
+	/*
+	story.onBefore("end_true",() => {
 	
-	story.onBefore("end_true", function () {
+		story.showDialogue = false
+		guz = true
+		toggleCharacters(false)
+		graphene.visible = true
+		talk_text.visible = true
 	
-		story.showDialogue = false;
-		guz = true;
-		toggleCharacters(false);
-		graphene.visible = true;
-		talk_text.visible = true;
 	
-		graphene.setPosition(_paper2.default.view.center);
-		talk_text.content = "А ти какво научи от всичко това?";
-		_paper2.default.view.update(true);
-	});
+		graphene.setPosition(paper.view.center)
+		talk_text.content = "А ти какво научи от всичко това?"	
+		paper.view.update(true)
+	
+	})
+	*/
 	
 	//gala --replace
+	/*
+	goto test
+	story.onBefore("test",() => {
+		window.location.href = "./test.html"
+	}) 
 	
-	story.onBefore("test", function () {
-		window.location.href = "./test.html";
-	});
 	
-	var resize = _kefir.Kefir.fromEvents(window, "resize").toProperty(function () {
-		return null;
-	}).map(function () {
-		return { height: window.innerHeight, width: window.innerWidth };
-	});
 	
-	var center = resize.map(function () {
-		return _paper2.default.view.center;
-	}).toProperty(function () {
-		return _paper2.default.view.center;
-	});
+	*/
 	
-	function set(obj, prop) {
-		return function (val) {
-			obj[prop] = val;
-		};
-	}
+	var mountedVideo = null;
 	
-	function toggleCharacters(val) {
-		graphene.visible = val;
-		carbon.visible = val;
-		talk_text.visible = val;
-		g_text.visible = val;
-		c_text.visible = val;
-		_paper2.default.view.draw();
+	function _ref() {
 		_paper2.default.view.update(true);
-	}
-	
-	function _ref5() {
-		window.next();
-	}
-	
-	function showDialogue() {
-		var choices = story.choices();
-	
-		if (_ramda2.default.isArrayLike(choices)) {
-			//	console.log(choices)
-	
-			dbuttons.create(choices);
-			dbuttons.calculate({ height: window.innerHeight, width: window.innerWidth });
-	
-			_paper2.default.view.draw();
-		} else {
-	
-			talk_text.content = choices.who + ": " + choices.say;
-			var len = choices.say.length;
-			var t = 0;
-			if (len < 10) {
-				t = 5000;
-			} else {
-				t = len * 200;
-			}
-	
-			timeout_id = setTimeout(_ref5, t);
-		}
 		_paper2.default.view.draw();
 	}
 	
-	function _ref6() {
-		return window.next();
-	}
-	
-	function show(current) {
-		var video = story.current.video;
-		if (video == current) {
-			return video;
-		} else {
-			if (current) {
-				console.log("Removeing: ", video);
-				current.remove();
-			}
-		}
-	
-		video.addEventListener("ended", _ref6);
-	
-		container.appendChild(video);
-		video.play();
-		return video;
-	}
-	
-	window.next = function (arg) {
-		clearTimeout(timeout_id);
-		if (story.hasChoices() && arg == null) {
-			return;
-		}
-	
-		dbuttons.remove();
-	
-		story.next(arg);
-		if (story.hasDialogue()) {
-	
-			showDialogue();
-			toggleCharacters(true);
-		} else {
-			if (!guz) {
-				toggleCharacters(false);
-			}
-		}
-	
-		_paper2.default.view.update(true);
-	
-		video = show(video);
-		video.volume = volume.get();
-	
-		console.log(video);
-	};
-	
-	var volumeModifier = 0.05;
-	
-	function _ref7(e) {
+	function _ref3(e) {
 		return e.wheelDelta < 0 ? -volumeModifier : volumeModifier;
 	}
 	
-	function _ref8(mod) {
+	function _ref4(mod) {
 		volume.modify(function (old) {
 			var volume = old + mod;
 			if (volume < 0) {
@@ -312,114 +108,67 @@ webpackJsonp([2],{
 		});
 	}
 	
-	function _ref9(point) {
-		return new _paper2.default.Point(point.x, point.y * 2 - 100);
-	}
-	
-	function _ref10() {
-		window.next();
+	function _ref5() {
+		return null;
 	}
 	
 	window.addEventListener("load", function () {
-	
 		console.log("Loading");
 	
 		canvas = document.getElementById("drawSurf");
 		container = document.getElementById("container");
-	
-		_kefir.Kefir.fromEvents(canvas, "mousewheel").map(_ref7).onValue(_ref8);
-	
 		_paper2.default.setup(canvas);
 	
-		//planet = new paper.Raster("./mercury.png")
+		var story = new _story2.default({
+			"Video": _Video2.default,
+			"Dialogue": _Dialogue2.default,
+			"End": _End2.default
+		}, _ref);
 	
-		graphene = new _paper2.default.Raster("./img/Graphene.png");
-		carbon = new _paper2.default.Raster("./img/Carbon1.png");
-		graphene.scale(-1, 1);
+		function _ref2() {
+			return story.next();
+		}
 	
-		carbon.position.x = 100;
+		story.onVideo(function (video) {
 	
-		carbon.scale(0.8, 0.8);
-		graphene.scale(0.8, 0.8);
+			console.log("Removeing: ", video);
+			if (mountedVideo != null) {
+				mountedVideo.remove();
+			}
 	
-		talk_text = new _paper2.default.PointText({
-			point: _paper2.default.view.center,
-			//	content: choices.who +": "+ choices.say,
-			fillColor: "white",
-			fontFamily: "Verdana",
-			fontWeight: "bold",
-			fontSize: font_size,
-			justification: "center"
+			video.addEventListener("ended", _ref2);
+	
+			container.appendChild(video);
+			video.play();
+	
+			mountedVideo = video;
+			video.volume = volume.get();
 		});
 	
-		g_text = new _paper2.default.PointText({
-			point: _paper2.default.view.center,
-			content: "Графен",
-			fillColor: "white",
-			fontFamily: "Verdana",
-			fontWeight: "bold",
-			fontSize: font_size,
-			justification: "center"
+		_kefir.Kefir.fromEvents(canvas, "mousewheel").map(_ref3).onValue(_ref4);
+	
+		window.hds = function () {
+			story.next();
+		};
+	
+		_kefir.Kefir.fromEvents(window, "resize").toProperty(_ref5).onValue(function () {
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
+			_paper2.default.view.setViewSize(window.innerWidth, window.innerHeight);
+	
+			story.uiCalc(window.innerWidth, window.innerHeight, _paper2.default.view.center);
 		});
-	
-		c_text = new _paper2.default.PointText({
-			point: _paper2.default.view.center,
-			content: "Карбон",
-			fillColor: "white",
-			fontFamily: "Verdana",
-			fontWeight: "bold",
-			fontSize: font_size,
-			justification: "center"
-		});
-	
-		talk_text.importSVG("./img/button.svg", function (e) {
-			main_button = e;
-			main_button.visible = false;
-		});
-	
-		c_text.position.x = 100;
-	
-		resize.onValue(function (size) {
-	
-			canvas.width = size.width;
-			canvas.height = size.height;
-			_paper2.default.view.setViewSize(size.width, size.height);
-	
-			g_text.position.x = size.width - 100;
-			graphene.position.x = size.width - 100;
-	
-			dbuttons.calculate(size);
-	
-			// update by center
-			var center = _paper2.default.view.center;
-	
-			carbon.position.y = center.y - 100;
-			graphene.position.y = center.y - 100;
-			g_text.position.y = center.y + 200;
-			c_text.position.y = center.y + 200;
-	
-			//redraw
-	
-			_paper2.default.view.update(true);
-			_paper2.default.view.draw();
-		});
-	
-		center.map(_ref9).onValue(set(talk_text, "point"));
-	
-		_paper2.default.view.onMouseDown = _ref10;
-	
-		video = show();
-		toggleCharacters(false);
 	
 		var volCtrl = new _VolumeCtrl2.default(volume.get());
 	
 		volume.onValue(function (value) {
-			if (video != null) {
-				video.volume = value;
+			if (mountedVideo != null) {
+				mountedVideo.volume = value;
 			}
 			volCtrl.update(value);
 		});
 	
+		story.next();
 		console.log("Loaded");
 	}, false);
 
@@ -542,7 +291,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 41:
+/***/ 30:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -557,14 +306,14 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 42:
+/***/ 31:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _defineProperty = __webpack_require__(80);
+	var _defineProperty = __webpack_require__(81);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
@@ -590,7 +339,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 48:
+/***/ 45:
 /***/ function(module, exports, __webpack_require__) {
 
 	//  Ramda v0.21.0
@@ -9381,3364 +9130,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 80:
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(81), __esModule: true };
-
-/***/ },
-
-/***/ 81:
-/***/ function(module, exports, __webpack_require__) {
-
-	var $ = __webpack_require__(21);
-	module.exports = function defineProperty(it, key, desc){
-	  return $.setDesc(it, key, desc);
-	};
-
-/***/ },
-
-/***/ 154:
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {/*! Kefir.js v3.2.2
-	 *  https://github.com/rpominov/kefir
-	 */
-	
-	(function (global, factory) {
-		 true ? factory(exports) :
-		typeof define === 'function' && define.amd ? define(['exports'], factory) :
-		(factory((global.Kefir = global.Kefir || {})));
-	}(this, function (exports) { 'use strict';
-	
-		var __commonjs_global = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
-		function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports, __commonjs_global), module.exports; }
-	
-		function createObj(proto) {
-		  var F = function () {};
-		  F.prototype = proto;
-		  return new F();
-		}
-	
-		function extend(target /*, mixin1, mixin2...*/) {
-		  var length = arguments.length,
-		      i = void 0,
-		      prop = void 0;
-		  for (i = 1; i < length; i++) {
-		    for (prop in arguments[i]) {
-		      target[prop] = arguments[i][prop];
-		    }
-		  }
-		  return target;
-		}
-	
-		function inherit(Child, Parent /*, mixin1, mixin2...*/) {
-		  var length = arguments.length,
-		      i = void 0;
-		  Child.prototype = createObj(Parent.prototype);
-		  Child.prototype.constructor = Child;
-		  for (i = 2; i < length; i++) {
-		    extend(Child.prototype, arguments[i]);
-		  }
-		  return Child;
-		}
-	
-		var NOTHING = ['<nothing>'];
-		var END = 'end';
-		var VALUE = 'value';
-		var ERROR = 'error';
-		var ANY = 'any';
-	
-		function concat(a, b) {
-		  var result = void 0,
-		      length = void 0,
-		      i = void 0,
-		      j = void 0;
-		  if (a.length === 0) {
-		    return b;
-		  }
-		  if (b.length === 0) {
-		    return a;
-		  }
-		  j = 0;
-		  result = new Array(a.length + b.length);
-		  length = a.length;
-		  for (i = 0; i < length; i++, j++) {
-		    result[j] = a[i];
-		  }
-		  length = b.length;
-		  for (i = 0; i < length; i++, j++) {
-		    result[j] = b[i];
-		  }
-		  return result;
-		}
-	
-		function find(arr, value) {
-		  var length = arr.length,
-		      i = void 0;
-		  for (i = 0; i < length; i++) {
-		    if (arr[i] === value) {
-		      return i;
-		    }
-		  }
-		  return -1;
-		}
-	
-		function findByPred(arr, pred) {
-		  var length = arr.length,
-		      i = void 0;
-		  for (i = 0; i < length; i++) {
-		    if (pred(arr[i])) {
-		      return i;
-		    }
-		  }
-		  return -1;
-		}
-	
-		function cloneArray(input) {
-		  var length = input.length,
-		      result = new Array(length),
-		      i = void 0;
-		  for (i = 0; i < length; i++) {
-		    result[i] = input[i];
-		  }
-		  return result;
-		}
-	
-		function remove(input, index) {
-		  var length = input.length,
-		      result = void 0,
-		      i = void 0,
-		      j = void 0;
-		  if (index >= 0 && index < length) {
-		    if (length === 1) {
-		      return [];
-		    } else {
-		      result = new Array(length - 1);
-		      for (i = 0, j = 0; i < length; i++) {
-		        if (i !== index) {
-		          result[j] = input[i];
-		          j++;
-		        }
-		      }
-		      return result;
-		    }
-		  } else {
-		    return input;
-		  }
-		}
-	
-		function map(input, fn) {
-		  var length = input.length,
-		      result = new Array(length),
-		      i = void 0;
-		  for (i = 0; i < length; i++) {
-		    result[i] = fn(input[i]);
-		  }
-		  return result;
-		}
-	
-		function forEach(arr, fn) {
-		  var length = arr.length,
-		      i = void 0;
-		  for (i = 0; i < length; i++) {
-		    fn(arr[i]);
-		  }
-		}
-	
-		function fillArray(arr, value) {
-		  var length = arr.length,
-		      i = void 0;
-		  for (i = 0; i < length; i++) {
-		    arr[i] = value;
-		  }
-		}
-	
-		function contains(arr, value) {
-		  return find(arr, value) !== -1;
-		}
-	
-		function slide(cur, next, max) {
-		  var length = Math.min(max, cur.length + 1),
-		      offset = cur.length - length + 1,
-		      result = new Array(length),
-		      i = void 0;
-		  for (i = offset; i < length; i++) {
-		    result[i - offset] = cur[i];
-		  }
-		  result[length - 1] = next;
-		  return result;
-		}
-	
-		function callSubscriber(type, fn, event) {
-		  if (type === ANY) {
-		    fn(event);
-		  } else if (type === event.type) {
-		    if (type === VALUE || type === ERROR) {
-		      fn(event.value);
-		    } else {
-		      fn();
-		    }
-		  }
-		}
-	
-		function Dispatcher() {
-		  this._items = [];
-		  this._inLoop = 0;
-		  this._removedItems = null;
-		}
-	
-		extend(Dispatcher.prototype, {
-		  add: function (type, fn) {
-		    this._items = concat(this._items, [{ type: type, fn: fn }]);
-		    return this._items.length;
-		  },
-		  remove: function (type, fn) {
-		    var index = findByPred(this._items, function (x) {
-		      return x.type === type && x.fn === fn;
-		    });
-	
-		    // if we're currently in a notification loop,
-		    // remember this subscriber was removed
-		    if (this._inLoop !== 0 && index !== -1) {
-		      if (this._removedItems === null) {
-		        this._removedItems = [];
-		      }
-		      this._removedItems.push(this._items[index]);
-		    }
-	
-		    this._items = remove(this._items, index);
-		    return this._items.length;
-		  },
-		  dispatch: function (event) {
-		    this._inLoop++;
-		    for (var i = 0, items = this._items; i < items.length; i++) {
-	
-		      // cleanup was called
-		      if (this._items === null) {
-		        break;
-		      }
-	
-		      // this subscriber was removed
-		      if (this._removedItems !== null && contains(this._removedItems, items[i])) {
-		        continue;
-		      }
-	
-		      callSubscriber(items[i].type, items[i].fn, event);
-		    }
-		    this._inLoop--;
-		    if (this._inLoop === 0) {
-		      this._removedItems = null;
-		    }
-		  },
-		  cleanup: function () {
-		    this._items = null;
-		  }
-		});
-	
-		function Observable() {
-		  this._dispatcher = new Dispatcher();
-		  this._active = false;
-		  this._alive = true;
-		  this._activating = false;
-		  this._logHandlers = null;
-		}
-	
-		extend(Observable.prototype, {
-	
-		  _name: 'observable',
-	
-		  _onActivation: function () {},
-		  _onDeactivation: function () {},
-		  _setActive: function (active) {
-		    if (this._active !== active) {
-		      this._active = active;
-		      if (active) {
-		        this._activating = true;
-		        this._onActivation();
-		        this._activating = false;
-		      } else {
-		        this._onDeactivation();
-		      }
-		    }
-		  },
-		  _clear: function () {
-		    this._setActive(false);
-		    this._dispatcher.cleanup();
-		    this._dispatcher = null;
-		    this._logHandlers = null;
-		  },
-		  _emit: function (type, x) {
-		    switch (type) {
-		      case VALUE:
-		        return this._emitValue(x);
-		      case ERROR:
-		        return this._emitError(x);
-		      case END:
-		        return this._emitEnd();
-		    }
-		  },
-		  _emitValue: function (value) {
-		    if (this._alive) {
-		      this._dispatcher.dispatch({ type: VALUE, value: value });
-		    }
-		  },
-		  _emitError: function (value) {
-		    if (this._alive) {
-		      this._dispatcher.dispatch({ type: ERROR, value: value });
-		    }
-		  },
-		  _emitEnd: function () {
-		    if (this._alive) {
-		      this._alive = false;
-		      this._dispatcher.dispatch({ type: END });
-		      this._clear();
-		    }
-		  },
-		  _on: function (type, fn) {
-		    if (this._alive) {
-		      this._dispatcher.add(type, fn);
-		      this._setActive(true);
-		    } else {
-		      callSubscriber(type, fn, { type: END });
-		    }
-		    return this;
-		  },
-		  _off: function (type, fn) {
-		    if (this._alive) {
-		      var count = this._dispatcher.remove(type, fn);
-		      if (count === 0) {
-		        this._setActive(false);
-		      }
-		    }
-		    return this;
-		  },
-		  onValue: function (fn) {
-		    return this._on(VALUE, fn);
-		  },
-		  onError: function (fn) {
-		    return this._on(ERROR, fn);
-		  },
-		  onEnd: function (fn) {
-		    return this._on(END, fn);
-		  },
-		  onAny: function (fn) {
-		    return this._on(ANY, fn);
-		  },
-		  offValue: function (fn) {
-		    return this._off(VALUE, fn);
-		  },
-		  offError: function (fn) {
-		    return this._off(ERROR, fn);
-		  },
-		  offEnd: function (fn) {
-		    return this._off(END, fn);
-		  },
-		  offAny: function (fn) {
-		    return this._off(ANY, fn);
-		  },
-	
-	
-		  // A and B must be subclasses of Stream and Property (order doesn't matter)
-		  _ofSameType: function (A, B) {
-		    return A.prototype.getType() === this.getType() ? A : B;
-		  },
-		  setName: function (sourceObs /* optional */, selfName) {
-		    this._name = selfName ? sourceObs._name + '.' + selfName : sourceObs;
-		    return this;
-		  },
-		  log: function () {
-		    var name = arguments.length <= 0 || arguments[0] === undefined ? this.toString() : arguments[0];
-	
-	
-		    var isCurrent = void 0;
-		    var handler = function (event) {
-		      var type = '<' + event.type + (isCurrent ? ':current' : '') + '>';
-		      if (event.type === END) {
-		        console.log(name, type);
-		      } else {
-		        console.log(name, type, event.value);
-		      }
-		    };
-	
-		    if (this._alive) {
-		      if (!this._logHandlers) {
-		        this._logHandlers = [];
-		      }
-		      this._logHandlers.push({ name: name, handler: handler });
-		    }
-	
-		    isCurrent = true;
-		    this.onAny(handler);
-		    isCurrent = false;
-	
-		    return this;
-		  },
-		  offLog: function () {
-		    var name = arguments.length <= 0 || arguments[0] === undefined ? this.toString() : arguments[0];
-	
-	
-		    if (this._logHandlers) {
-		      var handlerIndex = findByPred(this._logHandlers, function (obj) {
-		        return obj.name === name;
-		      });
-		      if (handlerIndex !== -1) {
-		        this.offAny(this._logHandlers[handlerIndex].handler);
-		        this._logHandlers.splice(handlerIndex, 1);
-		      }
-		    }
-	
-		    return this;
-		  }
-		});
-	
-		// extend() can't handle `toString` in IE8
-		Observable.prototype.toString = function () {
-		  return '[' + this._name + ']';
-		};
-	
-		function Stream() {
-		  Observable.call(this);
-		}
-	
-		inherit(Stream, Observable, {
-	
-		  _name: 'stream',
-	
-		  getType: function () {
-		    return 'stream';
-		  }
-		});
-	
-		function Property() {
-		  Observable.call(this);
-		  this._currentEvent = null;
-		}
-	
-		inherit(Property, Observable, {
-	
-		  _name: 'property',
-	
-		  _emitValue: function (value) {
-		    if (this._alive) {
-		      this._currentEvent = { type: VALUE, value: value };
-		      if (!this._activating) {
-		        this._dispatcher.dispatch({ type: VALUE, value: value });
-		      }
-		    }
-		  },
-		  _emitError: function (value) {
-		    if (this._alive) {
-		      this._currentEvent = { type: ERROR, value: value };
-		      if (!this._activating) {
-		        this._dispatcher.dispatch({ type: ERROR, value: value });
-		      }
-		    }
-		  },
-		  _emitEnd: function () {
-		    if (this._alive) {
-		      this._alive = false;
-		      if (!this._activating) {
-		        this._dispatcher.dispatch({ type: END });
-		      }
-		      this._clear();
-		    }
-		  },
-		  _on: function (type, fn) {
-		    if (this._alive) {
-		      this._dispatcher.add(type, fn);
-		      this._setActive(true);
-		    }
-		    if (this._currentEvent !== null) {
-		      callSubscriber(type, fn, this._currentEvent);
-		    }
-		    if (!this._alive) {
-		      callSubscriber(type, fn, { type: END });
-		    }
-		    return this;
-		  },
-		  getType: function () {
-		    return 'property';
-		  }
-		});
-	
-		var neverS = new Stream();
-		neverS._emitEnd();
-		neverS._name = 'never';
-	
-		function never() {
-		  return neverS;
-		}
-	
-		function timeBased(mixin) {
-	
-		  function AnonymousStream(wait, options) {
-		    var _this = this;
-	
-		    Stream.call(this);
-		    this._wait = wait;
-		    this._intervalId = null;
-		    this._$onTick = function () {
-		      return _this._onTick();
-		    };
-		    this._init(options);
-		  }
-	
-		  inherit(AnonymousStream, Stream, {
-		    _init: function () {},
-		    _free: function () {},
-		    _onTick: function () {},
-		    _onActivation: function () {
-		      this._intervalId = setInterval(this._$onTick, this._wait);
-		    },
-		    _onDeactivation: function () {
-		      if (this._intervalId !== null) {
-		        clearInterval(this._intervalId);
-		        this._intervalId = null;
-		      }
-		    },
-		    _clear: function () {
-		      Stream.prototype._clear.call(this);
-		      this._$onTick = null;
-		      this._free();
-		    }
-		  }, mixin);
-	
-		  return AnonymousStream;
-		}
-	
-		var S = timeBased({
-	
-		  _name: 'later',
-	
-		  _init: function (_ref) {
-		    var x = _ref.x;
-	
-		    this._x = x;
-		  },
-		  _free: function () {
-		    this._x = null;
-		  },
-		  _onTick: function () {
-		    this._emitValue(this._x);
-		    this._emitEnd();
-		  }
-		});
-	
-		function later(wait, x) {
-		  return new S(wait, { x: x });
-		}
-	
-		var S$1 = timeBased({
-	
-		  _name: 'interval',
-	
-		  _init: function (_ref) {
-		    var x = _ref.x;
-	
-		    this._x = x;
-		  },
-		  _free: function () {
-		    this._x = null;
-		  },
-		  _onTick: function () {
-		    this._emitValue(this._x);
-		  }
-		});
-	
-		function interval(wait, x) {
-		  return new S$1(wait, { x: x });
-		}
-	
-		var S$2 = timeBased({
-	
-		  _name: 'sequentially',
-	
-		  _init: function (_ref) {
-		    var xs = _ref.xs;
-	
-		    this._xs = cloneArray(xs);
-		  },
-		  _free: function () {
-		    this._xs = null;
-		  },
-		  _onTick: function () {
-		    if (this._xs.length === 1) {
-		      this._emitValue(this._xs[0]);
-		      this._emitEnd();
-		    } else {
-		      this._emitValue(this._xs.shift());
-		    }
-		  }
-		});
-	
-		function sequentially(wait, xs) {
-		  return xs.length === 0 ? never() : new S$2(wait, { xs: xs });
-		}
-	
-		var S$3 = timeBased({
-	
-		  _name: 'fromPoll',
-	
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _onTick: function () {
-		    var fn = this._fn;
-		    this._emitValue(fn());
-		  }
-		});
-	
-		function fromPoll(wait, fn) {
-		  return new S$3(wait, { fn: fn });
-		}
-	
-		function emitter(obs) {
-	
-		  function value(x) {
-		    obs._emitValue(x);
-		    return obs._active;
-		  }
-	
-		  function error(x) {
-		    obs._emitError(x);
-		    return obs._active;
-		  }
-	
-		  function end() {
-		    obs._emitEnd();
-		    return obs._active;
-		  }
-	
-		  function event(e) {
-		    obs._emit(e.type, e.value);
-		    return obs._active;
-		  }
-	
-		  return { value: value, error: error, end: end, event: event, emit: value, emitEvent: event };
-		}
-	
-		var S$4 = timeBased({
-	
-		  _name: 'withInterval',
-	
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		    this._emitter = emitter(this);
-		  },
-		  _free: function () {
-		    this._fn = null;
-		    this._emitter = null;
-		  },
-		  _onTick: function () {
-		    var fn = this._fn;
-		    fn(this._emitter);
-		  }
-		});
-	
-		function withInterval(wait, fn) {
-		  return new S$4(wait, { fn: fn });
-		}
-	
-		function S$5(fn) {
-		  Stream.call(this);
-		  this._fn = fn;
-		  this._unsubscribe = null;
-		}
-	
-		inherit(S$5, Stream, {
-	
-		  _name: 'stream',
-	
-		  _onActivation: function () {
-		    var fn = this._fn;
-		    var unsubscribe = fn(emitter(this));
-		    this._unsubscribe = typeof unsubscribe === 'function' ? unsubscribe : null;
-	
-		    // fix https://github.com/rpominov/kefir/issues/35
-		    if (!this._active) {
-		      this._callUnsubscribe();
-		    }
-		  },
-		  _callUnsubscribe: function () {
-		    if (this._unsubscribe !== null) {
-		      this._unsubscribe();
-		      this._unsubscribe = null;
-		    }
-		  },
-		  _onDeactivation: function () {
-		    this._callUnsubscribe();
-		  },
-		  _clear: function () {
-		    Stream.prototype._clear.call(this);
-		    this._fn = null;
-		  }
-		});
-	
-		function stream(fn) {
-		  return new S$5(fn);
-		}
-	
-		function fromCallback(callbackConsumer) {
-	
-		  var called = false;
-	
-		  return stream(function (emitter) {
-	
-		    if (!called) {
-		      callbackConsumer(function (x) {
-		        emitter.emit(x);
-		        emitter.end();
-		      });
-		      called = true;
-		    }
-		  }).setName('fromCallback');
-		}
-	
-		function fromNodeCallback(callbackConsumer) {
-	
-		  var called = false;
-	
-		  return stream(function (emitter) {
-	
-		    if (!called) {
-		      callbackConsumer(function (error, x) {
-		        if (error) {
-		          emitter.error(error);
-		        } else {
-		          emitter.emit(x);
-		        }
-		        emitter.end();
-		      });
-		      called = true;
-		    }
-		  }).setName('fromNodeCallback');
-		}
-	
-		function spread(fn, length) {
-		  switch (length) {
-		    case 0:
-		      return function () {
-		        return fn();
-		      };
-		    case 1:
-		      return function (a) {
-		        return fn(a[0]);
-		      };
-		    case 2:
-		      return function (a) {
-		        return fn(a[0], a[1]);
-		      };
-		    case 3:
-		      return function (a) {
-		        return fn(a[0], a[1], a[2]);
-		      };
-		    case 4:
-		      return function (a) {
-		        return fn(a[0], a[1], a[2], a[3]);
-		      };
-		    default:
-		      return function (a) {
-		        return fn.apply(null, a);
-		      };
-		  }
-		}
-	
-		function apply(fn, c, a) {
-		  var aLength = a ? a.length : 0;
-		  if (c == null) {
-		    switch (aLength) {
-		      case 0:
-		        return fn();
-		      case 1:
-		        return fn(a[0]);
-		      case 2:
-		        return fn(a[0], a[1]);
-		      case 3:
-		        return fn(a[0], a[1], a[2]);
-		      case 4:
-		        return fn(a[0], a[1], a[2], a[3]);
-		      default:
-		        return fn.apply(null, a);
-		    }
-		  } else {
-		    switch (aLength) {
-		      case 0:
-		        return fn.call(c);
-		      default:
-		        return fn.apply(c, a);
-		    }
-		  }
-		}
-	
-		function fromSubUnsub(sub, unsub, transformer /* Function | falsey */) {
-		  return stream(function (emitter) {
-	
-		    var handler = transformer ? function () {
-		      emitter.emit(apply(transformer, this, arguments));
-		    } : function (x) {
-		      emitter.emit(x);
-		    };
-	
-		    sub(handler);
-		    return function () {
-		      return unsub(handler);
-		    };
-		  }).setName('fromSubUnsub');
-		}
-	
-		var pairs = [['addEventListener', 'removeEventListener'], ['addListener', 'removeListener'], ['on', 'off']];
-	
-		function fromEvents(target, eventName, transformer) {
-		  var sub = void 0,
-		      unsub = void 0;
-	
-		  for (var i = 0; i < pairs.length; i++) {
-		    if (typeof target[pairs[i][0]] === 'function' && typeof target[pairs[i][1]] === 'function') {
-		      sub = pairs[i][0];
-		      unsub = pairs[i][1];
-		      break;
-		    }
-		  }
-	
-		  if (sub === undefined) {
-		    throw new Error('target don\'t support any of ' + 'addEventListener/removeEventListener, addListener/removeListener, on/off method pair');
-		  }
-	
-		  return fromSubUnsub(function (handler) {
-		    return target[sub](eventName, handler);
-		  }, function (handler) {
-		    return target[unsub](eventName, handler);
-		  }, transformer).setName('fromEvents');
-		}
-	
-		// HACK:
-		//   We don't call parent Class constructor, but instead putting all necessary
-		//   properties into prototype to simulate ended Property
-		//   (see Propperty and Observable classes).
-	
-		function P(value) {
-		  this._currentEvent = { type: 'value', value: value, current: true };
-		}
-	
-		inherit(P, Property, {
-		  _name: 'constant',
-		  _active: false,
-		  _activating: false,
-		  _alive: false,
-		  _dispatcher: null,
-		  _logHandlers: null
-		});
-	
-		function constant(x) {
-		  return new P(x);
-		}
-	
-		// HACK:
-		//   We don't call parent Class constructor, but instead putting all necessary
-		//   properties into prototype to simulate ended Property
-		//   (see Propperty and Observable classes).
-	
-		function P$1(value) {
-		  this._currentEvent = { type: 'error', value: value, current: true };
-		}
-	
-		inherit(P$1, Property, {
-		  _name: 'constantError',
-		  _active: false,
-		  _activating: false,
-		  _alive: false,
-		  _dispatcher: null,
-		  _logHandlers: null
-		});
-	
-		function constantError(x) {
-		  return new P$1(x);
-		}
-	
-		function createConstructor(BaseClass, name) {
-		  return function AnonymousObservable(source, options) {
-		    var _this = this;
-	
-		    BaseClass.call(this);
-		    this._source = source;
-		    this._name = source._name + '.' + name;
-		    this._init(options);
-		    this._$handleAny = function (event) {
-		      return _this._handleAny(event);
-		    };
-		  };
-		}
-	
-		function createClassMethods(BaseClass) {
-		  return {
-		    _init: function () {},
-		    _free: function () {},
-		    _handleValue: function (x) {
-		      this._emitValue(x);
-		    },
-		    _handleError: function (x) {
-		      this._emitError(x);
-		    },
-		    _handleEnd: function () {
-		      this._emitEnd();
-		    },
-		    _handleAny: function (event) {
-		      switch (event.type) {
-		        case VALUE:
-		          return this._handleValue(event.value);
-		        case ERROR:
-		          return this._handleError(event.value);
-		        case END:
-		          return this._handleEnd();
-		      }
-		    },
-		    _onActivation: function () {
-		      this._source.onAny(this._$handleAny);
-		    },
-		    _onDeactivation: function () {
-		      this._source.offAny(this._$handleAny);
-		    },
-		    _clear: function () {
-		      BaseClass.prototype._clear.call(this);
-		      this._source = null;
-		      this._$handleAny = null;
-		      this._free();
-		    }
-		  };
-		}
-	
-		function createStream(name, mixin) {
-		  var S = createConstructor(Stream, name);
-		  inherit(S, Stream, createClassMethods(Stream), mixin);
-		  return S;
-		}
-	
-		function createProperty(name, mixin) {
-		  var P = createConstructor(Property, name);
-		  inherit(P, Property, createClassMethods(Property), mixin);
-		  return P;
-		}
-	
-		var P$2 = createProperty('toProperty', {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._getInitialCurrent = fn;
-		  },
-		  _onActivation: function () {
-		    if (this._getInitialCurrent !== null) {
-		      var getInitial = this._getInitialCurrent;
-		      this._emitValue(getInitial());
-		    }
-		    this._source.onAny(this._$handleAny); // copied from patterns/one-source
-		  }
-		});
-	
-		function toProperty(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
-	
-		  if (fn !== null && typeof fn !== 'function') {
-		    throw new Error('You should call toProperty() with a function or no arguments.');
-		  }
-		  return new P$2(obs, { fn: fn });
-		}
-	
-		var S$6 = createStream('changes', {
-		  _handleValue: function (x) {
-		    if (!this._activating) {
-		      this._emitValue(x);
-		    }
-		  },
-		  _handleError: function (x) {
-		    if (!this._activating) {
-		      this._emitError(x);
-		    }
-		  }
-		});
-	
-		function changes(obs) {
-		  return new S$6(obs);
-		}
-	
-		function fromPromise(promise) {
-	
-		  var called = false;
-	
-		  var result = stream(function (emitter) {
-		    if (!called) {
-		      var onValue = function (x) {
-		        emitter.emit(x);
-		        emitter.end();
-		      };
-		      var onError = function (x) {
-		        emitter.error(x);
-		        emitter.end();
-		      };
-		      var _promise = promise.then(onValue, onError);
-	
-		      // prevent libraries like 'Q' or 'when' from swallowing exceptions
-		      if (_promise && typeof _promise.done === 'function') {
-		        _promise.done();
-		      }
-	
-		      called = true;
-		    }
-		  });
-	
-		  return toProperty(result, null).setName('fromPromise');
-		}
-	
-		function getGlodalPromise() {
-		  if (typeof Promise === 'function') {
-		    return Promise;
-		  } else {
-		    throw new Error('There isn\'t default Promise, use shim or parameter');
-		  }
-		}
-	
-		function toPromise (obs) {
-		  var Promise = arguments.length <= 1 || arguments[1] === undefined ? getGlodalPromise() : arguments[1];
-	
-		  var last = null;
-		  return new Promise(function (resolve, reject) {
-		    obs.onAny(function (event) {
-		      if (event.type === END && last !== null) {
-		        (last.type === VALUE ? resolve : reject)(last.value);
-		        last = null;
-		      } else {
-		        last = event;
-		      }
-		    });
-		  });
-		}
-	
-		var ponyfill = __commonjs(function (module) {
-		'use strict';
-	
-		module.exports = function symbolObservablePonyfill(root) {
-			var result;
-			var Symbol = root.Symbol;
-	
-			if (typeof Symbol === 'function') {
-				if (Symbol.observable) {
-					result = Symbol.observable;
-				} else {
-					result = Symbol('observable');
-					Symbol.observable = result;
-				}
-			} else {
-				result = '@@observable';
-			}
-	
-			return result;
-		};
-		});
-	
-		var require$$0 = (ponyfill && typeof ponyfill === 'object' && 'default' in ponyfill ? ponyfill['default'] : ponyfill);
-	
-		var index = __commonjs(function (module, exports, global) {
-		/* global window */
-		'use strict';
-	
-		module.exports = require$$0(global || window || __commonjs_global);
-		});
-	
-		var $$observable = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
-	
-		function fromESObservable(_observable) {
-		  var observable = _observable[$$observable] ? _observable[$$observable]() : _observable;
-		  return stream(function (emitter) {
-		    var unsub = observable.subscribe({
-		      error: function (error) {
-		        emitter.error(error);
-		        emitter.end();
-		      },
-		      next: function (value) {
-		        emitter.emit(value);
-		      },
-		      complete: function () {
-		        emitter.end();
-		      }
-		    });
-	
-		    if (unsub.unsubscribe) {
-		      return function () {
-		        unsub.unsubscribe();
-		      };
-		    } else {
-		      return unsub;
-		    }
-		  }).setName('fromESObservable');
-		}
-	
-		function ESObservable(observable) {
-		  this._observable = observable.takeErrors(1);
-		}
-	
-		extend(ESObservable.prototype, {
-		  subscribe: function (observer) {
-		    var _this = this;
-	
-		    var fn = function (event) {
-		      if (event.type === VALUE && observer.next) {
-		        observer.next(event.value);
-		      } else if (event.type === ERROR && observer.error) {
-		        observer.error(event.value);
-		      } else if (event.type === END && observer.complete) {
-		        observer.complete(event.value);
-		      }
-		    };
-	
-		    this._observable.onAny(fn);
-		    return function () {
-		      return _this._observable.offAny(fn);
-		    };
-		  }
-		});
-	
-		function toESObservable() {
-		  return new ESObservable(this);
-		}
-	
-		var mixin = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _handleValue: function (x) {
-		    var fn = this._fn;
-		    this._emitValue(fn(x));
-		  }
-		};
-	
-		var S$7 = createStream('map', mixin);
-		var P$3 = createProperty('map', mixin);
-	
-		var id = function (x) {
-		  return x;
-		};
-	
-		function map$1(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id : arguments[1];
-	
-		  return new (obs._ofSameType(S$7, P$3))(obs, { fn: fn });
-		}
-	
-		var mixin$1 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _handleValue: function (x) {
-		    var fn = this._fn;
-		    if (fn(x)) {
-		      this._emitValue(x);
-		    }
-		  }
-		};
-	
-		var S$8 = createStream('filter', mixin$1);
-		var P$4 = createProperty('filter', mixin$1);
-	
-		var id$1 = function (x) {
-		  return x;
-		};
-	
-		function filter(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$1 : arguments[1];
-	
-		  return new (obs._ofSameType(S$8, P$4))(obs, { fn: fn });
-		}
-	
-		var mixin$2 = {
-		  _init: function (_ref) {
-		    var n = _ref.n;
-	
-		    this._n = n;
-		    if (n <= 0) {
-		      this._emitEnd();
-		    }
-		  },
-		  _handleValue: function (x) {
-		    this._n--;
-		    this._emitValue(x);
-		    if (this._n === 0) {
-		      this._emitEnd();
-		    }
-		  }
-		};
-	
-		var S$9 = createStream('take', mixin$2);
-		var P$5 = createProperty('take', mixin$2);
-	
-		function take(obs, n) {
-		  return new (obs._ofSameType(S$9, P$5))(obs, { n: n });
-		}
-	
-		var mixin$3 = {
-		  _init: function (_ref) {
-		    var n = _ref.n;
-	
-		    this._n = n;
-		    if (n <= 0) {
-		      this._emitEnd();
-		    }
-		  },
-		  _handleError: function (x) {
-		    this._n--;
-		    this._emitError(x);
-		    if (this._n === 0) {
-		      this._emitEnd();
-		    }
-		  }
-		};
-	
-		var S$10 = createStream('takeErrors', mixin$3);
-		var P$6 = createProperty('takeErrors', mixin$3);
-	
-		function takeErrors(obs, n) {
-		  return new (obs._ofSameType(S$10, P$6))(obs, { n: n });
-		}
-	
-		var mixin$4 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _handleValue: function (x) {
-		    var fn = this._fn;
-		    if (fn(x)) {
-		      this._emitValue(x);
-		    } else {
-		      this._emitEnd();
-		    }
-		  }
-		};
-	
-		var S$11 = createStream('takeWhile', mixin$4);
-		var P$7 = createProperty('takeWhile', mixin$4);
-	
-		var id$2 = function (x) {
-		  return x;
-		};
-	
-		function takeWhile(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$2 : arguments[1];
-	
-		  return new (obs._ofSameType(S$11, P$7))(obs, { fn: fn });
-		}
-	
-		var mixin$5 = {
-		  _init: function () {
-		    this._lastValue = NOTHING;
-		  },
-		  _free: function () {
-		    this._lastValue = null;
-		  },
-		  _handleValue: function (x) {
-		    this._lastValue = x;
-		  },
-		  _handleEnd: function () {
-		    if (this._lastValue !== NOTHING) {
-		      this._emitValue(this._lastValue);
-		    }
-		    this._emitEnd();
-		  }
-		};
-	
-		var S$12 = createStream('last', mixin$5);
-		var P$8 = createProperty('last', mixin$5);
-	
-		function last(obs) {
-		  return new (obs._ofSameType(S$12, P$8))(obs);
-		}
-	
-		var mixin$6 = {
-		  _init: function (_ref) {
-		    var n = _ref.n;
-	
-		    this._n = Math.max(0, n);
-		  },
-		  _handleValue: function (x) {
-		    if (this._n === 0) {
-		      this._emitValue(x);
-		    } else {
-		      this._n--;
-		    }
-		  }
-		};
-	
-		var S$13 = createStream('skip', mixin$6);
-		var P$9 = createProperty('skip', mixin$6);
-	
-		function skip(obs, n) {
-		  return new (obs._ofSameType(S$13, P$9))(obs, { n: n });
-		}
-	
-		var mixin$7 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _handleValue: function (x) {
-		    var fn = this._fn;
-		    if (this._fn !== null && !fn(x)) {
-		      this._fn = null;
-		    }
-		    if (this._fn === null) {
-		      this._emitValue(x);
-		    }
-		  }
-		};
-	
-		var S$14 = createStream('skipWhile', mixin$7);
-		var P$10 = createProperty('skipWhile', mixin$7);
-	
-		var id$3 = function (x) {
-		  return x;
-		};
-	
-		function skipWhile(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$3 : arguments[1];
-	
-		  return new (obs._ofSameType(S$14, P$10))(obs, { fn: fn });
-		}
-	
-		var mixin$8 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		    this._prev = NOTHING;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		    this._prev = null;
-		  },
-		  _handleValue: function (x) {
-		    var fn = this._fn;
-		    if (this._prev === NOTHING || !fn(this._prev, x)) {
-		      this._prev = x;
-		      this._emitValue(x);
-		    }
-		  }
-		};
-	
-		var S$15 = createStream('skipDuplicates', mixin$8);
-		var P$11 = createProperty('skipDuplicates', mixin$8);
-	
-		var eq = function (a, b) {
-		  return a === b;
-		};
-	
-		function skipDuplicates(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? eq : arguments[1];
-	
-		  return new (obs._ofSameType(S$15, P$11))(obs, { fn: fn });
-		}
-	
-		var mixin$9 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-		    var seed = _ref.seed;
-	
-		    this._fn = fn;
-		    this._prev = seed;
-		  },
-		  _free: function () {
-		    this._prev = null;
-		    this._fn = null;
-		  },
-		  _handleValue: function (x) {
-		    if (this._prev !== NOTHING) {
-		      var fn = this._fn;
-		      this._emitValue(fn(this._prev, x));
-		    }
-		    this._prev = x;
-		  }
-		};
-	
-		var S$16 = createStream('diff', mixin$9);
-		var P$12 = createProperty('diff', mixin$9);
-	
-		function defaultFn(a, b) {
-		  return [a, b];
-		}
-	
-		function diff(obs, fn) {
-		  var seed = arguments.length <= 2 || arguments[2] === undefined ? NOTHING : arguments[2];
-	
-		  return new (obs._ofSameType(S$16, P$12))(obs, { fn: fn || defaultFn, seed: seed });
-		}
-	
-		var P$13 = createProperty('scan', {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-		    var seed = _ref.seed;
-	
-		    this._fn = fn;
-		    this._seed = seed;
-		    if (seed !== NOTHING) {
-		      this._emitValue(seed);
-		    }
-		  },
-		  _free: function () {
-		    this._fn = null;
-		    this._seed = null;
-		  },
-		  _handleValue: function (x) {
-		    var fn = this._fn;
-		    if (this._currentEvent === null || this._currentEvent.type === ERROR) {
-		      this._emitValue(this._seed === NOTHING ? x : fn(this._seed, x));
-		    } else {
-		      this._emitValue(fn(this._currentEvent.value, x));
-		    }
-		  }
-		});
-	
-		function scan(obs, fn) {
-		  var seed = arguments.length <= 2 || arguments[2] === undefined ? NOTHING : arguments[2];
-	
-		  return new P$13(obs, { fn: fn, seed: seed });
-		}
-	
-		var mixin$10 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _handleValue: function (x) {
-		    var fn = this._fn;
-		    var xs = fn(x);
-		    for (var i = 0; i < xs.length; i++) {
-		      this._emitValue(xs[i]);
-		    }
-		  }
-		};
-	
-		var S$17 = createStream('flatten', mixin$10);
-	
-		var id$4 = function (x) {
-		  return x;
-		};
-	
-		function flatten(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$4 : arguments[1];
-	
-		  return new S$17(obs, { fn: fn });
-		}
-	
-		var END_MARKER = {};
-	
-		var mixin$11 = {
-		  _init: function (_ref) {
-		    var _this = this;
-	
-		    var wait = _ref.wait;
-	
-		    this._wait = Math.max(0, wait);
-		    this._buff = [];
-		    this._$shiftBuff = function () {
-		      var value = _this._buff.shift();
-		      if (value === END_MARKER) {
-		        _this._emitEnd();
-		      } else {
-		        _this._emitValue(value);
-		      }
-		    };
-		  },
-		  _free: function () {
-		    this._buff = null;
-		    this._$shiftBuff = null;
-		  },
-		  _handleValue: function (x) {
-		    if (this._activating) {
-		      this._emitValue(x);
-		    } else {
-		      this._buff.push(x);
-		      setTimeout(this._$shiftBuff, this._wait);
-		    }
-		  },
-		  _handleEnd: function () {
-		    if (this._activating) {
-		      this._emitEnd();
-		    } else {
-		      this._buff.push(END_MARKER);
-		      setTimeout(this._$shiftBuff, this._wait);
-		    }
-		  }
-		};
-	
-		var S$18 = createStream('delay', mixin$11);
-		var P$14 = createProperty('delay', mixin$11);
-	
-		function delay(obs, wait) {
-		  return new (obs._ofSameType(S$18, P$14))(obs, { wait: wait });
-		}
-	
-		var now = Date.now ? function () {
-		  return Date.now();
-		} : function () {
-		  return new Date().getTime();
-		};
-	
-		var mixin$12 = {
-		  _init: function (_ref) {
-		    var _this = this;
-	
-		    var wait = _ref.wait;
-		    var leading = _ref.leading;
-		    var trailing = _ref.trailing;
-	
-		    this._wait = Math.max(0, wait);
-		    this._leading = leading;
-		    this._trailing = trailing;
-		    this._trailingValue = null;
-		    this._timeoutId = null;
-		    this._endLater = false;
-		    this._lastCallTime = 0;
-		    this._$trailingCall = function () {
-		      return _this._trailingCall();
-		    };
-		  },
-		  _free: function () {
-		    this._trailingValue = null;
-		    this._$trailingCall = null;
-		  },
-		  _handleValue: function (x) {
-		    if (this._activating) {
-		      this._emitValue(x);
-		    } else {
-		      var curTime = now();
-		      if (this._lastCallTime === 0 && !this._leading) {
-		        this._lastCallTime = curTime;
-		      }
-		      var remaining = this._wait - (curTime - this._lastCallTime);
-		      if (remaining <= 0) {
-		        this._cancelTrailing();
-		        this._lastCallTime = curTime;
-		        this._emitValue(x);
-		      } else if (this._trailing) {
-		        this._cancelTrailing();
-		        this._trailingValue = x;
-		        this._timeoutId = setTimeout(this._$trailingCall, remaining);
-		      }
-		    }
-		  },
-		  _handleEnd: function () {
-		    if (this._activating) {
-		      this._emitEnd();
-		    } else {
-		      if (this._timeoutId) {
-		        this._endLater = true;
-		      } else {
-		        this._emitEnd();
-		      }
-		    }
-		  },
-		  _cancelTrailing: function () {
-		    if (this._timeoutId !== null) {
-		      clearTimeout(this._timeoutId);
-		      this._timeoutId = null;
-		    }
-		  },
-		  _trailingCall: function () {
-		    this._emitValue(this._trailingValue);
-		    this._timeoutId = null;
-		    this._trailingValue = null;
-		    this._lastCallTime = !this._leading ? 0 : now();
-		    if (this._endLater) {
-		      this._emitEnd();
-		    }
-		  }
-		};
-	
-		var S$19 = createStream('throttle', mixin$12);
-		var P$15 = createProperty('throttle', mixin$12);
-	
-		function throttle(obs, wait) {
-		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-	
-		  var _ref2$leading = _ref2.leading;
-		  var leading = _ref2$leading === undefined ? true : _ref2$leading;
-		  var _ref2$trailing = _ref2.trailing;
-		  var trailing = _ref2$trailing === undefined ? true : _ref2$trailing;
-	
-		  return new (obs._ofSameType(S$19, P$15))(obs, { wait: wait, leading: leading, trailing: trailing });
-		}
-	
-		var mixin$13 = {
-		  _init: function (_ref) {
-		    var _this = this;
-	
-		    var wait = _ref.wait;
-		    var immediate = _ref.immediate;
-	
-		    this._wait = Math.max(0, wait);
-		    this._immediate = immediate;
-		    this._lastAttempt = 0;
-		    this._timeoutId = null;
-		    this._laterValue = null;
-		    this._endLater = false;
-		    this._$later = function () {
-		      return _this._later();
-		    };
-		  },
-		  _free: function () {
-		    this._laterValue = null;
-		    this._$later = null;
-		  },
-		  _handleValue: function (x) {
-		    if (this._activating) {
-		      this._emitValue(x);
-		    } else {
-		      this._lastAttempt = now();
-		      if (this._immediate && !this._timeoutId) {
-		        this._emitValue(x);
-		      }
-		      if (!this._timeoutId) {
-		        this._timeoutId = setTimeout(this._$later, this._wait);
-		      }
-		      if (!this._immediate) {
-		        this._laterValue = x;
-		      }
-		    }
-		  },
-		  _handleEnd: function () {
-		    if (this._activating) {
-		      this._emitEnd();
-		    } else {
-		      if (this._timeoutId && !this._immediate) {
-		        this._endLater = true;
-		      } else {
-		        this._emitEnd();
-		      }
-		    }
-		  },
-		  _later: function () {
-		    var last = now() - this._lastAttempt;
-		    if (last < this._wait && last >= 0) {
-		      this._timeoutId = setTimeout(this._$later, this._wait - last);
-		    } else {
-		      this._timeoutId = null;
-		      if (!this._immediate) {
-		        this._emitValue(this._laterValue);
-		        this._laterValue = null;
-		      }
-		      if (this._endLater) {
-		        this._emitEnd();
-		      }
-		    }
-		  }
-		};
-	
-		var S$20 = createStream('debounce', mixin$13);
-		var P$16 = createProperty('debounce', mixin$13);
-	
-		function debounce(obs, wait) {
-		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-	
-		  var _ref2$immediate = _ref2.immediate;
-		  var immediate = _ref2$immediate === undefined ? false : _ref2$immediate;
-	
-		  return new (obs._ofSameType(S$20, P$16))(obs, { wait: wait, immediate: immediate });
-		}
-	
-		var mixin$14 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _handleError: function (x) {
-		    var fn = this._fn;
-		    this._emitError(fn(x));
-		  }
-		};
-	
-		var S$21 = createStream('mapErrors', mixin$14);
-		var P$17 = createProperty('mapErrors', mixin$14);
-	
-		var id$5 = function (x) {
-		  return x;
-		};
-	
-		function mapErrors(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$5 : arguments[1];
-	
-		  return new (obs._ofSameType(S$21, P$17))(obs, { fn: fn });
-		}
-	
-		var mixin$15 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _handleError: function (x) {
-		    var fn = this._fn;
-		    if (fn(x)) {
-		      this._emitError(x);
-		    }
-		  }
-		};
-	
-		var S$22 = createStream('filterErrors', mixin$15);
-		var P$18 = createProperty('filterErrors', mixin$15);
-	
-		var id$6 = function (x) {
-		  return x;
-		};
-	
-		function filterErrors(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$6 : arguments[1];
-	
-		  return new (obs._ofSameType(S$22, P$18))(obs, { fn: fn });
-		}
-	
-		var mixin$16 = {
-		  _handleValue: function () {}
-		};
-	
-		var S$23 = createStream('ignoreValues', mixin$16);
-		var P$19 = createProperty('ignoreValues', mixin$16);
-	
-		function ignoreValues(obs) {
-		  return new (obs._ofSameType(S$23, P$19))(obs);
-		}
-	
-		var mixin$17 = {
-		  _handleError: function () {}
-		};
-	
-		var S$24 = createStream('ignoreErrors', mixin$17);
-		var P$20 = createProperty('ignoreErrors', mixin$17);
-	
-		function ignoreErrors(obs) {
-		  return new (obs._ofSameType(S$24, P$20))(obs);
-		}
-	
-		var mixin$18 = {
-		  _handleEnd: function () {}
-		};
-	
-		var S$25 = createStream('ignoreEnd', mixin$18);
-		var P$21 = createProperty('ignoreEnd', mixin$18);
-	
-		function ignoreEnd(obs) {
-		  return new (obs._ofSameType(S$25, P$21))(obs);
-		}
-	
-		var mixin$19 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _handleEnd: function () {
-		    var fn = this._fn;
-		    this._emitValue(fn());
-		    this._emitEnd();
-		  }
-		};
-	
-		var S$26 = createStream('beforeEnd', mixin$19);
-		var P$22 = createProperty('beforeEnd', mixin$19);
-	
-		function beforeEnd(obs, fn) {
-		  return new (obs._ofSameType(S$26, P$22))(obs, { fn: fn });
-		}
-	
-		var mixin$20 = {
-		  _init: function (_ref) {
-		    var min = _ref.min;
-		    var max = _ref.max;
-	
-		    this._max = max;
-		    this._min = min;
-		    this._buff = [];
-		  },
-		  _free: function () {
-		    this._buff = null;
-		  },
-		  _handleValue: function (x) {
-		    this._buff = slide(this._buff, x, this._max);
-		    if (this._buff.length >= this._min) {
-		      this._emitValue(this._buff);
-		    }
-		  }
-		};
-	
-		var S$27 = createStream('slidingWindow', mixin$20);
-		var P$23 = createProperty('slidingWindow', mixin$20);
-	
-		function slidingWindow(obs, max) {
-		  var min = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
-	
-		  return new (obs._ofSameType(S$27, P$23))(obs, { min: min, max: max });
-		}
-	
-		var mixin$21 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-		    var flushOnEnd = _ref.flushOnEnd;
-	
-		    this._fn = fn;
-		    this._flushOnEnd = flushOnEnd;
-		    this._buff = [];
-		  },
-		  _free: function () {
-		    this._buff = null;
-		  },
-		  _flush: function () {
-		    if (this._buff !== null && this._buff.length !== 0) {
-		      this._emitValue(this._buff);
-		      this._buff = [];
-		    }
-		  },
-		  _handleValue: function (x) {
-		    this._buff.push(x);
-		    var fn = this._fn;
-		    if (!fn(x)) {
-		      this._flush();
-		    }
-		  },
-		  _handleEnd: function () {
-		    if (this._flushOnEnd) {
-		      this._flush();
-		    }
-		    this._emitEnd();
-		  }
-		};
-	
-		var S$28 = createStream('bufferWhile', mixin$21);
-		var P$24 = createProperty('bufferWhile', mixin$21);
-	
-		var id$7 = function (x) {
-		  return x;
-		};
-	
-		function bufferWhile(obs, fn) {
-		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-	
-		  var _ref2$flushOnEnd = _ref2.flushOnEnd;
-		  var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
-	
-		  return new (obs._ofSameType(S$28, P$24))(obs, { fn: fn || id$7, flushOnEnd: flushOnEnd });
-		}
-	
-		var mixin$22 = {
-		  _init: function (_ref) {
-		    var count = _ref.count;
-		    var flushOnEnd = _ref.flushOnEnd;
-	
-		    this._count = count;
-		    this._flushOnEnd = flushOnEnd;
-		    this._buff = [];
-		  },
-		  _free: function () {
-		    this._buff = null;
-		  },
-		  _flush: function () {
-		    if (this._buff !== null && this._buff.length !== 0) {
-		      this._emitValue(this._buff);
-		      this._buff = [];
-		    }
-		  },
-		  _handleValue: function (x) {
-		    this._buff.push(x);
-		    if (this._buff.length >= this._count) {
-		      this._flush();
-		    }
-		  },
-		  _handleEnd: function () {
-		    if (this._flushOnEnd) {
-		      this._flush();
-		    }
-		    this._emitEnd();
-		  }
-		};
-	
-		var S$29 = createStream('bufferWithCount', mixin$22);
-		var P$25 = createProperty('bufferWithCount', mixin$22);
-	
-		function bufferWhile$1(obs, count) {
-		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-	
-		  var _ref2$flushOnEnd = _ref2.flushOnEnd;
-		  var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
-	
-		  return new (obs._ofSameType(S$29, P$25))(obs, { count: count, flushOnEnd: flushOnEnd });
-		}
-	
-		var mixin$23 = {
-		  _init: function (_ref) {
-		    var _this = this;
-	
-		    var wait = _ref.wait;
-		    var count = _ref.count;
-		    var flushOnEnd = _ref.flushOnEnd;
-	
-		    this._wait = wait;
-		    this._count = count;
-		    this._flushOnEnd = flushOnEnd;
-		    this._intervalId = null;
-		    this._$onTick = function () {
-		      return _this._flush();
-		    };
-		    this._buff = [];
-		  },
-		  _free: function () {
-		    this._$onTick = null;
-		    this._buff = null;
-		  },
-		  _flush: function () {
-		    if (this._buff !== null) {
-		      this._emitValue(this._buff);
-		      this._buff = [];
-		    }
-		  },
-		  _handleValue: function (x) {
-		    this._buff.push(x);
-		    if (this._buff.length >= this._count) {
-		      clearInterval(this._intervalId);
-		      this._flush();
-		      this._intervalId = setInterval(this._$onTick, this._wait);
-		    }
-		  },
-		  _handleEnd: function () {
-		    if (this._flushOnEnd && this._buff.length !== 0) {
-		      this._flush();
-		    }
-		    this._emitEnd();
-		  },
-		  _onActivation: function () {
-		    this._intervalId = setInterval(this._$onTick, this._wait);
-		    this._source.onAny(this._$handleAny); // copied from patterns/one-source
-		  },
-		  _onDeactivation: function () {
-		    if (this._intervalId !== null) {
-		      clearInterval(this._intervalId);
-		      this._intervalId = null;
-		    }
-		    this._source.offAny(this._$handleAny); // copied from patterns/one-source
-		  }
-		};
-	
-		var S$30 = createStream('bufferWithTimeOrCount', mixin$23);
-		var P$26 = createProperty('bufferWithTimeOrCount', mixin$23);
-	
-		function bufferWithTimeOrCount(obs, wait, count) {
-		  var _ref2 = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
-	
-		  var _ref2$flushOnEnd = _ref2.flushOnEnd;
-		  var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
-	
-		  return new (obs._ofSameType(S$30, P$26))(obs, { wait: wait, count: count, flushOnEnd: flushOnEnd });
-		}
-	
-		function xformForObs(obs) {
-		  return {
-		    '@@transducer/step': function (res, input) {
-		      obs._emitValue(input);
-		      return null;
-		    },
-		    '@@transducer/result': function () {
-		      obs._emitEnd();
-		      return null;
-		    }
-		  };
-		}
-	
-		var mixin$24 = {
-		  _init: function (_ref) {
-		    var transducer = _ref.transducer;
-	
-		    this._xform = transducer(xformForObs(this));
-		  },
-		  _free: function () {
-		    this._xform = null;
-		  },
-		  _handleValue: function (x) {
-		    if (this._xform['@@transducer/step'](null, x) !== null) {
-		      this._xform['@@transducer/result'](null);
-		    }
-		  },
-		  _handleEnd: function () {
-		    this._xform['@@transducer/result'](null);
-		  }
-		};
-	
-		var S$31 = createStream('transduce', mixin$24);
-		var P$27 = createProperty('transduce', mixin$24);
-	
-		function transduce(obs, transducer) {
-		  return new (obs._ofSameType(S$31, P$27))(obs, { transducer: transducer });
-		}
-	
-		var mixin$25 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._handler = fn;
-		    this._emitter = emitter(this);
-		  },
-		  _free: function () {
-		    this._handler = null;
-		    this._emitter = null;
-		  },
-		  _handleAny: function (event) {
-		    this._handler(this._emitter, event);
-		  }
-		};
-	
-		var S$32 = createStream('withHandler', mixin$25);
-		var P$28 = createProperty('withHandler', mixin$25);
-	
-		function withHandler(obs, fn) {
-		  return new (obs._ofSameType(S$32, P$28))(obs, { fn: fn });
-		}
-	
-		function defaultErrorsCombinator(errors) {
-		  var latestError = void 0;
-		  for (var i = 0; i < errors.length; i++) {
-		    if (errors[i] !== undefined) {
-		      if (latestError === undefined || latestError.index < errors[i].index) {
-		        latestError = errors[i];
-		      }
-		    }
-		  }
-		  return latestError.error;
-		}
-	
-		function Combine(active, passive, combinator) {
-		  var _this = this;
-	
-		  Stream.call(this);
-		  this._activeCount = active.length;
-		  this._sources = concat(active, passive);
-		  this._combinator = combinator ? spread(combinator, this._sources.length) : function (x) {
-		    return x;
-		  };
-		  this._aliveCount = 0;
-		  this._latestValues = new Array(this._sources.length);
-		  this._latestErrors = new Array(this._sources.length);
-		  fillArray(this._latestValues, NOTHING);
-		  this._emitAfterActivation = false;
-		  this._endAfterActivation = false;
-		  this._latestErrorIndex = 0;
-	
-		  this._$handlers = [];
-	
-		  var _loop = function (i) {
-		    _this._$handlers.push(function (event) {
-		      return _this._handleAny(i, event);
-		    });
-		  };
-	
-		  for (var i = 0; i < this._sources.length; i++) {
-		    _loop(i);
-		  }
-		}
-	
-		inherit(Combine, Stream, {
-	
-		  _name: 'combine',
-	
-		  _onActivation: function () {
-		    this._aliveCount = this._activeCount;
-	
-		    // we need to suscribe to _passive_ sources before _active_
-		    // (see https://github.com/rpominov/kefir/issues/98)
-		    for (var i = this._activeCount; i < this._sources.length; i++) {
-		      this._sources[i].onAny(this._$handlers[i]);
-		    }
-		    for (var i = 0; i < this._activeCount; i++) {
-		      this._sources[i].onAny(this._$handlers[i]);
-		    }
-	
-		    if (this._emitAfterActivation) {
-		      this._emitAfterActivation = false;
-		      this._emitIfFull();
-		    }
-		    if (this._endAfterActivation) {
-		      this._emitEnd();
-		    }
-		  },
-		  _onDeactivation: function () {
-		    var length = this._sources.length,
-		        i = void 0;
-		    for (i = 0; i < length; i++) {
-		      this._sources[i].offAny(this._$handlers[i]);
-		    }
-		  },
-		  _emitIfFull: function () {
-		    var hasAllValues = true;
-		    var hasErrors = false;
-		    var length = this._latestValues.length;
-		    var valuesCopy = new Array(length);
-		    var errorsCopy = new Array(length);
-	
-		    for (var i = 0; i < length; i++) {
-		      valuesCopy[i] = this._latestValues[i];
-		      errorsCopy[i] = this._latestErrors[i];
-	
-		      if (valuesCopy[i] === NOTHING) {
-		        hasAllValues = false;
-		      }
-	
-		      if (errorsCopy[i] !== undefined) {
-		        hasErrors = true;
-		      }
-		    }
-	
-		    if (hasAllValues) {
-		      var combinator = this._combinator;
-		      this._emitValue(combinator(valuesCopy));
-		    }
-		    if (hasErrors) {
-		      this._emitError(defaultErrorsCombinator(errorsCopy));
-		    }
-		  },
-		  _handleAny: function (i, event) {
-	
-		    if (event.type === VALUE || event.type === ERROR) {
-	
-		      if (event.type === VALUE) {
-		        this._latestValues[i] = event.value;
-		        this._latestErrors[i] = undefined;
-		      }
-		      if (event.type === ERROR) {
-		        this._latestValues[i] = NOTHING;
-		        this._latestErrors[i] = {
-		          index: this._latestErrorIndex++,
-		          error: event.value
-		        };
-		      }
-	
-		      if (i < this._activeCount) {
-		        if (this._activating) {
-		          this._emitAfterActivation = true;
-		        } else {
-		          this._emitIfFull();
-		        }
-		      }
-		    } else {
-		      // END
-	
-		      if (i < this._activeCount) {
-		        this._aliveCount--;
-		        if (this._aliveCount === 0) {
-		          if (this._activating) {
-		            this._endAfterActivation = true;
-		          } else {
-		            this._emitEnd();
-		          }
-		        }
-		      }
-		    }
-		  },
-		  _clear: function () {
-		    Stream.prototype._clear.call(this);
-		    this._sources = null;
-		    this._latestValues = null;
-		    this._latestErrors = null;
-		    this._combinator = null;
-		    this._$handlers = null;
-		  }
-		});
-	
-		function combine(active) {
-		  var passive = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
-		  var combinator = arguments[2];
-	
-		  if (typeof passive === 'function') {
-		    combinator = passive;
-		    passive = [];
-		  }
-		  return active.length === 0 ? never() : new Combine(active, passive, combinator);
-		}
-	
-		var isArray = Array.isArray || function (xs) {
-		  return Object.prototype.toString.call(xs) === '[object Array]';
-		};
-	
-		function Zip(sources, combinator) {
-		  var _this = this;
-	
-		  Stream.call(this);
-	
-		  this._buffers = map(sources, function (source) {
-		    return isArray(source) ? cloneArray(source) : [];
-		  });
-		  this._sources = map(sources, function (source) {
-		    return isArray(source) ? never() : source;
-		  });
-	
-		  this._combinator = combinator ? spread(combinator, this._sources.length) : function (x) {
-		    return x;
-		  };
-		  this._aliveCount = 0;
-	
-		  this._$handlers = [];
-	
-		  var _loop = function (i) {
-		    _this._$handlers.push(function (event) {
-		      return _this._handleAny(i, event);
-		    });
-		  };
-	
-		  for (var i = 0; i < this._sources.length; i++) {
-		    _loop(i);
-		  }
-		}
-	
-		inherit(Zip, Stream, {
-	
-		  _name: 'zip',
-	
-		  _onActivation: function () {
-	
-		    // if all sources are arrays
-		    while (this._isFull()) {
-		      this._emit();
-		    }
-	
-		    var length = this._sources.length;
-		    this._aliveCount = length;
-		    for (var i = 0; i < length && this._active; i++) {
-		      this._sources[i].onAny(this._$handlers[i]);
-		    }
-		  },
-		  _onDeactivation: function () {
-		    for (var i = 0; i < this._sources.length; i++) {
-		      this._sources[i].offAny(this._$handlers[i]);
-		    }
-		  },
-		  _emit: function () {
-		    var values = new Array(this._buffers.length);
-		    for (var i = 0; i < this._buffers.length; i++) {
-		      values[i] = this._buffers[i].shift();
-		    }
-		    var combinator = this._combinator;
-		    this._emitValue(combinator(values));
-		  },
-		  _isFull: function () {
-		    for (var i = 0; i < this._buffers.length; i++) {
-		      if (this._buffers[i].length === 0) {
-		        return false;
-		      }
-		    }
-		    return true;
-		  },
-		  _handleAny: function (i, event) {
-		    if (event.type === VALUE) {
-		      this._buffers[i].push(event.value);
-		      if (this._isFull()) {
-		        this._emit();
-		      }
-		    }
-		    if (event.type === ERROR) {
-		      this._emitError(event.value);
-		    }
-		    if (event.type === END) {
-		      this._aliveCount--;
-		      if (this._aliveCount === 0) {
-		        this._emitEnd();
-		      }
-		    }
-		  },
-		  _clear: function () {
-		    Stream.prototype._clear.call(this);
-		    this._sources = null;
-		    this._buffers = null;
-		    this._combinator = null;
-		    this._$handlers = null;
-		  }
-		});
-	
-		function zip(observables, combinator /* Function | falsey */) {
-		  return observables.length === 0 ? never() : new Zip(observables, combinator);
-		}
-	
-		var id$8 = function (x) {
-		  return x;
-		};
-	
-		function AbstractPool() {
-		  var _this = this;
-	
-		  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
-		  var _ref$queueLim = _ref.queueLim;
-		  var queueLim = _ref$queueLim === undefined ? 0 : _ref$queueLim;
-		  var _ref$concurLim = _ref.concurLim;
-		  var concurLim = _ref$concurLim === undefined ? -1 : _ref$concurLim;
-		  var _ref$drop = _ref.drop;
-		  var drop = _ref$drop === undefined ? 'new' : _ref$drop;
-	
-		  Stream.call(this);
-	
-		  this._queueLim = queueLim < 0 ? -1 : queueLim;
-		  this._concurLim = concurLim < 0 ? -1 : concurLim;
-		  this._drop = drop;
-		  this._queue = [];
-		  this._curSources = [];
-		  this._$handleSubAny = function (event) {
-		    return _this._handleSubAny(event);
-		  };
-		  this._$endHandlers = [];
-		  this._currentlyAdding = null;
-	
-		  if (this._concurLim === 0) {
-		    this._emitEnd();
-		  }
-		}
-	
-		inherit(AbstractPool, Stream, {
-	
-		  _name: 'abstractPool',
-	
-		  _add: function (obj, toObs /* Function | falsey */) {
-		    toObs = toObs || id$8;
-		    if (this._concurLim === -1 || this._curSources.length < this._concurLim) {
-		      this._addToCur(toObs(obj));
-		    } else {
-		      if (this._queueLim === -1 || this._queue.length < this._queueLim) {
-		        this._addToQueue(toObs(obj));
-		      } else if (this._drop === 'old') {
-		        this._removeOldest();
-		        this._add(obj, toObs);
-		      }
-		    }
-		  },
-		  _addAll: function (obss) {
-		    var _this2 = this;
-	
-		    forEach(obss, function (obs) {
-		      return _this2._add(obs);
-		    });
-		  },
-		  _remove: function (obs) {
-		    if (this._removeCur(obs) === -1) {
-		      this._removeQueue(obs);
-		    }
-		  },
-		  _addToQueue: function (obs) {
-		    this._queue = concat(this._queue, [obs]);
-		  },
-		  _addToCur: function (obs) {
-		    if (this._active) {
-	
-		      // HACK:
-		      //
-		      // We have two optimizations for cases when `obs` is ended. We don't want
-		      // to add such observable to the list, but only want to emit events
-		      // from it (if it has some).
-		      //
-		      // Instead of this hacks, we could just did following,
-		      // but it would be 5-8 times slower:
-		      //
-		      //     this._curSources = concat(this._curSources, [obs]);
-		      //     this._subscribe(obs);
-		      //
-	
-		      // #1
-		      // This one for cases when `obs` already ended
-		      // e.g., Kefir.constant() or Kefir.never()
-		      if (!obs._alive) {
-		        if (obs._currentEvent) {
-		          this._emit(obs._currentEvent.type, obs._currentEvent.value);
-		        }
-		        return;
-		      }
-	
-		      // #2
-		      // This one is for cases when `obs` going to end synchronously on
-		      // first subscriber e.g., Kefir.stream(em => {em.emit(1); em.end()})
-		      this._currentlyAdding = obs;
-		      obs.onAny(this._$handleSubAny);
-		      this._currentlyAdding = null;
-		      if (obs._alive) {
-		        this._curSources = concat(this._curSources, [obs]);
-		        if (this._active) {
-		          this._subToEnd(obs);
-		        }
-		      }
-		    } else {
-		      this._curSources = concat(this._curSources, [obs]);
-		    }
-		  },
-		  _subToEnd: function (obs) {
-		    var _this3 = this;
-	
-		    var onEnd = function () {
-		      return _this3._removeCur(obs);
-		    };
-		    this._$endHandlers.push({ obs: obs, handler: onEnd });
-		    obs.onEnd(onEnd);
-		  },
-		  _subscribe: function (obs) {
-		    obs.onAny(this._$handleSubAny);
-	
-		    // it can become inactive in responce of subscribing to `obs.onAny` above
-		    if (this._active) {
-		      this._subToEnd(obs);
-		    }
-		  },
-		  _unsubscribe: function (obs) {
-		    obs.offAny(this._$handleSubAny);
-	
-		    var onEndI = findByPred(this._$endHandlers, function (obj) {
-		      return obj.obs === obs;
-		    });
-		    if (onEndI !== -1) {
-		      obs.offEnd(this._$endHandlers[onEndI].handler);
-		      this._$endHandlers.splice(onEndI, 1);
-		    }
-		  },
-		  _handleSubAny: function (event) {
-		    if (event.type === VALUE) {
-		      this._emitValue(event.value);
-		    } else if (event.type === ERROR) {
-		      this._emitError(event.value);
-		    }
-		  },
-		  _removeQueue: function (obs) {
-		    var index = find(this._queue, obs);
-		    this._queue = remove(this._queue, index);
-		    return index;
-		  },
-		  _removeCur: function (obs) {
-		    if (this._active) {
-		      this._unsubscribe(obs);
-		    }
-		    var index = find(this._curSources, obs);
-		    this._curSources = remove(this._curSources, index);
-		    if (index !== -1) {
-		      if (this._queue.length !== 0) {
-		        this._pullQueue();
-		      } else if (this._curSources.length === 0) {
-		        this._onEmpty();
-		      }
-		    }
-		    return index;
-		  },
-		  _removeOldest: function () {
-		    this._removeCur(this._curSources[0]);
-		  },
-		  _pullQueue: function () {
-		    if (this._queue.length !== 0) {
-		      this._queue = cloneArray(this._queue);
-		      this._addToCur(this._queue.shift());
-		    }
-		  },
-		  _onActivation: function () {
-		    for (var i = 0, sources = this._curSources; i < sources.length && this._active; i++) {
-		      this._subscribe(sources[i]);
-		    }
-		  },
-		  _onDeactivation: function () {
-		    for (var i = 0, sources = this._curSources; i < sources.length; i++) {
-		      this._unsubscribe(sources[i]);
-		    }
-		    if (this._currentlyAdding !== null) {
-		      this._unsubscribe(this._currentlyAdding);
-		    }
-		  },
-		  _isEmpty: function () {
-		    return this._curSources.length === 0;
-		  },
-		  _onEmpty: function () {},
-		  _clear: function () {
-		    Stream.prototype._clear.call(this);
-		    this._queue = null;
-		    this._curSources = null;
-		    this._$handleSubAny = null;
-		    this._$endHandlers = null;
-		  }
-		});
-	
-		function Merge(sources) {
-		  AbstractPool.call(this);
-		  this._addAll(sources);
-		  this._initialised = true;
-		}
-	
-		inherit(Merge, AbstractPool, {
-	
-		  _name: 'merge',
-	
-		  _onEmpty: function () {
-		    if (this._initialised) {
-		      this._emitEnd();
-		    }
-		  }
-		});
-	
-		function merge(observables) {
-		  return observables.length === 0 ? never() : new Merge(observables);
-		}
-	
-		function S$33(generator) {
-		  var _this = this;
-	
-		  Stream.call(this);
-		  this._generator = generator;
-		  this._source = null;
-		  this._inLoop = false;
-		  this._iteration = 0;
-		  this._$handleAny = function (event) {
-		    return _this._handleAny(event);
-		  };
-		}
-	
-		inherit(S$33, Stream, {
-	
-		  _name: 'repeat',
-	
-		  _handleAny: function (event) {
-		    if (event.type === END) {
-		      this._source = null;
-		      this._getSource();
-		    } else {
-		      this._emit(event.type, event.value);
-		    }
-		  },
-		  _getSource: function () {
-		    if (!this._inLoop) {
-		      this._inLoop = true;
-		      var generator = this._generator;
-		      while (this._source === null && this._alive && this._active) {
-		        this._source = generator(this._iteration++);
-		        if (this._source) {
-		          this._source.onAny(this._$handleAny);
-		        } else {
-		          this._emitEnd();
-		        }
-		      }
-		      this._inLoop = false;
-		    }
-		  },
-		  _onActivation: function () {
-		    if (this._source) {
-		      this._source.onAny(this._$handleAny);
-		    } else {
-		      this._getSource();
-		    }
-		  },
-		  _onDeactivation: function () {
-		    if (this._source) {
-		      this._source.offAny(this._$handleAny);
-		    }
-		  },
-		  _clear: function () {
-		    Stream.prototype._clear.call(this);
-		    this._generator = null;
-		    this._source = null;
-		    this._$handleAny = null;
-		  }
-		});
-	
-		function repeat (generator) {
-		  return new S$33(generator);
-		}
-	
-		function concat$1(observables) {
-		  return repeat(function (index) {
-		    return observables.length > index ? observables[index] : false;
-		  }).setName('concat');
-		}
-	
-		function Pool() {
-		  AbstractPool.call(this);
-		}
-	
-		inherit(Pool, AbstractPool, {
-	
-		  _name: 'pool',
-	
-		  plug: function (obs) {
-		    this._add(obs);
-		    return this;
-		  },
-		  unplug: function (obs) {
-		    this._remove(obs);
-		    return this;
-		  }
-		});
-	
-		function FlatMap(source, fn, options) {
-		  var _this = this;
-	
-		  AbstractPool.call(this, options);
-		  this._source = source;
-		  this._fn = fn;
-		  this._mainEnded = false;
-		  this._lastCurrent = null;
-		  this._$handleMain = function (event) {
-		    return _this._handleMain(event);
-		  };
-		}
-	
-		inherit(FlatMap, AbstractPool, {
-		  _onActivation: function () {
-		    AbstractPool.prototype._onActivation.call(this);
-		    if (this._active) {
-		      this._source.onAny(this._$handleMain);
-		    }
-		  },
-		  _onDeactivation: function () {
-		    AbstractPool.prototype._onDeactivation.call(this);
-		    this._source.offAny(this._$handleMain);
-		    this._hadNoEvSinceDeact = true;
-		  },
-		  _handleMain: function (event) {
-	
-		    if (event.type === VALUE) {
-		      // Is latest value before deactivation survived, and now is 'current' on this activation?
-		      // We don't want to handle such values, to prevent to constantly add
-		      // same observale on each activation/deactivation when our main source
-		      // is a `Kefir.conatant()` for example.
-		      var sameCurr = this._activating && this._hadNoEvSinceDeact && this._lastCurrent === event.value;
-		      if (!sameCurr) {
-		        this._add(event.value, this._fn);
-		      }
-		      this._lastCurrent = event.value;
-		      this._hadNoEvSinceDeact = false;
-		    }
-	
-		    if (event.type === ERROR) {
-		      this._emitError(event.value);
-		    }
-	
-		    if (event.type === END) {
-		      if (this._isEmpty()) {
-		        this._emitEnd();
-		      } else {
-		        this._mainEnded = true;
-		      }
-		    }
-		  },
-		  _onEmpty: function () {
-		    if (this._mainEnded) {
-		      this._emitEnd();
-		    }
-		  },
-		  _clear: function () {
-		    AbstractPool.prototype._clear.call(this);
-		    this._source = null;
-		    this._lastCurrent = null;
-		    this._$handleMain = null;
-		  }
-		});
-	
-		function FlatMapErrors(source, fn) {
-		  FlatMap.call(this, source, fn);
-		}
-	
-		inherit(FlatMapErrors, FlatMap, {
-	
-		  // Same as in FlatMap, only VALUE/ERROR flipped
-	
-		  _handleMain: function (event) {
-	
-		    if (event.type === ERROR) {
-		      var sameCurr = this._activating && this._hadNoEvSinceDeact && this._lastCurrent === event.value;
-		      if (!sameCurr) {
-		        this._add(event.value, this._fn);
-		      }
-		      this._lastCurrent = event.value;
-		      this._hadNoEvSinceDeact = false;
-		    }
-	
-		    if (event.type === VALUE) {
-		      this._emitValue(event.value);
-		    }
-	
-		    if (event.type === END) {
-		      if (this._isEmpty()) {
-		        this._emitEnd();
-		      } else {
-		        this._mainEnded = true;
-		      }
-		    }
-		  }
-		});
-	
-		function createConstructor$1(BaseClass, name) {
-		  return function AnonymousObservable(primary, secondary, options) {
-		    var _this = this;
-	
-		    BaseClass.call(this);
-		    this._primary = primary;
-		    this._secondary = secondary;
-		    this._name = primary._name + '.' + name;
-		    this._lastSecondary = NOTHING;
-		    this._$handleSecondaryAny = function (event) {
-		      return _this._handleSecondaryAny(event);
-		    };
-		    this._$handlePrimaryAny = function (event) {
-		      return _this._handlePrimaryAny(event);
-		    };
-		    this._init(options);
-		  };
-		}
-	
-		function createClassMethods$1(BaseClass) {
-		  return {
-		    _init: function () {},
-		    _free: function () {},
-		    _handlePrimaryValue: function (x) {
-		      this._emitValue(x);
-		    },
-		    _handlePrimaryError: function (x) {
-		      this._emitError(x);
-		    },
-		    _handlePrimaryEnd: function () {
-		      this._emitEnd();
-		    },
-		    _handleSecondaryValue: function (x) {
-		      this._lastSecondary = x;
-		    },
-		    _handleSecondaryError: function (x) {
-		      this._emitError(x);
-		    },
-		    _handleSecondaryEnd: function () {},
-		    _handlePrimaryAny: function (event) {
-		      switch (event.type) {
-		        case VALUE:
-		          return this._handlePrimaryValue(event.value);
-		        case ERROR:
-		          return this._handlePrimaryError(event.value);
-		        case END:
-		          return this._handlePrimaryEnd(event.value);
-		      }
-		    },
-		    _handleSecondaryAny: function (event) {
-		      switch (event.type) {
-		        case VALUE:
-		          return this._handleSecondaryValue(event.value);
-		        case ERROR:
-		          return this._handleSecondaryError(event.value);
-		        case END:
-		          this._handleSecondaryEnd(event.value);
-		          this._removeSecondary();
-		      }
-		    },
-		    _removeSecondary: function () {
-		      if (this._secondary !== null) {
-		        this._secondary.offAny(this._$handleSecondaryAny);
-		        this._$handleSecondaryAny = null;
-		        this._secondary = null;
-		      }
-		    },
-		    _onActivation: function () {
-		      if (this._secondary !== null) {
-		        this._secondary.onAny(this._$handleSecondaryAny);
-		      }
-		      if (this._active) {
-		        this._primary.onAny(this._$handlePrimaryAny);
-		      }
-		    },
-		    _onDeactivation: function () {
-		      if (this._secondary !== null) {
-		        this._secondary.offAny(this._$handleSecondaryAny);
-		      }
-		      this._primary.offAny(this._$handlePrimaryAny);
-		    },
-		    _clear: function () {
-		      BaseClass.prototype._clear.call(this);
-		      this._primary = null;
-		      this._secondary = null;
-		      this._lastSecondary = null;
-		      this._$handleSecondaryAny = null;
-		      this._$handlePrimaryAny = null;
-		      this._free();
-		    }
-		  };
-		}
-	
-		function createStream$1(name, mixin) {
-		  var S = createConstructor$1(Stream, name);
-		  inherit(S, Stream, createClassMethods$1(Stream), mixin);
-		  return S;
-		}
-	
-		function createProperty$1(name, mixin) {
-		  var P = createConstructor$1(Property, name);
-		  inherit(P, Property, createClassMethods$1(Property), mixin);
-		  return P;
-		}
-	
-		var mixin$26 = {
-		  _handlePrimaryValue: function (x) {
-		    if (this._lastSecondary !== NOTHING && this._lastSecondary) {
-		      this._emitValue(x);
-		    }
-		  },
-		  _handleSecondaryEnd: function () {
-		    if (this._lastSecondary === NOTHING || !this._lastSecondary) {
-		      this._emitEnd();
-		    }
-		  }
-		};
-	
-		var S$34 = createStream$1('filterBy', mixin$26);
-		var P$29 = createProperty$1('filterBy', mixin$26);
-	
-		function filterBy(primary, secondary) {
-		  return new (primary._ofSameType(S$34, P$29))(primary, secondary);
-		}
-	
-		var id2 = function (_, x) {
-		  return x;
-		};
-	
-		function sampledBy(passive, active, combinator) {
-		  var _combinator = combinator ? function (a, b) {
-		    return combinator(b, a);
-		  } : id2;
-		  return combine([active], [passive], _combinator).setName(passive, 'sampledBy');
-		}
-	
-		var mixin$27 = {
-		  _handlePrimaryValue: function (x) {
-		    if (this._lastSecondary !== NOTHING) {
-		      this._emitValue(x);
-		    }
-		  },
-		  _handleSecondaryEnd: function () {
-		    if (this._lastSecondary === NOTHING) {
-		      this._emitEnd();
-		    }
-		  }
-		};
-	
-		var S$35 = createStream$1('skipUntilBy', mixin$27);
-		var P$30 = createProperty$1('skipUntilBy', mixin$27);
-	
-		function skipUntilBy(primary, secondary) {
-		  return new (primary._ofSameType(S$35, P$30))(primary, secondary);
-		}
-	
-		var mixin$28 = {
-		  _handleSecondaryValue: function () {
-		    this._emitEnd();
-		  }
-		};
-	
-		var S$36 = createStream$1('takeUntilBy', mixin$28);
-		var P$31 = createProperty$1('takeUntilBy', mixin$28);
-	
-		function takeUntilBy(primary, secondary) {
-		  return new (primary._ofSameType(S$36, P$31))(primary, secondary);
-		}
-	
-		var mixin$29 = {
-		  _init: function () {
-		    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
-		    var _ref$flushOnEnd = _ref.flushOnEnd;
-		    var flushOnEnd = _ref$flushOnEnd === undefined ? true : _ref$flushOnEnd;
-	
-		    this._buff = [];
-		    this._flushOnEnd = flushOnEnd;
-		  },
-		  _free: function () {
-		    this._buff = null;
-		  },
-		  _flush: function () {
-		    if (this._buff !== null) {
-		      this._emitValue(this._buff);
-		      this._buff = [];
-		    }
-		  },
-		  _handlePrimaryEnd: function () {
-		    if (this._flushOnEnd) {
-		      this._flush();
-		    }
-		    this._emitEnd();
-		  },
-		  _onActivation: function () {
-		    this._primary.onAny(this._$handlePrimaryAny);
-		    if (this._alive && this._secondary !== null) {
-		      this._secondary.onAny(this._$handleSecondaryAny);
-		    }
-		  },
-		  _handlePrimaryValue: function (x) {
-		    this._buff.push(x);
-		  },
-		  _handleSecondaryValue: function () {
-		    this._flush();
-		  },
-		  _handleSecondaryEnd: function () {
-		    if (!this._flushOnEnd) {
-		      this._emitEnd();
-		    }
-		  }
-		};
-	
-		var S$37 = createStream$1('bufferBy', mixin$29);
-		var P$32 = createProperty$1('bufferBy', mixin$29);
-	
-		function bufferBy(primary, secondary, options /* optional */) {
-		  return new (primary._ofSameType(S$37, P$32))(primary, secondary, options);
-		}
-	
-		var mixin$30 = {
-		  _init: function () {
-		    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
-		    var _ref$flushOnEnd = _ref.flushOnEnd;
-		    var flushOnEnd = _ref$flushOnEnd === undefined ? true : _ref$flushOnEnd;
-		    var _ref$flushOnChange = _ref.flushOnChange;
-		    var flushOnChange = _ref$flushOnChange === undefined ? false : _ref$flushOnChange;
-	
-		    this._buff = [];
-		    this._flushOnEnd = flushOnEnd;
-		    this._flushOnChange = flushOnChange;
-		  },
-		  _free: function () {
-		    this._buff = null;
-		  },
-		  _flush: function () {
-		    if (this._buff !== null) {
-		      this._emitValue(this._buff);
-		      this._buff = [];
-		    }
-		  },
-		  _handlePrimaryEnd: function () {
-		    if (this._flushOnEnd) {
-		      this._flush();
-		    }
-		    this._emitEnd();
-		  },
-		  _handlePrimaryValue: function (x) {
-		    this._buff.push(x);
-		    if (this._lastSecondary !== NOTHING && !this._lastSecondary) {
-		      this._flush();
-		    }
-		  },
-		  _handleSecondaryEnd: function () {
-		    if (!this._flushOnEnd && (this._lastSecondary === NOTHING || this._lastSecondary)) {
-		      this._emitEnd();
-		    }
-		  },
-		  _handleSecondaryValue: function (x) {
-		    if (this._flushOnChange && !x) {
-		      this._flush();
-		    }
-	
-		    // from default _handleSecondaryValue
-		    this._lastSecondary = x;
-		  }
-		};
-	
-		var S$38 = createStream$1('bufferWhileBy', mixin$30);
-		var P$33 = createProperty$1('bufferWhileBy', mixin$30);
-	
-		function bufferWhileBy(primary, secondary, options /* optional */) {
-		  return new (primary._ofSameType(S$38, P$33))(primary, secondary, options);
-		}
-	
-		var f = function () {
-		  return false;
-		};
-		var t = function () {
-		  return true;
-		};
-	
-		function awaiting(a, b) {
-		  var result = merge([map$1(a, t), map$1(b, f)]);
-		  result = skipDuplicates(result);
-		  result = toProperty(result, f);
-		  return result.setName(a, 'awaiting');
-		}
-	
-		var mixin$31 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _handleValue: function (x) {
-		    var fn = this._fn;
-		    var result = fn(x);
-		    if (result.convert) {
-		      this._emitError(result.error);
-		    } else {
-		      this._emitValue(x);
-		    }
-		  }
-		};
-	
-		var S$39 = createStream('valuesToErrors', mixin$31);
-		var P$34 = createProperty('valuesToErrors', mixin$31);
-	
-		var defFn = function (x) {
-		  return { convert: true, error: x };
-		};
-	
-		function valuesToErrors(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? defFn : arguments[1];
-	
-		  return new (obs._ofSameType(S$39, P$34))(obs, { fn: fn });
-		}
-	
-		var mixin$32 = {
-		  _init: function (_ref) {
-		    var fn = _ref.fn;
-	
-		    this._fn = fn;
-		  },
-		  _free: function () {
-		    this._fn = null;
-		  },
-		  _handleError: function (x) {
-		    var fn = this._fn;
-		    var result = fn(x);
-		    if (result.convert) {
-		      this._emitValue(result.value);
-		    } else {
-		      this._emitError(x);
-		    }
-		  }
-		};
-	
-		var S$40 = createStream('errorsToValues', mixin$32);
-		var P$35 = createProperty('errorsToValues', mixin$32);
-	
-		var defFn$1 = function (x) {
-		  return { convert: true, value: x };
-		};
-	
-		function errorsToValues(obs) {
-		  var fn = arguments.length <= 1 || arguments[1] === undefined ? defFn$1 : arguments[1];
-	
-		  return new (obs._ofSameType(S$40, P$35))(obs, { fn: fn });
-		}
-	
-		var mixin$33 = {
-		  _handleError: function (x) {
-		    this._emitError(x);
-		    this._emitEnd();
-		  }
-		};
-	
-		var S$41 = createStream('endOnError', mixin$33);
-		var P$36 = createProperty('endOnError', mixin$33);
-	
-		function endOnError(obs) {
-		  return new (obs._ofSameType(S$41, P$36))(obs);
-		}
-	
-		Observable.prototype.toProperty = function (fn) {
-		  return toProperty(this, fn);
-		};
-	
-		Observable.prototype.changes = function () {
-		  return changes(this);
-		};
-	
-		Observable.prototype.toPromise = function (Promise) {
-		  return toPromise(this, Promise);
-		};
-	
-		Observable.prototype.toESObservable = toESObservable;
-		Observable.prototype[$$observable] = toESObservable;
-	
-		Observable.prototype.map = function (fn) {
-		  return map$1(this, fn);
-		};
-	
-		Observable.prototype.filter = function (fn) {
-		  return filter(this, fn);
-		};
-	
-		Observable.prototype.take = function (n) {
-		  return take(this, n);
-		};
-	
-		Observable.prototype.takeErrors = function (n) {
-		  return takeErrors(this, n);
-		};
-	
-		Observable.prototype.takeWhile = function (fn) {
-		  return takeWhile(this, fn);
-		};
-	
-		Observable.prototype.last = function () {
-		  return last(this);
-		};
-	
-		Observable.prototype.skip = function (n) {
-		  return skip(this, n);
-		};
-	
-		Observable.prototype.skipWhile = function (fn) {
-		  return skipWhile(this, fn);
-		};
-	
-		Observable.prototype.skipDuplicates = function (fn) {
-		  return skipDuplicates(this, fn);
-		};
-	
-		Observable.prototype.diff = function (fn, seed) {
-		  return diff(this, fn, seed);
-		};
-	
-		Observable.prototype.scan = function (fn, seed) {
-		  return scan(this, fn, seed);
-		};
-	
-		Observable.prototype.flatten = function (fn) {
-		  return flatten(this, fn);
-		};
-	
-		Observable.prototype.delay = function (wait) {
-		  return delay(this, wait);
-		};
-	
-		Observable.prototype.throttle = function (wait, options) {
-		  return throttle(this, wait, options);
-		};
-	
-		Observable.prototype.debounce = function (wait, options) {
-		  return debounce(this, wait, options);
-		};
-	
-		Observable.prototype.mapErrors = function (fn) {
-		  return mapErrors(this, fn);
-		};
-	
-		Observable.prototype.filterErrors = function (fn) {
-		  return filterErrors(this, fn);
-		};
-	
-		Observable.prototype.ignoreValues = function () {
-		  return ignoreValues(this);
-		};
-	
-		Observable.prototype.ignoreErrors = function () {
-		  return ignoreErrors(this);
-		};
-	
-		Observable.prototype.ignoreEnd = function () {
-		  return ignoreEnd(this);
-		};
-	
-		Observable.prototype.beforeEnd = function (fn) {
-		  return beforeEnd(this, fn);
-		};
-	
-		Observable.prototype.slidingWindow = function (max, min) {
-		  return slidingWindow(this, max, min);
-		};
-	
-		Observable.prototype.bufferWhile = function (fn, options) {
-		  return bufferWhile(this, fn, options);
-		};
-	
-		Observable.prototype.bufferWithCount = function (count, options) {
-		  return bufferWhile$1(this, count, options);
-		};
-	
-		Observable.prototype.bufferWithTimeOrCount = function (wait, count, options) {
-		  return bufferWithTimeOrCount(this, wait, count, options);
-		};
-	
-		Observable.prototype.transduce = function (transducer) {
-		  return transduce(this, transducer);
-		};
-	
-		Observable.prototype.withHandler = function (fn) {
-		  return withHandler(this, fn);
-		};
-	
-		Observable.prototype.combine = function (other, combinator) {
-		  return combine([this, other], combinator);
-		};
-	
-		Observable.prototype.zip = function (other, combinator) {
-		  return zip([this, other], combinator);
-		};
-	
-		Observable.prototype.merge = function (other) {
-		  return merge([this, other]);
-		};
-	
-		Observable.prototype.concat = function (other) {
-		  return concat$1([this, other]);
-		};
-	
-		var pool = function () {
-		  return new Pool();
-		};
-	
-		Observable.prototype.flatMap = function (fn) {
-		  return new FlatMap(this, fn).setName(this, 'flatMap');
-		};
-		Observable.prototype.flatMapLatest = function (fn) {
-		  return new FlatMap(this, fn, { concurLim: 1, drop: 'old' }).setName(this, 'flatMapLatest');
-		};
-		Observable.prototype.flatMapFirst = function (fn) {
-		  return new FlatMap(this, fn, { concurLim: 1 }).setName(this, 'flatMapFirst');
-		};
-		Observable.prototype.flatMapConcat = function (fn) {
-		  return new FlatMap(this, fn, { queueLim: -1, concurLim: 1 }).setName(this, 'flatMapConcat');
-		};
-		Observable.prototype.flatMapConcurLimit = function (fn, limit) {
-		  return new FlatMap(this, fn, { queueLim: -1, concurLim: limit }).setName(this, 'flatMapConcurLimit');
-		};
-	
-		Observable.prototype.flatMapErrors = function (fn) {
-		  return new FlatMapErrors(this, fn).setName(this, 'flatMapErrors');
-		};
-	
-		Observable.prototype.filterBy = function (other) {
-		  return filterBy(this, other);
-		};
-	
-		Observable.prototype.sampledBy = function (other, combinator) {
-		  return sampledBy(this, other, combinator);
-		};
-	
-		Observable.prototype.skipUntilBy = function (other) {
-		  return skipUntilBy(this, other);
-		};
-	
-		Observable.prototype.takeUntilBy = function (other) {
-		  return takeUntilBy(this, other);
-		};
-	
-		Observable.prototype.bufferBy = function (other, options) {
-		  return bufferBy(this, other, options);
-		};
-	
-		Observable.prototype.bufferWhileBy = function (other, options) {
-		  return bufferWhileBy(this, other, options);
-		};
-	
-		// Deprecated
-		// -----------------------------------------------------------------------------
-	
-		var DEPRECATION_WARNINGS = true;
-		function dissableDeprecationWarnings() {
-		  DEPRECATION_WARNINGS = false;
-		}
-	
-		function warn(msg) {
-		  if (DEPRECATION_WARNINGS && console && typeof console.warn === 'function') {
-		    var msg2 = '\nHere is an Error object for you containing the call stack:';
-		    console.warn(msg, msg2, new Error());
-		  }
-		}
-	
-		Observable.prototype.awaiting = function (other) {
-		  warn('You are using deprecated .awaiting() method, see https://github.com/rpominov/kefir/issues/145');
-		  return awaiting(this, other);
-		};
-	
-		Observable.prototype.valuesToErrors = function (fn) {
-		  warn('You are using deprecated .valuesToErrors() method, see https://github.com/rpominov/kefir/issues/149');
-		  return valuesToErrors(this, fn);
-		};
-	
-		Observable.prototype.errorsToValues = function (fn) {
-		  warn('You are using deprecated .errorsToValues() method, see https://github.com/rpominov/kefir/issues/149');
-		  return errorsToValues(this, fn);
-		};
-	
-		Observable.prototype.endOnError = function () {
-		  warn('You are using deprecated .endOnError() method, see https://github.com/rpominov/kefir/issues/150');
-		  return endOnError(this);
-		};
-	
-		// Exports
-		// --------------------------------------------------------------------------
-	
-		var Kefir = { Observable: Observable, Stream: Stream, Property: Property, never: never, later: later, interval: interval, sequentially: sequentially,
-		  fromPoll: fromPoll, withInterval: withInterval, fromCallback: fromCallback, fromNodeCallback: fromNodeCallback, fromEvents: fromEvents, stream: stream,
-		  constant: constant, constantError: constantError, fromPromise: fromPromise, fromESObservable: fromESObservable, combine: combine, zip: zip, merge: merge,
-		  concat: concat$1, Pool: Pool, pool: pool, repeat: repeat };
-	
-		Kefir.Kefir = Kefir;
-	
-		exports.dissableDeprecationWarnings = dissableDeprecationWarnings;
-		exports.Kefir = Kefir;
-		exports.Observable = Observable;
-		exports.Stream = Stream;
-		exports.Property = Property;
-		exports.never = never;
-		exports.later = later;
-		exports.interval = interval;
-		exports.sequentially = sequentially;
-		exports.fromPoll = fromPoll;
-		exports.withInterval = withInterval;
-		exports.fromCallback = fromCallback;
-		exports.fromNodeCallback = fromNodeCallback;
-		exports.fromEvents = fromEvents;
-		exports.stream = stream;
-		exports.constant = constant;
-		exports.constantError = constantError;
-		exports.fromPromise = fromPromise;
-		exports.fromESObservable = fromESObservable;
-		exports.combine = combine;
-		exports.zip = zip;
-		exports.merge = merge;
-		exports.concat = concat$1;
-		exports.Pool = Pool;
-		exports.pool = pool;
-		exports.repeat = repeat;
-		exports['default'] = Kefir;
-	
-	}));
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-
-/***/ 171:
+/***/ 66:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -26449,6 +22841,3363 @@ webpackJsonp([2],{
 
 /***/ },
 
+/***/ 81:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(82), __esModule: true };
+
+/***/ },
+
+/***/ 82:
+/***/ function(module, exports, __webpack_require__) {
+
+	var $ = __webpack_require__(21);
+	module.exports = function defineProperty(it, key, desc){
+	  return $.setDesc(it, key, desc);
+	};
+
+/***/ },
+
+/***/ 155:
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/*! Kefir.js v3.2.2
+	 *  https://github.com/rpominov/kefir
+	 */
+	
+	(function (global, factory) {
+		 true ? factory(exports) :
+		typeof define === 'function' && define.amd ? define(['exports'], factory) :
+		(factory((global.Kefir = global.Kefir || {})));
+	}(this, function (exports) { 'use strict';
+	
+		var __commonjs_global = typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this;
+		function __commonjs(fn, module) { return module = { exports: {} }, fn(module, module.exports, __commonjs_global), module.exports; }
+	
+		function createObj(proto) {
+		  var F = function () {};
+		  F.prototype = proto;
+		  return new F();
+		}
+	
+		function extend(target /*, mixin1, mixin2...*/) {
+		  var length = arguments.length,
+		      i = void 0,
+		      prop = void 0;
+		  for (i = 1; i < length; i++) {
+		    for (prop in arguments[i]) {
+		      target[prop] = arguments[i][prop];
+		    }
+		  }
+		  return target;
+		}
+	
+		function inherit(Child, Parent /*, mixin1, mixin2...*/) {
+		  var length = arguments.length,
+		      i = void 0;
+		  Child.prototype = createObj(Parent.prototype);
+		  Child.prototype.constructor = Child;
+		  for (i = 2; i < length; i++) {
+		    extend(Child.prototype, arguments[i]);
+		  }
+		  return Child;
+		}
+	
+		var NOTHING = ['<nothing>'];
+		var END = 'end';
+		var VALUE = 'value';
+		var ERROR = 'error';
+		var ANY = 'any';
+	
+		function concat(a, b) {
+		  var result = void 0,
+		      length = void 0,
+		      i = void 0,
+		      j = void 0;
+		  if (a.length === 0) {
+		    return b;
+		  }
+		  if (b.length === 0) {
+		    return a;
+		  }
+		  j = 0;
+		  result = new Array(a.length + b.length);
+		  length = a.length;
+		  for (i = 0; i < length; i++, j++) {
+		    result[j] = a[i];
+		  }
+		  length = b.length;
+		  for (i = 0; i < length; i++, j++) {
+		    result[j] = b[i];
+		  }
+		  return result;
+		}
+	
+		function find(arr, value) {
+		  var length = arr.length,
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    if (arr[i] === value) {
+		      return i;
+		    }
+		  }
+		  return -1;
+		}
+	
+		function findByPred(arr, pred) {
+		  var length = arr.length,
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    if (pred(arr[i])) {
+		      return i;
+		    }
+		  }
+		  return -1;
+		}
+	
+		function cloneArray(input) {
+		  var length = input.length,
+		      result = new Array(length),
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    result[i] = input[i];
+		  }
+		  return result;
+		}
+	
+		function remove(input, index) {
+		  var length = input.length,
+		      result = void 0,
+		      i = void 0,
+		      j = void 0;
+		  if (index >= 0 && index < length) {
+		    if (length === 1) {
+		      return [];
+		    } else {
+		      result = new Array(length - 1);
+		      for (i = 0, j = 0; i < length; i++) {
+		        if (i !== index) {
+		          result[j] = input[i];
+		          j++;
+		        }
+		      }
+		      return result;
+		    }
+		  } else {
+		    return input;
+		  }
+		}
+	
+		function map(input, fn) {
+		  var length = input.length,
+		      result = new Array(length),
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    result[i] = fn(input[i]);
+		  }
+		  return result;
+		}
+	
+		function forEach(arr, fn) {
+		  var length = arr.length,
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    fn(arr[i]);
+		  }
+		}
+	
+		function fillArray(arr, value) {
+		  var length = arr.length,
+		      i = void 0;
+		  for (i = 0; i < length; i++) {
+		    arr[i] = value;
+		  }
+		}
+	
+		function contains(arr, value) {
+		  return find(arr, value) !== -1;
+		}
+	
+		function slide(cur, next, max) {
+		  var length = Math.min(max, cur.length + 1),
+		      offset = cur.length - length + 1,
+		      result = new Array(length),
+		      i = void 0;
+		  for (i = offset; i < length; i++) {
+		    result[i - offset] = cur[i];
+		  }
+		  result[length - 1] = next;
+		  return result;
+		}
+	
+		function callSubscriber(type, fn, event) {
+		  if (type === ANY) {
+		    fn(event);
+		  } else if (type === event.type) {
+		    if (type === VALUE || type === ERROR) {
+		      fn(event.value);
+		    } else {
+		      fn();
+		    }
+		  }
+		}
+	
+		function Dispatcher() {
+		  this._items = [];
+		  this._inLoop = 0;
+		  this._removedItems = null;
+		}
+	
+		extend(Dispatcher.prototype, {
+		  add: function (type, fn) {
+		    this._items = concat(this._items, [{ type: type, fn: fn }]);
+		    return this._items.length;
+		  },
+		  remove: function (type, fn) {
+		    var index = findByPred(this._items, function (x) {
+		      return x.type === type && x.fn === fn;
+		    });
+	
+		    // if we're currently in a notification loop,
+		    // remember this subscriber was removed
+		    if (this._inLoop !== 0 && index !== -1) {
+		      if (this._removedItems === null) {
+		        this._removedItems = [];
+		      }
+		      this._removedItems.push(this._items[index]);
+		    }
+	
+		    this._items = remove(this._items, index);
+		    return this._items.length;
+		  },
+		  dispatch: function (event) {
+		    this._inLoop++;
+		    for (var i = 0, items = this._items; i < items.length; i++) {
+	
+		      // cleanup was called
+		      if (this._items === null) {
+		        break;
+		      }
+	
+		      // this subscriber was removed
+		      if (this._removedItems !== null && contains(this._removedItems, items[i])) {
+		        continue;
+		      }
+	
+		      callSubscriber(items[i].type, items[i].fn, event);
+		    }
+		    this._inLoop--;
+		    if (this._inLoop === 0) {
+		      this._removedItems = null;
+		    }
+		  },
+		  cleanup: function () {
+		    this._items = null;
+		  }
+		});
+	
+		function Observable() {
+		  this._dispatcher = new Dispatcher();
+		  this._active = false;
+		  this._alive = true;
+		  this._activating = false;
+		  this._logHandlers = null;
+		}
+	
+		extend(Observable.prototype, {
+	
+		  _name: 'observable',
+	
+		  _onActivation: function () {},
+		  _onDeactivation: function () {},
+		  _setActive: function (active) {
+		    if (this._active !== active) {
+		      this._active = active;
+		      if (active) {
+		        this._activating = true;
+		        this._onActivation();
+		        this._activating = false;
+		      } else {
+		        this._onDeactivation();
+		      }
+		    }
+		  },
+		  _clear: function () {
+		    this._setActive(false);
+		    this._dispatcher.cleanup();
+		    this._dispatcher = null;
+		    this._logHandlers = null;
+		  },
+		  _emit: function (type, x) {
+		    switch (type) {
+		      case VALUE:
+		        return this._emitValue(x);
+		      case ERROR:
+		        return this._emitError(x);
+		      case END:
+		        return this._emitEnd();
+		    }
+		  },
+		  _emitValue: function (value) {
+		    if (this._alive) {
+		      this._dispatcher.dispatch({ type: VALUE, value: value });
+		    }
+		  },
+		  _emitError: function (value) {
+		    if (this._alive) {
+		      this._dispatcher.dispatch({ type: ERROR, value: value });
+		    }
+		  },
+		  _emitEnd: function () {
+		    if (this._alive) {
+		      this._alive = false;
+		      this._dispatcher.dispatch({ type: END });
+		      this._clear();
+		    }
+		  },
+		  _on: function (type, fn) {
+		    if (this._alive) {
+		      this._dispatcher.add(type, fn);
+		      this._setActive(true);
+		    } else {
+		      callSubscriber(type, fn, { type: END });
+		    }
+		    return this;
+		  },
+		  _off: function (type, fn) {
+		    if (this._alive) {
+		      var count = this._dispatcher.remove(type, fn);
+		      if (count === 0) {
+		        this._setActive(false);
+		      }
+		    }
+		    return this;
+		  },
+		  onValue: function (fn) {
+		    return this._on(VALUE, fn);
+		  },
+		  onError: function (fn) {
+		    return this._on(ERROR, fn);
+		  },
+		  onEnd: function (fn) {
+		    return this._on(END, fn);
+		  },
+		  onAny: function (fn) {
+		    return this._on(ANY, fn);
+		  },
+		  offValue: function (fn) {
+		    return this._off(VALUE, fn);
+		  },
+		  offError: function (fn) {
+		    return this._off(ERROR, fn);
+		  },
+		  offEnd: function (fn) {
+		    return this._off(END, fn);
+		  },
+		  offAny: function (fn) {
+		    return this._off(ANY, fn);
+		  },
+	
+	
+		  // A and B must be subclasses of Stream and Property (order doesn't matter)
+		  _ofSameType: function (A, B) {
+		    return A.prototype.getType() === this.getType() ? A : B;
+		  },
+		  setName: function (sourceObs /* optional */, selfName) {
+		    this._name = selfName ? sourceObs._name + '.' + selfName : sourceObs;
+		    return this;
+		  },
+		  log: function () {
+		    var name = arguments.length <= 0 || arguments[0] === undefined ? this.toString() : arguments[0];
+	
+	
+		    var isCurrent = void 0;
+		    var handler = function (event) {
+		      var type = '<' + event.type + (isCurrent ? ':current' : '') + '>';
+		      if (event.type === END) {
+		        console.log(name, type);
+		      } else {
+		        console.log(name, type, event.value);
+		      }
+		    };
+	
+		    if (this._alive) {
+		      if (!this._logHandlers) {
+		        this._logHandlers = [];
+		      }
+		      this._logHandlers.push({ name: name, handler: handler });
+		    }
+	
+		    isCurrent = true;
+		    this.onAny(handler);
+		    isCurrent = false;
+	
+		    return this;
+		  },
+		  offLog: function () {
+		    var name = arguments.length <= 0 || arguments[0] === undefined ? this.toString() : arguments[0];
+	
+	
+		    if (this._logHandlers) {
+		      var handlerIndex = findByPred(this._logHandlers, function (obj) {
+		        return obj.name === name;
+		      });
+		      if (handlerIndex !== -1) {
+		        this.offAny(this._logHandlers[handlerIndex].handler);
+		        this._logHandlers.splice(handlerIndex, 1);
+		      }
+		    }
+	
+		    return this;
+		  }
+		});
+	
+		// extend() can't handle `toString` in IE8
+		Observable.prototype.toString = function () {
+		  return '[' + this._name + ']';
+		};
+	
+		function Stream() {
+		  Observable.call(this);
+		}
+	
+		inherit(Stream, Observable, {
+	
+		  _name: 'stream',
+	
+		  getType: function () {
+		    return 'stream';
+		  }
+		});
+	
+		function Property() {
+		  Observable.call(this);
+		  this._currentEvent = null;
+		}
+	
+		inherit(Property, Observable, {
+	
+		  _name: 'property',
+	
+		  _emitValue: function (value) {
+		    if (this._alive) {
+		      this._currentEvent = { type: VALUE, value: value };
+		      if (!this._activating) {
+		        this._dispatcher.dispatch({ type: VALUE, value: value });
+		      }
+		    }
+		  },
+		  _emitError: function (value) {
+		    if (this._alive) {
+		      this._currentEvent = { type: ERROR, value: value };
+		      if (!this._activating) {
+		        this._dispatcher.dispatch({ type: ERROR, value: value });
+		      }
+		    }
+		  },
+		  _emitEnd: function () {
+		    if (this._alive) {
+		      this._alive = false;
+		      if (!this._activating) {
+		        this._dispatcher.dispatch({ type: END });
+		      }
+		      this._clear();
+		    }
+		  },
+		  _on: function (type, fn) {
+		    if (this._alive) {
+		      this._dispatcher.add(type, fn);
+		      this._setActive(true);
+		    }
+		    if (this._currentEvent !== null) {
+		      callSubscriber(type, fn, this._currentEvent);
+		    }
+		    if (!this._alive) {
+		      callSubscriber(type, fn, { type: END });
+		    }
+		    return this;
+		  },
+		  getType: function () {
+		    return 'property';
+		  }
+		});
+	
+		var neverS = new Stream();
+		neverS._emitEnd();
+		neverS._name = 'never';
+	
+		function never() {
+		  return neverS;
+		}
+	
+		function timeBased(mixin) {
+	
+		  function AnonymousStream(wait, options) {
+		    var _this = this;
+	
+		    Stream.call(this);
+		    this._wait = wait;
+		    this._intervalId = null;
+		    this._$onTick = function () {
+		      return _this._onTick();
+		    };
+		    this._init(options);
+		  }
+	
+		  inherit(AnonymousStream, Stream, {
+		    _init: function () {},
+		    _free: function () {},
+		    _onTick: function () {},
+		    _onActivation: function () {
+		      this._intervalId = setInterval(this._$onTick, this._wait);
+		    },
+		    _onDeactivation: function () {
+		      if (this._intervalId !== null) {
+		        clearInterval(this._intervalId);
+		        this._intervalId = null;
+		      }
+		    },
+		    _clear: function () {
+		      Stream.prototype._clear.call(this);
+		      this._$onTick = null;
+		      this._free();
+		    }
+		  }, mixin);
+	
+		  return AnonymousStream;
+		}
+	
+		var S = timeBased({
+	
+		  _name: 'later',
+	
+		  _init: function (_ref) {
+		    var x = _ref.x;
+	
+		    this._x = x;
+		  },
+		  _free: function () {
+		    this._x = null;
+		  },
+		  _onTick: function () {
+		    this._emitValue(this._x);
+		    this._emitEnd();
+		  }
+		});
+	
+		function later(wait, x) {
+		  return new S(wait, { x: x });
+		}
+	
+		var S$1 = timeBased({
+	
+		  _name: 'interval',
+	
+		  _init: function (_ref) {
+		    var x = _ref.x;
+	
+		    this._x = x;
+		  },
+		  _free: function () {
+		    this._x = null;
+		  },
+		  _onTick: function () {
+		    this._emitValue(this._x);
+		  }
+		});
+	
+		function interval(wait, x) {
+		  return new S$1(wait, { x: x });
+		}
+	
+		var S$2 = timeBased({
+	
+		  _name: 'sequentially',
+	
+		  _init: function (_ref) {
+		    var xs = _ref.xs;
+	
+		    this._xs = cloneArray(xs);
+		  },
+		  _free: function () {
+		    this._xs = null;
+		  },
+		  _onTick: function () {
+		    if (this._xs.length === 1) {
+		      this._emitValue(this._xs[0]);
+		      this._emitEnd();
+		    } else {
+		      this._emitValue(this._xs.shift());
+		    }
+		  }
+		});
+	
+		function sequentially(wait, xs) {
+		  return xs.length === 0 ? never() : new S$2(wait, { xs: xs });
+		}
+	
+		var S$3 = timeBased({
+	
+		  _name: 'fromPoll',
+	
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _onTick: function () {
+		    var fn = this._fn;
+		    this._emitValue(fn());
+		  }
+		});
+	
+		function fromPoll(wait, fn) {
+		  return new S$3(wait, { fn: fn });
+		}
+	
+		function emitter(obs) {
+	
+		  function value(x) {
+		    obs._emitValue(x);
+		    return obs._active;
+		  }
+	
+		  function error(x) {
+		    obs._emitError(x);
+		    return obs._active;
+		  }
+	
+		  function end() {
+		    obs._emitEnd();
+		    return obs._active;
+		  }
+	
+		  function event(e) {
+		    obs._emit(e.type, e.value);
+		    return obs._active;
+		  }
+	
+		  return { value: value, error: error, end: end, event: event, emit: value, emitEvent: event };
+		}
+	
+		var S$4 = timeBased({
+	
+		  _name: 'withInterval',
+	
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		    this._emitter = emitter(this);
+		  },
+		  _free: function () {
+		    this._fn = null;
+		    this._emitter = null;
+		  },
+		  _onTick: function () {
+		    var fn = this._fn;
+		    fn(this._emitter);
+		  }
+		});
+	
+		function withInterval(wait, fn) {
+		  return new S$4(wait, { fn: fn });
+		}
+	
+		function S$5(fn) {
+		  Stream.call(this);
+		  this._fn = fn;
+		  this._unsubscribe = null;
+		}
+	
+		inherit(S$5, Stream, {
+	
+		  _name: 'stream',
+	
+		  _onActivation: function () {
+		    var fn = this._fn;
+		    var unsubscribe = fn(emitter(this));
+		    this._unsubscribe = typeof unsubscribe === 'function' ? unsubscribe : null;
+	
+		    // fix https://github.com/rpominov/kefir/issues/35
+		    if (!this._active) {
+		      this._callUnsubscribe();
+		    }
+		  },
+		  _callUnsubscribe: function () {
+		    if (this._unsubscribe !== null) {
+		      this._unsubscribe();
+		      this._unsubscribe = null;
+		    }
+		  },
+		  _onDeactivation: function () {
+		    this._callUnsubscribe();
+		  },
+		  _clear: function () {
+		    Stream.prototype._clear.call(this);
+		    this._fn = null;
+		  }
+		});
+	
+		function stream(fn) {
+		  return new S$5(fn);
+		}
+	
+		function fromCallback(callbackConsumer) {
+	
+		  var called = false;
+	
+		  return stream(function (emitter) {
+	
+		    if (!called) {
+		      callbackConsumer(function (x) {
+		        emitter.emit(x);
+		        emitter.end();
+		      });
+		      called = true;
+		    }
+		  }).setName('fromCallback');
+		}
+	
+		function fromNodeCallback(callbackConsumer) {
+	
+		  var called = false;
+	
+		  return stream(function (emitter) {
+	
+		    if (!called) {
+		      callbackConsumer(function (error, x) {
+		        if (error) {
+		          emitter.error(error);
+		        } else {
+		          emitter.emit(x);
+		        }
+		        emitter.end();
+		      });
+		      called = true;
+		    }
+		  }).setName('fromNodeCallback');
+		}
+	
+		function spread(fn, length) {
+		  switch (length) {
+		    case 0:
+		      return function () {
+		        return fn();
+		      };
+		    case 1:
+		      return function (a) {
+		        return fn(a[0]);
+		      };
+		    case 2:
+		      return function (a) {
+		        return fn(a[0], a[1]);
+		      };
+		    case 3:
+		      return function (a) {
+		        return fn(a[0], a[1], a[2]);
+		      };
+		    case 4:
+		      return function (a) {
+		        return fn(a[0], a[1], a[2], a[3]);
+		      };
+		    default:
+		      return function (a) {
+		        return fn.apply(null, a);
+		      };
+		  }
+		}
+	
+		function apply(fn, c, a) {
+		  var aLength = a ? a.length : 0;
+		  if (c == null) {
+		    switch (aLength) {
+		      case 0:
+		        return fn();
+		      case 1:
+		        return fn(a[0]);
+		      case 2:
+		        return fn(a[0], a[1]);
+		      case 3:
+		        return fn(a[0], a[1], a[2]);
+		      case 4:
+		        return fn(a[0], a[1], a[2], a[3]);
+		      default:
+		        return fn.apply(null, a);
+		    }
+		  } else {
+		    switch (aLength) {
+		      case 0:
+		        return fn.call(c);
+		      default:
+		        return fn.apply(c, a);
+		    }
+		  }
+		}
+	
+		function fromSubUnsub(sub, unsub, transformer /* Function | falsey */) {
+		  return stream(function (emitter) {
+	
+		    var handler = transformer ? function () {
+		      emitter.emit(apply(transformer, this, arguments));
+		    } : function (x) {
+		      emitter.emit(x);
+		    };
+	
+		    sub(handler);
+		    return function () {
+		      return unsub(handler);
+		    };
+		  }).setName('fromSubUnsub');
+		}
+	
+		var pairs = [['addEventListener', 'removeEventListener'], ['addListener', 'removeListener'], ['on', 'off']];
+	
+		function fromEvents(target, eventName, transformer) {
+		  var sub = void 0,
+		      unsub = void 0;
+	
+		  for (var i = 0; i < pairs.length; i++) {
+		    if (typeof target[pairs[i][0]] === 'function' && typeof target[pairs[i][1]] === 'function') {
+		      sub = pairs[i][0];
+		      unsub = pairs[i][1];
+		      break;
+		    }
+		  }
+	
+		  if (sub === undefined) {
+		    throw new Error('target don\'t support any of ' + 'addEventListener/removeEventListener, addListener/removeListener, on/off method pair');
+		  }
+	
+		  return fromSubUnsub(function (handler) {
+		    return target[sub](eventName, handler);
+		  }, function (handler) {
+		    return target[unsub](eventName, handler);
+		  }, transformer).setName('fromEvents');
+		}
+	
+		// HACK:
+		//   We don't call parent Class constructor, but instead putting all necessary
+		//   properties into prototype to simulate ended Property
+		//   (see Propperty and Observable classes).
+	
+		function P(value) {
+		  this._currentEvent = { type: 'value', value: value, current: true };
+		}
+	
+		inherit(P, Property, {
+		  _name: 'constant',
+		  _active: false,
+		  _activating: false,
+		  _alive: false,
+		  _dispatcher: null,
+		  _logHandlers: null
+		});
+	
+		function constant(x) {
+		  return new P(x);
+		}
+	
+		// HACK:
+		//   We don't call parent Class constructor, but instead putting all necessary
+		//   properties into prototype to simulate ended Property
+		//   (see Propperty and Observable classes).
+	
+		function P$1(value) {
+		  this._currentEvent = { type: 'error', value: value, current: true };
+		}
+	
+		inherit(P$1, Property, {
+		  _name: 'constantError',
+		  _active: false,
+		  _activating: false,
+		  _alive: false,
+		  _dispatcher: null,
+		  _logHandlers: null
+		});
+	
+		function constantError(x) {
+		  return new P$1(x);
+		}
+	
+		function createConstructor(BaseClass, name) {
+		  return function AnonymousObservable(source, options) {
+		    var _this = this;
+	
+		    BaseClass.call(this);
+		    this._source = source;
+		    this._name = source._name + '.' + name;
+		    this._init(options);
+		    this._$handleAny = function (event) {
+		      return _this._handleAny(event);
+		    };
+		  };
+		}
+	
+		function createClassMethods(BaseClass) {
+		  return {
+		    _init: function () {},
+		    _free: function () {},
+		    _handleValue: function (x) {
+		      this._emitValue(x);
+		    },
+		    _handleError: function (x) {
+		      this._emitError(x);
+		    },
+		    _handleEnd: function () {
+		      this._emitEnd();
+		    },
+		    _handleAny: function (event) {
+		      switch (event.type) {
+		        case VALUE:
+		          return this._handleValue(event.value);
+		        case ERROR:
+		          return this._handleError(event.value);
+		        case END:
+		          return this._handleEnd();
+		      }
+		    },
+		    _onActivation: function () {
+		      this._source.onAny(this._$handleAny);
+		    },
+		    _onDeactivation: function () {
+		      this._source.offAny(this._$handleAny);
+		    },
+		    _clear: function () {
+		      BaseClass.prototype._clear.call(this);
+		      this._source = null;
+		      this._$handleAny = null;
+		      this._free();
+		    }
+		  };
+		}
+	
+		function createStream(name, mixin) {
+		  var S = createConstructor(Stream, name);
+		  inherit(S, Stream, createClassMethods(Stream), mixin);
+		  return S;
+		}
+	
+		function createProperty(name, mixin) {
+		  var P = createConstructor(Property, name);
+		  inherit(P, Property, createClassMethods(Property), mixin);
+		  return P;
+		}
+	
+		var P$2 = createProperty('toProperty', {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._getInitialCurrent = fn;
+		  },
+		  _onActivation: function () {
+		    if (this._getInitialCurrent !== null) {
+		      var getInitial = this._getInitialCurrent;
+		      this._emitValue(getInitial());
+		    }
+		    this._source.onAny(this._$handleAny); // copied from patterns/one-source
+		  }
+		});
+	
+		function toProperty(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
+	
+		  if (fn !== null && typeof fn !== 'function') {
+		    throw new Error('You should call toProperty() with a function or no arguments.');
+		  }
+		  return new P$2(obs, { fn: fn });
+		}
+	
+		var S$6 = createStream('changes', {
+		  _handleValue: function (x) {
+		    if (!this._activating) {
+		      this._emitValue(x);
+		    }
+		  },
+		  _handleError: function (x) {
+		    if (!this._activating) {
+		      this._emitError(x);
+		    }
+		  }
+		});
+	
+		function changes(obs) {
+		  return new S$6(obs);
+		}
+	
+		function fromPromise(promise) {
+	
+		  var called = false;
+	
+		  var result = stream(function (emitter) {
+		    if (!called) {
+		      var onValue = function (x) {
+		        emitter.emit(x);
+		        emitter.end();
+		      };
+		      var onError = function (x) {
+		        emitter.error(x);
+		        emitter.end();
+		      };
+		      var _promise = promise.then(onValue, onError);
+	
+		      // prevent libraries like 'Q' or 'when' from swallowing exceptions
+		      if (_promise && typeof _promise.done === 'function') {
+		        _promise.done();
+		      }
+	
+		      called = true;
+		    }
+		  });
+	
+		  return toProperty(result, null).setName('fromPromise');
+		}
+	
+		function getGlodalPromise() {
+		  if (typeof Promise === 'function') {
+		    return Promise;
+		  } else {
+		    throw new Error('There isn\'t default Promise, use shim or parameter');
+		  }
+		}
+	
+		function toPromise (obs) {
+		  var Promise = arguments.length <= 1 || arguments[1] === undefined ? getGlodalPromise() : arguments[1];
+	
+		  var last = null;
+		  return new Promise(function (resolve, reject) {
+		    obs.onAny(function (event) {
+		      if (event.type === END && last !== null) {
+		        (last.type === VALUE ? resolve : reject)(last.value);
+		        last = null;
+		      } else {
+		        last = event;
+		      }
+		    });
+		  });
+		}
+	
+		var ponyfill = __commonjs(function (module) {
+		'use strict';
+	
+		module.exports = function symbolObservablePonyfill(root) {
+			var result;
+			var Symbol = root.Symbol;
+	
+			if (typeof Symbol === 'function') {
+				if (Symbol.observable) {
+					result = Symbol.observable;
+				} else {
+					result = Symbol('observable');
+					Symbol.observable = result;
+				}
+			} else {
+				result = '@@observable';
+			}
+	
+			return result;
+		};
+		});
+	
+		var require$$0 = (ponyfill && typeof ponyfill === 'object' && 'default' in ponyfill ? ponyfill['default'] : ponyfill);
+	
+		var index = __commonjs(function (module, exports, global) {
+		/* global window */
+		'use strict';
+	
+		module.exports = require$$0(global || window || __commonjs_global);
+		});
+	
+		var $$observable = (index && typeof index === 'object' && 'default' in index ? index['default'] : index);
+	
+		function fromESObservable(_observable) {
+		  var observable = _observable[$$observable] ? _observable[$$observable]() : _observable;
+		  return stream(function (emitter) {
+		    var unsub = observable.subscribe({
+		      error: function (error) {
+		        emitter.error(error);
+		        emitter.end();
+		      },
+		      next: function (value) {
+		        emitter.emit(value);
+		      },
+		      complete: function () {
+		        emitter.end();
+		      }
+		    });
+	
+		    if (unsub.unsubscribe) {
+		      return function () {
+		        unsub.unsubscribe();
+		      };
+		    } else {
+		      return unsub;
+		    }
+		  }).setName('fromESObservable');
+		}
+	
+		function ESObservable(observable) {
+		  this._observable = observable.takeErrors(1);
+		}
+	
+		extend(ESObservable.prototype, {
+		  subscribe: function (observer) {
+		    var _this = this;
+	
+		    var fn = function (event) {
+		      if (event.type === VALUE && observer.next) {
+		        observer.next(event.value);
+		      } else if (event.type === ERROR && observer.error) {
+		        observer.error(event.value);
+		      } else if (event.type === END && observer.complete) {
+		        observer.complete(event.value);
+		      }
+		    };
+	
+		    this._observable.onAny(fn);
+		    return function () {
+		      return _this._observable.offAny(fn);
+		    };
+		  }
+		});
+	
+		function toESObservable() {
+		  return new ESObservable(this);
+		}
+	
+		var mixin = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    this._emitValue(fn(x));
+		  }
+		};
+	
+		var S$7 = createStream('map', mixin);
+		var P$3 = createProperty('map', mixin);
+	
+		var id = function (x) {
+		  return x;
+		};
+	
+		function map$1(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id : arguments[1];
+	
+		  return new (obs._ofSameType(S$7, P$3))(obs, { fn: fn });
+		}
+	
+		var mixin$1 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    if (fn(x)) {
+		      this._emitValue(x);
+		    }
+		  }
+		};
+	
+		var S$8 = createStream('filter', mixin$1);
+		var P$4 = createProperty('filter', mixin$1);
+	
+		var id$1 = function (x) {
+		  return x;
+		};
+	
+		function filter(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$1 : arguments[1];
+	
+		  return new (obs._ofSameType(S$8, P$4))(obs, { fn: fn });
+		}
+	
+		var mixin$2 = {
+		  _init: function (_ref) {
+		    var n = _ref.n;
+	
+		    this._n = n;
+		    if (n <= 0) {
+		      this._emitEnd();
+		    }
+		  },
+		  _handleValue: function (x) {
+		    this._n--;
+		    this._emitValue(x);
+		    if (this._n === 0) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$9 = createStream('take', mixin$2);
+		var P$5 = createProperty('take', mixin$2);
+	
+		function take(obs, n) {
+		  return new (obs._ofSameType(S$9, P$5))(obs, { n: n });
+		}
+	
+		var mixin$3 = {
+		  _init: function (_ref) {
+		    var n = _ref.n;
+	
+		    this._n = n;
+		    if (n <= 0) {
+		      this._emitEnd();
+		    }
+		  },
+		  _handleError: function (x) {
+		    this._n--;
+		    this._emitError(x);
+		    if (this._n === 0) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$10 = createStream('takeErrors', mixin$3);
+		var P$6 = createProperty('takeErrors', mixin$3);
+	
+		function takeErrors(obs, n) {
+		  return new (obs._ofSameType(S$10, P$6))(obs, { n: n });
+		}
+	
+		var mixin$4 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    if (fn(x)) {
+		      this._emitValue(x);
+		    } else {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$11 = createStream('takeWhile', mixin$4);
+		var P$7 = createProperty('takeWhile', mixin$4);
+	
+		var id$2 = function (x) {
+		  return x;
+		};
+	
+		function takeWhile(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$2 : arguments[1];
+	
+		  return new (obs._ofSameType(S$11, P$7))(obs, { fn: fn });
+		}
+	
+		var mixin$5 = {
+		  _init: function () {
+		    this._lastValue = NOTHING;
+		  },
+		  _free: function () {
+		    this._lastValue = null;
+		  },
+		  _handleValue: function (x) {
+		    this._lastValue = x;
+		  },
+		  _handleEnd: function () {
+		    if (this._lastValue !== NOTHING) {
+		      this._emitValue(this._lastValue);
+		    }
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$12 = createStream('last', mixin$5);
+		var P$8 = createProperty('last', mixin$5);
+	
+		function last(obs) {
+		  return new (obs._ofSameType(S$12, P$8))(obs);
+		}
+	
+		var mixin$6 = {
+		  _init: function (_ref) {
+		    var n = _ref.n;
+	
+		    this._n = Math.max(0, n);
+		  },
+		  _handleValue: function (x) {
+		    if (this._n === 0) {
+		      this._emitValue(x);
+		    } else {
+		      this._n--;
+		    }
+		  }
+		};
+	
+		var S$13 = createStream('skip', mixin$6);
+		var P$9 = createProperty('skip', mixin$6);
+	
+		function skip(obs, n) {
+		  return new (obs._ofSameType(S$13, P$9))(obs, { n: n });
+		}
+	
+		var mixin$7 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    if (this._fn !== null && !fn(x)) {
+		      this._fn = null;
+		    }
+		    if (this._fn === null) {
+		      this._emitValue(x);
+		    }
+		  }
+		};
+	
+		var S$14 = createStream('skipWhile', mixin$7);
+		var P$10 = createProperty('skipWhile', mixin$7);
+	
+		var id$3 = function (x) {
+		  return x;
+		};
+	
+		function skipWhile(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$3 : arguments[1];
+	
+		  return new (obs._ofSameType(S$14, P$10))(obs, { fn: fn });
+		}
+	
+		var mixin$8 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		    this._prev = NOTHING;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		    this._prev = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    if (this._prev === NOTHING || !fn(this._prev, x)) {
+		      this._prev = x;
+		      this._emitValue(x);
+		    }
+		  }
+		};
+	
+		var S$15 = createStream('skipDuplicates', mixin$8);
+		var P$11 = createProperty('skipDuplicates', mixin$8);
+	
+		var eq = function (a, b) {
+		  return a === b;
+		};
+	
+		function skipDuplicates(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? eq : arguments[1];
+	
+		  return new (obs._ofSameType(S$15, P$11))(obs, { fn: fn });
+		}
+	
+		var mixin$9 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+		    var seed = _ref.seed;
+	
+		    this._fn = fn;
+		    this._prev = seed;
+		  },
+		  _free: function () {
+		    this._prev = null;
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    if (this._prev !== NOTHING) {
+		      var fn = this._fn;
+		      this._emitValue(fn(this._prev, x));
+		    }
+		    this._prev = x;
+		  }
+		};
+	
+		var S$16 = createStream('diff', mixin$9);
+		var P$12 = createProperty('diff', mixin$9);
+	
+		function defaultFn(a, b) {
+		  return [a, b];
+		}
+	
+		function diff(obs, fn) {
+		  var seed = arguments.length <= 2 || arguments[2] === undefined ? NOTHING : arguments[2];
+	
+		  return new (obs._ofSameType(S$16, P$12))(obs, { fn: fn || defaultFn, seed: seed });
+		}
+	
+		var P$13 = createProperty('scan', {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+		    var seed = _ref.seed;
+	
+		    this._fn = fn;
+		    this._seed = seed;
+		    if (seed !== NOTHING) {
+		      this._emitValue(seed);
+		    }
+		  },
+		  _free: function () {
+		    this._fn = null;
+		    this._seed = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    if (this._currentEvent === null || this._currentEvent.type === ERROR) {
+		      this._emitValue(this._seed === NOTHING ? x : fn(this._seed, x));
+		    } else {
+		      this._emitValue(fn(this._currentEvent.value, x));
+		    }
+		  }
+		});
+	
+		function scan(obs, fn) {
+		  var seed = arguments.length <= 2 || arguments[2] === undefined ? NOTHING : arguments[2];
+	
+		  return new P$13(obs, { fn: fn, seed: seed });
+		}
+	
+		var mixin$10 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    var xs = fn(x);
+		    for (var i = 0; i < xs.length; i++) {
+		      this._emitValue(xs[i]);
+		    }
+		  }
+		};
+	
+		var S$17 = createStream('flatten', mixin$10);
+	
+		var id$4 = function (x) {
+		  return x;
+		};
+	
+		function flatten(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$4 : arguments[1];
+	
+		  return new S$17(obs, { fn: fn });
+		}
+	
+		var END_MARKER = {};
+	
+		var mixin$11 = {
+		  _init: function (_ref) {
+		    var _this = this;
+	
+		    var wait = _ref.wait;
+	
+		    this._wait = Math.max(0, wait);
+		    this._buff = [];
+		    this._$shiftBuff = function () {
+		      var value = _this._buff.shift();
+		      if (value === END_MARKER) {
+		        _this._emitEnd();
+		      } else {
+		        _this._emitValue(value);
+		      }
+		    };
+		  },
+		  _free: function () {
+		    this._buff = null;
+		    this._$shiftBuff = null;
+		  },
+		  _handleValue: function (x) {
+		    if (this._activating) {
+		      this._emitValue(x);
+		    } else {
+		      this._buff.push(x);
+		      setTimeout(this._$shiftBuff, this._wait);
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._activating) {
+		      this._emitEnd();
+		    } else {
+		      this._buff.push(END_MARKER);
+		      setTimeout(this._$shiftBuff, this._wait);
+		    }
+		  }
+		};
+	
+		var S$18 = createStream('delay', mixin$11);
+		var P$14 = createProperty('delay', mixin$11);
+	
+		function delay(obs, wait) {
+		  return new (obs._ofSameType(S$18, P$14))(obs, { wait: wait });
+		}
+	
+		var now = Date.now ? function () {
+		  return Date.now();
+		} : function () {
+		  return new Date().getTime();
+		};
+	
+		var mixin$12 = {
+		  _init: function (_ref) {
+		    var _this = this;
+	
+		    var wait = _ref.wait;
+		    var leading = _ref.leading;
+		    var trailing = _ref.trailing;
+	
+		    this._wait = Math.max(0, wait);
+		    this._leading = leading;
+		    this._trailing = trailing;
+		    this._trailingValue = null;
+		    this._timeoutId = null;
+		    this._endLater = false;
+		    this._lastCallTime = 0;
+		    this._$trailingCall = function () {
+		      return _this._trailingCall();
+		    };
+		  },
+		  _free: function () {
+		    this._trailingValue = null;
+		    this._$trailingCall = null;
+		  },
+		  _handleValue: function (x) {
+		    if (this._activating) {
+		      this._emitValue(x);
+		    } else {
+		      var curTime = now();
+		      if (this._lastCallTime === 0 && !this._leading) {
+		        this._lastCallTime = curTime;
+		      }
+		      var remaining = this._wait - (curTime - this._lastCallTime);
+		      if (remaining <= 0) {
+		        this._cancelTrailing();
+		        this._lastCallTime = curTime;
+		        this._emitValue(x);
+		      } else if (this._trailing) {
+		        this._cancelTrailing();
+		        this._trailingValue = x;
+		        this._timeoutId = setTimeout(this._$trailingCall, remaining);
+		      }
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._activating) {
+		      this._emitEnd();
+		    } else {
+		      if (this._timeoutId) {
+		        this._endLater = true;
+		      } else {
+		        this._emitEnd();
+		      }
+		    }
+		  },
+		  _cancelTrailing: function () {
+		    if (this._timeoutId !== null) {
+		      clearTimeout(this._timeoutId);
+		      this._timeoutId = null;
+		    }
+		  },
+		  _trailingCall: function () {
+		    this._emitValue(this._trailingValue);
+		    this._timeoutId = null;
+		    this._trailingValue = null;
+		    this._lastCallTime = !this._leading ? 0 : now();
+		    if (this._endLater) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$19 = createStream('throttle', mixin$12);
+		var P$15 = createProperty('throttle', mixin$12);
+	
+		function throttle(obs, wait) {
+		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	
+		  var _ref2$leading = _ref2.leading;
+		  var leading = _ref2$leading === undefined ? true : _ref2$leading;
+		  var _ref2$trailing = _ref2.trailing;
+		  var trailing = _ref2$trailing === undefined ? true : _ref2$trailing;
+	
+		  return new (obs._ofSameType(S$19, P$15))(obs, { wait: wait, leading: leading, trailing: trailing });
+		}
+	
+		var mixin$13 = {
+		  _init: function (_ref) {
+		    var _this = this;
+	
+		    var wait = _ref.wait;
+		    var immediate = _ref.immediate;
+	
+		    this._wait = Math.max(0, wait);
+		    this._immediate = immediate;
+		    this._lastAttempt = 0;
+		    this._timeoutId = null;
+		    this._laterValue = null;
+		    this._endLater = false;
+		    this._$later = function () {
+		      return _this._later();
+		    };
+		  },
+		  _free: function () {
+		    this._laterValue = null;
+		    this._$later = null;
+		  },
+		  _handleValue: function (x) {
+		    if (this._activating) {
+		      this._emitValue(x);
+		    } else {
+		      this._lastAttempt = now();
+		      if (this._immediate && !this._timeoutId) {
+		        this._emitValue(x);
+		      }
+		      if (!this._timeoutId) {
+		        this._timeoutId = setTimeout(this._$later, this._wait);
+		      }
+		      if (!this._immediate) {
+		        this._laterValue = x;
+		      }
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._activating) {
+		      this._emitEnd();
+		    } else {
+		      if (this._timeoutId && !this._immediate) {
+		        this._endLater = true;
+		      } else {
+		        this._emitEnd();
+		      }
+		    }
+		  },
+		  _later: function () {
+		    var last = now() - this._lastAttempt;
+		    if (last < this._wait && last >= 0) {
+		      this._timeoutId = setTimeout(this._$later, this._wait - last);
+		    } else {
+		      this._timeoutId = null;
+		      if (!this._immediate) {
+		        this._emitValue(this._laterValue);
+		        this._laterValue = null;
+		      }
+		      if (this._endLater) {
+		        this._emitEnd();
+		      }
+		    }
+		  }
+		};
+	
+		var S$20 = createStream('debounce', mixin$13);
+		var P$16 = createProperty('debounce', mixin$13);
+	
+		function debounce(obs, wait) {
+		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	
+		  var _ref2$immediate = _ref2.immediate;
+		  var immediate = _ref2$immediate === undefined ? false : _ref2$immediate;
+	
+		  return new (obs._ofSameType(S$20, P$16))(obs, { wait: wait, immediate: immediate });
+		}
+	
+		var mixin$14 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleError: function (x) {
+		    var fn = this._fn;
+		    this._emitError(fn(x));
+		  }
+		};
+	
+		var S$21 = createStream('mapErrors', mixin$14);
+		var P$17 = createProperty('mapErrors', mixin$14);
+	
+		var id$5 = function (x) {
+		  return x;
+		};
+	
+		function mapErrors(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$5 : arguments[1];
+	
+		  return new (obs._ofSameType(S$21, P$17))(obs, { fn: fn });
+		}
+	
+		var mixin$15 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleError: function (x) {
+		    var fn = this._fn;
+		    if (fn(x)) {
+		      this._emitError(x);
+		    }
+		  }
+		};
+	
+		var S$22 = createStream('filterErrors', mixin$15);
+		var P$18 = createProperty('filterErrors', mixin$15);
+	
+		var id$6 = function (x) {
+		  return x;
+		};
+	
+		function filterErrors(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? id$6 : arguments[1];
+	
+		  return new (obs._ofSameType(S$22, P$18))(obs, { fn: fn });
+		}
+	
+		var mixin$16 = {
+		  _handleValue: function () {}
+		};
+	
+		var S$23 = createStream('ignoreValues', mixin$16);
+		var P$19 = createProperty('ignoreValues', mixin$16);
+	
+		function ignoreValues(obs) {
+		  return new (obs._ofSameType(S$23, P$19))(obs);
+		}
+	
+		var mixin$17 = {
+		  _handleError: function () {}
+		};
+	
+		var S$24 = createStream('ignoreErrors', mixin$17);
+		var P$20 = createProperty('ignoreErrors', mixin$17);
+	
+		function ignoreErrors(obs) {
+		  return new (obs._ofSameType(S$24, P$20))(obs);
+		}
+	
+		var mixin$18 = {
+		  _handleEnd: function () {}
+		};
+	
+		var S$25 = createStream('ignoreEnd', mixin$18);
+		var P$21 = createProperty('ignoreEnd', mixin$18);
+	
+		function ignoreEnd(obs) {
+		  return new (obs._ofSameType(S$25, P$21))(obs);
+		}
+	
+		var mixin$19 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleEnd: function () {
+		    var fn = this._fn;
+		    this._emitValue(fn());
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$26 = createStream('beforeEnd', mixin$19);
+		var P$22 = createProperty('beforeEnd', mixin$19);
+	
+		function beforeEnd(obs, fn) {
+		  return new (obs._ofSameType(S$26, P$22))(obs, { fn: fn });
+		}
+	
+		var mixin$20 = {
+		  _init: function (_ref) {
+		    var min = _ref.min;
+		    var max = _ref.max;
+	
+		    this._max = max;
+		    this._min = min;
+		    this._buff = [];
+		  },
+		  _free: function () {
+		    this._buff = null;
+		  },
+		  _handleValue: function (x) {
+		    this._buff = slide(this._buff, x, this._max);
+		    if (this._buff.length >= this._min) {
+		      this._emitValue(this._buff);
+		    }
+		  }
+		};
+	
+		var S$27 = createStream('slidingWindow', mixin$20);
+		var P$23 = createProperty('slidingWindow', mixin$20);
+	
+		function slidingWindow(obs, max) {
+		  var min = arguments.length <= 2 || arguments[2] === undefined ? 0 : arguments[2];
+	
+		  return new (obs._ofSameType(S$27, P$23))(obs, { min: min, max: max });
+		}
+	
+		var mixin$21 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+		    var flushOnEnd = _ref.flushOnEnd;
+	
+		    this._fn = fn;
+		    this._flushOnEnd = flushOnEnd;
+		    this._buff = [];
+		  },
+		  _free: function () {
+		    this._buff = null;
+		  },
+		  _flush: function () {
+		    if (this._buff !== null && this._buff.length !== 0) {
+		      this._emitValue(this._buff);
+		      this._buff = [];
+		    }
+		  },
+		  _handleValue: function (x) {
+		    this._buff.push(x);
+		    var fn = this._fn;
+		    if (!fn(x)) {
+		      this._flush();
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._flushOnEnd) {
+		      this._flush();
+		    }
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$28 = createStream('bufferWhile', mixin$21);
+		var P$24 = createProperty('bufferWhile', mixin$21);
+	
+		var id$7 = function (x) {
+		  return x;
+		};
+	
+		function bufferWhile(obs, fn) {
+		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	
+		  var _ref2$flushOnEnd = _ref2.flushOnEnd;
+		  var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
+	
+		  return new (obs._ofSameType(S$28, P$24))(obs, { fn: fn || id$7, flushOnEnd: flushOnEnd });
+		}
+	
+		var mixin$22 = {
+		  _init: function (_ref) {
+		    var count = _ref.count;
+		    var flushOnEnd = _ref.flushOnEnd;
+	
+		    this._count = count;
+		    this._flushOnEnd = flushOnEnd;
+		    this._buff = [];
+		  },
+		  _free: function () {
+		    this._buff = null;
+		  },
+		  _flush: function () {
+		    if (this._buff !== null && this._buff.length !== 0) {
+		      this._emitValue(this._buff);
+		      this._buff = [];
+		    }
+		  },
+		  _handleValue: function (x) {
+		    this._buff.push(x);
+		    if (this._buff.length >= this._count) {
+		      this._flush();
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._flushOnEnd) {
+		      this._flush();
+		    }
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$29 = createStream('bufferWithCount', mixin$22);
+		var P$25 = createProperty('bufferWithCount', mixin$22);
+	
+		function bufferWhile$1(obs, count) {
+		  var _ref2 = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	
+		  var _ref2$flushOnEnd = _ref2.flushOnEnd;
+		  var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
+	
+		  return new (obs._ofSameType(S$29, P$25))(obs, { count: count, flushOnEnd: flushOnEnd });
+		}
+	
+		var mixin$23 = {
+		  _init: function (_ref) {
+		    var _this = this;
+	
+		    var wait = _ref.wait;
+		    var count = _ref.count;
+		    var flushOnEnd = _ref.flushOnEnd;
+	
+		    this._wait = wait;
+		    this._count = count;
+		    this._flushOnEnd = flushOnEnd;
+		    this._intervalId = null;
+		    this._$onTick = function () {
+		      return _this._flush();
+		    };
+		    this._buff = [];
+		  },
+		  _free: function () {
+		    this._$onTick = null;
+		    this._buff = null;
+		  },
+		  _flush: function () {
+		    if (this._buff !== null) {
+		      this._emitValue(this._buff);
+		      this._buff = [];
+		    }
+		  },
+		  _handleValue: function (x) {
+		    this._buff.push(x);
+		    if (this._buff.length >= this._count) {
+		      clearInterval(this._intervalId);
+		      this._flush();
+		      this._intervalId = setInterval(this._$onTick, this._wait);
+		    }
+		  },
+		  _handleEnd: function () {
+		    if (this._flushOnEnd && this._buff.length !== 0) {
+		      this._flush();
+		    }
+		    this._emitEnd();
+		  },
+		  _onActivation: function () {
+		    this._intervalId = setInterval(this._$onTick, this._wait);
+		    this._source.onAny(this._$handleAny); // copied from patterns/one-source
+		  },
+		  _onDeactivation: function () {
+		    if (this._intervalId !== null) {
+		      clearInterval(this._intervalId);
+		      this._intervalId = null;
+		    }
+		    this._source.offAny(this._$handleAny); // copied from patterns/one-source
+		  }
+		};
+	
+		var S$30 = createStream('bufferWithTimeOrCount', mixin$23);
+		var P$26 = createProperty('bufferWithTimeOrCount', mixin$23);
+	
+		function bufferWithTimeOrCount(obs, wait, count) {
+		  var _ref2 = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+	
+		  var _ref2$flushOnEnd = _ref2.flushOnEnd;
+		  var flushOnEnd = _ref2$flushOnEnd === undefined ? true : _ref2$flushOnEnd;
+	
+		  return new (obs._ofSameType(S$30, P$26))(obs, { wait: wait, count: count, flushOnEnd: flushOnEnd });
+		}
+	
+		function xformForObs(obs) {
+		  return {
+		    '@@transducer/step': function (res, input) {
+		      obs._emitValue(input);
+		      return null;
+		    },
+		    '@@transducer/result': function () {
+		      obs._emitEnd();
+		      return null;
+		    }
+		  };
+		}
+	
+		var mixin$24 = {
+		  _init: function (_ref) {
+		    var transducer = _ref.transducer;
+	
+		    this._xform = transducer(xformForObs(this));
+		  },
+		  _free: function () {
+		    this._xform = null;
+		  },
+		  _handleValue: function (x) {
+		    if (this._xform['@@transducer/step'](null, x) !== null) {
+		      this._xform['@@transducer/result'](null);
+		    }
+		  },
+		  _handleEnd: function () {
+		    this._xform['@@transducer/result'](null);
+		  }
+		};
+	
+		var S$31 = createStream('transduce', mixin$24);
+		var P$27 = createProperty('transduce', mixin$24);
+	
+		function transduce(obs, transducer) {
+		  return new (obs._ofSameType(S$31, P$27))(obs, { transducer: transducer });
+		}
+	
+		var mixin$25 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._handler = fn;
+		    this._emitter = emitter(this);
+		  },
+		  _free: function () {
+		    this._handler = null;
+		    this._emitter = null;
+		  },
+		  _handleAny: function (event) {
+		    this._handler(this._emitter, event);
+		  }
+		};
+	
+		var S$32 = createStream('withHandler', mixin$25);
+		var P$28 = createProperty('withHandler', mixin$25);
+	
+		function withHandler(obs, fn) {
+		  return new (obs._ofSameType(S$32, P$28))(obs, { fn: fn });
+		}
+	
+		function defaultErrorsCombinator(errors) {
+		  var latestError = void 0;
+		  for (var i = 0; i < errors.length; i++) {
+		    if (errors[i] !== undefined) {
+		      if (latestError === undefined || latestError.index < errors[i].index) {
+		        latestError = errors[i];
+		      }
+		    }
+		  }
+		  return latestError.error;
+		}
+	
+		function Combine(active, passive, combinator) {
+		  var _this = this;
+	
+		  Stream.call(this);
+		  this._activeCount = active.length;
+		  this._sources = concat(active, passive);
+		  this._combinator = combinator ? spread(combinator, this._sources.length) : function (x) {
+		    return x;
+		  };
+		  this._aliveCount = 0;
+		  this._latestValues = new Array(this._sources.length);
+		  this._latestErrors = new Array(this._sources.length);
+		  fillArray(this._latestValues, NOTHING);
+		  this._emitAfterActivation = false;
+		  this._endAfterActivation = false;
+		  this._latestErrorIndex = 0;
+	
+		  this._$handlers = [];
+	
+		  var _loop = function (i) {
+		    _this._$handlers.push(function (event) {
+		      return _this._handleAny(i, event);
+		    });
+		  };
+	
+		  for (var i = 0; i < this._sources.length; i++) {
+		    _loop(i);
+		  }
+		}
+	
+		inherit(Combine, Stream, {
+	
+		  _name: 'combine',
+	
+		  _onActivation: function () {
+		    this._aliveCount = this._activeCount;
+	
+		    // we need to suscribe to _passive_ sources before _active_
+		    // (see https://github.com/rpominov/kefir/issues/98)
+		    for (var i = this._activeCount; i < this._sources.length; i++) {
+		      this._sources[i].onAny(this._$handlers[i]);
+		    }
+		    for (var i = 0; i < this._activeCount; i++) {
+		      this._sources[i].onAny(this._$handlers[i]);
+		    }
+	
+		    if (this._emitAfterActivation) {
+		      this._emitAfterActivation = false;
+		      this._emitIfFull();
+		    }
+		    if (this._endAfterActivation) {
+		      this._emitEnd();
+		    }
+		  },
+		  _onDeactivation: function () {
+		    var length = this._sources.length,
+		        i = void 0;
+		    for (i = 0; i < length; i++) {
+		      this._sources[i].offAny(this._$handlers[i]);
+		    }
+		  },
+		  _emitIfFull: function () {
+		    var hasAllValues = true;
+		    var hasErrors = false;
+		    var length = this._latestValues.length;
+		    var valuesCopy = new Array(length);
+		    var errorsCopy = new Array(length);
+	
+		    for (var i = 0; i < length; i++) {
+		      valuesCopy[i] = this._latestValues[i];
+		      errorsCopy[i] = this._latestErrors[i];
+	
+		      if (valuesCopy[i] === NOTHING) {
+		        hasAllValues = false;
+		      }
+	
+		      if (errorsCopy[i] !== undefined) {
+		        hasErrors = true;
+		      }
+		    }
+	
+		    if (hasAllValues) {
+		      var combinator = this._combinator;
+		      this._emitValue(combinator(valuesCopy));
+		    }
+		    if (hasErrors) {
+		      this._emitError(defaultErrorsCombinator(errorsCopy));
+		    }
+		  },
+		  _handleAny: function (i, event) {
+	
+		    if (event.type === VALUE || event.type === ERROR) {
+	
+		      if (event.type === VALUE) {
+		        this._latestValues[i] = event.value;
+		        this._latestErrors[i] = undefined;
+		      }
+		      if (event.type === ERROR) {
+		        this._latestValues[i] = NOTHING;
+		        this._latestErrors[i] = {
+		          index: this._latestErrorIndex++,
+		          error: event.value
+		        };
+		      }
+	
+		      if (i < this._activeCount) {
+		        if (this._activating) {
+		          this._emitAfterActivation = true;
+		        } else {
+		          this._emitIfFull();
+		        }
+		      }
+		    } else {
+		      // END
+	
+		      if (i < this._activeCount) {
+		        this._aliveCount--;
+		        if (this._aliveCount === 0) {
+		          if (this._activating) {
+		            this._endAfterActivation = true;
+		          } else {
+		            this._emitEnd();
+		          }
+		        }
+		      }
+		    }
+		  },
+		  _clear: function () {
+		    Stream.prototype._clear.call(this);
+		    this._sources = null;
+		    this._latestValues = null;
+		    this._latestErrors = null;
+		    this._combinator = null;
+		    this._$handlers = null;
+		  }
+		});
+	
+		function combine(active) {
+		  var passive = arguments.length <= 1 || arguments[1] === undefined ? [] : arguments[1];
+		  var combinator = arguments[2];
+	
+		  if (typeof passive === 'function') {
+		    combinator = passive;
+		    passive = [];
+		  }
+		  return active.length === 0 ? never() : new Combine(active, passive, combinator);
+		}
+	
+		var isArray = Array.isArray || function (xs) {
+		  return Object.prototype.toString.call(xs) === '[object Array]';
+		};
+	
+		function Zip(sources, combinator) {
+		  var _this = this;
+	
+		  Stream.call(this);
+	
+		  this._buffers = map(sources, function (source) {
+		    return isArray(source) ? cloneArray(source) : [];
+		  });
+		  this._sources = map(sources, function (source) {
+		    return isArray(source) ? never() : source;
+		  });
+	
+		  this._combinator = combinator ? spread(combinator, this._sources.length) : function (x) {
+		    return x;
+		  };
+		  this._aliveCount = 0;
+	
+		  this._$handlers = [];
+	
+		  var _loop = function (i) {
+		    _this._$handlers.push(function (event) {
+		      return _this._handleAny(i, event);
+		    });
+		  };
+	
+		  for (var i = 0; i < this._sources.length; i++) {
+		    _loop(i);
+		  }
+		}
+	
+		inherit(Zip, Stream, {
+	
+		  _name: 'zip',
+	
+		  _onActivation: function () {
+	
+		    // if all sources are arrays
+		    while (this._isFull()) {
+		      this._emit();
+		    }
+	
+		    var length = this._sources.length;
+		    this._aliveCount = length;
+		    for (var i = 0; i < length && this._active; i++) {
+		      this._sources[i].onAny(this._$handlers[i]);
+		    }
+		  },
+		  _onDeactivation: function () {
+		    for (var i = 0; i < this._sources.length; i++) {
+		      this._sources[i].offAny(this._$handlers[i]);
+		    }
+		  },
+		  _emit: function () {
+		    var values = new Array(this._buffers.length);
+		    for (var i = 0; i < this._buffers.length; i++) {
+		      values[i] = this._buffers[i].shift();
+		    }
+		    var combinator = this._combinator;
+		    this._emitValue(combinator(values));
+		  },
+		  _isFull: function () {
+		    for (var i = 0; i < this._buffers.length; i++) {
+		      if (this._buffers[i].length === 0) {
+		        return false;
+		      }
+		    }
+		    return true;
+		  },
+		  _handleAny: function (i, event) {
+		    if (event.type === VALUE) {
+		      this._buffers[i].push(event.value);
+		      if (this._isFull()) {
+		        this._emit();
+		      }
+		    }
+		    if (event.type === ERROR) {
+		      this._emitError(event.value);
+		    }
+		    if (event.type === END) {
+		      this._aliveCount--;
+		      if (this._aliveCount === 0) {
+		        this._emitEnd();
+		      }
+		    }
+		  },
+		  _clear: function () {
+		    Stream.prototype._clear.call(this);
+		    this._sources = null;
+		    this._buffers = null;
+		    this._combinator = null;
+		    this._$handlers = null;
+		  }
+		});
+	
+		function zip(observables, combinator /* Function | falsey */) {
+		  return observables.length === 0 ? never() : new Zip(observables, combinator);
+		}
+	
+		var id$8 = function (x) {
+		  return x;
+		};
+	
+		function AbstractPool() {
+		  var _this = this;
+	
+		  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+		  var _ref$queueLim = _ref.queueLim;
+		  var queueLim = _ref$queueLim === undefined ? 0 : _ref$queueLim;
+		  var _ref$concurLim = _ref.concurLim;
+		  var concurLim = _ref$concurLim === undefined ? -1 : _ref$concurLim;
+		  var _ref$drop = _ref.drop;
+		  var drop = _ref$drop === undefined ? 'new' : _ref$drop;
+	
+		  Stream.call(this);
+	
+		  this._queueLim = queueLim < 0 ? -1 : queueLim;
+		  this._concurLim = concurLim < 0 ? -1 : concurLim;
+		  this._drop = drop;
+		  this._queue = [];
+		  this._curSources = [];
+		  this._$handleSubAny = function (event) {
+		    return _this._handleSubAny(event);
+		  };
+		  this._$endHandlers = [];
+		  this._currentlyAdding = null;
+	
+		  if (this._concurLim === 0) {
+		    this._emitEnd();
+		  }
+		}
+	
+		inherit(AbstractPool, Stream, {
+	
+		  _name: 'abstractPool',
+	
+		  _add: function (obj, toObs /* Function | falsey */) {
+		    toObs = toObs || id$8;
+		    if (this._concurLim === -1 || this._curSources.length < this._concurLim) {
+		      this._addToCur(toObs(obj));
+		    } else {
+		      if (this._queueLim === -1 || this._queue.length < this._queueLim) {
+		        this._addToQueue(toObs(obj));
+		      } else if (this._drop === 'old') {
+		        this._removeOldest();
+		        this._add(obj, toObs);
+		      }
+		    }
+		  },
+		  _addAll: function (obss) {
+		    var _this2 = this;
+	
+		    forEach(obss, function (obs) {
+		      return _this2._add(obs);
+		    });
+		  },
+		  _remove: function (obs) {
+		    if (this._removeCur(obs) === -1) {
+		      this._removeQueue(obs);
+		    }
+		  },
+		  _addToQueue: function (obs) {
+		    this._queue = concat(this._queue, [obs]);
+		  },
+		  _addToCur: function (obs) {
+		    if (this._active) {
+	
+		      // HACK:
+		      //
+		      // We have two optimizations for cases when `obs` is ended. We don't want
+		      // to add such observable to the list, but only want to emit events
+		      // from it (if it has some).
+		      //
+		      // Instead of this hacks, we could just did following,
+		      // but it would be 5-8 times slower:
+		      //
+		      //     this._curSources = concat(this._curSources, [obs]);
+		      //     this._subscribe(obs);
+		      //
+	
+		      // #1
+		      // This one for cases when `obs` already ended
+		      // e.g., Kefir.constant() or Kefir.never()
+		      if (!obs._alive) {
+		        if (obs._currentEvent) {
+		          this._emit(obs._currentEvent.type, obs._currentEvent.value);
+		        }
+		        return;
+		      }
+	
+		      // #2
+		      // This one is for cases when `obs` going to end synchronously on
+		      // first subscriber e.g., Kefir.stream(em => {em.emit(1); em.end()})
+		      this._currentlyAdding = obs;
+		      obs.onAny(this._$handleSubAny);
+		      this._currentlyAdding = null;
+		      if (obs._alive) {
+		        this._curSources = concat(this._curSources, [obs]);
+		        if (this._active) {
+		          this._subToEnd(obs);
+		        }
+		      }
+		    } else {
+		      this._curSources = concat(this._curSources, [obs]);
+		    }
+		  },
+		  _subToEnd: function (obs) {
+		    var _this3 = this;
+	
+		    var onEnd = function () {
+		      return _this3._removeCur(obs);
+		    };
+		    this._$endHandlers.push({ obs: obs, handler: onEnd });
+		    obs.onEnd(onEnd);
+		  },
+		  _subscribe: function (obs) {
+		    obs.onAny(this._$handleSubAny);
+	
+		    // it can become inactive in responce of subscribing to `obs.onAny` above
+		    if (this._active) {
+		      this._subToEnd(obs);
+		    }
+		  },
+		  _unsubscribe: function (obs) {
+		    obs.offAny(this._$handleSubAny);
+	
+		    var onEndI = findByPred(this._$endHandlers, function (obj) {
+		      return obj.obs === obs;
+		    });
+		    if (onEndI !== -1) {
+		      obs.offEnd(this._$endHandlers[onEndI].handler);
+		      this._$endHandlers.splice(onEndI, 1);
+		    }
+		  },
+		  _handleSubAny: function (event) {
+		    if (event.type === VALUE) {
+		      this._emitValue(event.value);
+		    } else if (event.type === ERROR) {
+		      this._emitError(event.value);
+		    }
+		  },
+		  _removeQueue: function (obs) {
+		    var index = find(this._queue, obs);
+		    this._queue = remove(this._queue, index);
+		    return index;
+		  },
+		  _removeCur: function (obs) {
+		    if (this._active) {
+		      this._unsubscribe(obs);
+		    }
+		    var index = find(this._curSources, obs);
+		    this._curSources = remove(this._curSources, index);
+		    if (index !== -1) {
+		      if (this._queue.length !== 0) {
+		        this._pullQueue();
+		      } else if (this._curSources.length === 0) {
+		        this._onEmpty();
+		      }
+		    }
+		    return index;
+		  },
+		  _removeOldest: function () {
+		    this._removeCur(this._curSources[0]);
+		  },
+		  _pullQueue: function () {
+		    if (this._queue.length !== 0) {
+		      this._queue = cloneArray(this._queue);
+		      this._addToCur(this._queue.shift());
+		    }
+		  },
+		  _onActivation: function () {
+		    for (var i = 0, sources = this._curSources; i < sources.length && this._active; i++) {
+		      this._subscribe(sources[i]);
+		    }
+		  },
+		  _onDeactivation: function () {
+		    for (var i = 0, sources = this._curSources; i < sources.length; i++) {
+		      this._unsubscribe(sources[i]);
+		    }
+		    if (this._currentlyAdding !== null) {
+		      this._unsubscribe(this._currentlyAdding);
+		    }
+		  },
+		  _isEmpty: function () {
+		    return this._curSources.length === 0;
+		  },
+		  _onEmpty: function () {},
+		  _clear: function () {
+		    Stream.prototype._clear.call(this);
+		    this._queue = null;
+		    this._curSources = null;
+		    this._$handleSubAny = null;
+		    this._$endHandlers = null;
+		  }
+		});
+	
+		function Merge(sources) {
+		  AbstractPool.call(this);
+		  this._addAll(sources);
+		  this._initialised = true;
+		}
+	
+		inherit(Merge, AbstractPool, {
+	
+		  _name: 'merge',
+	
+		  _onEmpty: function () {
+		    if (this._initialised) {
+		      this._emitEnd();
+		    }
+		  }
+		});
+	
+		function merge(observables) {
+		  return observables.length === 0 ? never() : new Merge(observables);
+		}
+	
+		function S$33(generator) {
+		  var _this = this;
+	
+		  Stream.call(this);
+		  this._generator = generator;
+		  this._source = null;
+		  this._inLoop = false;
+		  this._iteration = 0;
+		  this._$handleAny = function (event) {
+		    return _this._handleAny(event);
+		  };
+		}
+	
+		inherit(S$33, Stream, {
+	
+		  _name: 'repeat',
+	
+		  _handleAny: function (event) {
+		    if (event.type === END) {
+		      this._source = null;
+		      this._getSource();
+		    } else {
+		      this._emit(event.type, event.value);
+		    }
+		  },
+		  _getSource: function () {
+		    if (!this._inLoop) {
+		      this._inLoop = true;
+		      var generator = this._generator;
+		      while (this._source === null && this._alive && this._active) {
+		        this._source = generator(this._iteration++);
+		        if (this._source) {
+		          this._source.onAny(this._$handleAny);
+		        } else {
+		          this._emitEnd();
+		        }
+		      }
+		      this._inLoop = false;
+		    }
+		  },
+		  _onActivation: function () {
+		    if (this._source) {
+		      this._source.onAny(this._$handleAny);
+		    } else {
+		      this._getSource();
+		    }
+		  },
+		  _onDeactivation: function () {
+		    if (this._source) {
+		      this._source.offAny(this._$handleAny);
+		    }
+		  },
+		  _clear: function () {
+		    Stream.prototype._clear.call(this);
+		    this._generator = null;
+		    this._source = null;
+		    this._$handleAny = null;
+		  }
+		});
+	
+		function repeat (generator) {
+		  return new S$33(generator);
+		}
+	
+		function concat$1(observables) {
+		  return repeat(function (index) {
+		    return observables.length > index ? observables[index] : false;
+		  }).setName('concat');
+		}
+	
+		function Pool() {
+		  AbstractPool.call(this);
+		}
+	
+		inherit(Pool, AbstractPool, {
+	
+		  _name: 'pool',
+	
+		  plug: function (obs) {
+		    this._add(obs);
+		    return this;
+		  },
+		  unplug: function (obs) {
+		    this._remove(obs);
+		    return this;
+		  }
+		});
+	
+		function FlatMap(source, fn, options) {
+		  var _this = this;
+	
+		  AbstractPool.call(this, options);
+		  this._source = source;
+		  this._fn = fn;
+		  this._mainEnded = false;
+		  this._lastCurrent = null;
+		  this._$handleMain = function (event) {
+		    return _this._handleMain(event);
+		  };
+		}
+	
+		inherit(FlatMap, AbstractPool, {
+		  _onActivation: function () {
+		    AbstractPool.prototype._onActivation.call(this);
+		    if (this._active) {
+		      this._source.onAny(this._$handleMain);
+		    }
+		  },
+		  _onDeactivation: function () {
+		    AbstractPool.prototype._onDeactivation.call(this);
+		    this._source.offAny(this._$handleMain);
+		    this._hadNoEvSinceDeact = true;
+		  },
+		  _handleMain: function (event) {
+	
+		    if (event.type === VALUE) {
+		      // Is latest value before deactivation survived, and now is 'current' on this activation?
+		      // We don't want to handle such values, to prevent to constantly add
+		      // same observale on each activation/deactivation when our main source
+		      // is a `Kefir.conatant()` for example.
+		      var sameCurr = this._activating && this._hadNoEvSinceDeact && this._lastCurrent === event.value;
+		      if (!sameCurr) {
+		        this._add(event.value, this._fn);
+		      }
+		      this._lastCurrent = event.value;
+		      this._hadNoEvSinceDeact = false;
+		    }
+	
+		    if (event.type === ERROR) {
+		      this._emitError(event.value);
+		    }
+	
+		    if (event.type === END) {
+		      if (this._isEmpty()) {
+		        this._emitEnd();
+		      } else {
+		        this._mainEnded = true;
+		      }
+		    }
+		  },
+		  _onEmpty: function () {
+		    if (this._mainEnded) {
+		      this._emitEnd();
+		    }
+		  },
+		  _clear: function () {
+		    AbstractPool.prototype._clear.call(this);
+		    this._source = null;
+		    this._lastCurrent = null;
+		    this._$handleMain = null;
+		  }
+		});
+	
+		function FlatMapErrors(source, fn) {
+		  FlatMap.call(this, source, fn);
+		}
+	
+		inherit(FlatMapErrors, FlatMap, {
+	
+		  // Same as in FlatMap, only VALUE/ERROR flipped
+	
+		  _handleMain: function (event) {
+	
+		    if (event.type === ERROR) {
+		      var sameCurr = this._activating && this._hadNoEvSinceDeact && this._lastCurrent === event.value;
+		      if (!sameCurr) {
+		        this._add(event.value, this._fn);
+		      }
+		      this._lastCurrent = event.value;
+		      this._hadNoEvSinceDeact = false;
+		    }
+	
+		    if (event.type === VALUE) {
+		      this._emitValue(event.value);
+		    }
+	
+		    if (event.type === END) {
+		      if (this._isEmpty()) {
+		        this._emitEnd();
+		      } else {
+		        this._mainEnded = true;
+		      }
+		    }
+		  }
+		});
+	
+		function createConstructor$1(BaseClass, name) {
+		  return function AnonymousObservable(primary, secondary, options) {
+		    var _this = this;
+	
+		    BaseClass.call(this);
+		    this._primary = primary;
+		    this._secondary = secondary;
+		    this._name = primary._name + '.' + name;
+		    this._lastSecondary = NOTHING;
+		    this._$handleSecondaryAny = function (event) {
+		      return _this._handleSecondaryAny(event);
+		    };
+		    this._$handlePrimaryAny = function (event) {
+		      return _this._handlePrimaryAny(event);
+		    };
+		    this._init(options);
+		  };
+		}
+	
+		function createClassMethods$1(BaseClass) {
+		  return {
+		    _init: function () {},
+		    _free: function () {},
+		    _handlePrimaryValue: function (x) {
+		      this._emitValue(x);
+		    },
+		    _handlePrimaryError: function (x) {
+		      this._emitError(x);
+		    },
+		    _handlePrimaryEnd: function () {
+		      this._emitEnd();
+		    },
+		    _handleSecondaryValue: function (x) {
+		      this._lastSecondary = x;
+		    },
+		    _handleSecondaryError: function (x) {
+		      this._emitError(x);
+		    },
+		    _handleSecondaryEnd: function () {},
+		    _handlePrimaryAny: function (event) {
+		      switch (event.type) {
+		        case VALUE:
+		          return this._handlePrimaryValue(event.value);
+		        case ERROR:
+		          return this._handlePrimaryError(event.value);
+		        case END:
+		          return this._handlePrimaryEnd(event.value);
+		      }
+		    },
+		    _handleSecondaryAny: function (event) {
+		      switch (event.type) {
+		        case VALUE:
+		          return this._handleSecondaryValue(event.value);
+		        case ERROR:
+		          return this._handleSecondaryError(event.value);
+		        case END:
+		          this._handleSecondaryEnd(event.value);
+		          this._removeSecondary();
+		      }
+		    },
+		    _removeSecondary: function () {
+		      if (this._secondary !== null) {
+		        this._secondary.offAny(this._$handleSecondaryAny);
+		        this._$handleSecondaryAny = null;
+		        this._secondary = null;
+		      }
+		    },
+		    _onActivation: function () {
+		      if (this._secondary !== null) {
+		        this._secondary.onAny(this._$handleSecondaryAny);
+		      }
+		      if (this._active) {
+		        this._primary.onAny(this._$handlePrimaryAny);
+		      }
+		    },
+		    _onDeactivation: function () {
+		      if (this._secondary !== null) {
+		        this._secondary.offAny(this._$handleSecondaryAny);
+		      }
+		      this._primary.offAny(this._$handlePrimaryAny);
+		    },
+		    _clear: function () {
+		      BaseClass.prototype._clear.call(this);
+		      this._primary = null;
+		      this._secondary = null;
+		      this._lastSecondary = null;
+		      this._$handleSecondaryAny = null;
+		      this._$handlePrimaryAny = null;
+		      this._free();
+		    }
+		  };
+		}
+	
+		function createStream$1(name, mixin) {
+		  var S = createConstructor$1(Stream, name);
+		  inherit(S, Stream, createClassMethods$1(Stream), mixin);
+		  return S;
+		}
+	
+		function createProperty$1(name, mixin) {
+		  var P = createConstructor$1(Property, name);
+		  inherit(P, Property, createClassMethods$1(Property), mixin);
+		  return P;
+		}
+	
+		var mixin$26 = {
+		  _handlePrimaryValue: function (x) {
+		    if (this._lastSecondary !== NOTHING && this._lastSecondary) {
+		      this._emitValue(x);
+		    }
+		  },
+		  _handleSecondaryEnd: function () {
+		    if (this._lastSecondary === NOTHING || !this._lastSecondary) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$34 = createStream$1('filterBy', mixin$26);
+		var P$29 = createProperty$1('filterBy', mixin$26);
+	
+		function filterBy(primary, secondary) {
+		  return new (primary._ofSameType(S$34, P$29))(primary, secondary);
+		}
+	
+		var id2 = function (_, x) {
+		  return x;
+		};
+	
+		function sampledBy(passive, active, combinator) {
+		  var _combinator = combinator ? function (a, b) {
+		    return combinator(b, a);
+		  } : id2;
+		  return combine([active], [passive], _combinator).setName(passive, 'sampledBy');
+		}
+	
+		var mixin$27 = {
+		  _handlePrimaryValue: function (x) {
+		    if (this._lastSecondary !== NOTHING) {
+		      this._emitValue(x);
+		    }
+		  },
+		  _handleSecondaryEnd: function () {
+		    if (this._lastSecondary === NOTHING) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$35 = createStream$1('skipUntilBy', mixin$27);
+		var P$30 = createProperty$1('skipUntilBy', mixin$27);
+	
+		function skipUntilBy(primary, secondary) {
+		  return new (primary._ofSameType(S$35, P$30))(primary, secondary);
+		}
+	
+		var mixin$28 = {
+		  _handleSecondaryValue: function () {
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$36 = createStream$1('takeUntilBy', mixin$28);
+		var P$31 = createProperty$1('takeUntilBy', mixin$28);
+	
+		function takeUntilBy(primary, secondary) {
+		  return new (primary._ofSameType(S$36, P$31))(primary, secondary);
+		}
+	
+		var mixin$29 = {
+		  _init: function () {
+		    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+		    var _ref$flushOnEnd = _ref.flushOnEnd;
+		    var flushOnEnd = _ref$flushOnEnd === undefined ? true : _ref$flushOnEnd;
+	
+		    this._buff = [];
+		    this._flushOnEnd = flushOnEnd;
+		  },
+		  _free: function () {
+		    this._buff = null;
+		  },
+		  _flush: function () {
+		    if (this._buff !== null) {
+		      this._emitValue(this._buff);
+		      this._buff = [];
+		    }
+		  },
+		  _handlePrimaryEnd: function () {
+		    if (this._flushOnEnd) {
+		      this._flush();
+		    }
+		    this._emitEnd();
+		  },
+		  _onActivation: function () {
+		    this._primary.onAny(this._$handlePrimaryAny);
+		    if (this._alive && this._secondary !== null) {
+		      this._secondary.onAny(this._$handleSecondaryAny);
+		    }
+		  },
+		  _handlePrimaryValue: function (x) {
+		    this._buff.push(x);
+		  },
+		  _handleSecondaryValue: function () {
+		    this._flush();
+		  },
+		  _handleSecondaryEnd: function () {
+		    if (!this._flushOnEnd) {
+		      this._emitEnd();
+		    }
+		  }
+		};
+	
+		var S$37 = createStream$1('bufferBy', mixin$29);
+		var P$32 = createProperty$1('bufferBy', mixin$29);
+	
+		function bufferBy(primary, secondary, options /* optional */) {
+		  return new (primary._ofSameType(S$37, P$32))(primary, secondary, options);
+		}
+	
+		var mixin$30 = {
+		  _init: function () {
+		    var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+		    var _ref$flushOnEnd = _ref.flushOnEnd;
+		    var flushOnEnd = _ref$flushOnEnd === undefined ? true : _ref$flushOnEnd;
+		    var _ref$flushOnChange = _ref.flushOnChange;
+		    var flushOnChange = _ref$flushOnChange === undefined ? false : _ref$flushOnChange;
+	
+		    this._buff = [];
+		    this._flushOnEnd = flushOnEnd;
+		    this._flushOnChange = flushOnChange;
+		  },
+		  _free: function () {
+		    this._buff = null;
+		  },
+		  _flush: function () {
+		    if (this._buff !== null) {
+		      this._emitValue(this._buff);
+		      this._buff = [];
+		    }
+		  },
+		  _handlePrimaryEnd: function () {
+		    if (this._flushOnEnd) {
+		      this._flush();
+		    }
+		    this._emitEnd();
+		  },
+		  _handlePrimaryValue: function (x) {
+		    this._buff.push(x);
+		    if (this._lastSecondary !== NOTHING && !this._lastSecondary) {
+		      this._flush();
+		    }
+		  },
+		  _handleSecondaryEnd: function () {
+		    if (!this._flushOnEnd && (this._lastSecondary === NOTHING || this._lastSecondary)) {
+		      this._emitEnd();
+		    }
+		  },
+		  _handleSecondaryValue: function (x) {
+		    if (this._flushOnChange && !x) {
+		      this._flush();
+		    }
+	
+		    // from default _handleSecondaryValue
+		    this._lastSecondary = x;
+		  }
+		};
+	
+		var S$38 = createStream$1('bufferWhileBy', mixin$30);
+		var P$33 = createProperty$1('bufferWhileBy', mixin$30);
+	
+		function bufferWhileBy(primary, secondary, options /* optional */) {
+		  return new (primary._ofSameType(S$38, P$33))(primary, secondary, options);
+		}
+	
+		var f = function () {
+		  return false;
+		};
+		var t = function () {
+		  return true;
+		};
+	
+		function awaiting(a, b) {
+		  var result = merge([map$1(a, t), map$1(b, f)]);
+		  result = skipDuplicates(result);
+		  result = toProperty(result, f);
+		  return result.setName(a, 'awaiting');
+		}
+	
+		var mixin$31 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleValue: function (x) {
+		    var fn = this._fn;
+		    var result = fn(x);
+		    if (result.convert) {
+		      this._emitError(result.error);
+		    } else {
+		      this._emitValue(x);
+		    }
+		  }
+		};
+	
+		var S$39 = createStream('valuesToErrors', mixin$31);
+		var P$34 = createProperty('valuesToErrors', mixin$31);
+	
+		var defFn = function (x) {
+		  return { convert: true, error: x };
+		};
+	
+		function valuesToErrors(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? defFn : arguments[1];
+	
+		  return new (obs._ofSameType(S$39, P$34))(obs, { fn: fn });
+		}
+	
+		var mixin$32 = {
+		  _init: function (_ref) {
+		    var fn = _ref.fn;
+	
+		    this._fn = fn;
+		  },
+		  _free: function () {
+		    this._fn = null;
+		  },
+		  _handleError: function (x) {
+		    var fn = this._fn;
+		    var result = fn(x);
+		    if (result.convert) {
+		      this._emitValue(result.value);
+		    } else {
+		      this._emitError(x);
+		    }
+		  }
+		};
+	
+		var S$40 = createStream('errorsToValues', mixin$32);
+		var P$35 = createProperty('errorsToValues', mixin$32);
+	
+		var defFn$1 = function (x) {
+		  return { convert: true, value: x };
+		};
+	
+		function errorsToValues(obs) {
+		  var fn = arguments.length <= 1 || arguments[1] === undefined ? defFn$1 : arguments[1];
+	
+		  return new (obs._ofSameType(S$40, P$35))(obs, { fn: fn });
+		}
+	
+		var mixin$33 = {
+		  _handleError: function (x) {
+		    this._emitError(x);
+		    this._emitEnd();
+		  }
+		};
+	
+		var S$41 = createStream('endOnError', mixin$33);
+		var P$36 = createProperty('endOnError', mixin$33);
+	
+		function endOnError(obs) {
+		  return new (obs._ofSameType(S$41, P$36))(obs);
+		}
+	
+		Observable.prototype.toProperty = function (fn) {
+		  return toProperty(this, fn);
+		};
+	
+		Observable.prototype.changes = function () {
+		  return changes(this);
+		};
+	
+		Observable.prototype.toPromise = function (Promise) {
+		  return toPromise(this, Promise);
+		};
+	
+		Observable.prototype.toESObservable = toESObservable;
+		Observable.prototype[$$observable] = toESObservable;
+	
+		Observable.prototype.map = function (fn) {
+		  return map$1(this, fn);
+		};
+	
+		Observable.prototype.filter = function (fn) {
+		  return filter(this, fn);
+		};
+	
+		Observable.prototype.take = function (n) {
+		  return take(this, n);
+		};
+	
+		Observable.prototype.takeErrors = function (n) {
+		  return takeErrors(this, n);
+		};
+	
+		Observable.prototype.takeWhile = function (fn) {
+		  return takeWhile(this, fn);
+		};
+	
+		Observable.prototype.last = function () {
+		  return last(this);
+		};
+	
+		Observable.prototype.skip = function (n) {
+		  return skip(this, n);
+		};
+	
+		Observable.prototype.skipWhile = function (fn) {
+		  return skipWhile(this, fn);
+		};
+	
+		Observable.prototype.skipDuplicates = function (fn) {
+		  return skipDuplicates(this, fn);
+		};
+	
+		Observable.prototype.diff = function (fn, seed) {
+		  return diff(this, fn, seed);
+		};
+	
+		Observable.prototype.scan = function (fn, seed) {
+		  return scan(this, fn, seed);
+		};
+	
+		Observable.prototype.flatten = function (fn) {
+		  return flatten(this, fn);
+		};
+	
+		Observable.prototype.delay = function (wait) {
+		  return delay(this, wait);
+		};
+	
+		Observable.prototype.throttle = function (wait, options) {
+		  return throttle(this, wait, options);
+		};
+	
+		Observable.prototype.debounce = function (wait, options) {
+		  return debounce(this, wait, options);
+		};
+	
+		Observable.prototype.mapErrors = function (fn) {
+		  return mapErrors(this, fn);
+		};
+	
+		Observable.prototype.filterErrors = function (fn) {
+		  return filterErrors(this, fn);
+		};
+	
+		Observable.prototype.ignoreValues = function () {
+		  return ignoreValues(this);
+		};
+	
+		Observable.prototype.ignoreErrors = function () {
+		  return ignoreErrors(this);
+		};
+	
+		Observable.prototype.ignoreEnd = function () {
+		  return ignoreEnd(this);
+		};
+	
+		Observable.prototype.beforeEnd = function (fn) {
+		  return beforeEnd(this, fn);
+		};
+	
+		Observable.prototype.slidingWindow = function (max, min) {
+		  return slidingWindow(this, max, min);
+		};
+	
+		Observable.prototype.bufferWhile = function (fn, options) {
+		  return bufferWhile(this, fn, options);
+		};
+	
+		Observable.prototype.bufferWithCount = function (count, options) {
+		  return bufferWhile$1(this, count, options);
+		};
+	
+		Observable.prototype.bufferWithTimeOrCount = function (wait, count, options) {
+		  return bufferWithTimeOrCount(this, wait, count, options);
+		};
+	
+		Observable.prototype.transduce = function (transducer) {
+		  return transduce(this, transducer);
+		};
+	
+		Observable.prototype.withHandler = function (fn) {
+		  return withHandler(this, fn);
+		};
+	
+		Observable.prototype.combine = function (other, combinator) {
+		  return combine([this, other], combinator);
+		};
+	
+		Observable.prototype.zip = function (other, combinator) {
+		  return zip([this, other], combinator);
+		};
+	
+		Observable.prototype.merge = function (other) {
+		  return merge([this, other]);
+		};
+	
+		Observable.prototype.concat = function (other) {
+		  return concat$1([this, other]);
+		};
+	
+		var pool = function () {
+		  return new Pool();
+		};
+	
+		Observable.prototype.flatMap = function (fn) {
+		  return new FlatMap(this, fn).setName(this, 'flatMap');
+		};
+		Observable.prototype.flatMapLatest = function (fn) {
+		  return new FlatMap(this, fn, { concurLim: 1, drop: 'old' }).setName(this, 'flatMapLatest');
+		};
+		Observable.prototype.flatMapFirst = function (fn) {
+		  return new FlatMap(this, fn, { concurLim: 1 }).setName(this, 'flatMapFirst');
+		};
+		Observable.prototype.flatMapConcat = function (fn) {
+		  return new FlatMap(this, fn, { queueLim: -1, concurLim: 1 }).setName(this, 'flatMapConcat');
+		};
+		Observable.prototype.flatMapConcurLimit = function (fn, limit) {
+		  return new FlatMap(this, fn, { queueLim: -1, concurLim: limit }).setName(this, 'flatMapConcurLimit');
+		};
+	
+		Observable.prototype.flatMapErrors = function (fn) {
+		  return new FlatMapErrors(this, fn).setName(this, 'flatMapErrors');
+		};
+	
+		Observable.prototype.filterBy = function (other) {
+		  return filterBy(this, other);
+		};
+	
+		Observable.prototype.sampledBy = function (other, combinator) {
+		  return sampledBy(this, other, combinator);
+		};
+	
+		Observable.prototype.skipUntilBy = function (other) {
+		  return skipUntilBy(this, other);
+		};
+	
+		Observable.prototype.takeUntilBy = function (other) {
+		  return takeUntilBy(this, other);
+		};
+	
+		Observable.prototype.bufferBy = function (other, options) {
+		  return bufferBy(this, other, options);
+		};
+	
+		Observable.prototype.bufferWhileBy = function (other, options) {
+		  return bufferWhileBy(this, other, options);
+		};
+	
+		// Deprecated
+		// -----------------------------------------------------------------------------
+	
+		var DEPRECATION_WARNINGS = true;
+		function dissableDeprecationWarnings() {
+		  DEPRECATION_WARNINGS = false;
+		}
+	
+		function warn(msg) {
+		  if (DEPRECATION_WARNINGS && console && typeof console.warn === 'function') {
+		    var msg2 = '\nHere is an Error object for you containing the call stack:';
+		    console.warn(msg, msg2, new Error());
+		  }
+		}
+	
+		Observable.prototype.awaiting = function (other) {
+		  warn('You are using deprecated .awaiting() method, see https://github.com/rpominov/kefir/issues/145');
+		  return awaiting(this, other);
+		};
+	
+		Observable.prototype.valuesToErrors = function (fn) {
+		  warn('You are using deprecated .valuesToErrors() method, see https://github.com/rpominov/kefir/issues/149');
+		  return valuesToErrors(this, fn);
+		};
+	
+		Observable.prototype.errorsToValues = function (fn) {
+		  warn('You are using deprecated .errorsToValues() method, see https://github.com/rpominov/kefir/issues/149');
+		  return errorsToValues(this, fn);
+		};
+	
+		Observable.prototype.endOnError = function () {
+		  warn('You are using deprecated .endOnError() method, see https://github.com/rpominov/kefir/issues/150');
+		  return endOnError(this);
+		};
+	
+		// Exports
+		// --------------------------------------------------------------------------
+	
+		var Kefir = { Observable: Observable, Stream: Stream, Property: Property, never: never, later: later, interval: interval, sequentially: sequentially,
+		  fromPoll: fromPoll, withInterval: withInterval, fromCallback: fromCallback, fromNodeCallback: fromNodeCallback, fromEvents: fromEvents, stream: stream,
+		  constant: constant, constantError: constantError, fromPromise: fromPromise, fromESObservable: fromESObservable, combine: combine, zip: zip, merge: merge,
+		  concat: concat$1, Pool: Pool, pool: pool, repeat: repeat };
+	
+		Kefir.Kefir = Kefir;
+	
+		exports.dissableDeprecationWarnings = dissableDeprecationWarnings;
+		exports.Kefir = Kefir;
+		exports.Observable = Observable;
+		exports.Stream = Stream;
+		exports.Property = Property;
+		exports.never = never;
+		exports.later = later;
+		exports.interval = interval;
+		exports.sequentially = sequentially;
+		exports.fromPoll = fromPoll;
+		exports.withInterval = withInterval;
+		exports.fromCallback = fromCallback;
+		exports.fromNodeCallback = fromNodeCallback;
+		exports.fromEvents = fromEvents;
+		exports.stream = stream;
+		exports.constant = constant;
+		exports.constantError = constantError;
+		exports.fromPromise = fromPromise;
+		exports.fromESObservable = fromESObservable;
+		exports.combine = combine;
+		exports.zip = zip;
+		exports.merge = merge;
+		exports.concat = concat$1;
+		exports.Pool = Pool;
+		exports.pool = pool;
+		exports.repeat = repeat;
+		exports['default'] = Kefir;
+	
+	}));
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+
 /***/ 229:
 /***/ function(module, exports) {
 
@@ -26550,15 +26299,15 @@ webpackJsonp([2],{
 		value: true
 	});
 	
-	var _classCallCheck2 = __webpack_require__(41);
+	var _classCallCheck2 = __webpack_require__(30);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(42);
+	var _createClass2 = __webpack_require__(31);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _paper = __webpack_require__(171);
+	var _paper = __webpack_require__(66);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
@@ -26673,21 +26422,21 @@ webpackJsonp([2],{
 		value: true
 	});
 	
-	var _classCallCheck2 = __webpack_require__(41);
+	var _classCallCheck2 = __webpack_require__(30);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(42);
+	var _createClass2 = __webpack_require__(31);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _ramda = __webpack_require__(48);
+	var _ramda = __webpack_require__(45);
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var participants = ["Graphene", "Carbon"];
+	var participants = ["Graphene", "Carbon", "Silver"];
 	
 	var dialogue = [{
 		name: "intro_dialog",
@@ -26862,6 +26611,7 @@ webpackJsonp([2],{
 	}
 	
 	function _ref2(loc) {
+		// gives a specific phrase
 		return this.currentDialogue.array[loc];
 	}
 	
@@ -26881,6 +26631,7 @@ webpackJsonp([2],{
 	}
 	
 	function _ref5() {
+		// Gives the current Phrase
 		return this.currentPhrase;
 	}
 	
@@ -26897,6 +26648,8 @@ webpackJsonp([2],{
 					}
 					this.loc = this.currentPhrase.answer[choice].loc;
 					this.currentPhrase = this.phrase(this.currentPhrase.answer[choice].loc);
+	
+					return null;
 				} else {
 					throw "This answer does not exists";
 				}
@@ -26906,11 +26659,11 @@ webpackJsonp([2],{
 		} else if (this.currentPhrase.loc) {
 			this.loc = this.currentPhrase.loc;
 			this.currentPhrase = this.phrase(this.currentPhrase.loc);
+	
+			return null;
 		} else if (this.currentPhrase.scene) {
 			return this.currentPhrase.scene;
 		}
-	
-		console.log(this.loc);
 	}
 	
 	var Dialogue = function () {
@@ -26958,15 +26711,433 @@ webpackJsonp([2],{
 		value: true
 	});
 	
-	var _classCallCheck2 = __webpack_require__(41);
+	var _classCallCheck2 = __webpack_require__(30);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(42);
+	var _createClass2 = __webpack_require__(31);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _ramda = __webpack_require__(48);
+	var _paper = __webpack_require__(66);
+	
+	var _paper2 = _interopRequireDefault(_paper);
+	
+	var _ramda = __webpack_require__(45);
+	
+	var _ramda2 = _interopRequireDefault(_ramda);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var font_size = 21;
+	
+	function _ref(callback) {
+		this.callback = callback;
+	}
+	
+	function _ref2() {
+		this.callback = null;
+	}
+	
+	function _ref3(choices) {
+		var _this = this;
+	
+		this.remove();
+	
+		this.list = choices.map(function (choice, n) {
+			var group = new _paper2.default.Group();
+	
+			var text = new _paper2.default.PointText({
+				//	point: point,
+				content: choice,
+				fillColor: "#AEE1F9",
+				fontFamily: "Verdana",
+				fontWeight: "bold",
+				fontSize: _this.fontSize,
+				justification: "left"
+			});
+			text.onClick = function () {
+				return _this.callback(n);
+			};
+	
+			var button = _this.button.clone();
+			button.visible = true;
+			button.setBounds(_this.calculateButtonSize(text.bounds));
+	
+			group.addChild(button);
+			group.addChild(text);
+	
+			_this.width += group.getBounds().width;
+	
+			return group;
+		});
+	}
+	
+	function _ref4(rect) {
+		var res_rect = _ramda2.default.clone(rect);
+		var margin = 10;
+		res_rect.x -= margin / 2;
+		res_rect.y -= margin / 2;
+		res_rect.width += margin;
+		res_rect.height += margin;
+	
+		return res_rect;
+	}
+	
+	function _ref5(size) {
+		//(re)calculate dialogue buttons
+		var rem = size.width - this.width;
+		var padding = rem / (this.list.length + 1);
+		var cur = padding;
+		for (var i = 0; i < this.list.length; i++) {
+			var group = this.list[i];
+			group.bounds.x = cur;
+			group.bounds.y = size.height - 75;
+	
+			cur += group.bounds.width + padding;
+		}
+	}
+	
+	function _ref7(button) {
+		return button.remove();
+	}
+	
+	function _ref6() {
+		this.list.forEach(_ref7);
+		this.list = [];
+		this.width = 0;
+	}
+	
+	var DialogueButtons = function () {
+		function DialogueButtons(fontSize, button) {
+			(0, _classCallCheck3.default)(this, DialogueButtons);
+	
+			this.list = [];
+			this.width = 0;
+			this.fontSize = fontSize;
+			this.button = button;
+		}
+	
+		(0, _createClass3.default)(DialogueButtons, [{
+			key: "onSelect",
+			value: _ref
+		}, {
+			key: "off",
+			value: _ref2
+		}, {
+			key: "create",
+			value: _ref3
+		}, {
+			key: "calculateButtonSize",
+			value: _ref4
+		}, {
+			key: "calculate",
+			value: _ref5
+		}, {
+			key: "remove",
+			value: _ref6
+		}]);
+		return DialogueButtons;
+	}();
+	
+	function _ref8(line, choices) {
+		var _this3 = this;
+	
+		if (choices == null) {
+			this.DialogueButtons.remove();
+	
+			this.talkText.content = line.who + ": " + line.say;
+	
+			_paper2.default.view.onMouseDown = function () {
+				_this3.story.next();
+			};
+		} else {
+	
+			_paper2.default.view.onMouseDown = null; // disable clicking on the screen
+	
+			this.DialogueButtons.create(choices);
+			this.DialogueButtons.calculate({ height: window.innerHeight, width: window.innerWidth });
+		}
+	}
+	
+	function _ref9() {
+		var _this4 = this;
+	
+		this.Graphene.visible = true;
+		this.Enemy.visible = true;
+		this.talkText.visible = true;
+		this.GrapheneText.visible = true;
+		this.EnemyText.visible = true;
+		_paper2.default.view.onMouseDown = function () {
+			_this4.story.next();
+		};
+	}
+	
+	function _ref10() {
+		this.Graphene.visible = false;
+		this.Enemy.visible = false;
+		this.talkText.visible = false;
+		this.GrapheneText.visible = false;
+		this.EnemyText.visible = false;
+		_paper2.default.view.onMouseDown = null; // disable clicking on the screen
+	}
+	
+	function _ref11() {
+		this.DialogueButtons.off();
+		_paper2.default.view.onMouseDown = null; // disable clicking on the screen
+	}
+	
+	function _ref12(width, height, center) {
+		this.talkText.point = new _paper2.default.Point(center.x, center.y * 2 - 100);
+	
+		this.GrapheneText.position.x = this.Graphene.position.x = width - 100;
+	
+		this.DialogueButtons.calculate({ height: height, width: width });
+	
+		this.Graphene.position.y = this.Enemy.position.y = center.y - 100;
+	
+		this.EnemyText.position.y = this.GrapheneText.position.y = center.y + 200;
+	}
+	
+	var DialogueScene = function () {
+		function DialogueScene(story) {
+			var _this2 = this;
+	
+			(0, _classCallCheck3.default)(this, DialogueScene);
+	
+			this.story = story;
+			this.talkText = new _paper2.default.PointText({
+				point: _paper2.default.view.center,
+				//	content: choices.who +": "+ choices.say,
+				fillColor: "white",
+				fontFamily: "Verdana",
+				fontWeight: "bold",
+				fontSize: font_size,
+				justification: "center"
+			});
+	
+			this.talkText.importSVG("./img/button.svg", function (e) {
+				_this2.hiddenSampleButton = e;
+				_this2.hiddenSampleButton.visible = false;
+	
+				_this2.DialogueButtons = new DialogueButtons(font_size, _this2.hiddenSampleButton);
+	
+				_this2.DialogueButtons.onSelect(function (n) {
+					_this2.story.next(n);
+				});
+			});
+	
+			this.Graphene = new _paper2.default.Raster("./img/Graphene.png");
+			this.Graphene.scale(-1, 1);
+	
+			this.Enemy = new _paper2.default.Raster("./img/Carbon1.png");
+			this.Enemy.scale(0.8, 0.8);
+			this.Enemy.scale(0.8, 0.8);
+	
+			this.Enemy.position.x = 100;
+	
+			this.GrapheneText = new _paper2.default.PointText({
+				point: _paper2.default.view.center,
+				content: "Графен",
+				fillColor: "white",
+				fontFamily: "Verdana",
+				fontWeight: "bold",
+				fontSize: font_size,
+				justification: "center"
+			});
+	
+			this.EnemyText = new _paper2.default.PointText({
+				point: _paper2.default.view.center,
+				content: "Карбон",
+				fillColor: "white",
+				fontFamily: "Verdana",
+				fontWeight: "bold",
+				fontSize: font_size,
+				justification: "center"
+			});
+	
+			this.EnemyText.position.x = 100;
+		}
+	
+		(0, _createClass3.default)(DialogueScene, [{
+			key: "dialogue",
+			value: _ref8
+		}, {
+			key: "show",
+			value: _ref9
+		}, {
+			key: "hide",
+			value: _ref10
+		}, {
+			key: "destructor",
+			value: _ref11
+		}, {
+			key: "position",
+			value: _ref12
+		}]);
+		return DialogueScene;
+	}();
+
+	exports.default = DialogueScene;
+
+/***/ },
+
+/***/ 233:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _classCallCheck2 = __webpack_require__(30);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(31);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _ref(width, height, center) {}
+	
+	function _ref2() {}
+	
+	function _ref3() {}
+	
+	function _ref4(story) {}
+	
+	var EndScene = function () {
+		function EndScene() {
+			(0, _classCallCheck3.default)(this, EndScene);
+		}
+	
+		(0, _createClass3.default)(EndScene, [{
+			key: "position",
+			value: _ref
+		}, {
+			key: "hide",
+			value: _ref2
+		}, {
+			key: "show",
+			value: _ref3
+		}, {
+			key: "destructor",
+			value: _ref4
+		}]);
+		return EndScene;
+	}();
+
+	exports.default = EndScene;
+
+/***/ },
+
+/***/ 234:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _classCallCheck2 = __webpack_require__(30);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(31);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _paper = __webpack_require__(66);
+	
+	var _paper2 = _interopRequireDefault(_paper);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _ref(width, height /*, center*/) {
+		this.Skip.position.x = width - 100;
+		this.Skip.position.y = height - 120;
+	}
+	
+	function _ref2() {
+		this.Skip.visible = false;
+	}
+	
+	function _ref3() {
+		this.Skip.visible = true;
+	}
+	
+	function _ref4() {
+		this.Skip.remove();
+	
+		this.Skip.onMouseEnter = null;
+		this.Skip.onMouseLeave = null;
+		this.Skip.onClick = null;
+	}
+	
+	var VideoScene = function () {
+		function VideoScene(story) {
+			var _this = this;
+	
+			(0, _classCallCheck3.default)(this, VideoScene);
+	
+			this.Skip = new _paper2.default.Raster("./img/skip.png");
+			this.Skip.scale(0.5, 0.5);
+			this.hide();
+			this.Skip.opacity = 0.3;
+	
+			this.Skip.onMouseEnter = function () {
+				return _this.Skip.opacity = 0.8;
+			};
+			this.Skip.onMouseLeave = function () {
+				return _this.Skip.opacity = 0.3;
+			};
+			this.Skip.onClick = function () {
+				return story.next();
+			};
+		}
+	
+		(0, _createClass3.default)(VideoScene, [{
+			key: "position",
+			value: _ref
+		}, {
+			key: "hide",
+			value: _ref2
+		}, {
+			key: "show",
+			value: _ref3
+		}, {
+			key: "destructor",
+			value: _ref4
+		}]);
+		return VideoScene;
+	}();
+
+	exports.default = VideoScene;
+
+/***/ },
+
+/***/ 235:
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _classCallCheck2 = __webpack_require__(30);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(31);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _ramda = __webpack_require__(45);
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
@@ -26979,81 +27150,105 @@ webpackJsonp([2],{
 	var story = [{
 		"scene": "intro",
 		"src": "vid/Intro.mp4",
-		"next": "conflict"
+		"next": "conflict",
+		"type": "Video"
 	}, {
 		"scene": "conflict",
 		"src": "vid/Background.mp4",
-		"dialogue": "intro_dialog"
+		"dialogue": "intro_dialog",
+		"type": "Dialogue"
+	
 	}, {
 		"scene": "mech_force",
 		"src": "vid/Meteor.mp4",
-		"next": "mech_force_dialog"
+		"next": "mech_force_dialog",
+		"type": "Video"
+	
 	}, {
 		"scene": "mech_force_dialog",
 		"src": "vid/Background.mp4",
-		"dialogue": "asteroid_dialog"
+		"dialogue": "asteroid_dialog",
+		"type": "Dialogue"
+	
 	}, {
 		"scene": "compete_kind",
 		"src": "vid/Background.mp4",
-		"dialogue": "compete_kind_dialog"
+		"dialogue": "compete_kind_dialog",
+		"type": "Dialogue"
+	
 	}, {
 		"scene": "compete_hard",
 		"src": "vid/Background.mp4",
-		"dialogue": "compete_hard_dialog"
+		"dialogue": "compete_hard_dialog",
+		"type": "Dialogue"
+	
 	}, {
 		"scene": "electrical_density",
 		"src": "vid/Cars.mp4",
-		"next": "ed_dialog"
-	
+		"next": "ed_dialog",
+		"type": "Video"
 	}, {
 		"scene": "conductivity",
 		"src": "vid/Phone.mp4",
-		"next": "c_dialog"
+		"next": "c_dialog",
+		"type": "Video"
+	
 	}, {
 		"scene": "ed_dialog",
 		"src": "vid/Background.mp4",
-		"dialogue": "ed_c_dialog"
+		"dialogue": "ed_c_dialog",
+		"type": "Dialogue"
 	}, {
 		"scene": "c_dialog",
 		"src": "vid/Background.mp4",
-		"dialogue": "c_c_dialog"
+		"dialogue": "c_c_dialog",
+		"type": "Dialogue"
 	}, {
 		"scene": "electrical_density_2",
 		"src": "vid/Cars.mp4",
-		"next": "end1"
+		"next": "end1",
+		"type": "Video"
 	
 	}, {
 		"scene": "conductivity_2",
 		"src": "vid/Phone.mp4",
-		"next": "end1"
+		"next": "end1",
+		"type": "Video"
 	}, {
 		"scene": "electrical_density_good",
 		"src": "vid/Cars.mp4",
-		"next": "end2"
-	
+		"next": "end2",
+		"type": "Video"
 	}, {
 		"scene": "conductivity_good",
 		"src": "vid/Phone.mp4",
-		"next": "good_mid"
+		"next": "good_mid",
+		"type": "Video"
 	}, {
 		"scene": "good_mid",
 		"src": "vid/Background.mp4",
-		"dialogue": "good_dialog"
+		"dialogue": "good_dialog",
+		"type": "Dialogue"
 	}, {
 		"src": "vid/Background.mp4",
 		"scene": "end1",
-		"dialogue": "ending_dialog_1"
+		"dialogue": "ending_dialog_1",
+		"type": "Dialogue"
 	}, {
 		"src": "vid/Background.mp4",
 		"dialogue": "ending_dialog_2",
-		"scene": "end2"
+		"scene": "end2",
+		"type": "Dialogue"
+	
 	}, {
 		"src": "vid/Background.mp4",
 		"scene": "end_true",
-		"next": "test"
+		"next": "test",
+		"type": "End"
 	}, {
 		"src": "vid/Background.mp4",
-		"scene": "test"
+		"scene": "test",
+		"type": "End"
 	}];
 	
 	window.s = story;
@@ -27075,23 +27270,41 @@ webpackJsonp([2],{
 		}
 	}
 	
-	function _ref() {
+	function _ref() {}
+	
+	function _ref2() {}
+	
+	function _ref3() {}
+	
+	function _ref4(type) {
+		this.sceneUi = this.types[type];
+		this.sceneUi.show();
+	}
+	
+	function _ref5(width, height, center) {
+		this.old = { width: width, height: height, center: center };
+		this.sceneUi.position(width, height, center);
+		this.update();
+	}
+	
+	function _ref6() {
+		//TODO: write to be more flexible
 		return _ramda2.default.find(_ramda2.default.propEq("src", "vid/Background.mp4"))(cache);
 	}
 	
-	function _ref2(name) {
+	function _ref7(name) {
 		return _ramda2.default.find(_ramda2.default.propEq("scene", name))(this.story);
 	}
 	
-	function _ref3(scene) {
+	function _ref8(scene) {
 		return this.scene(scene) != null;
 	}
 	
-	function _ref15(o) {
+	function _ref16(o) {
 		return o.show;
 	}
 	
-	function _ref4() {
+	function _ref9() {
 		if (this.current.dialogue != null) {
 			if (this.dialogue.hasChoices()) {
 				return this.dialogue.choices();
@@ -27100,25 +27313,21 @@ webpackJsonp([2],{
 			}
 		}
 		if (this.current.choice != null) {
-			return this.current.choice.map(_ref15);
+			return this.current.choice.map(_ref16);
 		} else {
 			return [];
 		}
 	}
 	
-	function _ref5() {
+	function _ref10() {
 		return this.current.choice != null || this.dialogue.hasChoices();
 	}
 	
-	function _ref6(bool /* bool */) {
-		this.showDialogue = bool;
-	}
-	
-	function _ref7() {
+	function _ref11() {
 		return this.showDialogue;
 	}
 	
-	function _ref8() {
+	function _ref12() {
 		var _this = this;
 	
 		if (this.current.choice) {
@@ -27130,119 +27339,127 @@ webpackJsonp([2],{
 		}
 	}
 	
-	function _ref9(scene, fn) {
-		if (this.exists(scene)) {
-			this.scene(scene).onBefore = fn;
-		}
+	function _ref13(callback) {
+		this.onvideo = callback;
 	}
 	
-	function _ref10(scene) {
-		if (this.exists(scene)) {
-			delete this.scene(scene).onBefore;
+	function _ref14(scene) {
+		//Before the switch
+		var oldVideo = this.current.video;
+		this.current = this.scene(scene); // switch the video with the next one
+		if (oldVideo != this.current.video) {
+			this.onvideo(this.current.video);
 		}
-	}
 	
-	function _ref11(scene, fn) {
-		if (this.exists(scene)) {
-			this.scene(scene).onAfter = fn;
-		}
-	}
+		this.sceneUi.hide();
 	
-	function _ref12(scene) {
-		if (this.exists(scene)) {
-			delete this.scene(scene).onAfter;
-		}
-	}
+		this.ui(this.current.type);
 	
-	function _ref13(scene) {
-		if (scene != null) {
-			if (this.current.onAfter != null) {
-				// calls onAfter just before switching the video
-				this.current.onAfter();
-			}
-	
-			this.current = this.scene(scene); // switch the video with the next one
-	
-			if (this.current.dialogue != null) {
-				this.dialogue.select(this.current.dialogue);
-				this.showDialogue = true;
-			} else {
-				this.showDialogue = false;
-			}
-	
-			if (this.current.onBefore != null) {
-				// call onBefore for the the next video
-				this.current.onBefore();
-			}
-		}
-	}
-	
-	function _ref14(choice) {
 		if (this.current.dialogue != null) {
+			this.dialogue.select(this.current.dialogue);
+			this.showDialogue = true;
+		} else {
+			this.showDialogue = false;
+		}
+	
+		//After the switch
+	}
+	
+	function _ref15(choice) {
+		if (this.current.dialogue != null) {
+	
 			var scene = this.dialogue.next(choice);
-			this.switchTo(scene);
+	
+			if (scene != null) {
+				this.switchTo(scene);
+			}
 		} else {
 			this.switchTo(this.current.next);
 		}
+	
+		if (this.showDialogue) {
+			if (this.dialogue.hasChoices()) {
+				this.sceneUi.dialogue(null, this.dialogue.choices());
+			} else {
+				this.sceneUi.dialogue(this.dialogue.say(), null);
+			}
+		}
+	
+		var _old = this.old;
+		var width = _old.width;
+		var height = _old.height;
+		var center = _old.center;
+	
+		this.uiCalc(width, height, center);
 	}
 	
 	var Story = function () {
-		function Story() {
+		function Story(types, update) {
 			(0, _classCallCheck3.default)(this, Story);
+	
+			this.update = update;
 	
 			this.story = story;
 			this.showDialogue = false;
 			this.dialogue = new _dialogue2.default();
-			this.current = this.story[0];
+			this.current = {
+				"next": this.story[0].scene
+			};
+	
 			this.story.forEach(createVideo);
-			console.log(cache);
+			console.log("Loaded videos:", cache);
+			this.types = {};
+	
+			for (var t in types) {
+				this.types[t] = new types[t](this);
+				this.types[t].hide();
+			}
+	
+			this.sceneUi = {
+				hide: _ref,
+				show: _ref2,
+				position: _ref3
+			};
+	
+			this.old = {};
 		}
 	
 		(0, _createClass3.default)(Story, [{
-			key: "defaultVideo",
-			value: _ref
-		}, {
-			key: "scene",
-			value: _ref2
-		}, {
-			key: "exists",
-			value: _ref3
-		}, {
-			key: "choices",
+			key: "ui",
 			value: _ref4
 		}, {
-			key: "hasChoices",
+			key: "uiCalc",
 			value: _ref5
 		}, {
-			key: "setHasDialogue",
+			key: "defaultVideo",
 			value: _ref6
 		}, {
-			key: "hasDialogue",
+			key: "scene",
 			value: _ref7
 		}, {
-			key: "neededVideos",
+			key: "exists",
 			value: _ref8
-
-			//events for the scene
-
 		}, {
-			key: "onBefore",
+			key: "choices",
 			value: _ref9
 		}, {
-			key: "offBefore",
+			key: "hasChoices",
 			value: _ref10
 		}, {
-			key: "onAfter",
+			key: "hasDialogue",
 			value: _ref11
 		}, {
-			key: "offAfetr",
+			key: "neededVideos",
 			value: _ref12
 		}, {
-			key: "switchTo",
+			key: "onVideo",
 			value: _ref13
 		}, {
-			key: "next",
+			key: "switchTo",
 			value: _ref14
+		}, {
+			key: "next",
+			value: _ref15
 		}]);
 		return Story;
 	}();
@@ -27251,10 +27468,10 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 262:
+/***/ 265:
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(84)();
+	exports = module.exports = __webpack_require__(85)();
 	// imports
 	
 	
@@ -27266,7 +27483,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 297:
+/***/ 302:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27278,15 +27495,15 @@ webpackJsonp([2],{
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _kefir = __webpack_require__(154);
+	var _kefir = __webpack_require__(155);
 	
 	var Kefir = _interopRequireWildcard(_kefir);
 	
-	var _ramda = __webpack_require__(48);
+	var _ramda = __webpack_require__(45);
 	
 	var R = _interopRequireWildcard(_ramda);
 	
-	var _partial = __webpack_require__(337);
+	var _partial = __webpack_require__(342);
 	
 	var L = _interopRequireWildcard(_partial);
 	
@@ -27429,7 +27646,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 337:
+/***/ 342:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -27441,7 +27658,7 @@ webpackJsonp([2],{
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _ramda = __webpack_require__(48);
+	var _ramda = __webpack_require__(45);
 	
 	var R = _interopRequireWildcard(_ramda);
 	
@@ -27842,16 +28059,16 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 482:
+/***/ 487:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(262);
+	var content = __webpack_require__(265);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(124)(content, {});
+	var update = __webpack_require__(125)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
