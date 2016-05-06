@@ -33,7 +33,6 @@ var container = null
 
 var volume = new Atom(0.5)
 
-
 /*
 story.onBefore("end_true",() => {
 
@@ -49,17 +48,9 @@ story.onBefore("end_true",() => {
 	paper.view.update(true)
 
 })
-*/
+
 
 //gala --replace
-/*
-goto test
-story.onBefore("test",() => {
-	window.location.href = "./test.html"
-}) 
-
-
-
 */
 
 var mountedVideo = null

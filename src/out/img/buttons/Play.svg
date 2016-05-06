@@ -22,17 +22,9 @@ viewBox="0 0 1667 1667"
  </defs>
  <g id="Layer_x0020_1">
   <metadata id="CorelCorpID_0Corel-Layer"/>
-  <g id="_881882328896">
-   <g style="clip-path:url(#id0)">
-    <image x="29" y="43" width="1621" height="1625" xlink:href="Play_Images\Play_ImgID1.png"/>
-   </g>
-  </g>
+
   <circle class="fil0 str0" cx="838" cy="856" r="763"/>
-  <g id="_881882326624">
-   <g style="clip-path:url(#id1)">
-    <image x="557" y="566" width="902" height="833" xlink:href="Play_Images\Play_ImgID2.png"/>
-   </g>
-  </g>
+
   <polygon class="fil1 str1" points="1294,825 957,1093 619,1360 615,831 610,301 952,563 "/>
  </g>
 </svg>

@@ -47,8 +47,7 @@ body {
 	width: 100%;
 	margin: 0px;
 	padding: 0px;
-	font-family: steinemu; 
-
+	font-family: Helvetica; 
 }
 
 
@@ -59,6 +58,9 @@ section {
 	transform-style: preserve-3d;
 	position: relative;
 	font-size: 1.1em;
+	background-color: #00AFEF; 
+	color: white;
+	
 	&.paralax {
 		height: 500px;
 
@@ -89,7 +91,6 @@ section {
 		flex: 1 1;
 		text-align: center;
 		transition: opacity 1.5s;
-
 		.icon {
 			height: 450px;
 			display: inline-block;
@@ -106,6 +107,7 @@ section {
 
 		h1 {
 			font-size: 3em;
+			font-family: steinemu;
 		}
 
 		> .row {
@@ -116,6 +118,7 @@ section {
 			}
 
 			> p {
+
 				flex: 5;
 				align-self: center;
 				text-align: left;
@@ -133,7 +136,7 @@ section {
 }
 
 a {
-	color: black;
+	color: blue;
 }
 
 .static {
@@ -148,25 +151,29 @@ a {
 		padding: 6px 12px 6px 12px;
 		display: block;
 		font-size: 1.2em;
-		color: black;
-		/* background-color: white; */
+		color: #444;
+		background-color: #0096CC;
 		transition: color 0.1s;
 		text-decoration: none;
-		border-bottom: 2px black solid;
+		/* border-bottom: 2px black solid; */
 		perspective: 800px;
 		transition: all 0.5s;
 		opacity: 0;
-	
+		font-weight: bold;	
 
 		&.show{
 			bottom: 40px;
 			opacity: 1;
 		}
 
+		&:hover {
+			color: white;
+		}
+
 		&:before {
 			content: "";
 			position: absolute;
-			background: #CCC;
+			background: #444;
 			bottom: 0;
 			left: 0;
 			right: 0;
