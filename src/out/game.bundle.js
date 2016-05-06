@@ -272,25 +272,6 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 21:
-/***/ function(module, exports) {
-
-	var $Object = Object;
-	module.exports = {
-	  create:     $Object.create,
-	  getProto:   $Object.getPrototypeOf,
-	  isEnum:     {}.propertyIsEnumerable,
-	  getDesc:    $Object.getOwnPropertyDescriptor,
-	  setDesc:    $Object.defineProperty,
-	  setDescs:   $Object.defineProperties,
-	  getKeys:    $Object.keys,
-	  getNames:   $Object.getOwnPropertyNames,
-	  getSymbols: $Object.getOwnPropertySymbols,
-	  each:       [].forEach
-	};
-
-/***/ },
-
 /***/ 30:
 /***/ function(module, exports) {
 
@@ -26932,7 +26913,7 @@ webpackJsonp([2],{
 	
 			this.Enemy = new _paper2.default.Raster("./img/Carbon1.png");
 			this.Enemy.scale(0.8, 0.8);
-			this.Enemy.scale(0.8, 0.8);
+			this.Graphene.scale(0.8, 0.8);
 	
 			this.Enemy.position.x = 100;
 	

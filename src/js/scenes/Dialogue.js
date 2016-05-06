@@ -111,7 +111,7 @@ export default class DialogueScene {
 
 		this.Enemy = new paper.Raster("./img/Carbon1.png")
 		this.Enemy.scale(0.8,0.8)
-		this.Enemy.scale(0.8,0.8)
+		this.Graphene.scale(0.8,0.8)
 
 		this.Enemy.position.x = 100
 

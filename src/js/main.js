@@ -16,9 +16,41 @@ let landing = document.getElementById("landing")
 
 let to_game = document.getElementById("to-game")
 
+let sources = document.getElementById("sources")
+let sources_link = document.getElementById("source_link")
+
+
+sources.style.display = "none"
+
+sources_link.addEventListener("click", () => {
+	if(sources.style.display == "none"){
+		sources.style.display = "flex"
+	}else{
+		sources.style.display = "none"
+
+	}
+})
+
 arrow.addEventListener("click", () => {
 	scrollTo(window.innerHeight, 800)
 })
+
+let icons = Array.from(document.getElementsByClassName("icon"))
+
+Array.from(document.getElementsByClassName("paralax")).map((element,index) => {
+	return new Waypoint({
+		element: element,
+		handler: () => {
+			icons[index].classList.add("show")
+		},
+		offset: 250
+
+	})
+})
+
+
+
+
 
 let landingWaypoint = new Waypoint({
 	element: landing,
@@ -45,4 +77,11 @@ let infoWaypoint = new Waypoint({
 	offset: 0
 })
 
+
+var landing_cont = landing.children[0]
+
+
+setTimeout(() => {
+	landing_cont.classList.add("show")
+}, 0)
 //smoothScroll.init()

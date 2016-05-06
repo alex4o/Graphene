@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<!-- Creator: CorelDRAW X7 -->
+<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="1.66666in" height="1.66666in" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
+viewBox="0 0 1667 1667"
+ xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <style type="text/css">
+   <![CDATA[
+    .str0 {stroke:#00AFEF;stroke-width:6.94488}
+    .str1 {stroke:#0098DA;stroke-width:6.94488}
+    .fil0 {fill:#00AFEF}
+    .fil1 {fill:#0098DA}
+   ]]>
+  </style>
+    <clipPath id="id0">
+     <path d="M29 43l1621 0 0 1625 -1621 0 0 -1625z"/>
+    </clipPath>
+    <clipPath id="id1">
+     <path d="M676 566l783 0 -119 834 -783 0 119 -834z"/>
+    </clipPath>
+ </defs>
+ <g id="Layer_x0020_1">
+  <metadata id="CorelCorpID_0Corel-Layer"/>
+  <g id="_881882328896">
+   <g style="clip-path:url(#id0)">
+    <image x="29" y="43" width="1621" height="1625" xlink:href="Play_Images\Play_ImgID1.png"/>
+   </g>
+  </g>
+  <circle class="fil0 str0" cx="838" cy="856" r="763"/>
+  <g id="_881882326624">
+   <g style="clip-path:url(#id1)">
+    <image x="557" y="566" width="902" height="833" xlink:href="Play_Images\Play_ImgID2.png"/>
+   </g>
+  </g>
+  <polygon class="fil1 str1" points="1294,825 957,1093 619,1360 615,831 610,301 952,563 "/>
+ </g>
+</svg>
