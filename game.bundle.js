@@ -72,17 +72,9 @@ webpackJsonp([2],{
 		paper.view.update(true)
 	
 	})
-	*/
+	
 	
 	//gala --replace
-	/*
-	goto test
-	story.onBefore("test",() => {
-		window.location.href = "./test.html"
-	}) 
-	
-	
-	
 	*/
 	
 	var mountedVideo = null;
@@ -27045,10 +27037,18 @@ webpackJsonp([2],{
 	
 	function _ref2() {
 		this.Skip.visible = false;
+		if (this.Play != null) {
+			this.Play.visible = false;
+			this.Pause.visible = false;
+		}
 	}
 	
 	function _ref3() {
 		this.Skip.visible = true;
+		if (this.Play != null) {
+			this.Play.visible = true;
+			this.Pause.visible = true;
+		}
 	}
 	
 	function _ref4() {
@@ -27069,6 +27069,15 @@ webpackJsonp([2],{
 			this.Skip.scale(0.5, 0.5);
 			this.hide();
 			this.Skip.opacity = 0.3;
+			this.Skip.importSVG("./img/buttons/Play.svg", function (play) {
+				_this.Play = play;
+				_this.Play.position = _paper2.default.view.center;
+			});
+	
+			this.Skip.importSVG("./img/buttons/Paused.svg", function (pause) {
+				_this.Pause = pause;
+				_this.Pause.position = _paper2.default.view.center;
+			});
 	
 			this.Skip.onMouseEnter = function () {
 				return _this.Skip.opacity = 0.8;
