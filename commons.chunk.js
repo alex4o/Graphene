@@ -97,7 +97,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"1":"test","2":"game","3":"main"}[chunkId]||chunkId) + ".bundle.js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"1":"test","2":"main","3":"game"}[chunkId]||chunkId) + ".bundle.js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -137,7 +137,7 @@
 	return modules;
 }({
 
-/***/ 21:
+/***/ 18:
 /***/ function(module, exports) {
 
 	var $Object = Object;
@@ -156,7 +156,7 @@
 
 /***/ },
 
-/***/ 85:
+/***/ 102:
 /***/ function(module, exports) {
 
 	/*
@@ -213,7 +213,7 @@
 
 /***/ },
 
-/***/ 125:
+/***/ 142:
 /***/ function(module, exports, __webpack_require__) {
 
 	/*

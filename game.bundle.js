@@ -1,52 +1,52 @@
-webpackJsonp([2],{
+webpackJsonp([3],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _paper = __webpack_require__(66);
+	var _paper = __webpack_require__(80);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
-	var _story = __webpack_require__(235);
+	var _story = __webpack_require__(242);
 	
 	var _story2 = _interopRequireDefault(_story);
 	
-	var _VolumeCtrl = __webpack_require__(230);
+	var _VolumeCtrl = __webpack_require__(237);
 	
 	var _VolumeCtrl2 = _interopRequireDefault(_VolumeCtrl);
 	
-	var _kefir = __webpack_require__(155);
+	var _kefir = __webpack_require__(162);
 	
-	var _kefir2 = __webpack_require__(302);
+	var _kefir2 = __webpack_require__(316);
 	
 	var _kefir3 = _interopRequireDefault(_kefir2);
 	
-	var _ramda = __webpack_require__(45);
+	var _ramda = __webpack_require__(49);
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
-	var _Dialogue = __webpack_require__(232);
+	var _Dialogue = __webpack_require__(239);
 	
 	var _Dialogue2 = _interopRequireDefault(_Dialogue);
 	
-	var _Video = __webpack_require__(234);
+	var _Video = __webpack_require__(241);
 	
 	var _Video2 = _interopRequireDefault(_Video);
 	
-	var _End = __webpack_require__(233);
+	var _End = __webpack_require__(240);
 	
 	var _End2 = _interopRequireDefault(_End);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(229);
+	__webpack_require__(236);
 	
 	window.R = _ramda2.default;
 	window.p = _paper2.default;
 	
-	__webpack_require__(487);
+	__webpack_require__(501);
 	
 	// TODO: move to new file and find better name
 	
@@ -264,7 +264,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 30:
+/***/ 32:
 /***/ function(module, exports) {
 
 	"use strict";
@@ -279,14 +279,14 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 31:
+/***/ 33:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
 	exports.__esModule = true;
 	
-	var _defineProperty = __webpack_require__(81);
+	var _defineProperty = __webpack_require__(95);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
@@ -312,7 +312,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 45:
+/***/ 49:
 /***/ function(module, exports, __webpack_require__) {
 
 	//  Ramda v0.21.0
@@ -9103,7 +9103,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 66:
+/***/ 80:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -22814,24 +22814,24 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 81:
+/***/ 95:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(82), __esModule: true };
+	module.exports = { "default": __webpack_require__(96), __esModule: true };
 
 /***/ },
 
-/***/ 82:
+/***/ 96:
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(21);
+	var $ = __webpack_require__(18);
 	module.exports = function defineProperty(it, key, desc){
 	  return $.setDesc(it, key, desc);
 	};
 
 /***/ },
 
-/***/ 155:
+/***/ 162:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*! Kefir.js v3.2.2
@@ -26171,7 +26171,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 229:
+/***/ 236:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -26263,7 +26263,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 230:
+/***/ 237:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26272,15 +26272,15 @@ webpackJsonp([2],{
 		value: true
 	});
 	
-	var _classCallCheck2 = __webpack_require__(30);
+	var _classCallCheck2 = __webpack_require__(32);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(31);
+	var _createClass2 = __webpack_require__(33);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _paper = __webpack_require__(66);
+	var _paper = __webpack_require__(80);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
@@ -26386,7 +26386,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 231:
+/***/ 238:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26395,15 +26395,15 @@ webpackJsonp([2],{
 		value: true
 	});
 	
-	var _classCallCheck2 = __webpack_require__(30);
+	var _classCallCheck2 = __webpack_require__(32);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(31);
+	var _createClass2 = __webpack_require__(33);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _ramda = __webpack_require__(45);
+	var _ramda = __webpack_require__(49);
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
@@ -26416,16 +26416,13 @@ webpackJsonp([2],{
 		array: [{ //loc: 0
 			//say: "Loerm ipsum"
 			who: "Карбон",
-			say: "Кой си ти?",
-			loc: 1
+			say: "Кой си ти?"
 		}, { //loc: 1
 			who: "Графен",
-			say: "Аз съм материал създаден от един ред въглеродни атоми и имам уникални свойства!",
-			loc: 2
+			say: "Аз съм материал създаден от един ред въглеродни атоми и имам уникални свойства!"
 		}, { //loc: 2
 			who: "Карбон",
-			say: "Хаха, за много по-полезен ли се мислиш?",
-			loc: 3
+			say: "Хаха, за много по-полезен ли се мислиш?"
 		}, { //loc: 3
 			who: "Графен",
 			answer: [{ say: "Покажи свойствата си.", loc: 4 }, { say: "Опитай да решиш всичко с думи.", loc: 6 /* scene: "use_words" */ }, { say: "Игнорирай го.", loc: 9 }]
@@ -26581,6 +26578,7 @@ webpackJsonp([2],{
 	function _ref(name) {
 		this.currentDialogue = _ramda2.default.find(_ramda2.default.propEq("name", name))(this.dialogue);
 		this.currentPhrase = this.currentDialogue.array[0];
+		this.loc = 0;
 	}
 	
 	function _ref2(loc) {
@@ -26619,8 +26617,15 @@ webpackJsonp([2],{
 					if (this.currentPhrase.answer[choice].scene) {
 						return this.currentPhrase.answer[choice].scene;
 					}
-					this.loc = this.currentPhrase.answer[choice].loc;
-					this.currentPhrase = this.phrase(this.currentPhrase.answer[choice].loc);
+	
+					if (this.currentPhrase.answer[choice].loc != null) {
+						// checks if the answer has a location otherwise increment
+						this.loc = this.currentPhrase.answer[choice].loc;
+					} else {
+						this.loc += 1;
+					}
+	
+					this.currentPhrase = this.phrase(this.loc);
 	
 					return null;
 				} else {
@@ -26636,13 +26641,18 @@ webpackJsonp([2],{
 			return null;
 		} else if (this.currentPhrase.scene) {
 			return this.currentPhrase.scene;
+		} else {
+			this.loc += 1;
+			this.currentPhrase = this.phrase(this.loc);
+			return null;
 		}
 	}
 	
 	var Dialogue = function () {
-		function Dialogue() {
+		function Dialogue(tags) {
 			(0, _classCallCheck3.default)(this, Dialogue);
 	
+			this.tags = tags;
 			this.dialogue = dialogue;
 		}
 	
@@ -26675,7 +26685,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 232:
+/***/ 239:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26684,19 +26694,19 @@ webpackJsonp([2],{
 		value: true
 	});
 	
-	var _classCallCheck2 = __webpack_require__(30);
+	var _classCallCheck2 = __webpack_require__(32);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(31);
+	var _createClass2 = __webpack_require__(33);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _paper = __webpack_require__(66);
+	var _paper = __webpack_require__(80);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
-	var _ramda = __webpack_require__(45);
+	var _ramda = __webpack_require__(49);
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
@@ -26739,6 +26749,18 @@ webpackJsonp([2],{
 	
 			group.addChild(button);
 			group.addChild(text);
+	
+			var rootButtonelement = button.children[0].children[0]; // illogical but the first two are groups
+	
+			group.onMouseEnter = function (e) {
+				rootButtonelement.shadowBlur = 50;
+				rootButtonelement.shadowColor = new _paper2.default.Color(255, 255, 255);
+			};
+	
+			group.onMouseLeave = function (e) {
+				rootButtonelement.shadowBlur = 0;
+				rootButtonelement.shadowColor = new _paper2.default.Color(0, 0, 0);
+			};
 	
 			_this.width += group.getBounds().width;
 	
@@ -26813,16 +26835,31 @@ webpackJsonp([2],{
 		return DialogueButtons;
 	}();
 	
-	function _ref8(line, choices) {
+	function _ref8() {
 		var _this3 = this;
+	
+		if (!this.story.hasChoices()) {
+			if (this.paused == false) {
+				window.timeout_next = setTimeout(function () {
+					_this3.story.next();
+				}, 5000);
+			}
+		}
+	}
+	
+	function _ref9(line, choices) {
+		var _this4 = this;
 	
 		if (choices == null) {
 			this.DialogueButtons.remove();
 	
 			this.talkText.content = line.who + ": " + line.say;
 	
-			_paper2.default.view.onMouseDown = function () {
-				_this3.story.next();
+			_paper2.default.view.onMouseDown = function (e) {
+				// console.log(e.event.button == 0)
+				if (e.event.button == 0) {
+					_this4.story.next();
+				}
 			};
 		} else {
 	
@@ -26831,37 +26868,57 @@ webpackJsonp([2],{
 			this.DialogueButtons.create(choices);
 			this.DialogueButtons.calculate({ height: window.innerHeight, width: window.innerWidth });
 		}
+	
+		this.play();
 	}
 	
-	function _ref9() {
-		var _this4 = this;
+	function _ref10() {
+		var _this5 = this;
 	
 		this.Graphene.visible = true;
 		this.Enemy.visible = true;
 		this.talkText.visible = true;
 		this.GrapheneText.visible = true;
 		this.EnemyText.visible = true;
-		_paper2.default.view.onMouseDown = function () {
-			_this4.story.next();
+		if (this.paused == true) {
+			this.Play.visible = true;
+			this.Pause.visible = false;
+		} else {
+			this.Play.visible = false;
+			this.Pause.visible = true;
+		}
+	
+		_paper2.default.view.onMouseDown = function (e) {
+			if (e.event.button == 0) {
+				_this5.story.next();
+			}
 		};
+	
+		// this.Play.visible = false
+		// this.Pause.visible = false
 	}
 	
-	function _ref10() {
+	function _ref11() {
 		this.Graphene.visible = false;
 		this.Enemy.visible = false;
 		this.talkText.visible = false;
 		this.GrapheneText.visible = false;
 		this.EnemyText.visible = false;
+		this.Play.visible = false;
+		this.Pause.visible = false;
 		_paper2.default.view.onMouseDown = null; // disable clicking on the screen
+	
+		// this.Play.visible = true
+		// this.Pause.visible = true
 	}
 	
-	function _ref11() {
+	function _ref12() {
 		this.DialogueButtons.off();
 		_paper2.default.view.onMouseDown = null; // disable clicking on the screen
 	}
 	
-	function _ref12(width, height, center) {
-		this.talkText.point = new _paper2.default.Point(center.x, center.y * 2 - 100);
+	function _ref13(width, height, center) {
+		this.talkText.point = new _paper2.default.Point(center.x, center.y * 2 - 130);
 	
 		this.GrapheneText.position.x = this.Graphene.position.x = width - 100;
 	
@@ -26870,6 +26927,9 @@ webpackJsonp([2],{
 		this.Graphene.position.y = this.Enemy.position.y = center.y - 100;
 	
 		this.EnemyText.position.y = this.GrapheneText.position.y = center.y + 200;
+	
+		this.Play.position.x = this.Pause.position.x = 50;
+		this.Play.position.y = this.Pause.position.y = height - 50;
 	}
 	
 	var DialogueScene = function () {
@@ -26879,26 +26939,6 @@ webpackJsonp([2],{
 			(0, _classCallCheck3.default)(this, DialogueScene);
 	
 			this.story = story;
-			this.talkText = new _paper2.default.PointText({
-				point: _paper2.default.view.center,
-				//	content: choices.who +": "+ choices.say,
-				fillColor: "white",
-				fontFamily: "Verdana",
-				fontWeight: "bold",
-				fontSize: font_size,
-				justification: "center"
-			});
-	
-			this.talkText.importSVG("./img/button.svg", function (e) {
-				_this2.hiddenSampleButton = e;
-				_this2.hiddenSampleButton.visible = false;
-	
-				_this2.DialogueButtons = new DialogueButtons(font_size, _this2.hiddenSampleButton);
-	
-				_this2.DialogueButtons.onSelect(function (n) {
-					_this2.story.next(n);
-				});
-			});
 	
 			this.Graphene = new _paper2.default.Raster("./img/Graphene.png");
 			this.Graphene.scale(-1, 1);
@@ -26929,24 +26969,75 @@ webpackJsonp([2],{
 				justification: "center"
 			});
 	
+			this.Graphene.importSVG("./img/button.svg", function (e) {
+				_this2.hiddenSampleButton = e;
+				_this2.hiddenSampleButton.visible = false;
+				window.hsb = _this2.hiddenSampleButton;
+				_this2.DialogueButtons = new DialogueButtons(font_size, _this2.hiddenSampleButton);
+	
+				_this2.DialogueButtons.onSelect(function (n) {
+					_this2.story.next(n);
+				});
+			});
+	
+			this.talkText = new _paper2.default.PointText({
+				point: _paper2.default.view.center,
+				//	content: choices.who +": "+ choices.say,
+				fillColor: "white",
+				fontFamily: "Verdana",
+				fontWeight: "bold",
+				fontSize: font_size,
+				justification: "center"
+			});
+	
 			this.EnemyText.position.x = 100;
+	
+			this.Play = new _paper2.default.Raster("./img/buttons/Play.png");
+			this.Play.position = _paper2.default.view.center;
+			this.Play.visible = false;
+			this.Play.scale(0.5, 0.5);
+	
+			this.Pause = new _paper2.default.Raster("./img/buttons/Paused.png");
+			this.Pause.position = _paper2.default.view.center;
+			this.Pause.visible = false;
+			this.Pause.scale(0.5, 0.5);
+	
+			this.Play.onClick = function () {
+				_this2.Play.visible = false;
+				_this2.Pause.visible = true;
+				_this2.paused = false;
+				_this2.play();
+			};
+	
+			this.Pause.onClick = function () {
+				_this2.Play.visible = true;
+				_this2.Pause.visible = false;
+				_this2.paused = true;
+	
+				clearTimeout(window.timeout_next);
+			};
+	
+			this.paused = true;
 		}
 	
 		(0, _createClass3.default)(DialogueScene, [{
-			key: "dialogue",
+			key: "play",
 			value: _ref8
 		}, {
-			key: "show",
+			key: "dialogue",
 			value: _ref9
 		}, {
-			key: "hide",
+			key: "show",
 			value: _ref10
 		}, {
-			key: "destructor",
+			key: "hide",
 			value: _ref11
 		}, {
-			key: "position",
+			key: "destructor",
 			value: _ref12
+		}, {
+			key: "position",
+			value: _ref13
 		}]);
 		return DialogueScene;
 	}();
@@ -26955,7 +27046,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 233:
+/***/ 240:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26964,11 +27055,11 @@ webpackJsonp([2],{
 		value: true
 	});
 	
-	var _classCallCheck2 = __webpack_require__(30);
+	var _classCallCheck2 = __webpack_require__(32);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(31);
+	var _createClass2 = __webpack_require__(33);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
@@ -27007,7 +27098,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 234:
+/***/ 241:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27016,39 +27107,31 @@ webpackJsonp([2],{
 		value: true
 	});
 	
-	var _classCallCheck2 = __webpack_require__(30);
+	var _classCallCheck2 = __webpack_require__(32);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(31);
+	var _createClass2 = __webpack_require__(33);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _paper = __webpack_require__(66);
+	var _paper = __webpack_require__(80);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _ref(width, height /*, center*/) {
-		this.Skip.position.x = width - 100;
-		this.Skip.position.y = height - 120;
+		this.Skip.position.x = width - 80;
+		this.Skip.position.y = height - 80;
 	}
 	
 	function _ref2() {
 		this.Skip.visible = false;
-		if (this.Play != null) {
-			this.Play.visible = false;
-			this.Pause.visible = false;
-		}
 	}
 	
 	function _ref3() {
 		this.Skip.visible = true;
-		if (this.Play != null) {
-			this.Play.visible = true;
-			this.Pause.visible = true;
-		}
 	}
 	
 	function _ref4() {
@@ -27066,18 +27149,11 @@ webpackJsonp([2],{
 			(0, _classCallCheck3.default)(this, VideoScene);
 	
 			this.Skip = new _paper2.default.Raster("./img/skip.png");
-			this.Skip.scale(0.5, 0.5);
-			this.hide();
-			this.Skip.opacity = 0.3;
-			this.Skip.importSVG("./img/buttons/Play.svg", function (play) {
-				_this.Play = play;
-				_this.Play.position = _paper2.default.view.center;
-			});
+			this.Skip.scale(0.2, 0.2);
 	
-			this.Skip.importSVG("./img/buttons/Paused.svg", function (pause) {
-				_this.Pause = pause;
-				_this.Pause.position = _paper2.default.view.center;
-			});
+			this.hide();
+	
+			this.Skip.opacity = 0.3;
 	
 			this.Skip.onMouseEnter = function () {
 				return _this.Skip.opacity = 0.8;
@@ -27110,7 +27186,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 235:
+/***/ 242:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27119,19 +27195,19 @@ webpackJsonp([2],{
 		value: true
 	});
 	
-	var _classCallCheck2 = __webpack_require__(30);
+	var _classCallCheck2 = __webpack_require__(32);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _createClass2 = __webpack_require__(31);
+	var _createClass2 = __webpack_require__(33);
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _ramda = __webpack_require__(45);
+	var _ramda = __webpack_require__(49);
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
-	var _dialogue = __webpack_require__(231);
+	var _dialogue = __webpack_require__(238);
 	
 	var _dialogue2 = _interopRequireDefault(_dialogue);
 	
@@ -27391,7 +27467,10 @@ webpackJsonp([2],{
 	
 			this.story = story;
 			this.showDialogue = false;
-			this.dialogue = new _dialogue2.default();
+	
+			this.tags = {};
+	
+			this.dialogue = new _dialogue2.default(this.tags);
 			this.current = {
 				"next": this.story[0].scene
 			};
@@ -27458,10 +27537,10 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 265:
+/***/ 280:
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(85)();
+	exports = module.exports = __webpack_require__(102)();
 	// imports
 	
 	
@@ -27473,7 +27552,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 302:
+/***/ 316:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27485,15 +27564,15 @@ webpackJsonp([2],{
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _kefir = __webpack_require__(155);
+	var _kefir = __webpack_require__(162);
 	
 	var Kefir = _interopRequireWildcard(_kefir);
 	
-	var _ramda = __webpack_require__(45);
+	var _ramda = __webpack_require__(49);
 	
 	var R = _interopRequireWildcard(_ramda);
 	
-	var _partial = __webpack_require__(342);
+	var _partial = __webpack_require__(356);
 	
 	var L = _interopRequireWildcard(_partial);
 	
@@ -27636,7 +27715,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 342:
+/***/ 356:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -27648,7 +27727,7 @@ webpackJsonp([2],{
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _ramda = __webpack_require__(45);
+	var _ramda = __webpack_require__(49);
 	
 	var R = _interopRequireWildcard(_ramda);
 	
@@ -28049,16 +28128,16 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 487:
+/***/ 501:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(265);
+	var content = __webpack_require__(280);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(125)(content, {});
+	var update = __webpack_require__(142)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
