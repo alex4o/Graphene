@@ -43,6 +43,18 @@ class DialogueButtons {
 			group.addChild(button)
 			group.addChild(text)
 
+			let rootButtonelement = button.children[0].children[0] // illogical but the first two are groups
+
+			group.onMouseEnter = e => {
+				rootButtonelement.shadowBlur = 50
+				rootButtonelement.shadowColor = new paper.Color(255,255,255)
+			}
+
+			group.onMouseLeave = e => {
+				rootButtonelement.shadowBlur = 0
+				rootButtonelement.shadowColor = new paper.Color(0,0,0)
+			}
+
 			this.width += group.getBounds().width
 
 			return group
@@ -84,27 +96,6 @@ class DialogueButtons {
 export default class DialogueScene {
 	constructor(story){
 		this.story = story
-		this.talkText = new paper.PointText({
-			point: paper.view.center,
-		//	content: choices.who +": "+ choices.say,
-			fillColor: "white",
-			fontFamily: "Verdana",
-			fontWeight: "bold",
-			fontSize: font_size,
-			justification: "center"
-		})
-
-		this.talkText.importSVG("./img/button.svg", e => {
-			this.hiddenSampleButton = e
-			this.hiddenSampleButton.visible = false
-
-			this.DialogueButtons = new DialogueButtons(font_size, this.hiddenSampleButton)
-
-			this.DialogueButtons.onSelect(n => {
-				this.story.next(n)
-			})
-
-		})
 
 		this.Graphene = new paper.Raster("./img/Graphene.png")
 		this.Graphene.scale(-1,1)
@@ -135,8 +126,70 @@ export default class DialogueScene {
 			justification: "center"
 		})
 	
+		this.Graphene.importSVG("./img/button.svg", e => {
+			this.hiddenSampleButton = e
+			this.hiddenSampleButton.visible = false
+			window.hsb = this.hiddenSampleButton
+			this.DialogueButtons = new DialogueButtons(font_size, this.hiddenSampleButton)
+
+			this.DialogueButtons.onSelect(n => {
+				this.story.next(n)
+			})
+
+		})
+
+		this.talkText = new paper.PointText({
+			point: paper.view.center,
+		//	content: choices.who +": "+ choices.say,
+			fillColor: "white",
+			fontFamily: "Verdana",
+			fontWeight: "bold",
+			fontSize: font_size,
+			justification: "center"
+		})
+
+
 		this.EnemyText.position.x = 100
+
+		this.Play = new paper.Raster("./img/buttons/Play.png")
+		this.Play.position = paper.view.center
+		this.Play.visible = false
+		this.Play.scale(0.5, 0.5)
+
+		this.Pause = new paper.Raster("./img/buttons/Paused.png")
+		this.Pause.position = paper.view.center
+		this.Pause.visible = false
+		this.Pause.scale(0.5, 0.5)
+
+
+		this.Play.onClick = () => {
+			this.Play.visible = false
+			this.Pause.visible = true
+			this.paused = false
+			this.play()
+		}
+
+		this.Pause.onClick = () => {
+			this.Play.visible = true
+			this.Pause.visible = false
+			this.paused = true
+
+			clearTimeout(window.timeout_next)
+		}
+
+		this.paused = true
 	
+	}
+
+	play() {
+		if(!this.story.hasChoices()){
+			if(this.paused == false){
+				window.timeout_next = setTimeout(() => {
+					this.story.next()
+				}, 5000)
+			}
+		}
+
 	}
 
 	dialogue(line, choices){
@@ -145,8 +198,11 @@ export default class DialogueScene {
 
 			this.talkText.content = line.who +": "+ line.say
 
-			paper.view.onMouseDown = () => {
-				this.story.next()
+			paper.view.onMouseDown = (e) => {
+				// console.log(e.event.button == 0)
+				if(e.event.button == 0){
+					this.story.next()
+				}
 			}
 
 		}else{
@@ -156,6 +212,9 @@ export default class DialogueScene {
 			this.DialogueButtons.create(choices)
 			this.DialogueButtons.calculate({height: window.innerHeight, width: window.innerWidth})
 		}
+
+		this.play()
+
 	}
 
 	show(){
@@ -164,9 +223,24 @@ export default class DialogueScene {
 		this.talkText.visible = true
 		this.GrapheneText.visible = true
 		this.EnemyText.visible = true
-		paper.view.onMouseDown = () => {
-			this.story.next()
+		if(this.paused == true){
+			this.Play.visible = true
+			this.Pause.visible = false
+		}else{
+			this.Play.visible = false
+			this.Pause.visible = true
+
 		}
+
+
+		paper.view.onMouseDown = (e) => {
+			if(e.event.button == 0){
+				this.story.next()
+			}
+		}
+
+		// this.Play.visible = false
+		// this.Pause.visible = false
 	}
 
 	hide(){
@@ -175,8 +249,12 @@ export default class DialogueScene {
 		this.talkText.visible = false
 		this.GrapheneText.visible = false
 		this.EnemyText.visible = false
+		this.Play.visible = false
+		this.Pause.visible = false
 		paper.view.onMouseDown = null // disable clicking on the screen
 
+		// this.Play.visible = true
+		// this.Pause.visible = true
 
 	}
 
@@ -187,7 +265,7 @@ export default class DialogueScene {
 	}
 
 	position(width, height, center){
-		this.talkText.point = new paper.Point(center.x, (center.y * 2) - 100)
+		this.talkText.point = new paper.Point(center.x, (center.y * 2) - 130)
 
 		this.GrapheneText.position.x = this.Graphene.position.x = width - 100
 
@@ -196,5 +274,9 @@ export default class DialogueScene {
 		this.Graphene.position.y = this.Enemy.position.y = center.y - 100
 
 		this.EnemyText.position.y = this.GrapheneText.position.y = center.y + 200
+
+		this.Play.position.x = this.Pause.position.x = 50
+		this.Play.position.y = this.Pause.position.y = height - 50
+
 	}
 }

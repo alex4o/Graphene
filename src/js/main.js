@@ -17,19 +17,9 @@ let landing = document.getElementById("landing")
 let to_game = document.getElementById("to-game")
 
 let sources = document.getElementById("sources")
-let sources_link = document.getElementById("source_link")
-
+let logo = document.getElementById("logo")
 
 sources.style.display = "none"
-
-sources_link.addEventListener("click", () => {
-	if(sources.style.display == "none"){
-		sources.style.display = "flex"
-	}else{
-		sources.style.display = "none"
-
-	}
-})
 
 arrow.addEventListener("click", () => {
 	scrollTo(window.innerHeight, 800)
@@ -80,6 +70,9 @@ let infoWaypoint = new Waypoint({
 
 var landing_cont = landing.children[0]
 
+setTimeout(() => {
+	logo.classList.add("hidden")
+}, 5000)
 
 setTimeout(() => {
 	landing_cont.classList.add("show")

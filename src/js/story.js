@@ -156,7 +156,11 @@ export default class Story {
 
 		this.story = story
 		this.showDialogue = false
-		this.dialogue = new Dialogue()
+
+
+		this.tags = {}
+
+		this.dialogue = new Dialogue(this.tags)
 		this.current = {
 			"next" : this.story[0].scene
 		}
@@ -177,6 +181,7 @@ export default class Story {
 		}
 
 		this.old = {}
+
 	}
 
 	ui(type){

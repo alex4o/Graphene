@@ -4,7 +4,7 @@ import ReactDOM from "react-dom"
 
 import _ from "lodash"
 
-import {Grid, Row, Col, Panel, Input, Button, Alert, Modal} from "react-bootstrap"
+import {Grid, Row, Col, Panel, Input, Button, Alert, Modal, Radio, FormGroup} from "react-bootstrap"
 
 //var math = require('mathjs'); // TODO: remove if unused
 
@@ -68,7 +68,7 @@ class Quetion extends React.Component
 {
 	renderAnswers(){
 		let hc = this.handleChange.bind(this)
-		return this.props.question.answers.map((e, i) => <Col xs={3} key={i}><Input type="radio" value={i} label={e} name={this.props.index} onChange={hc(this.props.index)} /></Col>)
+		return this.props.question.answers.map((e, i) => <Col xs={3} key={i}><Radio value={i} label={e} name={this.props.index} onChange={hc(this.props.index)} >{e}</Radio></Col>)
 	}
 
 
@@ -92,7 +92,9 @@ class Quetion extends React.Component
 		<Panel header={"Въпрос " + this.props.title}>
 			{this.props.question.text}
 			<Row>
-				{this.renderAnswers()}
+				<FormGroup controlId={"Въпрос " + this.props.title}>
+					{this.renderAnswers()}
+				</FormGroup>
 			</Row>
 			
 		</Panel>
@@ -185,6 +187,8 @@ class App extends React.Component
 
 
 					<Button onClick={this.checkAnswers.bind(this)}>Провери</Button>
+					<Button >Назад</Button>
+
 				</Row>
 				<Modal show={this.state.videoModal} onHide={() => {this.video.pause(); this.setState({videoModal: false, result: 0})}}  bsSize="large">
 					<Modal.Header closeButton>
@@ -194,8 +198,6 @@ class App extends React.Component
 						<video src="vid/End.mp4" ref={e => this.video = e}></video>
 					</Modal.Body>
 				</Modal>
-				
-
 			</Grid>
 			)
 	}

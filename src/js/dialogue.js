@@ -13,18 +13,15 @@ var dialogue = [
 			{ //loc: 0
 				//say: "Loerm ipsum"
 				who: "Карбон",
-				say: "Кой си ти?",
-				loc: 1
+				say: "Кой си ти?"
 			},
 			{ //loc: 1
 				who: "Графен",
-				say: "Аз съм материал създаден от един ред въглеродни атоми и имам уникални свойства!",
-				loc: 2
+				say: "Аз съм материал създаден от един ред въглеродни атоми и имам уникални свойства!"
 			},
 			{ //loc: 2
 				who: "Карбон",
-				say: "Хаха, за много по-полезен ли се мислиш?",
-				loc: 3
+				say: "Хаха, за много по-полезен ли се мислиш?"
 			},
 			{ //loc: 3
 				who: "Графен",
@@ -240,13 +237,15 @@ var dialogue = [
 window.d = dialogue
 
 export default class Dialogue {
-	constructor(){
+	constructor(tags){
+		this.tags = tags
 		this.dialogue = dialogue
 	}
 
 	select(name){
 		this.currentDialogue = R.find(R.propEq("name", name))(this.dialogue)
 		this.currentPhrase = this.currentDialogue.array[0]
+		this.loc = 0
 	}
 
 	phrase(loc){ // gives a specific phrase
@@ -280,8 +279,14 @@ export default class Dialogue {
 					if(this.currentPhrase.answer[choice].scene){
 						return this.currentPhrase.answer[choice].scene
 					}
-					this.loc = this.currentPhrase.answer[choice].loc
-					this.currentPhrase = this.phrase(this.currentPhrase.answer[choice].loc)
+
+					if(this.currentPhrase.answer[choice].loc != null){ // checks if the answer has a location otherwise increment
+						this.loc = this.currentPhrase.answer[choice].loc
+					}else{
+						this.loc += 1
+					}
+
+					this.currentPhrase = this.phrase(this.loc)
 					
 					return null
 				}else{
@@ -297,6 +302,10 @@ export default class Dialogue {
 			return null
 		}else if(this.currentPhrase.scene){
 			return this.currentPhrase.scene
+		}else{
+			this.loc += 1
+			this.currentPhrase = this.phrase(this.loc)
+			return null
 		}
 	}
 }
