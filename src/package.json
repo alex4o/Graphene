@@ -4,6 +4,8 @@
   "description": "webpage",
   "main": "app.js",
   "dependencies": {
+    "ajpng": "^0.1.2",
+    "async.js": "^0.9.5",
     "autoprefixer": "^6.3.1",
     "babel": "^6.3.26",
     "babel-loader": "^6.2.1",

@@ -1,8 +1,12 @@
 require("waypoints/lib/noframework.waypoints")
+require("./Element.mutation.js")
 
 require("../css/index.css")
 // found that code on github
 import scrollTo from "./util/scrollTo"
+import AJPNG from "ajpng"
+
+window.ajpng = AJPNG
 
 
 // for eslint, couldn't find a way not to polute the environement
@@ -24,7 +28,7 @@ sources.style.display = "none"
 arrow.addEventListener("click", () => {
 	scrollTo(window.innerHeight, 800)
 })
-
+/*
 let icons = Array.from(document.getElementsByClassName("icon"))
 
 Array.from(document.getElementsByClassName("paralax")).map((element,index) => {
@@ -39,7 +43,48 @@ Array.from(document.getElementsByClassName("paralax")).map((element,index) => {
 		})
 	}
 })
+*/
 
+let butFlex = document.getElementById("but-flex")
+let butStr = document.getElementById("but-str")
+let butCond = document.getElementById("but-cond")
+
+let videos = Array.from(document.getElementsByClassName("vid-box"))
+let aicons = document.getElementsByClassName("animated")
+
+/*
+AJPNG.ifNeeded().then(() => {
+	for (var i = 0; i < aicons.length; i++) {
+		AJPNG.animateImage(aicons[i]).then(e => console.log(e)).catch(e => console.log(e))
+	}
+})
+*/
+
+function hideVideos(){
+	videos.forEach(video => {
+		video.classList.remove("show")
+	})
+	document.removeEventListener("click", hideVideos)
+
+}
+
+butFlex.addEventListener("click", () => {
+	videos[0].classList.add("show")
+	document.addEventListener("click", hideVideos)
+
+})
+
+butStr.addEventListener("click", () => {
+	videos[1].classList.add("show")
+	document.addEventListener("click", hideVideos)
+
+})
+
+butCond.addEventListener("click", () => {
+	videos[2].classList.add("show")
+	document.addEventListener("click", hideVideos)
+	
+})
 
 
 

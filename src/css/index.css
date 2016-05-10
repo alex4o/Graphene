@@ -48,7 +48,20 @@
 		transform: translate(0, -10px);
 	}
 	to {
-		transform: translate(0, -px);
+		transform: translate(0, -0px);
+
+	}
+}
+
+@keyframes float-small{
+	from {
+		transform: translate(0, 0px);
+	}
+	65% {
+		transform: translate(0, -5px);
+	}
+	to {
+		transform: translate(0, -0px);
 
 	}
 }
@@ -101,23 +114,28 @@ section {
 		flex: 1 1;
 		text-align: center;
 		transition: opacity 1.5s;
+
 		.icon {
-			height: 30vh;
+			height: 35vh;
 			display: inline-block;
 			margin-right: 10px;
-			opacity: 0;
 			transition: opacity 0.5s;
+		
+			&.flexibility {
+				/* src="./img/home_page/guvkavost_animated.png" */
+			}
 
 		}
 
 		.full-image {
 			height: 100%;
+			animation-name: float-small;
+			animation-iteration-count: infinite;
+			animation-duration: 3s;
+			animation-timing-function: ease-in-out;
 		}
 
-		.icon.show {
-			opacity: 1  !important;
-
-		}
+		
 
 		h1 {
 			font-size: 3em;
@@ -205,6 +223,28 @@ a {
 			right: 0;
 			transform: rotatex( 0deg );
 
+		}
+
+		#close {
+
+		}
+	}
+
+	.vid-box
+	{
+		top: calc(50% - 720px/2);
+		left: calc(50% - 1280px/2);
+		box-shadow: 0 0 3em #222;
+
+		transform: translateX(0px);
+		transition: opacity .9s;
+		opacity: 0;
+		display: none;
+
+
+		&.show {
+			opacity: 1;
+			display: block;
 		}
 	}
 }
@@ -474,3 +514,4 @@ a {
 		flex:1;
 	}
 }
+
