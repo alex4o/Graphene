@@ -66,6 +66,11 @@
 	}
 }
 
+@keyframes sprite{
+  from { background-position: 0%; }
+  to { background-position: 100%; }
+}
+
 body {
 	width: 100%;
 	margin: 0px;
@@ -117,15 +122,18 @@ section {
 
 		.icon {
 			height: 35vh;
+			width: 35vh;
+
 			display: inline-block;
 			margin-right: 10px;
 			transition: opacity 0.5s;
-		
-			&.flexibility {
-				/* src="./img/home_page/guvkavost_animated.png" */
+			
+			&.animated {
+				animation: sprite 1s steps(27) infinite;
 			}
-
 		}
+
+
 
 		.full-image {
 			height: 100%;
@@ -147,7 +155,7 @@ section {
 			margin: 0 10% 0 10%;
 
 			> .icon {
-				flex: 1;
+				/* flex: 1; */
 			}
 
 			> p {
@@ -157,6 +165,14 @@ section {
 				text-align: left;
 			}
 		}
+	}
+}
+
+
+#flexibility {
+	.icon {
+		background:  url("./img/home_page/guvkavost_sprite.png") no-repeat 0 0%;
+		background-size: 2700%;
 	}
 }
 
