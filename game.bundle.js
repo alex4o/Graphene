@@ -9,17 +9,17 @@ webpackJsonp([3],{
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
-	var _story = __webpack_require__(242);
+	var _story = __webpack_require__(248);
 	
 	var _story2 = _interopRequireDefault(_story);
 	
-	var _VolumeCtrl = __webpack_require__(237);
+	var _VolumeCtrl = __webpack_require__(243);
 	
 	var _VolumeCtrl2 = _interopRequireDefault(_VolumeCtrl);
 	
-	var _kefir = __webpack_require__(162);
+	var _kefir = __webpack_require__(163);
 	
-	var _kefir2 = __webpack_require__(316);
+	var _kefir2 = __webpack_require__(314);
 	
 	var _kefir3 = _interopRequireDefault(_kefir2);
 	
@@ -27,26 +27,26 @@ webpackJsonp([3],{
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
-	var _Dialogue = __webpack_require__(239);
+	var _Dialogue = __webpack_require__(245);
 	
 	var _Dialogue2 = _interopRequireDefault(_Dialogue);
 	
-	var _Video = __webpack_require__(241);
+	var _Video = __webpack_require__(247);
 	
 	var _Video2 = _interopRequireDefault(_Video);
 	
-	var _End = __webpack_require__(240);
+	var _End = __webpack_require__(246);
 	
 	var _End2 = _interopRequireDefault(_End);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(236);
+	__webpack_require__(95);
 	
 	window.R = _ramda2.default;
 	window.p = _paper2.default;
 	
-	__webpack_require__(501);
+	__webpack_require__(502);
 	
 	// TODO: move to new file and find better name
 	
@@ -166,104 +166,6 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 4:
-/***/ function(module, exports) {
-
-	// shim for using process in browser
-	
-	var process = module.exports = {};
-	var queue = [];
-	var draining = false;
-	var currentQueue;
-	var queueIndex = -1;
-	
-	function cleanUpNextTick() {
-	    draining = false;
-	    if (currentQueue.length) {
-	        queue = currentQueue.concat(queue);
-	    } else {
-	        queueIndex = -1;
-	    }
-	    if (queue.length) {
-	        drainQueue();
-	    }
-	}
-	
-	function drainQueue() {
-	    if (draining) {
-	        return;
-	    }
-	    var timeout = setTimeout(cleanUpNextTick);
-	    draining = true;
-	
-	    var len = queue.length;
-	    while(len) {
-	        currentQueue = queue;
-	        queue = [];
-	        while (++queueIndex < len) {
-	            if (currentQueue) {
-	                currentQueue[queueIndex].run();
-	            }
-	        }
-	        queueIndex = -1;
-	        len = queue.length;
-	    }
-	    currentQueue = null;
-	    draining = false;
-	    clearTimeout(timeout);
-	}
-	
-	process.nextTick = function (fun) {
-	    var args = new Array(arguments.length - 1);
-	    if (arguments.length > 1) {
-	        for (var i = 1; i < arguments.length; i++) {
-	            args[i - 1] = arguments[i];
-	        }
-	    }
-	    queue.push(new Item(fun, args));
-	    if (queue.length === 1 && !draining) {
-	        setTimeout(drainQueue, 0);
-	    }
-	};
-	
-	// v8 likes predictible objects
-	function Item(fun, array) {
-	    this.fun = fun;
-	    this.array = array;
-	}
-	Item.prototype.run = function () {
-	    this.fun.apply(null, this.array);
-	};
-	process.title = 'browser';
-	process.browser = true;
-	process.env = {};
-	process.argv = [];
-	process.version = ''; // empty string to avoid regexp issues
-	process.versions = {};
-	
-	function noop() {}
-	
-	process.on = noop;
-	process.addListener = noop;
-	process.once = noop;
-	process.off = noop;
-	process.removeListener = noop;
-	process.removeAllListeners = noop;
-	process.emit = noop;
-	
-	process.binding = function (name) {
-	    throw new Error('process.binding is not supported');
-	};
-	
-	process.cwd = function () { return '/' };
-	process.chdir = function (dir) {
-	    throw new Error('process.chdir is not supported');
-	};
-	process.umask = function() { return 0; };
-
-
-/***/ },
-
 /***/ 32:
 /***/ function(module, exports) {
 
@@ -286,7 +188,7 @@ webpackJsonp([3],{
 	
 	exports.__esModule = true;
 	
-	var _defineProperty = __webpack_require__(95);
+	var _defineProperty = __webpack_require__(96);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
@@ -22815,13 +22717,105 @@ webpackJsonp([3],{
 /***/ },
 
 /***/ 95:
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	module.exports = { "default": __webpack_require__(96), __esModule: true };
+	'use strict';
+	
+	/**
+	 * Apply mutation shims
+	 */
+	
+	function _toNode(node) {
+	  return typeof node === 'string' ? document.createTextNode(node) : node;
+	}
+	
+	function _ref() {
+	  var parentNode = this.parentNode;
+	  if (parentNode) {
+	    parentNode.removeChild(this);
+	  }
+	}
+	
+	(function () {
+	  'use strict';
+	
+	  var ElementPrototype = Element.prototype;
+	
+	  /**
+	   * Detect full support
+	   */
+	
+	  var isSupported = ElementPrototype.after && ElementPrototype.append && ElementPrototype.before && ElementPrototype.prepend && ElementPrototype.remove && ElementPrototype.replace;
+	
+	  if (isSupported) {
+	    return;
+	  }function mutationMacro(nodes) {
+	    var fragment, i, len;
+	    if (nodes) {
+	      len = nodes.length;
+	    }
+	
+	    if (!len) {
+	      throw new Error('No node was specified (DOM Exception 8)');
+	    }
+	
+	    if (len === 1) {
+	      return _toNode(nodes[0]);
+	    } else {
+	      fragment = document.createDocumentFragment();
+	      for (i = 0; i < len; i++) {
+	        fragment.appendChild(_toNode(nodes[i]));
+	      }
+	      return fragment;
+	    }
+	  }
+	
+	  ElementPrototype.prepend = function prepend() {
+	    this.insertBefore(mutationMacro(arguments), this.firstChild);
+	  };
+	
+	  ElementPrototype.append = function append() {
+	    this.appendChild(mutationMacro(arguments));
+	  };
+	
+	  ElementPrototype.before = function before() {
+	    var parentNode = this.parentNode;
+	    if (parentNode) {
+	      parentNode.insertBefore(mutationMacro(arguments), this);
+	    }
+	  };
+	
+	  ElementPrototype.after = function after() {
+	    var parentNode = this.parentNode;
+	    if (parentNode) {
+	      parentNode.insertBefore(mutationMacro(arguments), this.nextSibling);
+	    }
+	  };
+	
+	  ElementPrototype.replace = function replace() {
+	    var parentNode = this.parentNode;
+	    if (parentNode) {
+	      parentNode.replaceChild(mutationMacro(arguments), this);
+	    }
+	  };
+	
+	  /**
+	   * This method is defined with bracket notation to avoid conflicting with the
+	   * definition of HTMLSelectElement.
+	   */
+	  ElementPrototype['remove'] = _ref;
+	})();
 
 /***/ },
 
 /***/ 96:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(97), __esModule: true };
+
+/***/ },
+
+/***/ 97:
 /***/ function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(18);
@@ -22831,7 +22825,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 162:
+/***/ 163:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*! Kefir.js v3.2.2
@@ -26171,99 +26165,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 236:
-/***/ function(module, exports) {
-
-	'use strict';
-	
-	/**
-	 * Apply mutation shims
-	 */
-	
-	function _toNode(node) {
-	  return typeof node === 'string' ? document.createTextNode(node) : node;
-	}
-	
-	function _ref() {
-	  var parentNode = this.parentNode;
-	  if (parentNode) {
-	    parentNode.removeChild(this);
-	  }
-	}
-	
-	(function () {
-	  'use strict';
-	
-	  var ElementPrototype = Element.prototype;
-	
-	  /**
-	   * Detect full support
-	   */
-	
-	  var isSupported = ElementPrototype.after && ElementPrototype.append && ElementPrototype.before && ElementPrototype.prepend && ElementPrototype.remove && ElementPrototype.replace;
-	
-	  if (isSupported) {
-	    return;
-	  }function mutationMacro(nodes) {
-	    var fragment, i, len;
-	    if (nodes) {
-	      len = nodes.length;
-	    }
-	
-	    if (!len) {
-	      throw new Error('No node was specified (DOM Exception 8)');
-	    }
-	
-	    if (len === 1) {
-	      return _toNode(nodes[0]);
-	    } else {
-	      fragment = document.createDocumentFragment();
-	      for (i = 0; i < len; i++) {
-	        fragment.appendChild(_toNode(nodes[i]));
-	      }
-	      return fragment;
-	    }
-	  }
-	
-	  ElementPrototype.prepend = function prepend() {
-	    this.insertBefore(mutationMacro(arguments), this.firstChild);
-	  };
-	
-	  ElementPrototype.append = function append() {
-	    this.appendChild(mutationMacro(arguments));
-	  };
-	
-	  ElementPrototype.before = function before() {
-	    var parentNode = this.parentNode;
-	    if (parentNode) {
-	      parentNode.insertBefore(mutationMacro(arguments), this);
-	    }
-	  };
-	
-	  ElementPrototype.after = function after() {
-	    var parentNode = this.parentNode;
-	    if (parentNode) {
-	      parentNode.insertBefore(mutationMacro(arguments), this.nextSibling);
-	    }
-	  };
-	
-	  ElementPrototype.replace = function replace() {
-	    var parentNode = this.parentNode;
-	    if (parentNode) {
-	      parentNode.replaceChild(mutationMacro(arguments), this);
-	    }
-	  };
-	
-	  /**
-	   * This method is defined with bracket notation to avoid conflicting with the
-	   * definition of HTMLSelectElement.
-	   */
-	  ElementPrototype['remove'] = _ref;
-	})();
-
-/***/ },
-
-/***/ 237:
+/***/ 243:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26386,7 +26288,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 238:
+/***/ 244:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26685,7 +26587,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 239:
+/***/ 245:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27046,7 +26948,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 240:
+/***/ 246:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27098,7 +27000,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 241:
+/***/ 247:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27186,7 +27088,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 242:
+/***/ 248:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27207,7 +27109,7 @@ webpackJsonp([3],{
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
-	var _dialogue = __webpack_require__(238);
+	var _dialogue = __webpack_require__(244);
 	
 	var _dialogue2 = _interopRequireDefault(_dialogue);
 	
@@ -27537,22 +27439,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 280:
-/***/ function(module, exports, __webpack_require__) {
-
-	exports = module.exports = __webpack_require__(102)();
-	// imports
-	
-	
-	// module
-	exports.push([module.id, "body, html {\n\tmargin: 0px;\n\tbackground-color: black;\n    overflow: hidden;\n    height: 100%;\n}\n\ncanvas[resize] {\n    width: 100%;\n    height: 100%;\n}\n\nvideo {\n\twidth: 100%;\n}\n\n.draw {\n\tposition: absolute;\n\ttop: 0px;\n\tleft: 0px;\n}", ""]);
-	
-	// exports
-
-
-/***/ },
-
-/***/ 316:
+/***/ 314:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27564,7 +27451,7 @@ webpackJsonp([3],{
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _kefir = __webpack_require__(162);
+	var _kefir = __webpack_require__(163);
 	
 	var Kefir = _interopRequireWildcard(_kefir);
 	
@@ -27572,7 +27459,7 @@ webpackJsonp([3],{
 	
 	var R = _interopRequireWildcard(_ramda);
 	
-	var _partial = __webpack_require__(356);
+	var _partial = __webpack_require__(354);
 	
 	var L = _interopRequireWildcard(_partial);
 	
@@ -27715,7 +27602,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 356:
+/***/ 354:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -28128,13 +28015,20 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 501:
+/***/ 355:
+/***/ function(module, exports) {
+
+	module.exports = "body, html {\n\tmargin: 0px;\n\tbackground-color: black;\n    overflow: hidden;\n    height: 100%;\n}\n\ncanvas[resize] {\n    width: 100%;\n    height: 100%;\n}\n\nvideo {\n\twidth: 100%;\n}\n\n.draw {\n\tposition: absolute;\n\ttop: 0px;\n\tleft: 0px;\n}"
+
+/***/ },
+
+/***/ 502:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(280);
+	var content = __webpack_require__(355);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
 	var update = __webpack_require__(142)(content, {});
@@ -28143,8 +28037,8 @@ webpackJsonp([3],{
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./global.css", function() {
-				var newContent = require("!!./../node_modules/css-loader/index.js!./../node_modules/postcss-loader/index.js!./global.css");
+			module.hot.accept("!!./../node_modules/raw-loader/index.js!./../node_modules/postcss-loader/index.js!./global.css", function() {
+				var newContent = require("!!./../node_modules/raw-loader/index.js!./../node_modules/postcss-loader/index.js!./global.css");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
