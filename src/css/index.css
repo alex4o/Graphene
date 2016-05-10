@@ -20,12 +20,22 @@
 }
 
 
-@media (max-width: 1000px) {
+@media (max-width: 750px) {
 	.row {
 		flex-direction: column;
 
 		> * {
 			margin: 10 auto 0 auto !important;
+		}
+	}
+
+	section {
+		height: auto !important;
+		padding: 15px;
+		> .content {
+			.full-image {
+				height: 50% !important;
+			}
 		}
 	}
 }
@@ -98,6 +108,10 @@ section {
 			opacity: 0;
 			transition: opacity 0.5s;
 
+		}
+
+		.full-image {
+			height: 100%;
 		}
 
 		.icon.show {
@@ -198,7 +212,7 @@ a {
 
 
 #landing {
-	height: 100vh;
+	height: 100vh !important;
 
 	background-image: url("./img/Background.jpg");
 	background-attachment: fixed;

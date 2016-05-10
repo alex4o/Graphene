@@ -28,14 +28,16 @@ arrow.addEventListener("click", () => {
 let icons = Array.from(document.getElementsByClassName("icon"))
 
 Array.from(document.getElementsByClassName("paralax")).map((element,index) => {
-	return new Waypoint({
-		element: element,
-		handler: () => {
-			icons[index].classList.add("show")
-		},
-		offset: 250
+	if(icons[index] != null){
+		return new Waypoint({
+			element: element,
+			handler: () => {
+				icons[index].classList.add("show")
+			},
+			offset: 250
 
-	})
+		})
+	}
 })
 
 
