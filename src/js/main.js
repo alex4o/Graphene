@@ -64,6 +64,8 @@ function hideVideos(){
 	videos.forEach(video => {
 		video.pause()
 		video.classList.remove("show")
+		video.classList.remove("display")
+
 	})
 
 	close.classList.remove("show")
@@ -72,6 +74,8 @@ function hideVideos(){
 }
 
 function showVideo(idx){
+	videos[idx].classList.add("display")
+
 	videos[idx].classList.add("show")
 	close.classList.add("show")
 
