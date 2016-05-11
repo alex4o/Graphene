@@ -150,16 +150,18 @@ export default class DialogueScene {
 
 
 		this.EnemyText.position.x = 100
+		
+		let ppbs = 0.4
 
 		this.Play = new paper.Raster("./img/buttons/Play.png")
 		this.Play.position = paper.view.center
 		this.Play.visible = false
-		this.Play.scale(0.5, 0.5)
+		this.Play.scale(ppbs, ppbs)
 
 		this.Pause = new paper.Raster("./img/buttons/Paused.png")
 		this.Pause.position = paper.view.center
 		this.Pause.visible = false
-		this.Pause.scale(0.5, 0.5)
+		this.Pause.scale(ppbs, ppbs)
 
 
 		this.Play.onClick = () => {

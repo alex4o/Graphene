@@ -268,8 +268,8 @@ a {
 		top: calc(50vh - 22.5vw) !important;
 		left: 10vw !important;
 		width: 80vw;	
-		height: 45vw;
-/* 		top: calc(50% - 720px/2);
+/*		height: 45vw;
+ 		top: calc(50% - 720px/2);
 		left: calc(50% - 1280px/2);
 		box-shadow: 0 0 3em #222;
  */
@@ -289,7 +289,7 @@ a {
 
 	#close {
 		top: calc(50vh - 22.5vw - 80px);
-		right: calc(10vw - 100px);
+		right: calc(10vw - 80px);
 		background-color: #444;
 		transform: scale(0.5, 0.5);
 		border-radius: 80px;
