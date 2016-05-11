@@ -29,16 +29,20 @@
 		}
 	}
 
+
 	section {
 		height: auto !important;
 		padding: 15px;
 		> .content {
 			.full-image {
-				height: 50% !important;
+				 height: 50% !important; 
+				/*width: 100% !important;*/
 			}
 		}
 	}
+
 }
+
 
 @keyframes float{
 	from {
@@ -67,8 +71,8 @@
 }
 
 @keyframes sprite{
-  from { background-position: 0%; }
-  to { background-position: 100%; }
+  from { background-position:0 0%; }
+  to { background-position:0 100%; }
 }
 
 body {
@@ -129,7 +133,8 @@ section {
 			transition: opacity 0.5s;
 			
 			&.animated {
-				animation: sprite 1s steps(27) infinite;
+				animation: sprite 1.5s steps(26) infinite;
+				transform: translateX(0px);
 			}
 		}
 
@@ -163,6 +168,8 @@ section {
 				flex: 5;
 				align-self: center;
 				text-align: left;
+				text-shadow: 0 0 3px #000;
+				letter-spacing: 1px;
 			}
 		}
 	}
@@ -171,8 +178,8 @@ section {
 
 #flexibility {
 	.icon {
-		background:  url("./img/home_page/guvkavost_sprite.png") no-repeat 0 0%;
-		background-size: 2700%;
+		background:  url("./img/home_page/guvkavost_sprite.png");
+		background-size: 100%;
 	}
 }
 
@@ -186,6 +193,7 @@ section {
 
 a {
 	color: blue;
+	cursor: pointer;
 }
 
 .static {
@@ -241,9 +249,7 @@ a {
 
 		}
 
-		#close {
 
-		}
 	}
 
 	.vid-box
@@ -263,16 +269,25 @@ a {
 			display: block;
 		}
 	}
+
+	#close {
+		top: calc((100% - 720px)/2 - 80px);
+		right: calc((100% - 1280px)/2 - 80px);
+		background-color: #444;
+		transform: scale(0.5, 0.5);
+		border-radius: 80px;
+		display: none;
+
+		&.show {
+			display: block;
+		}
+	}
 }
 
 
 
 #landing {
 	height: 100vh !important;
-
-	background-image: url("./img/Background.jpg");
-	background-attachment: fixed;
-	position: relative;
 
 	> .content {
 		opacity: 0;
@@ -286,7 +301,7 @@ a {
 
 		bottom: 0px;
 		left: calc(50% - 80px);
-		cursor: hand;
+		cursor: pointer;
 		/* transition: all .3s; */
 
 		img {
@@ -346,27 +361,6 @@ a {
 	h2 {
 
 	}
-
-
-	
-
-/*.button:before {
-		content: "";
-		position: absolute;
-		background: white;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		top: 100%;
-		z-index: -1;
-		transition: top 0.09s ease-in;
-	}
-
-	.button:hover:before {
-		top: 0;
-
-	}	 */
-
 }
 
 .button {
@@ -428,6 +422,10 @@ a {
 	font-weight: bold;
 }
 
+a {
+	color: #000;
+	text-shadow: none;
+}
 
 
 .button-slide:hover{
@@ -530,4 +528,3 @@ a {
 		flex:1;
 	}
 }
-

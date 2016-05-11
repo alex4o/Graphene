@@ -54,7 +54,7 @@ module.exports = {
 		return {
 			defaults: [precss, lost, cssnext],
 			cleaner:  [autoprefixer({ browsers: ["last 1 version"] })]
-		};
+		}
 	},
 	resolve: {
 		modulesDirectories: ["./node_modules"]

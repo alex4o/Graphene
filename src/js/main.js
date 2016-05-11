@@ -50,7 +50,7 @@ let butStr = document.getElementById("but-str")
 let butCond = document.getElementById("but-cond")
 
 let videos = Array.from(document.getElementsByClassName("vid-box"))
-let aicons = document.getElementsByClassName("animated")
+let close = document.getElementById("close")
 
 /*
 AJPNG.ifNeeded().then(() => {
@@ -62,28 +62,35 @@ AJPNG.ifNeeded().then(() => {
 
 function hideVideos(){
 	videos.forEach(video => {
+		video.pause()
 		video.classList.remove("show")
 	})
-	document.removeEventListener("click", hideVideos)
+
+	close.classList.remove("show")
+
 
 }
 
-butFlex.addEventListener("click", () => {
-	videos[0].classList.add("show")
-	document.addEventListener("click", hideVideos)
+function showVideo(idx){
+	videos[idx].classList.add("show")
+	close.classList.add("show")
 
+
+}
+
+close.addEventListener("click", hideVideos)
+
+
+butFlex.addEventListener("click", () => {
+	showVideo(0)
 })
 
 butStr.addEventListener("click", () => {
-	videos[1].classList.add("show")
-	document.addEventListener("click", hideVideos)
-
+	showVideo(2)
 })
 
 butCond.addEventListener("click", () => {
-	videos[2].classList.add("show")
-	document.addEventListener("click", hideVideos)
-	
+	showVideo(1)
 })
 
 
