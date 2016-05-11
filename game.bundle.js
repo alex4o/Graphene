@@ -26894,15 +26894,17 @@ webpackJsonp([3],{
 	
 			this.EnemyText.position.x = 100;
 	
+			var ppbs = 0.4;
+	
 			this.Play = new _paper2.default.Raster("./img/buttons/Play.png");
 			this.Play.position = _paper2.default.view.center;
 			this.Play.visible = false;
-			this.Play.scale(0.5, 0.5);
+			this.Play.scale(ppbs, ppbs);
 	
 			this.Pause = new _paper2.default.Raster("./img/buttons/Paused.png");
 			this.Pause.position = _paper2.default.view.center;
 			this.Pause.visible = false;
-			this.Pause.scale(0.5, 0.5);
+			this.Pause.scale(ppbs, ppbs);
 	
 			this.Play.onClick = function () {
 				_this2.Play.visible = false;
