@@ -4,10 +4,9 @@ require("./Element.mutation.js")
 require("../css/index.css")
 // found that code on github
 import scrollTo from "./util/scrollTo"
-import AJPNG from "ajpng"
+import Luminous from "luminous-lightbox"
 
-window.ajpng = AJPNG
-
+window.ps = Luminous
 
 // for eslint, couldn't find a way not to polute the environement
 
@@ -28,37 +27,32 @@ sources.style.display = "none"
 arrow.addEventListener("click", () => {
 	scrollTo(window.innerHeight, 800)
 })
-/*
-let icons = Array.from(document.getElementsByClassName("icon"))
-
-Array.from(document.getElementsByClassName("paralax")).map((element,index) => {
-	if(icons[index] != null){
-		return new Waypoint({
-			element: element,
-			handler: () => {
-				icons[index].classList.add("show")
-			},
-			offset: 250
-
-		})
-	}
-})
-*/
 
 let butFlex = document.getElementById("but-flex")
 let butStr = document.getElementById("but-str")
 let butCond = document.getElementById("but-cond")
 
 let videos = Array.from(document.getElementsByClassName("vid-box"))
-let close = document.getElementById("close")
 
-/*
-AJPNG.ifNeeded().then(() => {
-	for (var i = 0; i < aicons.length; i++) {
-		AJPNG.animateImage(aicons[i]).then(e => console.log(e)).catch(e => console.log(e))
-	}
+let thumbs = Array.from(document.getElementsByClassName("thumb"))
+
+function showLightbox(src){
+	console.log("Showing lightbox:", src)
+}
+let options = {
+	sourceAttribute: 'src'
+}
+thumbs.map(thumb => {
+	return new Luminous(thumb, options)
+	// thumb.addEventListener("click", () => {
+	// 	showLightbox(thumb.src)
+	// })
 })
-*/
+
+
+let luminous 
+
+let close = document.getElementById("close")
 
 function hideVideos(){
 	videos.forEach(video => {
