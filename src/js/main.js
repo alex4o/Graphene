@@ -5,6 +5,7 @@ require("../css/index.css")
 // found that code on github
 import scrollTo from "./util/scrollTo"
 import Luminous from "luminous-lightbox"
+// import Luminous from "Luminous"
 
 window.ps = Luminous
 
@@ -19,10 +20,8 @@ let landing = document.getElementById("landing")
 
 let to_game = document.getElementById("to-game")
 
-let sources = document.getElementById("sources")
 let logo = document.getElementById("logo")
 
-sources.style.display = "none"
 
 arrow.addEventListener("click", () => {
 	scrollTo(window.innerHeight, 800)
@@ -31,26 +30,20 @@ arrow.addEventListener("click", () => {
 let butFlex = document.getElementById("but-flex")
 let butStr = document.getElementById("but-str")
 let butCond = document.getElementById("but-cond")
+let butEle = document.getElementById("but-ele")
 
 let videos = Array.from(document.getElementsByClassName("vid-box"))
 
 let thumbs = Array.from(document.getElementsByClassName("thumb"))
 
-function showLightbox(src){
-	console.log("Showing lightbox:", src)
-}
 let options = {
-	sourceAttribute: 'src'
+	sourceAttribute: "src"
 }
-thumbs.map(thumb => {
+
+let lum = thumbs.map(thumb => {
 	return new Luminous(thumb, options)
-	// thumb.addEventListener("click", () => {
-	// 	showLightbox(thumb.src)
-	// })
 })
 
-
-let luminous 
 
 let close = document.getElementById("close")
 
@@ -79,18 +72,21 @@ function showVideo(idx){
 close.addEventListener("click", hideVideos)
 
 
-butFlex.addEventListener("click", () => {
-	showVideo(0)
-})
+// butFlex.addEventListener("click", () => {
+// 	showVideo(0)
+// })
 
 butStr.addEventListener("click", () => {
-	showVideo(2)
-})
-
-butCond.addEventListener("click", () => {
 	showVideo(1)
 })
 
+butCond.addEventListener("click", () => {
+	showVideo(2)
+})
+
+butEle.addEventListener("click", () => {
+	showVideo(3)
+})
 
 
 
