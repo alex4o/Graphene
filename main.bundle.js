@@ -5,26 +5,27 @@ webpackJsonp([2],{
 
 	"use strict";
 	
-	var _from = __webpack_require__(250);
+	var _from = __webpack_require__(242);
 	
 	var _from2 = _interopRequireDefault(_from);
 	
-	var _scrollTo = __webpack_require__(249);
+	var _scrollTo = __webpack_require__(241);
 	
 	var _scrollTo2 = _interopRequireDefault(_scrollTo);
 	
-	var _luminousLightbox = __webpack_require__(513);
+	var _luminousLightbox = __webpack_require__(346);
 	
 	var _luminousLightbox2 = _interopRequireDefault(_luminousLightbox);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(507);
-	__webpack_require__(95);
+	__webpack_require__(500);
+	__webpack_require__(94);
 	
-	__webpack_require__(503);
+	__webpack_require__(496);
 	// found that code on github
 	
+	// import Luminous from "Luminous"
 	
 	window.ps = _luminousLightbox2.default;
 	
@@ -39,10 +40,7 @@ webpackJsonp([2],{
 	
 	var to_game = document.getElementById("to-game");
 	
-	var sources = document.getElementById("sources");
 	var logo = document.getElementById("logo");
-	
-	sources.style.display = "none";
 	
 	arrow.addEventListener("click", function () {
 		(0, _scrollTo2.default)(window.innerHeight, 800);
@@ -51,25 +49,19 @@ webpackJsonp([2],{
 	var butFlex = document.getElementById("but-flex");
 	var butStr = document.getElementById("but-str");
 	var butCond = document.getElementById("but-cond");
+	var butEle = document.getElementById("but-ele");
 	
 	var videos = (0, _from2.default)(document.getElementsByClassName("vid-box"));
 	
 	var thumbs = (0, _from2.default)(document.getElementsByClassName("thumb"));
 	
-	function showLightbox(src) {
-		console.log("Showing lightbox:", src);
-	}
 	var options = {
-		sourceAttribute: 'src'
+		sourceAttribute: "src"
 	};
-	thumbs.map(function (thumb) {
-		return new _luminousLightbox2.default(thumb, options);
-		// thumb.addEventListener("click", () => {
-		// 	showLightbox(thumb.src)
-		// })
-	});
 	
-	var luminous = undefined;
+	var lum = thumbs.map(function (thumb) {
+		return new _luminousLightbox2.default(thumb, options);
+	});
 	
 	var close = document.getElementById("close");
 	
@@ -94,16 +86,20 @@ webpackJsonp([2],{
 	
 	close.addEventListener("click", hideVideos);
 	
-	butFlex.addEventListener("click", function () {
-		showVideo(0);
-	});
+	// butFlex.addEventListener("click", () => {
+	// 	showVideo(0)
+	// })
 	
 	butStr.addEventListener("click", function () {
-		showVideo(2);
+		showVideo(1);
 	});
 	
 	butCond.addEventListener("click", function () {
-		showVideo(1);
+		showVideo(2);
+	});
+	
+	butEle.addEventListener("click", function () {
+		showVideo(3);
 	});
 	
 	var landingWaypoint = new Waypoint({
@@ -242,7 +238,7 @@ webpackJsonp([2],{
 /***/ function(module, exports, __webpack_require__) {
 
 	// optional / simple context binding
-	var aFunction = __webpack_require__(98);
+	var aFunction = __webpack_require__(97);
 	module.exports = function(fn, that, length){
 	  aFunction(fn);
 	  if(that === undefined)return fn;
@@ -401,7 +397,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 95:
+/***/ 94:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -493,7 +489,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 98:
+/***/ 97:
 /***/ function(module, exports) {
 
 	module.exports = function(it){
@@ -503,28 +499,28 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 99:
+/***/ 98:
 /***/ function(module, exports) {
 
 	module.exports = {};
 
 /***/ },
 
-/***/ 100:
+/***/ 99:
 /***/ function(module, exports) {
 
 	module.exports = true;
 
 /***/ },
 
-/***/ 101:
+/***/ 100:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(55);
 
 /***/ },
 
-/***/ 148:
+/***/ 146:
 /***/ function(module, exports) {
 
 	// 7.1.4 ToInteger
@@ -536,7 +532,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 249:
+/***/ 241:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -601,23 +597,23 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 250:
+/***/ 242:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(258), __esModule: true };
+	module.exports = { "default": __webpack_require__(250), __esModule: true };
 
 /***/ },
 
-/***/ 258:
+/***/ 250:
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(284);
-	__webpack_require__(278);
+	__webpack_require__(276);
+	__webpack_require__(270);
 	module.exports = __webpack_require__(22).Array.from;
 
 /***/ },
 
-/***/ 263:
+/***/ 255:
 /***/ function(module, exports, __webpack_require__) {
 
 	// getting tag from 19.1.3.6 Object.prototype.toString()
@@ -639,11 +635,11 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 266:
+/***/ 258:
 /***/ function(module, exports, __webpack_require__) {
 
 	// check on default Array iterator
-	var Iterators  = __webpack_require__(99)
+	var Iterators  = __webpack_require__(98)
 	  , ITERATOR   = __webpack_require__(25)('iterator')
 	  , ArrayProto = Array.prototype;
 	
@@ -653,7 +649,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 268:
+/***/ 260:
 /***/ function(module, exports, __webpack_require__) {
 
 	// call something on iterator step with safe closing on error
@@ -671,7 +667,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 269:
+/***/ 261:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -690,17 +686,17 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 270:
+/***/ 262:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var LIBRARY        = __webpack_require__(100)
+	var LIBRARY        = __webpack_require__(99)
 	  , $export        = __webpack_require__(41)
-	  , redefine       = __webpack_require__(101)
+	  , redefine       = __webpack_require__(100)
 	  , hide           = __webpack_require__(55)
 	  , has            = __webpack_require__(54)
-	  , Iterators      = __webpack_require__(99)
-	  , $iterCreate    = __webpack_require__(269)
+	  , Iterators      = __webpack_require__(98)
+	  , $iterCreate    = __webpack_require__(261)
 	  , setToStringTag = __webpack_require__(69)
 	  , getProto       = __webpack_require__(18).getProto
 	  , ITERATOR       = __webpack_require__(25)('iterator')
@@ -762,7 +758,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 271:
+/***/ 263:
 /***/ function(module, exports, __webpack_require__) {
 
 	var ITERATOR     = __webpack_require__(25)('iterator')
@@ -789,10 +785,10 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 275:
+/***/ 267:
 /***/ function(module, exports, __webpack_require__) {
 
-	var toInteger = __webpack_require__(148)
+	var toInteger = __webpack_require__(146)
 	  , defined   = __webpack_require__(53);
 	// true  -> String#at
 	// false -> String#codePointAt
@@ -812,11 +808,11 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 276:
+/***/ 268:
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.15 ToLength
-	var toInteger = __webpack_require__(148)
+	var toInteger = __webpack_require__(146)
 	  , min       = Math.min;
 	module.exports = function(it){
 	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
@@ -824,12 +820,12 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 277:
+/***/ 269:
 /***/ function(module, exports, __webpack_require__) {
 
-	var classof   = __webpack_require__(263)
+	var classof   = __webpack_require__(255)
 	  , ITERATOR  = __webpack_require__(25)('iterator')
-	  , Iterators = __webpack_require__(99);
+	  , Iterators = __webpack_require__(98);
 	module.exports = __webpack_require__(22).getIteratorMethod = function(it){
 	  if(it != undefined)return it[ITERATOR]
 	    || it['@@iterator']
@@ -838,18 +834,18 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 278:
+/***/ 270:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	var ctx         = __webpack_require__(52)
 	  , $export     = __webpack_require__(41)
 	  , toObject    = __webpack_require__(57)
-	  , call        = __webpack_require__(268)
-	  , isArrayIter = __webpack_require__(266)
-	  , toLength    = __webpack_require__(276)
-	  , getIterFn   = __webpack_require__(277);
-	$export($export.S + $export.F * !__webpack_require__(271)(function(iter){ Array.from(iter); }), 'Array', {
+	  , call        = __webpack_require__(260)
+	  , isArrayIter = __webpack_require__(258)
+	  , toLength    = __webpack_require__(268)
+	  , getIterFn   = __webpack_require__(269);
+	$export($export.S + $export.F * !__webpack_require__(263)(function(iter){ Array.from(iter); }), 'Array', {
 	  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
 	  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
 	    var O       = toObject(arrayLike)
@@ -881,14 +877,14 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 284:
+/***/ 276:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var $at  = __webpack_require__(275)(true);
+	var $at  = __webpack_require__(267)(true);
 	
 	// 21.1.3.27 String.prototype[@@iterator]()
-	__webpack_require__(270)(String, 'String', function(iterated){
+	__webpack_require__(262)(String, 'String', function(iterated){
 	  this._t = String(iterated); // target
 	  this._i = 0;                // next index
 	// 21.1.5.2.1 %StringIteratorPrototype%.next()
@@ -904,23 +900,500 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 356:
+/***/ 346:
+/***/ function(module, exports, __webpack_require__) {
+
+	var require;var require;(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Luminous = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _dom = require('./util/dom');
+	
+	var _throwIfMissing = require('./util/throwIfMissing');
+	
+	var _throwIfMissing2 = _interopRequireDefault(_throwIfMissing);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	// All officially-supported browsers have this, but it's easy to
+	// account for, just in case.
+	var HAS_ANIMATION = typeof document === 'undefined' ? false : 'animation' in document.createElement('div').style;
+	
+	var Lightbox = function () {
+	  function Lightbox() {
+	    var _this = this;
+	
+	    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	
+	    _classCallCheck(this, Lightbox);
+	
+	    this._sizeImgWrapperEl = function () {
+	      var style = _this.imgWrapperEl.style;
+	      style.width = _this.innerEl.clientWidth + 'px';
+	      style.maxWidth = _this.innerEl.clientWidth + 'px';
+	      style.height = _this.innerEl.clientHeight - _this.captionEl.clientHeight + 'px';
+	      style.maxHeight = _this.innerEl.clientHeight - _this.captionEl.clientHeight + 'px';
+	    };
+	
+	    this._completeOpen = function () {
+	      _this.el.removeEventListener('animationend', _this._completeOpen, false);
+	
+	      (0, _dom.removeClasses)(_this.el, _this.openingClasses);
+	    };
+	
+	    this._completeClose = function () {
+	      _this.el.removeEventListener('animationend', _this._completeClose, false);
+	
+	      (0, _dom.removeClasses)(_this.el, _this.openClasses);
+	      (0, _dom.removeClasses)(_this.el, _this.closingClasses);
+	    };
+	
+	    var _options$namespace = options.namespace;
+	    var namespace = _options$namespace === undefined ? null : _options$namespace;
+	    var _options$parentEl = options.parentEl;
+	    var parentEl = _options$parentEl === undefined ? (0, _throwIfMissing2.default)() : _options$parentEl;
+	    var _options$triggerEl = options.triggerEl;
+	    var triggerEl = _options$triggerEl === undefined ? (0, _throwIfMissing2.default)() : _options$triggerEl;
+	    var _options$sourceAttrib = options.sourceAttribute;
+	    var sourceAttribute = _options$sourceAttrib === undefined ? (0, _throwIfMissing2.default)() : _options$sourceAttrib;
+	    var _options$captionAttri = options.captionAttribute;
+	    var captionAttribute = _options$captionAttri === undefined ? (0, _throwIfMissing2.default)() : _options$captionAttri;
+	    var _options$includeImgix = options.includeImgixJSClass;
+	    var includeImgixJSClass = _options$includeImgix === undefined ? false : _options$includeImgix;
+	
+	
+	    this.settings = { namespace: namespace, parentEl: parentEl, triggerEl: triggerEl, sourceAttribute: sourceAttribute, captionAttribute: captionAttribute, includeImgixJSClass: includeImgixJSClass };
+	
+	    if (!(0, _dom.isDOMElement)(this.settings.parentEl)) {
+	      throw new TypeError('`new Lightbox` requires a DOM element passed as `parentEl`.');
+	    }
+	
+	    this.openClasses = this._buildClasses('open');
+	    this.openingClasses = this._buildClasses('opening');
+	    this.closingClasses = this._buildClasses('closing');
+	
+	    this.elementBuilt = false;
+	  }
+	
+	  _createClass(Lightbox, [{
+	    key: '_buildClasses',
+	    value: function _buildClasses(suffix) {
+	      var classes = ['lum-' + suffix];
+	
+	      var ns = this.settings.namespace;
+	      if (ns) {
+	        classes.push(ns + '-' + suffix);
+	      }
+	
+	      return classes;
+	    }
+	  }, {
+	    key: '_buildElement',
+	    value: function _buildElement() {
+	      this.el = document.createElement('div');
+	      (0, _dom.addClasses)(this.el, this._buildClasses('lightbox'));
+	
+	      this.innerEl = document.createElement('div');
+	      (0, _dom.addClasses)(this.innerEl, this._buildClasses('lightbox-inner'));
+	      this.el.appendChild(this.innerEl);
+	
+	      var loaderEl = document.createElement('div');
+	      (0, _dom.addClasses)(loaderEl, this._buildClasses('lightbox-loader'));
+	      this.innerEl.appendChild(loaderEl);
+	
+	      this.imgWrapperEl = document.createElement('div');
+	      (0, _dom.addClasses)(this.imgWrapperEl, this._buildClasses('lightbox-image-wrapper'));
+	      this.innerEl.appendChild(this.imgWrapperEl);
+	
+	      var positionHelperEl = document.createElement('span');
+	      (0, _dom.addClasses)(positionHelperEl, this._buildClasses('lightbox-position-helper'));
+	      this.imgWrapperEl.appendChild(positionHelperEl);
+	
+	      this.imgEl = document.createElement('img');
+	      positionHelperEl.appendChild(this.imgEl);
+	
+	      this.captionEl = document.createElement('p');
+	      (0, _dom.addClasses)(this.captionEl, this._buildClasses('lightbox-caption'));
+	      positionHelperEl.appendChild(this.captionEl);
+	
+	      this.settings.parentEl.appendChild(this.el);
+	
+	      this._updateImgSrc();
+	      this._updateCaption();
+	
+	      if (this.settings.includeImgixJSClass) {
+	        this.imgEl.classList.add('imgix-fluid');
+	      }
+	    }
+	  }, {
+	    key: '_updateCaption',
+	    value: function _updateCaption() {
+	      var captionAttr = this.settings.captionAttribute;
+	      if (captionAttr) {
+	        this.captionEl.innerText = this.settings.triggerEl.getAttribute(captionAttr);
+	      }
+	    }
+	  }, {
+	    key: '_updateImgSrc',
+	    value: function _updateImgSrc() {
+	      var imageURL = this.settings.triggerEl.getAttribute(this.settings.sourceAttribute);
+	
+	      if (!imageURL) {
+	        throw new Error('No image URL was found in the ' + this.settings.sourceAttribute + ' attribute of the trigger.');
+	      }
+	
+	      this.imgEl.setAttribute('src', imageURL);
+	    }
+	  }, {
+	    key: 'open',
+	    value: function open() {
+	      if (!this.elementBuilt) {
+	        this._buildElement();
+	        this.elementBuilt = true;
+	      }
+	
+	      // Make sure to re-set the `img` `src`, in case it's been changed
+	      // by someone/something else.
+	      this._updateImgSrc();
+	      this._updateCaption();
+	
+	      (0, _dom.addClasses)(this.el, this.openClasses);
+	
+	      this._sizeImgWrapperEl();
+	      window.addEventListener('resize', this._sizeImgWrapperEl, false);
+	
+	      if (HAS_ANIMATION) {
+	        this.el.addEventListener('animationend', this._completeOpen, false);
+	        (0, _dom.addClasses)(this.el, this.openingClasses);
+	      }
+	    }
+	  }, {
+	    key: 'close',
+	    value: function close() {
+	      window.removeEventListener('resize', this._sizeImgWrapperEl, false);
+	
+	      if (HAS_ANIMATION) {
+	        this.el.addEventListener('animationend', this._completeClose, false);
+	        (0, _dom.addClasses)(this.el, this.closingClasses);
+	      } else {
+	        (0, _dom.removeClasses)(this.el, this.openClasses);
+	      }
+	    }
+	  }, {
+	    key: 'destroy',
+	    value: function destroy() {
+	      this.settings.parentEl.removeChild(this.el);
+	    }
+	  }]);
+	
+	  return Lightbox;
+	}();
+	
+	exports.default = Lightbox;
+	
+	},{"./util/dom":4,"./util/throwIfMissing":5}],2:[function(require,module,exports){
+	'use strict';
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _class, _temp, _initialiseProps;
+	
+	var _dom = require('./util/dom');
+	
+	var _injectBaseStylesheet = require('./injectBaseStylesheet');
+	
+	var _injectBaseStylesheet2 = _interopRequireDefault(_injectBaseStylesheet);
+	
+	var _Lightbox = require('./Lightbox');
+	
+	var _Lightbox2 = _interopRequireDefault(_Lightbox);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	module.exports = (_temp = _class = function () {
+	  function Luminous(trigger) {
+	    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	
+	    _classCallCheck(this, Luminous);
+	
+	    _initialiseProps.call(this);
+	
+	    this.isOpen = false;
+	
+	    this.trigger = trigger;
+	
+	    if (!(0, _dom.isDOMElement)(this.trigger)) {
+	      throw new TypeError('`new Luminous` requires a DOM element as its first argument.');
+	    }
+	
+	    // A bit unexpected if you haven't seen this pattern before.
+	    // Based on the pattern here:
+	    // https://github.com/getify/You-Dont-Know-JS/blob/master/es6%20&%20beyond/ch2.md#nested-defaults-destructured-and-restructured
+	    var _options$namespace = options.namespace;
+	    var
+	    // Prefix for generated element class names (e.g. `my-ns` will
+	    // result in classes such as `my-ns-lightbox`. Default `lum-`
+	    // prefixed classes will always be added as well.
+	    namespace = _options$namespace === undefined ? null : _options$namespace;
+	    var _options$sourceAttrib = options.sourceAttribute;
+	    var
+	    // Which attribute to pull the lightbox image source from.
+	    sourceAttribute = _options$sourceAttrib === undefined ? 'href' : _options$sourceAttrib;
+	    var _options$captionAttri = options.captionAttribute;
+	    var
+	    // Which attribute to pull the caption from, if any.
+	    captionAttribute = _options$captionAttri === undefined ? null : _options$captionAttri;
+	    var _options$openTrigger = options.openTrigger;
+	    var
+	    // The event to listen to on the _trigger_ element: triggers opening.
+	    openTrigger = _options$openTrigger === undefined ? 'click' : _options$openTrigger;
+	    var _options$closeTrigger = options.closeTrigger;
+	    var
+	    // The event to listen to on the _lightbox_ element: triggers closing.
+	    closeTrigger = _options$closeTrigger === undefined ? 'click' : _options$closeTrigger;
+	    var _options$closeWithEsc = options.closeWithEscape;
+	    var
+	    // Allow closing by pressing escape.
+	    closeWithEscape = _options$closeWithEsc === undefined ? true : _options$closeWithEsc;
+	    var _options$closeOnScrol = options.closeOnScroll;
+	    var
+	    // Automatically close when the page is scrolled.
+	    closeOnScroll = _options$closeOnScrol === undefined ? false : _options$closeOnScrol;
+	    var _options$appendToSele = options.appendToSelector;
+	    var
+	    // A selector defining what to append the lightbox element to.
+	    appendToSelector = _options$appendToSele === undefined ? 'body' : _options$appendToSele;
+	    var _options$onOpen = options.onOpen;
+	    var
+	    // If present (and a function), this will be called
+	    // whenever the lightbox is opened.
+	    onOpen = _options$onOpen === undefined ? null : _options$onOpen;
+	    var _options$onClose = options.onClose;
+	    var
+	    // If present (and a function), this will be called
+	    // whenever the lightbox is closed.
+	    onClose = _options$onClose === undefined ? null : _options$onClose;
+	    var _options$includeImgix = options.includeImgixJSClass;
+	    var
+	    // When true, adds the `imgix-fluid` class to the `img`
+	    // inside the lightbox. See https://github.com/imgix/imgix.js
+	    // for more information.
+	    includeImgixJSClass = _options$includeImgix === undefined ? false : _options$includeImgix;
+	    var _options$injectBaseSt = options.injectBaseStyles;
+	    var
+	    // Add base styles to the page. See the "Theming"
+	    // section of README.md for more information.
+	    injectBaseStyles = _options$injectBaseSt === undefined ? true : _options$injectBaseSt;
+	
+	
+	    this.settings = { namespace: namespace, sourceAttribute: sourceAttribute, captionAttribute: captionAttribute, openTrigger: openTrigger, closeTrigger: closeTrigger, closeWithEscape: closeWithEscape, closeOnScroll: closeOnScroll, appendToSelector: appendToSelector, onOpen: onOpen, onClose: onClose, includeImgixJSClass: includeImgixJSClass, injectBaseStyles: injectBaseStyles };
+	
+	    if (this.settings.injectBaseStyles) {
+	      (0, _injectBaseStylesheet2.default)();
+	    }
+	
+	    this._buildLightbox();
+	    this._bindEvents();
+	  }
+	
+	  _createClass(Luminous, [{
+	    key: '_buildLightbox',
+	    value: function _buildLightbox() {
+	      this.lightbox = new _Lightbox2.default({
+	        namespace: this.settings.namespace,
+	        parentEl: document.querySelector(this.settings.appendToSelector),
+	        triggerEl: this.trigger,
+	        sourceAttribute: this.settings.sourceAttribute,
+	        captionAttribute: this.settings.captionAttribute,
+	        includeImgixJSClass: this.settings.includeImgixJSClass
+	      });
+	    }
+	  }, {
+	    key: '_bindEvents',
+	    value: function _bindEvents() {
+	      this.trigger.addEventListener(this.settings.openTrigger, this.open, false);
+	
+	      if (this.settings.closeWithEscape) {
+	        window.addEventListener('keyup', this._handleKeyup, false);
+	      }
+	    }
+	  }, {
+	    key: '_bindCloseEvent',
+	    value: function _bindCloseEvent() {
+	      this.lightbox.el.addEventListener(this.settings.closeTrigger, this.close, false);
+	    }
+	  }, {
+	    key: '_unbindEvents',
+	    value: function _unbindEvents() {
+	      this.trigger.removeEventListener(this.settings.openTrigger, this.open, false);
+	      this.lightbox.el.removeEventListener(this.settings.closeTrigger, this.close, false);
+	
+	      if (this.settings.closeWithEscape) {
+	        window.removeEventListener('keyup', this._handleKeyup, false);
+	      }
+	    }
+	  }]);
+	
+	  return Luminous;
+	}(), _initialiseProps = function _initialiseProps() {
+	  var _this = this;
+	
+	  this.VERSION = '0.2.6';
+	
+	  this.open = function (e) {
+	    if (e && typeof e.preventDefault === 'function') {
+	      e.preventDefault();
+	    }
+	
+	    var previouslyBuilt = _this.lightbox.elementBuilt;
+	
+	    _this.lightbox.open();
+	
+	    if (!previouslyBuilt) {
+	      _this._bindCloseEvent();
+	    }
+	
+	    if (_this.settings.closeOnScroll) {
+	      window.addEventListener('scroll', _this.close, false);
+	    }
+	
+	    var onOpen = _this.settings.onOpen;
+	    if (onOpen && typeof onOpen === 'function') {
+	      onOpen();
+	    }
+	
+	    _this.isOpen = true;
+	  };
+	
+	  this.close = function (e) {
+	    if (e && typeof e.preventDefault === 'function') {
+	      e.preventDefault();
+	    }
+	
+	    if (_this.settings.closeOnScroll) {
+	      window.removeEventListener('scroll', _this.close, false);
+	    }
+	
+	    _this.lightbox.close();
+	
+	    var onClose = _this.settings.onClose;
+	    if (onClose && typeof onClose === 'function') {
+	      onClose();
+	    }
+	
+	    _this.isOpen = false;
+	  };
+	
+	  this._handleKeyup = function (e) {
+	    if (_this.isOpen && e.keyCode === 27) {
+	      _this.close();
+	    }
+	  };
+	
+	  this.destroy = function () {
+	    _this._unbindEvents();
+	    _this.lightbox.destroy();
+	  };
+	}, _temp);
+	
+	},{"./Lightbox":1,"./injectBaseStylesheet":3,"./util/dom":4}],3:[function(require,module,exports){
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = injectBaseStylesheet;
+	var RULES = '\n@keyframes lum-noop {\n  0% { zoom: 1; }\n}\n\n.lum-lightbox {\n  position: fixed;\n  display: none;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n}\n\n.lum-lightbox.lum-open {\n  display: block;\n}\n\n.lum-lightbox.lum-opening, .lum-lightbox.lum-closing {\n  animation: lum-noop 1ms;\n}\n\n.lum-lightbox-inner {\n  position: absolute;\n  top: 0%;\n  right: 0%;\n  bottom: 0%;\n  left: 0%;\n\n  overflow: hidden;\n}\n\n.lum-lightbox-loader {\n  display: none;\n}\n\n.lum-lightbox-inner img {\n  max-width: 100%;\n  max-height: 100%;\n}\n\n.lum-lightbox-image-wrapper {\n  vertical-align: middle;\n  display: table-cell;\n  text-align: center;\n}\n';
+	
+	function injectBaseStylesheet() {
+	  if (document.querySelector('.lum-base-styles')) {
+	    return;
+	  }
+	
+	  var styleEl = document.createElement('style');
+	  styleEl.type = 'text/css';
+	  styleEl.classList.add('lum-base-styles');
+	
+	  styleEl.appendChild(document.createTextNode(RULES));
+	
+	  var head = document.head;
+	  head.insertBefore(styleEl, head.firstChild);
+	}
+	
+	},{}],4:[function(require,module,exports){
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
+	exports.isDOMElement = isDOMElement;
+	exports.addClasses = addClasses;
+	exports.removeClasses = removeClasses;
+	// This is not really a perfect check, but works fine.
+	// From http://stackoverflow.com/questions/384286
+	var HAS_DOM_2 = (typeof HTMLElement === 'undefined' ? 'undefined' : _typeof(HTMLElement)) === 'object';
+	
+	function isDOMElement(obj) {
+	  return HAS_DOM_2 ? obj instanceof HTMLElement : obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && obj !== null && obj.nodeType === 1 && typeof obj.nodeName === 'string';
+	}
+	
+	function addClasses(el, classNames) {
+	  classNames.forEach(function (className) {
+	    el.classList.add(className);
+	  });
+	}
+	
+	function removeClasses(el, classNames) {
+	  classNames.forEach(function (className) {
+	    el.classList.remove(className);
+	  });
+	}
+	
+	},{}],5:[function(require,module,exports){
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = throwIfMissing;
+	function throwIfMissing() {
+	  throw new Error('Missing parameter');
+	}
+	
+	},{}]},{},[2])(2)
+	});
+
+/***/ },
+
+/***/ 349:
 /***/ function(module, exports) {
 
 	module.exports = "@font-face {\n\tfont-family:\"TeXGyreAdventor\";\n\tsrc:url(\"./fnt/texgyreadventor-regular.woff\") format(\"woff\"),url(\"./fnt/texgyreadventor-regular.ttf\") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n@font-face {\n\tfont-family:\"Droid-sans\";\n\tsrc:url(\"./fnt/DroidSans.ttf\") format(\"truetype\"),url(\"./fnt/DroidSans-Bold.ttf\") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n@font-face {\n\tfont-family:\"steinemu\";\n\tsrc:url(\"./fnt/STEINEMU.ttf\") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n\n@media (max-width: 750px) {\n\t.row {\n\t\t-webkit-box-orient: vertical;\n\t\t-webkit-box-direction: normal;\n\t\t-webkit-flex-direction: column;\n\t\t    -ms-flex-direction: column;\n\t\t        flex-direction: column;\n\t}\n\t.row > * {\n\t\tmargin: 10 auto 0 auto !important;\n\t}\n\n\n\tsection {\n\t\theight: auto !important;\n\t\tpadding: 15px;\n\t}\n\n\n\tsection > .content .full-image {\n\t\theight: 50% !important;\n\t\t/*width: 100% !important;*/\n\t}\n\n}\n/* \n@media (max-height: 800px) {\n\t.vid-box {\n\t}\n\n}\n\n@media (max-width: 1350px) {\n\t.vid-box {\n\n\t}\n} */\n@-webkit-keyframes float{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -10px);\n\t\t        transform: translate(0, -10px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n@keyframes float{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -10px);\n\t\t        transform: translate(0, -10px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n\n@-webkit-keyframes float-small{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -5px);\n\t\t        transform: translate(0, -5px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n\n@keyframes float-small{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -5px);\n\t\t        transform: translate(0, -5px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n\n@-webkit-keyframes sprite{\n  from { background-position:0 0%; }\n  to { background-position:0 100%; }\n}\n\n@keyframes sprite{\n  from { background-position:0 0%; }\n  to { background-position:0 100%; }\n}\n\nbody {\n\twidth: 100%;\n\tmargin: 0px;\n\tpadding: 0px;\n\tfont-family: Helvetica; \n}\n\n\nsection {\n\twidth: 100%;\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\theight: 50vh;\n\t-webkit-transform-style: preserve-3d;\n\t        transform-style: preserve-3d;\n\tposition: relative;\n\tfont-size: 1.1em;\n\tbackground-color: #00AFEF; \n\tcolor: white;\n}\n\n\nsection > .content.show {\n\topacity: 1 !important;\n}\n\n\nsection > .content {\n\t/*background-color: white;*/\n\t/* border-top: 2px solid black;\n\t\tborder-bottom: 2px solid black; */\n\tmargin: auto;\n\t-webkit-box-flex: 1;\n\t-webkit-flex: 1 1;\n\t    -ms-flex: 1 1;\n\t        flex: 1 1;\n\ttext-align: center;\n\t-webkit-transition:opacity 1.5s;\n\ttransition: opacity 1.5s;\n}\n\n\nsection > .content .icon {\n\theight: 35vh;\n\twidth: 35vh;\n\tdisplay: inline-block;\n\tmargin-right: 10px;\n\t-webkit-transition:opacity 0.5s;\n\ttransition: opacity 0.5s\n}\n\n\nsection > .content .icon.animated {\n\t-webkit-animation:sprite 1.5s steps(26) infinite;\n\t        animation:sprite 1.5s steps(26) infinite;\n\t-webkit-transform:translateX(0px);\n\t        transform:translateX(0px);\n}\n\n\nsection > .content .full-image {\n\theight: 100%;\n\t-webkit-animation-name: float-small;\n\t        animation-name: float-small;\n\t-webkit-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-duration: 3s;\n\t        animation-duration: 3s;\n\t-webkit-animation-timing-function: ease-in-out;\n\t        animation-timing-function: ease-in-out;\n}\n\n\nsection > .content h1 {\n\tfont-size: 3em;\n\tfont-family: steinemu;\n\tletter-spacing: 2px;\n}\n\n\nsection > .content > .row {\n\tmargin: 0 10% 0 10%;\n}\n\n\nsection > .content > .row > .icon {\n\t/* flex: 1; */\n}\n\n\nsection > .content > .row > p {\n\tfont-size: 1.1em;\n\t-webkit-box-flex: 5;\n\t-webkit-flex: 5;\n\t    -ms-flex: 5;\n\t        flex: 5;\n\t-webkit-align-self: center;\n\t    -ms-flex-item-align: center;\n\t        align-self: center;\n\ttext-align: left;\n\ttext-shadow: 0 0 3px #000;\n\tletter-spacing: 1px;\n}\n\n\nsection > .content > .row.wrap {\n\t-webkit-flex-wrap:wrap;\n\t    -ms-flex-wrap:wrap;\n\t        flex-wrap:wrap;\n}\n\n\nsection.paralax {\n\tmin-height:500px;\n\tbackground-image:url(\"./img/Background.jpg\");\n\tbackground-position:center;\n\tbackground-repeat:no-repeat;\n\tbackground-attachment:fixed;\n\tbackground-size:cover;\n}\n\n\nsection.paralax h1 {\n\t-webkit-animation-name:float;\n\t        animation-name:float;\n\t-webkit-animation-iteration-count:infinite;\n\t        animation-iteration-count:infinite;\n\t-webkit-animation-duration:3s;\n\t        animation-duration:3s;\n\t-webkit-animation-timing-function:ease-in-out;\n\t        animation-timing-function:ease-in-out;\n}\n\n\n#flexibility .icon {\n\tbackground:  url(\"./img/home_page/guvkavost_sprite.png\");\n\tbackground-size: 100%;\n}\n\n.row {\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\t-webkit-box-pack: center;\n\t-webkit-justify-content: center;\n\t    -ms-flex-pack: center;\n\t        justify-content: center;\n}\n\n.row > * {}\n\na {\n\tcolor: blue;\n\tcursor: pointer;\n}\n\n.static > * {\n\tposition: fixed;\n}\n\n.static > #to-game {\n\tright: 50px;\n\tbottom: -34px;\n\tpadding: 6px 12px 6px 12px;\n\tdisplay: block;\n\tfont-size: 1.2em;\n\tcolor: #444;\n\tbackground-color: #0096CC;\n\t-webkit-transition:color 0.1s;\n\ttransition: color 0.1s;\n\ttext-decoration: none;\n\t/* border-bottom: 2px black solid; */\n\t-webkit-perspective: 800px;\n\t        perspective: 800px;\n\t-webkit-transition:all 0.5s;\n\ttransition: all 0.5s;\n\topacity: 0;\n\tfont-weight: bold\n}\n\n.static > #to-game.show {\n\tbottom:40px;\n\topacity:1;\n}\n\n.static > #to-game:hover {\n\tcolor:white;\n}\n\n.static > #to-game:before {\n\tcontent:\"\";\n\tposition:absolute;\n\tbackground:#444;\n\tbottom:0;\n\tleft:0;\n\tright:0;\n\ttop:0;\n\tz-index:-1;\n\t/* border-radius: 3px; */\n\t-webkit-transform:rotatex( 90deg );\n\t        transform:rotatex( 90deg );\n\t-webkit-transform-origin:bottom;\n\t        transform-origin:bottom;\n\t-webkit-transition:-webkit-transform 0.15s ease-in;\n\ttransition:-webkit-transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in, -webkit-transform 0.15s ease-in;\n}\n\n.static > #to-game:hover:before {\n\tright:0;\n\t-webkit-transform:rotatex( 0deg );\n\t        transform:rotatex( 0deg );\n}\n\n.static .vid-box\n\t{\n\ttop: 50vh;\n\t-webkit-transform: translateY(-22.5vw);\n\t        transform: translateY(-22.5vw);\n\tleft: 10vw;\n\twidth: 80vw;\n\topacity: 0;\n\tdisplay: none\n}\n\n.static .vid-box.display {\n\tdisplay:block;\n}\n\n.static .vid-box.show {\n\topacity:1;\n}\n\n.static #close {\n\ttop: calc(50vh - 22.5vw - 80px);\n\tright: 10vw;\n\t-webkit-transform: translateX(93px) scale(0.5, 0.5);\n\t        transform: translateX(93px) scale(0.5, 0.5);\n\tbackground-color: #444;\n\t/* transform: translateX(80px) translateY(-22.5vw) translateY(-80px) scale(0.5, 0.5); */\n\tborder-radius: 80px;\n\tdisplay: none\n}\n\n.static #close:hover {\n\tbackground-color:#bbb;\n}\n\n.static #close.show {\n\tdisplay:block;\n}\n\n\n.thumb {\n\theight: 200px;\n\tmargin: 10px;\n\tcursor: pointer;\n}\n\n#landing {\n\theight: 100vh !important;\n}\n\n#landing > .content {\n\topacity: 0;\n}\n\n#landing a {\n\tdisplay: block;\n\tposition: absolute;\n\tmargin: 0px;\n\t-webkit-transform: rotate(180deg);\n\t        transform: rotate(180deg);\n\tbottom: 0px;\n\tleft: calc(50% - 80px);\n\tcursor: pointer;\n}\n\n/* transition: all .3s; */\n\n#landing a img {\n\tz-index: 11;\n\t-webkit-transition:all .3s;\n\ttransition: all .3s;\n\t/* \t\t\twidth: 160px;\n\t\t\theight: 160px; */\n}\n\n/* left: calc(50% - 90px); */\n\n#landing a:hover img {\n\t/* \t\t\twidth: 180px;\n\t\t\theight: 180px; */\n\t-webkit-transform: scale(1.3);\n\t        transform: scale(1.3);\n}\n\n/*#logo {\n\t\tposition: absolute;\n\t\ttop: calc(50vh - 720px/2);\n\t\tleft: calc(50vw - 1280px/2);\n\t}\n*/\n\n#landing #logo {\n\tposition: absolute;\n\ttop: 50vh;\n\t-webkit-transform: translate(-640px, -360px) scale(1);\n\t        transform: translate(-640px, -360px) scale(1);\n\tleft: 50vw;\n\t-webkit-transition:all .5s;\n\ttransition: all .5s;\n\tz-index: -1;\n}\n\n#landing #logo.hidden {\n\t-webkit-transform: translate(-640px, -360px) scale(0);\n\t        transform: translate(-640px, -360px) scale(0);\n}\n\n#landing h1, #landing h2{\n\tfont-family: steinemu, Verdana, sans-serif;\n\tcolor: white;\n\tz-index: 10;\n}\n\n#landing h1 {\n\tfont-size: 4em;\n\tmargin: 0px;\n\t-webkit-animation-name: float;\n\t        animation-name: float;\n\t-webkit-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-duration: 3s;\n\t        animation-duration: 3s;\n\t-webkit-animation-timing-function: ease-in-out;\n\t        animation-timing-function: ease-in-out;\n}\n\n#landing h2 {}\n\n.button {\n\tfont-weight: bold;\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\twidth: 200px;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition:background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor, Verdana, sans-serif;\n\tfont-size: 2em;\n}\n\n.button:hover{\n\tbackground-color: #444;\n\tcolor: white;\n}\n\n\n.button-small {\n\tfont-size: 1em;\n\twidth: 200px;\n\n}\n\n.button-large {\n\tfont-size: 1.5em;\n\twidth: 300px;\n\n}\n\n.button-slide {\n\ttext-decoration: inherit;\n\ttext-align: center;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\tbackground-image: -webkit-linear-gradient(#444, #444);\n\tbackground-image: linear-gradient(#444, #444);\n\tbackground-position: 50% 50%;\n\tbackground-size: 100% 0%;\n\tbackground-repeat: no-repeat;\n\t-webkit-transition:background-size .3s, color .3s;\n\ttransition: background-size .3s, color .3s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n\tfont-weight: bold;\n}\n\na {\n\tcolor: #000;\n\ttext-shadow: none;\n}\n\n\n.button-slide:hover{\n\tbackground-size: 100% 100%;\n\tcolor: #FFF;\n}\n\n\n.button-black {\n\tfont-weight: bold;\n\tfont-size: 1.5em;\n\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\twidth: 400px;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition:background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n}\n\n.button-black:hover{\n\tbackground-color: #444;\n\tcolor: white;\n}\n\n\n.text {\n\tbackground-color: blue;\n}\n\n.button-3d {\n\tfont-weight: bold;\n\tfont-size: 1.5em;\n\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\twidth: 400px;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition:background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n\t-webkit-perspective: 800px;\n\t        perspective: 800px\n}\n\n.button-3d:hover {\n\tcolor:white;\n}\n\n.button-3d:before {\n\tcontent:\"\";\n\tposition:absolute;\n\tbackground:#444;\n\tbottom:0;\n\tleft:0;\n\tright:0;\n\ttop:0;\n\tz-index:-1;\n\t/* border-radius: 3px; */\n\t-webkit-transform:rotatex( 90deg );\n\t        transform:rotatex( 90deg );\n\t-webkit-transform-origin:bottom;\n\t        transform-origin:bottom;\n\t-webkit-transition:-webkit-transform 0.15s ease-in;\n\ttransition:-webkit-transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in, -webkit-transform 0.15s ease-in;\n}\n\n.button-3d:hover:before {\n\tright:0;\n\t-webkit-transform:rotatex( 0deg );\n\t        transform:rotatex( 0deg );\n}\n\n.button-3d:hover{\n\tbackground-color: #444;\n\tcolor: white;\n}\n\n\n\n\n#sources {\n\tdisplay: none;\n\t-webkit-box-orient: vertical;\n\t-webkit-box-direction: normal;\n\t-webkit-flex-direction: column;\n\t    -ms-flex-direction: column;\n\t        flex-direction: column;\n}\n\n\n\n\n#sources > * {\n\ttext-align: left;\n\tmargin: auto;\n\t-webkit-box-flex:1;\n\t-webkit-flex:1;\n\t    -ms-flex:1;\n\t        flex:1;\n}\n\n\n\n\n/*\n Luminous css\n*/\n\n@-webkit-keyframes lum-fade {\n  0% { opacity: 0; }\n  100% { opacity: 1; }\n}\n\n@keyframes lum-fade {\n  0% { opacity: 0; }\n  100% { opacity: 1; }\n}\n\n@-webkit-keyframes lum-fadeZoom {\n  0% { -webkit-transform: scale(0.5); transform: scale(0.5); opacity: 0; }\n  100% { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }\n}\n\n@keyframes lum-fadeZoom {\n  0% { -webkit-transform: scale(0.5); transform: scale(0.5); opacity: 0; }\n  100% { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }\n}\n\n@-webkit-keyframes lum-loader-rotate {\n  0% { -webkit-transform: translate(-50%, -50%) rotate(0); transform: translate(-50%, -50%) rotate(0); }\n  50% { -webkit-transform: translate(-50%, -50%) rotate(-180deg); transform: translate(-50%, -50%) rotate(-180deg); }\n  100% { -webkit-transform: translate(-50%, -50%) rotate(-360deg); transform: translate(-50%, -50%) rotate(-360deg); }\n}\n\n@keyframes lum-loader-rotate {\n  0% { -webkit-transform: translate(-50%, -50%) rotate(0); transform: translate(-50%, -50%) rotate(0); }\n  50% { -webkit-transform: translate(-50%, -50%) rotate(-180deg); transform: translate(-50%, -50%) rotate(-180deg); }\n  100% { -webkit-transform: translate(-50%, -50%) rotate(-360deg); transform: translate(-50%, -50%) rotate(-360deg); }\n}\n\n@-webkit-keyframes lum-loader-before {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  25% { -webkit-transform: scale(1.3) translateX(8px); transform: scale(1.3) translateX(8px); }\n  40% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  75% { -webkit-transform: scale(0.7) translateX(8px); transform: scale(0.7) translateX(8px); }\n  90% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n@keyframes lum-loader-before {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  25% { -webkit-transform: scale(1.3) translateX(8px); transform: scale(1.3) translateX(8px); }\n  40% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  75% { -webkit-transform: scale(0.7) translateX(8px); transform: scale(0.7) translateX(8px); }\n  90% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n@-webkit-keyframes lum-loader-after {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  25% { -webkit-transform: scale(1.3) translateX(-8px); transform: scale(1.3) translateX(-8px); }\n  40% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  75% { -webkit-transform: scale(0.7) translateX(-8px); transform: scale(0.7) translateX(-8px); }\n  90% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n@keyframes lum-loader-after {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  25% { -webkit-transform: scale(1.3) translateX(-8px); transform: scale(1.3) translateX(-8px); }\n  40% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  75% { -webkit-transform: scale(0.7) translateX(-8px); transform: scale(0.7) translateX(-8px); }\n  90% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n.lum-lightbox {\n  background: rgba(0, 0, 0, 0.6);\n}\n\n.lum-lightbox-inner {\n  top: 2.5%;\n  right: 2.5%;\n  bottom: 2.5%;\n  left: 2.5%;\n}\n\n.lum-lightbox-inner img {\n  position: relative;\n    cursor: zoom-out;\n  \n}\n\n.lum-lightbox-inner .lum-lightbox-caption {\n  margin: 0 auto;\n  color: #fff;\n  max-width: 700px;\n  text-align: center;\n}\n\n.lum-lightbox-loader {\n  display: block;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  width: 66px;\n  height: 20px;\n  -webkit-animation: lum-loader-rotate 1800ms infinite linear;\n          animation: lum-loader-rotate 1800ms infinite linear;\n}\n\n.lum-lightbox-loader:before, .lum-lightbox-loader:after {\n  content: \"\";\n  display: block;\n  width: 20px;\n  height: 20px;\n  position: absolute;\n  top: 50%;\n  margin-top: -10px;\n  border-radius: 20px;\n  background: rgba(255, 255, 255, 0.9);\n}\n\n.lum-lightbox-loader:before {\n  left: 0;\n  -webkit-animation: lum-loader-before 1800ms infinite linear;\n          animation: lum-loader-before 1800ms infinite linear;\n}\n\n.lum-lightbox-loader:after {\n  right: 0;\n  -webkit-animation: lum-loader-after 1800ms infinite linear;\n          animation: lum-loader-after 1800ms infinite linear;\n  -webkit-animation-delay: -900ms;\n          animation-delay: -900ms;\n}\n\n.lum-lightbox.lum-opening {\n  -webkit-animation: lum-fade 180ms ease-out;\n          animation: lum-fade 180ms ease-out;\n}\n\n.lum-lightbox.lum-opening .lum-lightbox-inner {\n  -webkit-animation: lum-fadeZoom 180ms ease-out;\n          animation: lum-fadeZoom 180ms ease-out;\n}\n\n.lum-lightbox.lum-closing {\n  -webkit-animation: lum-fade 300ms ease-in;\n          animation: lum-fade 300ms ease-in;\n  -webkit-animation-direction: reverse;\n          animation-direction: reverse;\n}\n\n.lum-lightbox.lum-closing .lum-lightbox-inner {\n  -webkit-animation: lum-fadeZoom 300ms ease-in;\n          animation: lum-fadeZoom 300ms ease-in;\n  -webkit-animation-direction: reverse;\n          animation-direction: reverse;\n}\n\n/* This media query makes screens less than 460px wide display in a \"fullscreen\"-esque mode. Users can then scroll around inside the lightbox to see the entire image. */\n@media (max-width: 460px) {\n  .lum-lightbox-image-wrapper {\n    display: block;\n    overflow: auto;\n    -webkit-overflow-scrolling: touch;\n  }\n\n  .lum-lightbox-caption {\n    width: 100%;\n    position: absolute;\n    bottom: 0;\n  }\n\n  .lum-lightbox-inner img {\n    max-width: none;\n    max-height: none;\n    display: block;\n  }\n}\n"
 
 /***/ },
 
-/***/ 503:
+/***/ 496:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(356);
+	var content = __webpack_require__(349);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(142)(content, {});
+	var update = __webpack_require__(141)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -938,7 +1411,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 507:
+/***/ 500:
 /***/ function(module, exports) {
 
 	/*!
@@ -1686,483 +2159,6 @@ webpackJsonp([2],{
 	  Waypoint.Adapter = NoFrameworkAdapter
 	}())
 	;
-
-/***/ },
-
-/***/ 513:
-/***/ function(module, exports, __webpack_require__) {
-
-	var require;var require;(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Luminous = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _dom = require('./util/dom');
-	
-	var _throwIfMissing = require('./util/throwIfMissing');
-	
-	var _throwIfMissing2 = _interopRequireDefault(_throwIfMissing);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	// All officially-supported browsers have this, but it's easy to
-	// account for, just in case.
-	var HAS_ANIMATION = typeof document === 'undefined' ? false : 'animation' in document.createElement('div').style;
-	
-	var Lightbox = function () {
-	  function Lightbox() {
-	    var _this = this;
-	
-	    var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	
-	    _classCallCheck(this, Lightbox);
-	
-	    this._sizeImgWrapperEl = function () {
-	      var style = _this.imgWrapperEl.style;
-	      style.width = _this.innerEl.clientWidth + 'px';
-	      style.maxWidth = _this.innerEl.clientWidth + 'px';
-	      style.height = _this.innerEl.clientHeight - _this.captionEl.clientHeight + 'px';
-	      style.maxHeight = _this.innerEl.clientHeight - _this.captionEl.clientHeight + 'px';
-	    };
-	
-	    this._completeOpen = function () {
-	      _this.el.removeEventListener('animationend', _this._completeOpen, false);
-	
-	      (0, _dom.removeClasses)(_this.el, _this.openingClasses);
-	    };
-	
-	    this._completeClose = function () {
-	      _this.el.removeEventListener('animationend', _this._completeClose, false);
-	
-	      (0, _dom.removeClasses)(_this.el, _this.openClasses);
-	      (0, _dom.removeClasses)(_this.el, _this.closingClasses);
-	    };
-	
-	    var _options$namespace = options.namespace;
-	    var namespace = _options$namespace === undefined ? null : _options$namespace;
-	    var _options$parentEl = options.parentEl;
-	    var parentEl = _options$parentEl === undefined ? (0, _throwIfMissing2.default)() : _options$parentEl;
-	    var _options$triggerEl = options.triggerEl;
-	    var triggerEl = _options$triggerEl === undefined ? (0, _throwIfMissing2.default)() : _options$triggerEl;
-	    var _options$sourceAttrib = options.sourceAttribute;
-	    var sourceAttribute = _options$sourceAttrib === undefined ? (0, _throwIfMissing2.default)() : _options$sourceAttrib;
-	    var _options$captionAttri = options.captionAttribute;
-	    var captionAttribute = _options$captionAttri === undefined ? (0, _throwIfMissing2.default)() : _options$captionAttri;
-	    var _options$includeImgix = options.includeImgixJSClass;
-	    var includeImgixJSClass = _options$includeImgix === undefined ? false : _options$includeImgix;
-	
-	
-	    this.settings = { namespace: namespace, parentEl: parentEl, triggerEl: triggerEl, sourceAttribute: sourceAttribute, captionAttribute: captionAttribute, includeImgixJSClass: includeImgixJSClass };
-	
-	    if (!(0, _dom.isDOMElement)(this.settings.parentEl)) {
-	      throw new TypeError('`new Lightbox` requires a DOM element passed as `parentEl`.');
-	    }
-	
-	    this.openClasses = this._buildClasses('open');
-	    this.openingClasses = this._buildClasses('opening');
-	    this.closingClasses = this._buildClasses('closing');
-	
-	    this.elementBuilt = false;
-	  }
-	
-	  _createClass(Lightbox, [{
-	    key: '_buildClasses',
-	    value: function _buildClasses(suffix) {
-	      var classes = ['lum-' + suffix];
-	
-	      var ns = this.settings.namespace;
-	      if (ns) {
-	        classes.push(ns + '-' + suffix);
-	      }
-	
-	      return classes;
-	    }
-	  }, {
-	    key: '_buildElement',
-	    value: function _buildElement() {
-	      this.el = document.createElement('div');
-	      (0, _dom.addClasses)(this.el, this._buildClasses('lightbox'));
-	
-	      this.innerEl = document.createElement('div');
-	      (0, _dom.addClasses)(this.innerEl, this._buildClasses('lightbox-inner'));
-	      this.el.appendChild(this.innerEl);
-	
-	      var loaderEl = document.createElement('div');
-	      (0, _dom.addClasses)(loaderEl, this._buildClasses('lightbox-loader'));
-	      this.innerEl.appendChild(loaderEl);
-	
-	      this.imgWrapperEl = document.createElement('div');
-	      (0, _dom.addClasses)(this.imgWrapperEl, this._buildClasses('lightbox-image-wrapper'));
-	      this.innerEl.appendChild(this.imgWrapperEl);
-	
-	      var positionHelperEl = document.createElement('span');
-	      (0, _dom.addClasses)(positionHelperEl, this._buildClasses('lightbox-position-helper'));
-	      this.imgWrapperEl.appendChild(positionHelperEl);
-	
-	      this.imgEl = document.createElement('img');
-	      positionHelperEl.appendChild(this.imgEl);
-	
-	      this.captionEl = document.createElement('p');
-	      (0, _dom.addClasses)(this.captionEl, this._buildClasses('lightbox-caption'));
-	      positionHelperEl.appendChild(this.captionEl);
-	
-	      this.settings.parentEl.appendChild(this.el);
-	
-	      this._updateImgSrc();
-	      this._updateCaption();
-	
-	      if (this.settings.includeImgixJSClass) {
-	        this.imgEl.classList.add('imgix-fluid');
-	      }
-	    }
-	  }, {
-	    key: '_updateCaption',
-	    value: function _updateCaption() {
-	      var captionAttr = this.settings.captionAttribute;
-	      if (captionAttr) {
-	        this.captionEl.innerText = this.settings.triggerEl.getAttribute(captionAttr);
-	      }
-	    }
-	  }, {
-	    key: '_updateImgSrc',
-	    value: function _updateImgSrc() {
-	      var imageURL = this.settings.triggerEl.getAttribute(this.settings.sourceAttribute);
-	
-	      if (!imageURL) {
-	        throw new Error('No image URL was found in the ' + this.settings.sourceAttribute + ' attribute of the trigger.');
-	      }
-	
-	      this.imgEl.setAttribute('src', imageURL);
-	    }
-	  }, {
-	    key: 'open',
-	    value: function open() {
-	      if (!this.elementBuilt) {
-	        this._buildElement();
-	        this.elementBuilt = true;
-	      }
-	
-	      // Make sure to re-set the `img` `src`, in case it's been changed
-	      // by someone/something else.
-	      this._updateImgSrc();
-	      this._updateCaption();
-	
-	      (0, _dom.addClasses)(this.el, this.openClasses);
-	
-	      this._sizeImgWrapperEl();
-	      window.addEventListener('resize', this._sizeImgWrapperEl, false);
-	
-	      if (HAS_ANIMATION) {
-	        this.el.addEventListener('animationend', this._completeOpen, false);
-	        (0, _dom.addClasses)(this.el, this.openingClasses);
-	      }
-	    }
-	  }, {
-	    key: 'close',
-	    value: function close() {
-	      window.removeEventListener('resize', this._sizeImgWrapperEl, false);
-	
-	      if (HAS_ANIMATION) {
-	        this.el.addEventListener('animationend', this._completeClose, false);
-	        (0, _dom.addClasses)(this.el, this.closingClasses);
-	      } else {
-	        (0, _dom.removeClasses)(this.el, this.openClasses);
-	      }
-	    }
-	  }, {
-	    key: 'destroy',
-	    value: function destroy() {
-	      this.settings.parentEl.removeChild(this.el);
-	    }
-	  }]);
-	
-	  return Lightbox;
-	}();
-	
-	exports.default = Lightbox;
-	
-	},{"./util/dom":4,"./util/throwIfMissing":5}],2:[function(require,module,exports){
-	'use strict';
-	
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-	
-	var _class, _temp, _initialiseProps;
-	
-	var _dom = require('./util/dom');
-	
-	var _injectBaseStylesheet = require('./injectBaseStylesheet');
-	
-	var _injectBaseStylesheet2 = _interopRequireDefault(_injectBaseStylesheet);
-	
-	var _Lightbox = require('./Lightbox');
-	
-	var _Lightbox2 = _interopRequireDefault(_Lightbox);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-	
-	module.exports = (_temp = _class = function () {
-	  function Luminous(trigger) {
-	    var options = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	
-	    _classCallCheck(this, Luminous);
-	
-	    _initialiseProps.call(this);
-	
-	    this.isOpen = false;
-	
-	    this.trigger = trigger;
-	
-	    if (!(0, _dom.isDOMElement)(this.trigger)) {
-	      throw new TypeError('`new Luminous` requires a DOM element as its first argument.');
-	    }
-	
-	    // A bit unexpected if you haven't seen this pattern before.
-	    // Based on the pattern here:
-	    // https://github.com/getify/You-Dont-Know-JS/blob/master/es6%20&%20beyond/ch2.md#nested-defaults-destructured-and-restructured
-	    var _options$namespace = options.namespace;
-	    var
-	    // Prefix for generated element class names (e.g. `my-ns` will
-	    // result in classes such as `my-ns-lightbox`. Default `lum-`
-	    // prefixed classes will always be added as well.
-	    namespace = _options$namespace === undefined ? null : _options$namespace;
-	    var _options$sourceAttrib = options.sourceAttribute;
-	    var
-	    // Which attribute to pull the lightbox image source from.
-	    sourceAttribute = _options$sourceAttrib === undefined ? 'href' : _options$sourceAttrib;
-	    var _options$captionAttri = options.captionAttribute;
-	    var
-	    // Which attribute to pull the caption from, if any.
-	    captionAttribute = _options$captionAttri === undefined ? null : _options$captionAttri;
-	    var _options$openTrigger = options.openTrigger;
-	    var
-	    // The event to listen to on the _trigger_ element: triggers opening.
-	    openTrigger = _options$openTrigger === undefined ? 'click' : _options$openTrigger;
-	    var _options$closeTrigger = options.closeTrigger;
-	    var
-	    // The event to listen to on the _lightbox_ element: triggers closing.
-	    closeTrigger = _options$closeTrigger === undefined ? 'click' : _options$closeTrigger;
-	    var _options$closeWithEsc = options.closeWithEscape;
-	    var
-	    // Allow closing by pressing escape.
-	    closeWithEscape = _options$closeWithEsc === undefined ? true : _options$closeWithEsc;
-	    var _options$closeOnScrol = options.closeOnScroll;
-	    var
-	    // Automatically close when the page is scrolled.
-	    closeOnScroll = _options$closeOnScrol === undefined ? false : _options$closeOnScrol;
-	    var _options$appendToSele = options.appendToSelector;
-	    var
-	    // A selector defining what to append the lightbox element to.
-	    appendToSelector = _options$appendToSele === undefined ? 'body' : _options$appendToSele;
-	    var _options$onOpen = options.onOpen;
-	    var
-	    // If present (and a function), this will be called
-	    // whenever the lightbox is opened.
-	    onOpen = _options$onOpen === undefined ? null : _options$onOpen;
-	    var _options$onClose = options.onClose;
-	    var
-	    // If present (and a function), this will be called
-	    // whenever the lightbox is closed.
-	    onClose = _options$onClose === undefined ? null : _options$onClose;
-	    var _options$includeImgix = options.includeImgixJSClass;
-	    var
-	    // When true, adds the `imgix-fluid` class to the `img`
-	    // inside the lightbox. See https://github.com/imgix/imgix.js
-	    // for more information.
-	    includeImgixJSClass = _options$includeImgix === undefined ? false : _options$includeImgix;
-	    var _options$injectBaseSt = options.injectBaseStyles;
-	    var
-	    // Add base styles to the page. See the "Theming"
-	    // section of README.md for more information.
-	    injectBaseStyles = _options$injectBaseSt === undefined ? true : _options$injectBaseSt;
-	
-	
-	    this.settings = { namespace: namespace, sourceAttribute: sourceAttribute, captionAttribute: captionAttribute, openTrigger: openTrigger, closeTrigger: closeTrigger, closeWithEscape: closeWithEscape, closeOnScroll: closeOnScroll, appendToSelector: appendToSelector, onOpen: onOpen, onClose: onClose, includeImgixJSClass: includeImgixJSClass, injectBaseStyles: injectBaseStyles };
-	
-	    if (this.settings.injectBaseStyles) {
-	      (0, _injectBaseStylesheet2.default)();
-	    }
-	
-	    this._buildLightbox();
-	    this._bindEvents();
-	  }
-	
-	  _createClass(Luminous, [{
-	    key: '_buildLightbox',
-	    value: function _buildLightbox() {
-	      this.lightbox = new _Lightbox2.default({
-	        namespace: this.settings.namespace,
-	        parentEl: document.querySelector(this.settings.appendToSelector),
-	        triggerEl: this.trigger,
-	        sourceAttribute: this.settings.sourceAttribute,
-	        captionAttribute: this.settings.captionAttribute,
-	        includeImgixJSClass: this.settings.includeImgixJSClass
-	      });
-	    }
-	  }, {
-	    key: '_bindEvents',
-	    value: function _bindEvents() {
-	      this.trigger.addEventListener(this.settings.openTrigger, this.open, false);
-	
-	      if (this.settings.closeWithEscape) {
-	        window.addEventListener('keyup', this._handleKeyup, false);
-	      }
-	    }
-	  }, {
-	    key: '_bindCloseEvent',
-	    value: function _bindCloseEvent() {
-	      this.lightbox.el.addEventListener(this.settings.closeTrigger, this.close, false);
-	    }
-	  }, {
-	    key: '_unbindEvents',
-	    value: function _unbindEvents() {
-	      this.trigger.removeEventListener(this.settings.openTrigger, this.open, false);
-	      this.lightbox.el.removeEventListener(this.settings.closeTrigger, this.close, false);
-	
-	      if (this.settings.closeWithEscape) {
-	        window.removeEventListener('keyup', this._handleKeyup, false);
-	      }
-	    }
-	  }]);
-	
-	  return Luminous;
-	}(), _initialiseProps = function _initialiseProps() {
-	  var _this = this;
-	
-	  this.VERSION = '0.2.6';
-	
-	  this.open = function (e) {
-	    if (e && typeof e.preventDefault === 'function') {
-	      e.preventDefault();
-	    }
-	
-	    var previouslyBuilt = _this.lightbox.elementBuilt;
-	
-	    _this.lightbox.open();
-	
-	    if (!previouslyBuilt) {
-	      _this._bindCloseEvent();
-	    }
-	
-	    if (_this.settings.closeOnScroll) {
-	      window.addEventListener('scroll', _this.close, false);
-	    }
-	
-	    var onOpen = _this.settings.onOpen;
-	    if (onOpen && typeof onOpen === 'function') {
-	      onOpen();
-	    }
-	
-	    _this.isOpen = true;
-	  };
-	
-	  this.close = function (e) {
-	    if (e && typeof e.preventDefault === 'function') {
-	      e.preventDefault();
-	    }
-	
-	    if (_this.settings.closeOnScroll) {
-	      window.removeEventListener('scroll', _this.close, false);
-	    }
-	
-	    _this.lightbox.close();
-	
-	    var onClose = _this.settings.onClose;
-	    if (onClose && typeof onClose === 'function') {
-	      onClose();
-	    }
-	
-	    _this.isOpen = false;
-	  };
-	
-	  this._handleKeyup = function (e) {
-	    if (_this.isOpen && e.keyCode === 27) {
-	      _this.close();
-	    }
-	  };
-	
-	  this.destroy = function () {
-	    _this._unbindEvents();
-	    _this.lightbox.destroy();
-	  };
-	}, _temp);
-	
-	},{"./Lightbox":1,"./injectBaseStylesheet":3,"./util/dom":4}],3:[function(require,module,exports){
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = injectBaseStylesheet;
-	var RULES = '\n@keyframes lum-noop {\n  0% { zoom: 1; }\n}\n\n.lum-lightbox {\n  position: fixed;\n  display: none;\n  top: 0;\n  right: 0;\n  bottom: 0;\n  left: 0;\n}\n\n.lum-lightbox.lum-open {\n  display: block;\n}\n\n.lum-lightbox.lum-opening, .lum-lightbox.lum-closing {\n  animation: lum-noop 1ms;\n}\n\n.lum-lightbox-inner {\n  position: absolute;\n  top: 0%;\n  right: 0%;\n  bottom: 0%;\n  left: 0%;\n\n  overflow: hidden;\n}\n\n.lum-lightbox-loader {\n  display: none;\n}\n\n.lum-lightbox-inner img {\n  max-width: 100%;\n  max-height: 100%;\n}\n\n.lum-lightbox-image-wrapper {\n  vertical-align: middle;\n  display: table-cell;\n  text-align: center;\n}\n';
-	
-	function injectBaseStylesheet() {
-	  if (document.querySelector('.lum-base-styles')) {
-	    return;
-	  }
-	
-	  var styleEl = document.createElement('style');
-	  styleEl.type = 'text/css';
-	  styleEl.classList.add('lum-base-styles');
-	
-	  styleEl.appendChild(document.createTextNode(RULES));
-	
-	  var head = document.head;
-	  head.insertBefore(styleEl, head.firstChild);
-	}
-	
-	},{}],4:[function(require,module,exports){
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-	
-	exports.isDOMElement = isDOMElement;
-	exports.addClasses = addClasses;
-	exports.removeClasses = removeClasses;
-	// This is not really a perfect check, but works fine.
-	// From http://stackoverflow.com/questions/384286
-	var HAS_DOM_2 = (typeof HTMLElement === 'undefined' ? 'undefined' : _typeof(HTMLElement)) === 'object';
-	
-	function isDOMElement(obj) {
-	  return HAS_DOM_2 ? obj instanceof HTMLElement : obj && (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && obj !== null && obj.nodeType === 1 && typeof obj.nodeName === 'string';
-	}
-	
-	function addClasses(el, classNames) {
-	  classNames.forEach(function (className) {
-	    el.classList.add(className);
-	  });
-	}
-	
-	function removeClasses(el, classNames) {
-	  classNames.forEach(function (className) {
-	    el.classList.remove(className);
-	  });
-	}
-	
-	},{}],5:[function(require,module,exports){
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = throwIfMissing;
-	function throwIfMissing() {
-	  throw new Error('Missing parameter');
-	}
-	
-	},{}]},{},[2])(2)
-	});
 
 /***/ }
 

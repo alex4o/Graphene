@@ -5,21 +5,21 @@ webpackJsonp([3],{
 
 	"use strict";
 	
-	var _paper = __webpack_require__(80);
+	var _paper = __webpack_require__(79);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
-	var _story = __webpack_require__(248);
+	var _story = __webpack_require__(240);
 	
 	var _story2 = _interopRequireDefault(_story);
 	
-	var _VolumeCtrl = __webpack_require__(243);
+	var _VolumeCtrl = __webpack_require__(235);
 	
 	var _VolumeCtrl2 = _interopRequireDefault(_VolumeCtrl);
 	
-	var _kefir = __webpack_require__(163);
+	var _kefir = __webpack_require__(161);
 	
-	var _kefir2 = __webpack_require__(314);
+	var _kefir2 = __webpack_require__(306);
 	
 	var _kefir3 = _interopRequireDefault(_kefir2);
 	
@@ -27,26 +27,26 @@ webpackJsonp([3],{
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
-	var _Dialogue = __webpack_require__(245);
+	var _Dialogue = __webpack_require__(237);
 	
 	var _Dialogue2 = _interopRequireDefault(_Dialogue);
 	
-	var _Video = __webpack_require__(247);
+	var _Video = __webpack_require__(239);
 	
 	var _Video2 = _interopRequireDefault(_Video);
 	
-	var _End = __webpack_require__(246);
+	var _End = __webpack_require__(238);
 	
 	var _End2 = _interopRequireDefault(_End);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(95);
+	__webpack_require__(94);
 	
 	window.R = _ramda2.default;
 	window.p = _paper2.default;
 	
-	__webpack_require__(502);
+	__webpack_require__(495);
 	
 	// TODO: move to new file and find better name
 	
@@ -286,7 +286,7 @@ webpackJsonp([3],{
 	
 	exports.__esModule = true;
 	
-	var _defineProperty = __webpack_require__(96);
+	var _defineProperty = __webpack_require__(95);
 	
 	var _defineProperty2 = _interopRequireDefault(_defineProperty);
 	
@@ -9103,7 +9103,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 80:
+/***/ 79:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -22814,7 +22814,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 95:
+/***/ 94:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22906,14 +22906,14 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 96:
+/***/ 95:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(97), __esModule: true };
+	module.exports = { "default": __webpack_require__(96), __esModule: true };
 
 /***/ },
 
-/***/ 97:
+/***/ 96:
 /***/ function(module, exports, __webpack_require__) {
 
 	var $ = __webpack_require__(18);
@@ -22923,7 +22923,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 163:
+/***/ 161:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*! Kefir.js v3.2.2
@@ -26263,7 +26263,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 243:
+/***/ 235:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26280,7 +26280,7 @@ webpackJsonp([3],{
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _paper = __webpack_require__(80);
+	var _paper = __webpack_require__(79);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
@@ -26386,7 +26386,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 244:
+/***/ 236:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26685,7 +26685,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 245:
+/***/ 237:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26702,7 +26702,7 @@ webpackJsonp([3],{
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _paper = __webpack_require__(80);
+	var _paper = __webpack_require__(79);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
@@ -27048,7 +27048,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 246:
+/***/ 238:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27100,7 +27100,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 247:
+/***/ 239:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27117,7 +27117,7 @@ webpackJsonp([3],{
 	
 	var _createClass3 = _interopRequireDefault(_createClass2);
 	
-	var _paper = __webpack_require__(80);
+	var _paper = __webpack_require__(79);
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
@@ -27188,7 +27188,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 248:
+/***/ 240:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27209,7 +27209,7 @@ webpackJsonp([3],{
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
-	var _dialogue = __webpack_require__(244);
+	var _dialogue = __webpack_require__(236);
 	
 	var _dialogue2 = _interopRequireDefault(_dialogue);
 	
@@ -27539,7 +27539,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 314:
+/***/ 306:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27551,7 +27551,7 @@ webpackJsonp([3],{
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _kefir = __webpack_require__(163);
+	var _kefir = __webpack_require__(161);
 	
 	var Kefir = _interopRequireWildcard(_kefir);
 	
@@ -27559,7 +27559,7 @@ webpackJsonp([3],{
 	
 	var R = _interopRequireWildcard(_ramda);
 	
-	var _partial = __webpack_require__(354);
+	var _partial = __webpack_require__(347);
 	
 	var L = _interopRequireWildcard(_partial);
 	
@@ -27702,7 +27702,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 354:
+/***/ 347:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -28115,23 +28115,23 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 355:
+/***/ 348:
 /***/ function(module, exports) {
 
 	module.exports = "body, html {\n\tmargin: 0px;\n\tbackground-color: black;\n    overflow: hidden;\n    height: 100%;\n}\n\ncanvas[resize] {\n    width: 100%;\n    height: 100%;\n}\n\nvideo {\n\twidth: 100%;\n}\n\n.draw {\n\tposition: absolute;\n\ttop: 0px;\n\tleft: 0px;\n}"
 
 /***/ },
 
-/***/ 502:
+/***/ 495:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(355);
+	var content = __webpack_require__(348);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(142)(content, {});
+	var update = __webpack_require__(141)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
