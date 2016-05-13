@@ -1,4 +1,4 @@
-webpackJsonp([3],{
+webpackJsonp([2],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
@@ -9,17 +9,17 @@ webpackJsonp([3],{
 	
 	var _paper2 = _interopRequireDefault(_paper);
 	
-	var _story = __webpack_require__(240);
+	var _story = __webpack_require__(245);
 	
 	var _story2 = _interopRequireDefault(_story);
 	
-	var _VolumeCtrl = __webpack_require__(235);
+	var _VolumeCtrl = __webpack_require__(240);
 	
 	var _VolumeCtrl2 = _interopRequireDefault(_VolumeCtrl);
 	
-	var _kefir = __webpack_require__(161);
+	var _kefir = __webpack_require__(166);
 	
-	var _kefir2 = __webpack_require__(306);
+	var _kefir2 = __webpack_require__(313);
 	
 	var _kefir3 = _interopRequireDefault(_kefir2);
 	
@@ -27,15 +27,15 @@ webpackJsonp([3],{
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
-	var _Dialogue = __webpack_require__(237);
+	var _Dialogue = __webpack_require__(242);
 	
 	var _Dialogue2 = _interopRequireDefault(_Dialogue);
 	
-	var _Video = __webpack_require__(239);
+	var _Video = __webpack_require__(244);
 	
 	var _Video2 = _interopRequireDefault(_Video);
 	
-	var _End = __webpack_require__(238);
+	var _End = __webpack_require__(243);
 	
 	var _End2 = _interopRequireDefault(_End);
 	
@@ -46,7 +46,7 @@ webpackJsonp([3],{
 	window.R = _ramda2.default;
 	window.p = _paper2.default;
 	
-	__webpack_require__(495);
+	__webpack_require__(502);
 	
 	// TODO: move to new file and find better name
 	
@@ -309,6 +309,13 @@ webpackJsonp([3],{
 	    return Constructor;
 	  };
 	})();
+
+/***/ },
+
+/***/ 34:
+/***/ function(module, exports) {
+
+	module.exports = {};
 
 /***/ },
 
@@ -9100,6 +9107,113 @@ webpackJsonp([3],{
 	
 	}.call(this));
 
+
+/***/ },
+
+/***/ 55:
+/***/ function(module, exports, __webpack_require__) {
+
+	// to indexed object, toObject with fallback for non-array-like ES3 strings
+	var IObject = __webpack_require__(68)
+	  , defined = __webpack_require__(46);
+	module.exports = function(it){
+	  return IObject(defined(it));
+	};
+
+/***/ },
+
+/***/ 68:
+/***/ function(module, exports, __webpack_require__) {
+
+	// fallback for non-array-like ES3 and non-enumerable old V8 strings
+	var cof = __webpack_require__(52);
+	module.exports = Object('z').propertyIsEnumerable(0) ? Object : function(it){
+	  return cof(it) == 'String' ? it.split('') : Object(it);
+	};
+
+/***/ },
+
+/***/ 69:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var LIBRARY        = __webpack_require__(100)
+	  , $export        = __webpack_require__(41)
+	  , redefine       = __webpack_require__(101)
+	  , hide           = __webpack_require__(53)
+	  , has            = __webpack_require__(67)
+	  , Iterators      = __webpack_require__(34)
+	  , $iterCreate    = __webpack_require__(99)
+	  , setToStringTag = __webpack_require__(54)
+	  , getProto       = __webpack_require__(18).getProto
+	  , ITERATOR       = __webpack_require__(22)('iterator')
+	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
+	  , FF_ITERATOR    = '@@iterator'
+	  , KEYS           = 'keys'
+	  , VALUES         = 'values';
+	
+	var returnThis = function(){ return this; };
+	
+	module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+	  $iterCreate(Constructor, NAME, next);
+	  var getMethod = function(kind){
+	    if(!BUGGY && kind in proto)return proto[kind];
+	    switch(kind){
+	      case KEYS: return function keys(){ return new Constructor(this, kind); };
+	      case VALUES: return function values(){ return new Constructor(this, kind); };
+	    } return function entries(){ return new Constructor(this, kind); };
+	  };
+	  var TAG        = NAME + ' Iterator'
+	    , DEF_VALUES = DEFAULT == VALUES
+	    , VALUES_BUG = false
+	    , proto      = Base.prototype
+	    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
+	    , $default   = $native || getMethod(DEFAULT)
+	    , methods, key;
+	  // Fix native
+	  if($native){
+	    var IteratorPrototype = getProto($default.call(new Base));
+	    // Set @@toStringTag to native iterators
+	    setToStringTag(IteratorPrototype, TAG, true);
+	    // FF fix
+	    if(!LIBRARY && has(proto, FF_ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+	    // fix Array#{values, @@iterator}.name in V8 / FF
+	    if(DEF_VALUES && $native.name !== VALUES){
+	      VALUES_BUG = true;
+	      $default = function values(){ return $native.call(this); };
+	    }
+	  }
+	  // Define iterator
+	  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+	    hide(proto, ITERATOR, $default);
+	  }
+	  // Plug for library
+	  Iterators[NAME] = $default;
+	  Iterators[TAG]  = returnThis;
+	  if(DEFAULT){
+	    methods = {
+	      values:  DEF_VALUES  ? $default : getMethod(VALUES),
+	      keys:    IS_SET      ? $default : getMethod(KEYS),
+	      entries: !DEF_VALUES ? $default : getMethod('entries')
+	    };
+	    if(FORCED)for(key in methods){
+	      if(!(key in proto))redefine(proto, key, methods[key]);
+	    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+	  }
+	  return methods;
+	};
+
+/***/ },
+
+/***/ 71:
+/***/ function(module, exports) {
+
+	// 7.1.4 ToInteger
+	var ceil  = Math.ceil
+	  , floor = Math.floor;
+	module.exports = function(it){
+	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+	};
 
 /***/ },
 
@@ -22923,7 +23037,108 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 161:
+/***/ 97:
+/***/ function(module, exports, __webpack_require__) {
+
+	// getting tag from 19.1.3.6 Object.prototype.toString()
+	var cof = __webpack_require__(52)
+	  , TAG = __webpack_require__(22)('toStringTag')
+	  // ES3 wrong here
+	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
+	
+	module.exports = function(it){
+	  var O, T, B;
+	  return it === undefined ? 'Undefined' : it === null ? 'Null'
+	    // @@toStringTag case
+	    : typeof (T = (O = Object(it))[TAG]) == 'string' ? T
+	    // builtinTag case
+	    : ARG ? cof(O)
+	    // ES3 arguments fallback
+	    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
+	};
+
+/***/ },
+
+/***/ 99:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var $              = __webpack_require__(18)
+	  , descriptor     = __webpack_require__(70)
+	  , setToStringTag = __webpack_require__(54)
+	  , IteratorPrototype = {};
+	
+	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+	__webpack_require__(53)(IteratorPrototype, __webpack_require__(22)('iterator'), function(){ return this; });
+	
+	module.exports = function(Constructor, NAME, next){
+	  Constructor.prototype = $.create(IteratorPrototype, {next: descriptor(1, next)});
+	  setToStringTag(Constructor, NAME + ' Iterator');
+	};
+
+/***/ },
+
+/***/ 102:
+/***/ function(module, exports, __webpack_require__) {
+
+	var toInteger = __webpack_require__(71)
+	  , defined   = __webpack_require__(46);
+	// true  -> String#at
+	// false -> String#codePointAt
+	module.exports = function(TO_STRING){
+	  return function(that, pos){
+	    var s = String(defined(that))
+	      , i = toInteger(pos)
+	      , l = s.length
+	      , a, b;
+	    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+	    a = s.charCodeAt(i);
+	    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+	      ? TO_STRING ? s.charAt(i) : a
+	      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+	  };
+	};
+
+/***/ },
+
+/***/ 103:
+/***/ function(module, exports, __webpack_require__) {
+
+	var classof   = __webpack_require__(97)
+	  , ITERATOR  = __webpack_require__(22)('iterator')
+	  , Iterators = __webpack_require__(34);
+	module.exports = __webpack_require__(23).getIteratorMethod = function(it){
+	  if(it != undefined)return it[ITERATOR]
+	    || it['@@iterator']
+	    || Iterators[classof(it)];
+	};
+
+/***/ },
+
+/***/ 104:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var $at  = __webpack_require__(102)(true);
+	
+	// 21.1.3.27 String.prototype[@@iterator]()
+	__webpack_require__(69)(String, 'String', function(iterated){
+	  this._t = String(iterated); // target
+	  this._i = 0;                // next index
+	// 21.1.5.2.1 %StringIteratorPrototype%.next()
+	}, function(){
+	  var O     = this._t
+	    , index = this._i
+	    , point;
+	  if(index >= O.length)return {value: undefined, done: true};
+	  point = $at(O, index);
+	  this._i += point.length;
+	  return {value: point, done: false};
+	});
+
+/***/ },
+
+/***/ 166:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/*! Kefir.js v3.2.2
@@ -26263,7 +26478,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 235:
+/***/ 240:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26386,7 +26601,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 236:
+/***/ 241:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26394,6 +26609,10 @@ webpackJsonp([3],{
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	
+	var _getIterator2 = __webpack_require__(248);
+	
+	var _getIterator3 = _interopRequireDefault(_getIterator2);
 	
 	var _classCallCheck2 = __webpack_require__(32);
 	
@@ -26412,164 +26631,206 @@ webpackJsonp([3],{
 	var participants = ["Graphene", "Carbon", "Silver"];
 	
 	var dialogue = [{
-		name: "intro_dialog",
-		array: [{ //loc: 0
-			//say: "Loerm ipsum"
+		name: "begin",
+		array: [// scene: begin
+		{ // loc: 0
+			who: "Графен",
+			say: "Здравейте!"
+		}, { // loc: 1
 			who: "Карбон",
 			say: "Кой си ти?"
-		}, { //loc: 1
+		}, { // loc: 2
 			who: "Графен",
-			say: "Аз съм материал създаден от един ред въглеродни атоми и имам уникални свойства!"
-		}, { //loc: 2
+			say: "О, извинете, забравих да се представя!\n Аз съм материал, създаден от един ред въглеродни атоми, и имам уникални свойства!"
+		}, { // loc: 3
 			who: "Карбон",
-			say: "Хаха, за много по-полезен ли се мислиш?"
-		}, { //loc: 3
+			say: "Виждам, че си сравнително нов тук!?\nИскаш ли да видим дали си и полезен??"
+		}, { // loc: 4
 			who: "Графен",
-			answer: [{ say: "Покажи свойствата си.", loc: 4 }, { say: "Опитай да решиш всичко с думи.", loc: 6 /* scene: "use_words" */ }, { say: "Игнорирай го.", loc: 9 }]
-		}, { //loc: 4
-			who: "Графен",
-			say: "Да.",
-			loc: 5
-		}, { //loc: 5
+			answer: [{ say: "Уверен съм, че е така.", loc: 5 }, { say: "Не мисля, че е нужно.", loc: 7 }, { say: "Игнорирай го.", loc: 11 }]
+		}, { // loc: 5
 			who: "Карбон",
-			say: "Не мисля, че е възможно да имаш по-добри характеристики от моите.",
-			loc: 13
-		}, { //loc: 6
+			say: "Мислиш, че си по-добър от мен ли?!?"
+		}, { // loc: 6
+			who: "Карбон",
+			say: "Кое ще е първото нещо, с което искаш да се докажеш?",
+			answer: [{ say: "Eлектропроводимост", scene: "phone" }, { say: "Здравината", scene: "asteroid" }, { say: "Енергийна плътност.", scene: "cars" }]
+		}, { // loc: 7
+			who: "Карбон",
+			say: "Не си достатъчно уверен в себе си ли? Явно не си толкова добър?!"
+		}, { // loc: 8
 			who: "Графен",
-			say: "Няма смисъл да спорим.",
-			loc: 7
+			say: "Така ли мислиш? Имам много качества, с които те превъзхождам!"
+		}, { // loc: 9
+			who: "Карбон",
+			say: "Нека видим тогава. Какво ще ни демонстрираш първо?"
+		}, { // loc: 10
+			who: "Графен",
+			sat: "Ти си избери! Имам приложение:",
+			answer: [{ say: "В медицината", scene: "blood" }, { say: "В архитектурата на космическо ниво", scene: "elevator" }, { say: "В енергетиката", scene: "cars" }]
+		}, { // loc: 11
+			who: "Карбон",
+			say: "Защо ме игнорираш? За толкова по-висш от нас ли се смяташ?"
+		}, { // loc: 12
+			who: "Графен",
+			answer: [{ say: "Играй с думи", loc: 13 }, { say: "Свободен диалог", loc: 16 }]
+		}, { // loc: 13
+			who: "Графен",
+			say: "Имам много качества с които те превъзхождам!"
+		}, { // loc: 14
+			who: "Карбон",
+			say: "Нека видим тогава. Какво ще демонстрираш първо?"
+		}, { // loc: 15
+			who: "Графен",
+			say: "Приложението си в:",
+			answer: [{ say: "Гъвкавост", scene: "blood" }, { say: "Здравина", scene: "elevator" }, { say: "Електропроводимост", scene: "cars" }]
+		}, { // loc: 16
+			who: "Карбон",
+			say: "Явно не ти се говори, а?"
+		}, { // loc: 17
+			who: "Графен",
+			say: "Напротив! Има много какво да видите и чуете от мен!\n Просто не исках да се хваля."
+		}, { // loc: 18
+			who: "Карбон",
+			say: "Защо не покажеш тогава на какво си способен тогава?! "
+		}, { // loc: 19
+			who: "Графен",
+			say: "Разбира се! Благодарение на моята здравина от 1100 GPa\nкосмическият асансьор е достижим!",
+			scene: "elevator",
+			tag: "free"
+		}]
+	}, {
+		name: "blood_dialogue",
+		array: [// scene: After blood
+		{ // loc: 0
+			who: "Графен",
+			say: "И това не е всичко!"
+		}, { // loc: 1
+			who: "Графен",
+			say: "С моята енергийна плътност от 75 F/g и 31-9 Wh/kg\n мога да захранвам устройство много по дълго от теб!",
+			tag: "free",
+			scene: "cars"
+		}]
+	}, {
+		name: "asteroid_dialogue",
+		array: [// scene: after meteor
+		{ // loc: 0
+			who: "Карбон",
+			say: "Изкара късмет! И сам можех да се справя с това,\n само да имах малко повече време, за да стана по-голям.",
+			tag: "earth"
+		}, { // loc: 1
+			who: "Графен",
+			say: "Земята няма да чака, за да я спасиш!\n Това са просто свойства, които ти не притежаваш!",
+			tags: [{ name: "free", loc: 9 }, { name: "End", loc: 10 }]
+		}, { // loc: 2
+			who: "Графен",
+			say: "С моята невероятна здравина от 1100 GPa, успях да спра метеорита!"
+		}, { // loc: 3
+			who: "Карбон",
+			say: "И все пак….само това ли е? Само защото ме превъзхождаш с тези две свойства\n не означава, че си толкова велик за колкото се мислиш!"
+		}, { // loc: 4
+			who: "Графен",
+			say: "Оо, имам още много да ти покажа!",
+			tags: [{ name: "cars", loc: 6 }, { name: "elevator", loc: 7 }, { name: "blood", loc: 8 }]
+		}, { // loc: 5
+			who: "Графен",
+			say: "Може да се запознаете и с моите приложения:",
+			answer: [{ say: "В медицината", scene: "blood" }, { say: "В архитектурата на космическо ниво", scene: "elevator" }, { say: "В енергетиката", scene: "cars" }]
+		}, { // loc: 6
+			who: "Графен",
+			say: "Може да се запознаете и с моите приложения:",
+			answer: [{ say: "В архитектурата на космическо ниво", scene: "elevator" }, { say: "В енергетиката", scene: "cars" }]
+		}, { // loc: 7
+			who: "Графен",
+			say: "Може да се запознаете и с моите приложения:",
+			answer: [{ say: "В медицината", scene: "blood" }, { say: "В енергетиката", scene: "cars" }]
+		}, { // loc: 8
+			who: "Графен",
+			say: "Може да се запознаете и с моите приложения:",
+			answer: [{ say: "В архитектурата на космическо ниво", scene: "elevator" }, { say: "В енергетиката", scene: "cars" }]
+		}, { // loc: 9
+			who: "Графен",
+			say: "С моята енергийна плътност от 75 F/g и 31-9 Wh/kg\n мога да захранвам устройство много по дълго от теб!",
+			tag: "blood",
+			scene: "cars"
+		}, { // loc: 10
+			who: "Графен",
+			say: "Да признавам те! Наистина си елемент - чудо!",
+			scene: "End"
+		}]
+	}, {
+		name: "junkction_dialogue",
+		array: [// scene: after many(some) things [cars, elevator, blood]
+		{ // loc: 0
+			who: "Карбон",
+			say: "Очевидно наистина те бива! Има ли още нещо, което можеш да ни покажеш?",
+			tags: [{ name: "free", loc: 3 }, { name: "blood", loc: 1 }, { name: "cars", loc: 1 }, { name: "space", loc: 2 }]
+		}, { // loc: 1
+			who: "Графен",
+			say: "Разбира се! Отново благодарение на моята здравина от 1100 GPa,\n космическият асансьор е достижим!",
+			scene: "elevator"
 	
-		}, { //loc: 7
-			who: "Карбон",
-			say: "Да прав си!",
-			loc: 8
-		}, { //loc: 8
+		}, { // loc: 2
 			who: "Графен",
-			answer: [{ say: "Остави го да говори.", loc: 16 }, { say: "Все пак му покажи възможностите си.", loc: 18 }]
-		}, { //loc: 9
-			who: "Карбон",
-			say: "Защо ме игнорираш, да не ме имаш за много по-слаб?",
-			loc: 10
-		}, { //loc: 10
-			who: "Карбон",
-			say: "Сигурно те е страх, че не можеш да покажеш нищо кой знае какво!?",
-			loc: 11
-		}, { //loc: 11
-			who: "Графен",
-			say: "Не искам да навлизам в излишни конфликти.",
-			loc: 12
-		}, { //loc: 12
-			who: "Карбон",
-			say: "Така ли? Покажи ми какво можеш тогава.",
-			loc: 13 //"conductivity"
-		}, { //loc: 13
-			who: "Графен",
-			say: "С моята невероятната здравина от 1100 GPa, ще спра метеорита летящ към земята.", //"Сега не е времето за това!! Виж метеорит е на път да се разбие в земята, трябва да го спрем!!!",
-			loc: 14
-		}, { //loc: 14
-			who: "Карбон",
-			say: "Не ми трябваш, аз мога да се справя сам.",
-			scene: "mech_force"
-		}, { //loc: 15
-			who: "Графен",
-			say: "...",
-			scene: "mech_force"
-		}, { //loc: 16
-			who: "Карбон",
-			say: "Почуствах се застрашен. Не искам да повярвам, че има по-полезна вариация на въглерода от мен.",
-			loc: 17
-		}, { //loc: 17
-			who: "Карбон",
-			say: "Аз съм здрав, лек и всичко което някой би искал.",
-			loc: 18
-		}, { //loc: 18
-			who: "Графен",
-			say: "Ами да, но е факт, че аз съм по-електропроводим, здрав и с по-голяма енергийна плътност",
-			loc: 19
-		}, { //loc: 19
-			who: "Карбон",
-			say: "Разбира се!",
-			loc: 20
-		}, { //loc: 20
-			who: "Графен",
-			say: "Например благодарение на моята електропроводимост от\n 1738 siemens/m мога да заредя телефон за секунди!",
-			scene: "conductivity_good"
-		}, { //loc: 21
-			who: "Графен",
-			say: "С моята невероятната здравина от 1100 GPa ще спра метеорита летящ към земята!",
-			loc: 13
+			say: "Видяхте ли на какво съм способен?",
+			scene: "blood"
 		}]
 	}, {
-		name: "asteroid_dialog",
-		array: [{ //loc: 0
+		name: "cars_dialogue",
+		array: [// scene: cars
+		{ // loc: 0
 			who: "Карбон",
-			say: "Просто изкара късмет, че нямах време да направя стената по-голяма.",
-			loc: 1
-		}, {
+			tags: [{ name: "free", loc: 1 }, { name: "blood", loc: 2 }, { name: "noend", loc: 3 }]
+		}, { // loc: 1
 			who: "Графен",
-			say: "Дали? Или просто аз съм по-здравия?",
-			loc: 2
-		}, { //loc: 2
+			say: "Да признавам те! Наистина си елемент - чудо!",
+			scene: "End"
+		}, { // loc: 2
+			who: "Графен",
+			say: "Разбира се! Благодарение на моята невероятна здравина от 1100 GPa,\n  космическият асансьор е достижим!",
+			scene: "elevator",
+			tag: "End"
+		}, { // loc: 3
+			who: "Графен",
+			say: "А виждaш ли този метеорит идващ към земята?",
+			scene: "asteroid",
+			tag: "End"
+		}]
+	}, {
+		name: "phone",
+		array: [//
+		{ // loc: 0
 			who: "Карбон",
-			say: "Да видим другите ти свойства тогава.",
-			loc: 3
-		}, { //loc: 3
+			say: "С твоята електропроводимост от 178 siemens/m си много добър проводник."
+		}, { // loc: 1
 			who: "Графен",
-			say: "Както пожелаеш.",
-			scene: "compete_hard"
-		}]
-	}, {
-		name: "compete_hard_dialog",
-		array: [{ //loc: 0
+			say: "Това не е единственото, с което те превъзхождам!"
+		}, { // loc: 2
 			who: "Карбон",
-			say: "Чакам. ",
-			loc: 1
-		}, { //loc: 1
-			who: "Графен",
-			answer: [{ say: "Покажи - електропроводимост\n от 1738 siemens/m.", loc: 2 }, { say: "Покажи - енергийна плътност\n от 75 F/g и 31·9 Wh/kg.", loc: 3 }]
-		}, { //loc: 2
-			who: "Графен",
-			say: "Ето виж!",
-			scene: "conductivity"
-		}, { //loc: 3
-			who: "Графен",
-			say: "A знаеше ли, че бaтерия и акумулатор, направена с моята помощ,\n издържа в пъти повече от нормална батерия?",
-			scene: "electrical_density"
+			say: "Нека видим тогава какво още можеш?",
+			answer: [{ say: "Здравина", scene: "asteroid" }, { say: "Енергийна плътност", scene: "cars" }]
 		}]
 	}, {
-		name: "good_dialog",
-		array: [{ //loc: 0
-			who: "Графен",
-			say: "A също така, бaтерия и акумулатор, направена с моята помощ,\n издържа в пъти повече от нормална батерия.",
-			scene: "electrical_density_good"
-		}]
-	}, {
-		name: "ed_c_dialog",
-		array: [{ //loc: 0
-			who: "Графен",
-			say: "А виж какво мога, благодарение на моята електропроводимост от 1738 siemens/m.",
-			scene: "conductivity_2"
-		}]
-	}, {
-		name: "c_c_dialog",
-		array: [{ //loc: 0
-			who: "Графен",
-			say: "А виж какво мога, благодарение на моята енергийна плътност от 75 F/g и 31·9 Wh/kg.\n Заради нея, могат да се направят много по издържливи батерии и акумулатори.",
-			scene: "electrical_density_2"
-		}]
-	}, {
-		name: "ending_dialog_1",
-		array: [{
+		name: "elevator_dialogue",
+		array: [//
+		{ // loc: 0
 			who: "Карбон",
-			say: "Добре признавам, че си по-полезен в повечето ситуации!",
-			scene: "end_true"
-		}]
-	}, {
-		name: "ending_dialog_2",
-		array: [{
-			who: "Карбон",
-			say: "Разбирам и признавам, че си по-полезен!",
-			scene: "end_true"
+			say: "Добра работа!"
+		}, { // loc: 1
+			who: "Графен",
+			say: "Това не е единственото, с което те превъзхождам!"
+		}, { // loc: 2
+			who: "Графен",
+			say: "А виждaш ли този метеорит идващ към земята?",
+			tags: [{ name: "asteroid", loc: 4 }]
+		}, { // loc: 3
+			who: "Графен",
+			say: "Искате ли да ви покажа какво е здравина?",
+			scene: "asteroid"
+		}, { // loc: 4
+			who: "Графен",
+			say: "Искате ли да ви покажа какво е здравина?",
+			scene: "cars"
 		}]
 	}];
 	
@@ -26579,6 +26840,9 @@ webpackJsonp([3],{
 		this.currentDialogue = _ramda2.default.find(_ramda2.default.propEq("name", name))(this.dialogue);
 		this.currentPhrase = this.currentDialogue.array[0];
 		this.loc = 0;
+		if (this.currentPhrase.say == null) {
+			this.next();
+		}
 	}
 	
 	function _ref2(loc) {
@@ -26586,12 +26850,12 @@ webpackJsonp([3],{
 		return this.currentDialogue.array[loc];
 	}
 	
-	function _ref8(o) {
+	function _ref9(o) {
 		return o.say;
 	}
 	
 	function _ref3() {
-		return this.currentPhrase.answer.map(_ref8);
+		return this.currentPhrase.answer.map(_ref9);
 	}
 	
 	function _ref4() {
@@ -26610,7 +26874,18 @@ webpackJsonp([3],{
 		return this.loc < this.currentDialogue.array.length() - 1;
 	}
 	
-	function _ref7(choice) {
+	function _ref7(phrase) {
+		if (phrase.tag) {
+			this.tags[phrase.tag] = 1;
+			console.log("Tag added:", this.tags);
+		}
+	}
+	
+	function _ref8(choice) {
+		if (this.currentPhrase.tag) {
+			this.tags[this.currentPhrase.tag] = 1;
+		}
+	
 		if (this.currentPhrase.answer) {
 			if (arguments.length > 0) {
 				if (choice <= this.currentPhrase.answer.length) {
@@ -26634,6 +26909,47 @@ webpackJsonp([3],{
 			} else {
 				throw "This transition to the next phrase requires an argument";
 			}
+		} else if (this.currentPhrase.tags) {
+			console.log("Tags:", this.tags);
+	
+			var _iteratorNormalCompletion = true;
+			var _didIteratorError = false;
+			var _iteratorError = undefined;
+	
+			try {
+				for (var _iterator = (0, _getIterator3.default)(this.currentPhrase.tags), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+					var tag = _step.value;
+	
+					console.log("Cur:", tag);
+					if (this.tags[tag.name]) {
+						if (this.tags[tag.name] == 1) {
+							console.log("Chosen:", tag);
+	
+							this.loc = tag.loc;
+							this.currentPhrase = this.phrase(tag.loc);
+	
+							return null;
+						}
+					}
+				}
+			} catch (err) {
+				_didIteratorError = true;
+				_iteratorError = err;
+			} finally {
+				try {
+					if (!_iteratorNormalCompletion && _iterator.return) {
+						_iterator.return();
+					}
+				} finally {
+					if (_didIteratorError) {
+						throw _iteratorError;
+					}
+				}
+			}
+	
+			this.loc += 1;
+			this.currentPhrase = this.phrase(this.loc);
+			return null;
 		} else if (this.currentPhrase.loc) {
 			this.loc = this.currentPhrase.loc;
 			this.currentPhrase = this.phrase(this.currentPhrase.loc);
@@ -26675,8 +26991,11 @@ webpackJsonp([3],{
 			key: "hasNext",
 			value: _ref6
 		}, {
-			key: "next",
+			key: "chekcTag",
 			value: _ref7
+		}, {
+			key: "next",
+			value: _ref8
 		}]);
 		return Dialogue;
 	}();
@@ -26685,7 +27004,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 237:
+/***/ 242:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -26862,6 +27181,9 @@ webpackJsonp([3],{
 				}
 			};
 		} else {
+			if (line != null && line.say != null) {
+				this.talkText.content = line.who + ": " + line.say;
+			}
 	
 			_paper2.default.view.onMouseDown = null; // disable clicking on the screen
 	
@@ -26899,6 +27221,7 @@ webpackJsonp([3],{
 	}
 	
 	function _ref11() {
+		// hide all the elements in the scene
 		this.Graphene.visible = false;
 		this.Enemy.visible = false;
 		this.talkText.visible = false;
@@ -26907,6 +27230,9 @@ webpackJsonp([3],{
 		this.Play.visible = false;
 		this.Pause.visible = false;
 		_paper2.default.view.onMouseDown = null; // disable clicking on the screen
+		if (this.DialogueButtons != null) {
+			this.DialogueButtons.remove();
+		}
 	
 		// this.Play.visible = true
 		// this.Pause.visible = true
@@ -27048,7 +27374,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 238:
+/***/ 243:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27100,7 +27426,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 239:
+/***/ 244:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27188,7 +27514,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 240:
+/***/ 245:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27209,7 +27535,7 @@ webpackJsonp([3],{
 	
 	var _ramda2 = _interopRequireDefault(_ramda);
 	
-	var _dialogue = __webpack_require__(236);
+	var _dialogue = __webpack_require__(241);
 	
 	var _dialogue2 = _interopRequireDefault(_dialogue);
 	
@@ -27218,65 +27544,63 @@ webpackJsonp([3],{
 	var story = [{
 		"scene": "intro",
 		"src": "vid/Intro.mp4",
-		"next": "conflict",
+		"next": "begin",
 		"type": "Video"
 	}, {
-		"scene": "conflict",
+		"scene": "begin",
 		"src": "vid/Background.mp4",
-		"dialogue": "intro_dialog",
+		"dialogue": "begin",
 		"type": "Dialogue"
-	
 	}, {
-		"scene": "mech_force",
+		"scene": "asteroid",
 		"src": "vid/Meteor.mp4",
-		"next": "mech_force_dialog",
+		"next": "asteroid_dialogue",
 		"type": "Video"
-	
 	}, {
-		"scene": "mech_force_dialog",
+		"scene": "asteroid_dialogue",
 		"src": "vid/Background.mp4",
-		"dialogue": "asteroid_dialog",
+		"dialogue": "asteroid_dialogue",
 		"type": "Dialogue"
-	
 	}, {
-		"scene": "compete_kind",
-		"src": "vid/Background.mp4",
-		"dialogue": "compete_kind_dialog",
-		"type": "Dialogue"
-	
-	}, {
-		"scene": "compete_hard",
-		"src": "vid/Background.mp4",
-		"dialogue": "compete_hard_dialog",
-		"type": "Dialogue"
-	
-	}, {
-		"scene": "electrical_density",
+		"scene": "cars",
 		"src": "vid/Cars.mp4",
-		"next": "ed_dialog",
+		"next": "cars_dialogue",
 		"type": "Video"
 	}, {
-		"scene": "conductivity",
-		"src": "vid/Phone.mp4",
-		"next": "c_dialog",
-		"type": "Video"
-	
-	}, {
-		"scene": "ed_dialog",
+		"scene": "cars_dialogue",
 		"src": "vid/Background.mp4",
-		"dialogue": "ed_c_dialog",
+		"dialogue": "cars_dialogue",
 		"type": "Dialogue"
 	}, {
-		"scene": "c_dialog",
+		"scene": "phone",
+		"src": "vid/Phone.mp4",
+		"next": "phone_dialogue",
+		"type": "Video"
+	}, {
+		"scene": "phone_dialogue",
 		"src": "vid/Background.mp4",
-		"dialogue": "c_c_dialog",
+		"dialogue": "phone",
+		"type": "Dialogue"
+	}, {
+		"scene": "blood",
+		"src": "vid/Blood.mp4",
+		"type": "Video",
+		"next": "blood_dialogue"
+	}, {
+		"scene": "junktion_dialogue",
+		"src": "vid/Background.mp4",
+		"dialogue": "junkction_dialogue",
+		"type": "Dialogue"
+	}, {
+		"scene": "blood_dialogue",
+		"src": "vid/Background.mp4",
+		"dialogue": "blood_dialogue",
 		"type": "Dialogue"
 	}, {
 		"scene": "electrical_density_2",
 		"src": "vid/Cars.mp4",
 		"next": "end1",
 		"type": "Video"
-	
 	}, {
 		"scene": "conductivity_2",
 		"src": "vid/Phone.mp4",
@@ -27293,14 +27617,14 @@ webpackJsonp([3],{
 		"next": "good_mid",
 		"type": "Video"
 	}, {
-		"scene": "good_mid",
-		"src": "vid/Background.mp4",
-		"dialogue": "good_dialog",
-		"type": "Dialogue"
+		"scene": "elevator",
+		"src": "vid/Elevator.mp4",
+		"type": "Video",
+		"next": "elevator_dialogue"
 	}, {
+		"scene": "elevator_dialogue",
 		"src": "vid/Background.mp4",
-		"scene": "end1",
-		"dialogue": "ending_dialog_1",
+		"dialogue": "elevator_dialogue",
 		"type": "Dialogue"
 	}, {
 		"src": "vid/Background.mp4",
@@ -27414,14 +27738,19 @@ webpackJsonp([3],{
 	function _ref14(scene) {
 		//Before the switch
 		var oldVideo = this.current.video;
+		console.log("Switching to:", scene);
 		this.current = this.scene(scene); // switch the video with the next one
+		if (this.current == null) {
+			throw "This scene does not exists";
+		}
+	
 		if (oldVideo != this.current.video) {
 			this.onvideo(this.current.video);
 		}
 	
 		this.sceneUi.hide();
-	
 		this.ui(this.current.type);
+		this.tags[scene] = 1;
 	
 		if (this.current.dialogue != null) {
 			this.dialogue.select(this.current.dialogue);
@@ -27447,7 +27776,7 @@ webpackJsonp([3],{
 	
 		if (this.showDialogue) {
 			if (this.dialogue.hasChoices()) {
-				this.sceneUi.dialogue(null, this.dialogue.choices());
+				this.sceneUi.dialogue(this.dialogue.say(), this.dialogue.choices());
 			} else {
 				this.sceneUi.dialogue(this.dialogue.say(), null);
 			}
@@ -27539,7 +27868,101 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 306:
+/***/ 248:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(257), __esModule: true };
+
+/***/ },
+
+/***/ 257:
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(284);
+	__webpack_require__(104);
+	module.exports = __webpack_require__(275);
+
+/***/ },
+
+/***/ 263:
+/***/ function(module, exports) {
+
+	module.exports = function(){ /* empty */ };
+
+/***/ },
+
+/***/ 270:
+/***/ function(module, exports) {
+
+	module.exports = function(done, value){
+	  return {value: value, done: !!done};
+	};
+
+/***/ },
+
+/***/ 275:
+/***/ function(module, exports, __webpack_require__) {
+
+	var anObject = __webpack_require__(64)
+	  , get      = __webpack_require__(103);
+	module.exports = __webpack_require__(23).getIterator = function(it){
+	  var iterFn = get(it);
+	  if(typeof iterFn != 'function')throw TypeError(it + ' is not iterable!');
+	  return anObject(iterFn.call(it));
+	};
+
+/***/ },
+
+/***/ 277:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var addToUnscopables = __webpack_require__(263)
+	  , step             = __webpack_require__(270)
+	  , Iterators        = __webpack_require__(34)
+	  , toIObject        = __webpack_require__(55);
+	
+	// 22.1.3.4 Array.prototype.entries()
+	// 22.1.3.13 Array.prototype.keys()
+	// 22.1.3.29 Array.prototype.values()
+	// 22.1.3.30 Array.prototype[@@iterator]()
+	module.exports = __webpack_require__(69)(Array, 'Array', function(iterated, kind){
+	  this._t = toIObject(iterated); // target
+	  this._i = 0;                   // next index
+	  this._k = kind;                // kind
+	// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
+	}, function(){
+	  var O     = this._t
+	    , kind  = this._k
+	    , index = this._i++;
+	  if(!O || index >= O.length){
+	    this._t = undefined;
+	    return step(1);
+	  }
+	  if(kind == 'keys'  )return step(0, index);
+	  if(kind == 'values')return step(0, O[index]);
+	  return step(0, [index, O[index]]);
+	}, 'values');
+	
+	// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
+	Iterators.Arguments = Iterators.Array;
+	
+	addToUnscopables('keys');
+	addToUnscopables('values');
+	addToUnscopables('entries');
+
+/***/ },
+
+/***/ 284:
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(277);
+	var Iterators = __webpack_require__(34);
+	Iterators.NodeList = Iterators.HTMLCollection = Iterators.Array;
+
+/***/ },
+
+/***/ 313:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -27551,7 +27974,7 @@ webpackJsonp([3],{
 	
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 	
-	var _kefir = __webpack_require__(161);
+	var _kefir = __webpack_require__(166);
 	
 	var Kefir = _interopRequireWildcard(_kefir);
 	
@@ -27559,7 +27982,7 @@ webpackJsonp([3],{
 	
 	var R = _interopRequireWildcard(_ramda);
 	
-	var _partial = __webpack_require__(347);
+	var _partial = __webpack_require__(354);
 	
 	var L = _interopRequireWildcard(_partial);
 	
@@ -27702,7 +28125,7 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 347:
+/***/ 354:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {"use strict";
@@ -28115,23 +28538,23 @@ webpackJsonp([3],{
 
 /***/ },
 
-/***/ 348:
+/***/ 355:
 /***/ function(module, exports) {
 
-	module.exports = "body, html {\n\tmargin: 0px;\n\tbackground-color: black;\n    overflow: hidden;\n    height: 100%;\n}\n\ncanvas[resize] {\n    width: 100%;\n    height: 100%;\n}\n\nvideo {\n\twidth: 100%;\n}\n\n.draw {\n\tposition: absolute;\n\ttop: 0px;\n\tleft: 0px;\n}"
+	module.exports = "body, html {\n\tmargin: 0px;\n\tbackground-color: black;\n    overflow: hidden;\n    height: 100%;\n}\n\ncanvas[resize] {\n    width: 100%;\n    height: 100%;\n}\n\nvideo {\n\twidth: 100%;\n\tposition: absolute;\n\ttop: 50vh;\n\t-webkit-transform: translateY(-50%);\n\t        transform: translateY(-50%);\n}\n\n.draw {\n\tposition: absolute;\n\ttop: 0px;\n\tleft: 0px;\n}"
 
 /***/ },
 
-/***/ 495:
+/***/ 502:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(348);
+	var content = __webpack_require__(355);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(141)(content, {});
+	var update = __webpack_require__(144)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
