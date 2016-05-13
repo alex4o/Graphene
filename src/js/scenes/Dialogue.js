@@ -208,6 +208,9 @@ export default class DialogueScene {
 			}
 
 		}else{
+			if(line != null && line.say != null){
+				this.talkText.content = line.who +": "+ line.say
+			}
 
 			paper.view.onMouseDown = null // disable clicking on the screen
 
@@ -245,7 +248,7 @@ export default class DialogueScene {
 		// this.Pause.visible = false
 	}
 
-	hide(){
+	hide(){ // hide all the elements in the scene
 		this.Graphene.visible = false
 		this.Enemy.visible = false
 		this.talkText.visible = false
@@ -254,6 +257,10 @@ export default class DialogueScene {
 		this.Play.visible = false
 		this.Pause.visible = false
 		paper.view.onMouseDown = null // disable clicking on the screen
+		if(this.DialogueButtons != null){
+			this.DialogueButtons.remove() 
+		}
+
 
 		// this.Play.visible = true
 		// this.Pause.visible = true

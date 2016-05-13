@@ -40,8 +40,29 @@ let questions = [
 		text: "Графенът по-здрав ли е от карбона?",
 		answers: ["Да.", "Не."],
 		correct: 0
+	},
+	{
+		text: "Кое от следните, е възможно благодарение на графена.",
+		answers: ["Космически асансьор", "Сешоар", "Процесор"],
+		correct: 0
+	},
+	{
+		text: "В кой университет се разработва технология за отгряване на графен.",
+		answers: [ "MIT", "TFT London", "Enclave" ],
+		correct: 1
+	},
+	{
+		text: "Какво следи графененият чип във вената.",
+		answers: [ "BPM, mmol/L", "BPM, хемоглубин", "mmol/L, левкуцити" ],
+		correct: 1
+	},
+	{
+		text: "Кое от следните, е възможно благодарение на графена.",
+		answers: ["Сешоар", "Процесор", "Космически асансьор"],
+		correct: 2
 	}
 ]
+
 
 function TestMangler(questions, count){ // the function that randomizes the questions
 	if(count > questions.length){
@@ -57,8 +78,7 @@ function TestMangler(questions, count){ // the function that randomizes the ques
 		let sha = _.shuffle(answers) // shuffled answers (sha)
 		shuffled[i].answers = sha.map(e => e.text)
 		shuffled[i].correct = sha.reduce((p, c, i) => c.correct ? i : p)
-}
-*/
+}*/
 
 	return shuffled
 

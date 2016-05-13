@@ -5,67 +5,67 @@ var story = [
 	{
 		"scene": "intro",
 		"src": "vid/Intro.mp4",
-		"next": "conflict",
+		"next": "begin",
 		"type": "Video"
 	},	
 	{
-		"scene": "conflict",
+		"scene": "begin",
 		"src": "vid/Background.mp4",
-		"dialogue": "intro_dialog",
+		"dialogue": "begin",
 		"type": "Dialogue"
-
 	},
 	{
-		"scene": "mech_force",
+		"scene": "asteroid",
 		"src": "vid/Meteor.mp4",
-		"next": "mech_force_dialog",
+		"next": "asteroid_dialogue",
 		"type": "Video"
-
 	},
 	{
-		"scene": "mech_force_dialog",
+		"scene": "asteroid_dialogue",
 		"src": "vid/Background.mp4",
-		"dialogue": "asteroid_dialog",
+		"dialogue": "asteroid_dialogue",
 		"type": "Dialogue"
-
 	},
 	{
-		"scene": "compete_kind",
-		"src": "vid/Background.mp4",
-		"dialogue": "compete_kind_dialog",
-		"type": "Dialogue"
-
-	},
-	{
-		"scene": "compete_hard",
-		"src": "vid/Background.mp4",
-		"dialogue": "compete_hard_dialog",
-		"type": "Dialogue"
-
-	},
-	{
-		"scene": "electrical_density",
+		"scene": "cars",
 		"src": "vid/Cars.mp4",
-		"next": "ed_dialog",
+		"next": "cars_dialogue",
 		"type": "Video"
 	},
 	{
-		"scene": "conductivity",
-		"src": "vid/Phone.mp4",
-		"next": "c_dialog",
-		"type": "Video"
-
-	},
-	{
-		"scene": "ed_dialog",
+		"scene": "cars_dialogue",
 		"src": "vid/Background.mp4",
-		"dialogue": "ed_c_dialog",
+		"dialogue": "cars_dialogue",
 		"type": "Dialogue"
+	},
+	{
+		"scene": "phone",
+		"src": "vid/Phone.mp4",
+		"next": "phone_dialogue",
+		"type": "Video"
+	},
+	{
+		"scene": "phone_dialogue",
+		"src": "vid/Background.mp4",
+		"dialogue": "phone",
+		"type": "Dialogue"
+	},
+	{
+		"scene": "blood",
+		"src": "vid/Blood.mp4",
+		"type": "Video",
+		"next": "blood_dialogue"
 	},	
 	{
-		"scene": "c_dialog",
+		"scene": "junktion_dialogue",
 		"src": "vid/Background.mp4",
-		"dialogue": "c_c_dialog",
+		"dialogue": "junkction_dialogue",
+		"type": "Dialogue"
+	},
+	{
+		"scene": "blood_dialogue",
+		"src": "vid/Background.mp4",
+		"dialogue": "blood_dialogue",
 		"type": "Dialogue"
 	},
 	{
@@ -73,7 +73,6 @@ var story = [
 		"src": "vid/Cars.mp4",
 		"next": "end1",
 		"type": "Video"
-
 	},
 	{
 		"scene": "conductivity_2",
@@ -81,7 +80,6 @@ var story = [
 		"next": "end1",
 		"type": "Video"
 	},
-
 	{
 		"scene": "electrical_density_good",
 		"src": "vid/Cars.mp4",
@@ -94,18 +92,16 @@ var story = [
 		"next": "good_mid",
 		"type": "Video"
 	},
-
 	{
-		"scene": "good_mid",
-		"src": "vid/Background.mp4",
-		"dialogue": "good_dialog",
-		"type": "Dialogue"
+		"scene": "elevator",
+		"src": "vid/Elevator.mp4",
+		"type": "Video",
+		"next": "elevator_dialogue"
 	},
-
 	{
+		"scene": "elevator_dialogue",
 		"src": "vid/Background.mp4",
-		"scene": "end1",
-		"dialogue": "ending_dialog_1",
+		"dialogue": "elevator_dialogue",
 		"type": "Dialogue"
 	},
 	{
@@ -247,14 +243,19 @@ export default class Story {
 	switchTo(scene){
 		//Before the switch
 		let oldVideo = this.current.video
+		console.log("Switching to:", scene)
 		this.current = this.scene(scene) // switch the video with the next one
+		if(this.current == null){
+			throw "This scene does not exists"
+		}
+
 		if(oldVideo != this.current.video){
 			this.onvideo(this.current.video)
 		}
 
 		this.sceneUi.hide()
-
 		this.ui(this.current.type)
+		this.tags[scene] = 1;
 
 		if(this.current.dialogue != null){
 			this.dialogue.select(this.current.dialogue)
@@ -284,7 +285,7 @@ export default class Story {
 		
 		if(this.showDialogue){
 			if(this.dialogue.hasChoices()){
-				this.sceneUi.dialogue(null, this.dialogue.choices())
+				this.sceneUi.dialogue(this.dialogue.say(), this.dialogue.choices())
 			}else{
 				this.sceneUi.dialogue(this.dialogue.say(), null)
 			}

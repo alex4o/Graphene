@@ -8,229 +8,319 @@ var participants = [
 
 var dialogue = [
 	{
-		name: "intro_dialog",
-		array: [
-			{ //loc: 0
-				//say: "Loerm ipsum"
+		name: "begin",
+		array: [ // scene: begin
+			{ // loc: 0
+				who: "Графен",
+				say: "Здравейте!",
+			},
+			{ // loc: 1
 				who: "Карбон",
 				say: "Кой си ти?"
 			},
-			{ //loc: 1
+			{ // loc: 2
 				who: "Графен",
-				say: "Аз съм материал създаден от един ред въглеродни атоми и имам уникални свойства!"
+				say: "О, извинете, забравих да се представя!\n Аз съм материал, създаден от един ред въглеродни атоми, и имам уникални свойства!"
 			},
-			{ //loc: 2
+			{ // loc: 3
 				who: "Карбон",
-				say: "Хаха, за много по-полезен ли се мислиш?"
+				say: "Виждам, че си сравнително нов тук!?\nИскаш ли да видим дали си и полезен??"
 			},
-			{ //loc: 3
+			{ // loc: 4
 				who: "Графен",
 				answer: [
-					{ say: "Покажи свойствата си.", loc: 4 },
-					{ say: "Опитай да решиш всичко с думи.", loc: 6 /* scene: "use_words" */},
-					{ say: "Игнорирай го.", loc: 9}
+					{ say: "Уверен съм, че е така.", loc: 5 },
+					{ say: "Не мисля, че е нужно.", loc: 7 },
+					{ say: "Игнорирай го.", loc: 11 }
 				]
 			},
-			{ //loc: 4
-				who: "Графен",
-				say: "Да.",
-				loc: 5
-			},
-			{ //loc: 5
+			{ // loc: 5
 				who: "Карбон",
-				say: "Не мисля, че е възможно да имаш по-добри характеристики от моите.",
-				loc: 13
+				say: "Мислиш, че си по-добър от мен ли?!?"
 			},
-			{ //loc: 6
-				who: "Графен",
-				say: "Няма смисъл да спорим.",
-				loc: 7
-
-			},			
-			{ //loc: 7
+			{ // loc: 6
 				who: "Карбон",
-				say: "Да прав си!",
-				loc: 8
-			},
-			{ //loc: 8
-				who: "Графен",				
+				say: "Кое ще е първото нещо, с което искаш да се докажеш?",
 				answer: [
-					{ say: "Остави го да говори.", loc: 16},
-					{ say: "Все пак му покажи възможностите си.", loc: 18}
+					{ say: "Eлектропроводимост", scene: "phone" },
+					{ say: "Здравината", scene: "asteroid" },
+					{ say: "Енергийна плътност.", scene:  "cars"},
 				]
 			},
-			{ //loc: 9
+			{ // loc: 7
 				who: "Карбон",
-				say: "Защо ме игнорираш, да не ме имаш за много по-слаб?",
-				loc: 10
+				say: "Не си достатъчно уверен в себе си ли? Явно не си толкова добър?!"
 			},
-			{ //loc: 10
-				who: "Карбон",
-				say: "Сигурно те е страх, че не можеш да покажеш нищо кой знае какво!?",
-				loc: 11
-			},
-			{ //loc: 11
+			{ // loc: 8
 				who: "Графен",
-				say: "Не искам да навлизам в излишни конфликти.",
-				loc: 12
+				say: "Така ли мислиш? Имам много качества, с които те превъзхождам!"
 			},
-			{  //loc: 12
+			{ // loc: 9
 				who: "Карбон",
-				say: "Така ли? Покажи ми какво можеш тогава.",
-				loc: 13 //"conductivity"
+				say: "Нека видим тогава. Какво ще ни демонстрираш първо?"
 			},
-			{ //loc: 13
+			{ // loc: 10
 				who: "Графен",
-				say:  "С моята невероятната здравина от 1100 GPa, ще спра метеорита летящ към земята.", //"Сега не е времето за това!! Виж метеорит е на път да се разбие в земята, трябва да го спрем!!!",
-				loc: 14
-			},
-			{  //loc: 14
-				who: "Карбон",
-				say: "Не ми трябваш, аз мога да се справя сам.",
-				scene: "mech_force"
-			},
-			{ //loc: 15
-				who: "Графен",
-				say: "...",
-				scene: "mech_force"
-			},
-			{ //loc: 16
-				who: "Карбон",
-				say: "Почуствах се застрашен. Не искам да повярвам, че има по-полезна вариация на въглерода от мен.",
-				loc: 17
-			},			
-			{ //loc: 17
-				who: "Карбон",
-				say: "Аз съм здрав, лек и всичко което някой би искал.",
-				loc: 18
-			},
-			{ //loc: 18
-				who: "Графен",
-				say: "Ами да, но е факт, че аз съм по-електропроводим, здрав и с по-голяма енергийна плътност",
-				loc: 19
-			},
-			{ //loc: 19
-				who: "Карбон",
-				say: "Разбира се!",
-				loc: 20
-			},
-			{ //loc: 20
-				who: "Графен",
-				say: "Например благодарение на моята електропроводимост от\n 1738 siemens/m мога да заредя телефон за секунди!",
-				scene: "conductivity_good" 
-			},
-			{ //loc: 21
-				who: "Графен",
-				say: "С моята невероятната здравина от 1100 GPa ще спра метеорита летящ към земята!",
-				loc: 13 
-			}
-		]
-	},
-	{
-		name: "asteroid_dialog",
-		array: [
-			{ //loc: 0
-				who: "Карбон",
-				say: "Просто изкара късмет, че нямах време да направя стената по-голяма.",
-				loc: 1
-			},
-			{
-				who: "Графен",
-				say: "Дали? Или просто аз съм по-здравия?",
-				loc: 2
-			},
-			{ //loc: 2
-				who: "Карбон",
-				say: "Да видим другите ти свойства тогава.",
-				loc: 3
-			},
-			{ //loc: 3
-				who: "Графен",
-				say: "Както пожелаеш.",
-				scene: "compete_hard" 
-			}
-		]
-	},
-	{
-		name: "compete_hard_dialog",
-		array: [
-			{ //loc: 0
-				who: "Карбон",
-				say: "Чакам. ",
-				loc: 1
-			},
-			{ //loc: 1
-				who: "Графен",		
+				sat: "Ти си избери! Имам приложение:",
 				answer: [
-					{ say: "Покажи - електропроводимост\n от 1738 siemens/m.", loc: 2 },
-					{ say: "Покажи - енергийна плътност\n от 75 F/g и 31·9 Wh/kg.", loc: 3 }
+					{ say: "В медицината", scene: "blood" },
+					{ say: "В архитектурата на космическо ниво", scene: "elevator"},
+					{ say: "В енергетиката", scene:  "cars"},
 				]
 			},
-			{ //loc: 2
-				who: "Графен",
-				say: "Ето виж!",
-				scene: "conductivity"
+			{ // loc: 11
+				who: "Карбон",
+				say: "Защо ме игнорираш? За толкова по-висш от нас ли се смяташ?"
 			},
-			{ //loc: 3
+			{ // loc: 12
 				who: "Графен",
-				say: "A знаеше ли, че бaтерия и акумулатор, направена с моята помощ,\n издържа в пъти повече от нормална батерия?",
-				scene: "electrical_density"
-			}
-
-		]
-	},
-	{
-		name: "good_dialog",
-		array: [
-			{ //loc: 0
+				answer: [
+					{ say: "Играй с думи", loc: 13 },
+					{ say: "Свободен диалог", loc: 16 }
+				]
+			},
+			{ // loc: 13
 				who: "Графен",
-				say: "A също така, бaтерия и акумулатор, направена с моята помощ,\n издържа в пъти повече от нормална батерия.",
-				scene: "electrical_density_good"
-			}
-
-		]
-	},
-	{
-		name: "ed_c_dialog",
-		array: [
-			{ //loc: 0
-				who: "Графен",
-				say: "А виж какво мога, благодарение на моята електропроводимост от 1738 siemens/m.",
-				scene: "conductivity_2"
-			}
-		]
-	},
-	{
-		name: "c_c_dialog",
-		array: [
-			{ //loc: 0
-				who: "Графен",
-				say: "А виж какво мога, благодарение на моята енергийна плътност от 75 F/g и 31·9 Wh/kg.\n Заради нея, могат да се направят много по издържливи батерии и акумулатори.",
-				scene: "electrical_density_2"
-			}
-		]
-	},
-	{
-		name: "ending_dialog_1",
-		array: [
-			{
+				say: "Имам много качества с които те превъзхождам!"
+			},
+			{ // loc: 14
 				who: "Карбон",
-				say: "Добре признавам, че си по-полезен в повечето ситуации!",
-				scene: "end_true"
+				say: "Нека видим тогава. Какво ще демонстрираш първо?"
+			},
+			{ // loc: 15
+				who: "Графен",
+				say: "Приложението си в:",
+				answer: [
+					{ say: "Гъвкавост", scene: "blood" },
+					{ say: "Здравина", scene:  "elevator"},
+					{ say: "Електропроводимост", scene:  "cars"},
+				]
+			},
+			{ // loc: 16
+				who: "Карбон",
+				say: "Явно не ти се говори, а?"
+			},
+			{ // loc: 17
+				who: "Графен",
+				say: "Напротив! Има много какво да видите и чуете от мен!\n Просто не исках да се хваля."
+			},
+			{ // loc: 18
+				who: "Карбон",
+				say: "Защо не покажеш тогава на какво си способен тогава?! "
+			},
+			{ // loc: 19
+				who: "Графен",
+				say: "Разбира се! Благодарение на моята здравина от 1100 GPa\nкосмическият асансьор е достижим!",
+				scene: "elevator",
+				tag: "free"
+			},
+		]
+	},
+	{
+		name: "blood_dialogue",
+		array: [ // scene: After blood 
+			{ // loc: 0
+				who: "Графен",
+				say: "И това не е всичко!"
+			},
+			{ // loc: 1
+				who: "Графен",
+				say: "С моята енергийна плътност от 75 F/g и 31-9 Wh/kg\n мога да захранвам устройство много по дълго от теб!",
+				tag: "free",
+				scene: "cars"
 			}
 		]
 	},
 	{
-		name: "ending_dialog_2",
-		array: [
-			{
+		name: "asteroid_dialogue",
+		array: [ // scene: after meteor
+			{ // loc: 0
 				who: "Карбон",
-				say: "Разбирам и признавам, че си по-полезен!",
-				scene: "end_true"
+				say: "Изкара късмет! И сам можех да се справя с това,\n само да имах малко повече време, за да стана по-голям.",
+				tag: "earth"
+			},
+			{ // loc: 1
+				who: "Графен",
+				say: "Земята няма да чака, за да я спасиш!\n Това са просто свойства, които ти не притежаваш!",
+				tags: [
+					{ name: "free", loc: 9 },
+					{ name: "End", loc: 10 },
+				]
+			},
+			{ // loc: 2
+				who: "Графен",
+				say: "С моята невероятна здравина от 1100 GPa, успях да спра метеорита!"
+			},
+			{ // loc: 3
+				who: "Карбон",
+				say: "И все пак….само това ли е? Само защото ме превъзхождаш с тези две свойства\n не означава, че си толкова велик за колкото се мислиш!"
+			},
+			{ // loc: 4
+				who: "Графен",
+				say: "Оо, имам още много да ти покажа!",
+				tags: [
+					{ name: "cars", loc: 6 },
+					{ name: "elevator", loc: 7 },
+					{ name: "blood", loc: 8 },
+				]
+			},
+			{ // loc: 5
+				who: "Графен",
+				say: "Може да се запознаете и с моите приложения:",
+				answer: [
+					{ say: "В медицината", scene: "blood" },
+					{ say: "В архитектурата на космическо ниво", scene:  "elevator" },
+					{ say: "В енергетиката", scene: "cars" },
+				]
+			},
+			{ // loc: 6
+				who: "Графен",
+				say: "Може да се запознаете и с моите приложения:",
+				answer: [
+					{ say: "В архитектурата на космическо ниво", scene:  "elevator"},
+					{ say: "В енергетиката", scene: "cars"},
+				]
+			},
+			{ // loc: 7
+				who: "Графен",
+				say: "Може да се запознаете и с моите приложения:",
+				answer: [
+					{ say: "В медицината", scene: "blood"},
+					{ say: "В енергетиката", scene: "cars"},
+				]
+			},
+			{ // loc: 8
+				who: "Графен",
+				say: "Може да се запознаете и с моите приложения:",
+				answer: [
+					{ say: "В архитектурата на космическо ниво", scene:  "elevator"},
+					{ say: "В енергетиката", scene: "cars"},
+				]
+			},
+			{ // loc: 9
+				who: "Графен",
+				say: "С моята енергийна плътност от 75 F/g и 31-9 Wh/kg\n мога да захранвам устройство много по дълго от теб!",
+				tag: "blood",
+				scene: "cars"
+			},
+			{ // loc: 10
+				who: "Графен",
+				say: "Да признавам те! Наистина си елемент - чудо!",
+				scene: "End"		
+			}
+
+		]
+	},
+	{
+		name: "junkction_dialogue",
+		array: [ // scene: after many(some) things [cars, elevator, blood]
+			{ // loc: 0
+				who: "Карбон",
+				say: "Очевидно наистина те бива! Има ли още нещо, което можеш да ни покажеш?",
+				tags: [
+					{ name: "free", loc: 3 },
+					{ name: "blood", loc: 1 },
+					{ name: "cars", loc: 1 },
+					{ name: "space", loc: 2 },
+
+				]
+			},
+			{ // loc: 1
+				who: "Графен",
+				say: "Разбира се! Отново благодарение на моята здравина от 1100 GPa,\n космическият асансьор е достижим!",
+				scene: "elevator"
+
+			},
+			{ // loc: 2
+				who: "Графен",
+				say: "Видяхте ли на какво съм способен?",
+				scene: "blood"
+			},
+
+		]
+	},
+	{
+		name: "cars_dialogue",
+		array: [ // scene: cars
+			{ // loc: 0
+				who: "Карбон",
+				tags: [
+					{ name: "free", loc: 1 },
+					{ name: "blood", loc: 2 },
+					{ name: "noend", loc: 3 },
+				]
+			},
+			{ // loc: 1
+				who: "Графен",
+				say: "Да признавам те! Наистина си елемент - чудо!",
+				scene: "End"
+			},
+			{ // loc: 2
+				who: "Графен",
+				say: "Разбира се! Благодарение на моята невероятна здравина от 1100 GPa,\n  космическият асансьор е достижим!",
+				scene: "elevator",
+				tag: "End"
+			},
+			{ // loc: 3
+				who: "Графен",
+				say: "А виждaш ли този метеорит идващ към земята?",
+				scene: "asteroid",
+				tag: "End"
+			},
+
+		]
+	},
+	{
+		name: "phone",
+		array: [ //
+			{ // loc: 0
+				who: "Карбон",
+				say: "С твоята електропроводимост от 178 siemens/m си много добър проводник.",
+			},
+			{ // loc: 1
+				who: "Графен",
+				say: "Това не е единственото, с което те превъзхождам!",
+			},
+			{ // loc: 2
+				who: "Карбон",
+				say: "Нека видим тогава какво още можеш?",
+				answer: [
+					{ say: "Здравина", scene: "asteroid" },
+					{ say: "Енергийна плътност", scene: "cars" }
+				]
 			}
 		]
-	}
-
+	},
+	{
+		name: "elevator_dialogue",
+		array: [ //
+			{ // loc: 0
+				who: "Карбон",
+				say: "Добра работа!",
+			},
+			{ // loc: 1
+				who: "Графен",
+				say: "Това не е единственото, с което те превъзхождам!",
+			},
+			{ // loc: 2
+				who: "Графен",
+				say: "А виждaш ли този метеорит идващ към земята?",
+				tags: [
+					{ name: "asteroid", loc: 4 }
+				]
+			},
+			{ // loc: 3
+				who: "Графен",
+				say: "Искате ли да ви покажа какво е здравина?",
+				scene: "asteroid"
+			},
+			{ // loc: 4
+				who: "Графен",
+				say: "Искате ли да ви покажа какво е здравина?",
+				scene: "cars"
+			}
+		]
+	},
 ]
 
 
@@ -246,6 +336,9 @@ export default class Dialogue {
 		this.currentDialogue = R.find(R.propEq("name", name))(this.dialogue)
 		this.currentPhrase = this.currentDialogue.array[0]
 		this.loc = 0
+		if(this.currentPhrase.say == null){
+			this.next()
+		}
 	}
 
 	phrase(loc){ // gives a specific phrase
@@ -272,7 +365,18 @@ export default class Dialogue {
 		return this.loc < (this.currentDialogue.array.length() - 1)
 	}
 
+	chekcTag(phrase){
+		if(phrase.tag){
+			this.tags[phrase.tag] = 1
+			console.log("Tag added:", this.tags)
+		}
+	}
+
 	next(choice){
+		if(this.currentPhrase.tag){
+			this.tags[this.currentPhrase.tag] = 1
+		}
+
 		if(this.currentPhrase.answer){
 			if(arguments.length > 0){
 				if(choice <= this.currentPhrase.answer.length){
@@ -295,6 +399,28 @@ export default class Dialogue {
 			}else{
 				throw "This transition to the next phrase requires an argument"
 			}
+		}else if(this.currentPhrase.tags){
+			console.log("Tags:", this.tags)
+			
+			for(let tag of this.currentPhrase.tags){
+				console.log("Cur:", tag)
+				if(this.tags[tag.name]){
+					if(this.tags[tag.name] == 1){
+						console.log("Chosen:", tag)
+
+						this.loc = tag.loc
+						this.currentPhrase = this.phrase(tag.loc)
+
+
+
+						return null
+					}
+				}
+			}
+
+			this.loc += 1
+			this.currentPhrase = this.phrase(this.loc)
+			return null
 		}else if(this.currentPhrase.loc){
 			this.loc = this.currentPhrase.loc
 			this.currentPhrase = this.phrase(this.currentPhrase.loc)

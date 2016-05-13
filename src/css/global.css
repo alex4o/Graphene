@@ -12,6 +12,9 @@ canvas[resize] {
 
 video {
 	width: 100%;
+	position: absolute;
+	top: 50vh;
+	transform: translateY(-50%);
 }
 
 .draw {

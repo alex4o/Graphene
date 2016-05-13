@@ -65,6 +65,8 @@ function showVideo(idx){
 
 	videos[idx].classList.add("show")
 	close.classList.add("show")
+	videos[idx].play()
+
 
 
 }

@@ -23,7 +23,7 @@ module.exports = {
 				loader: "babel",
 				query: {
 					cacheDirectory: true,
-					plugins: ["transform-runtime", "closure-elimination"],
+					plugins: ["transform-runtime", "transform-regenerator", "closure-elimination"],
 					presets: ["es2015", "stage-0", "react"]
 				}
 

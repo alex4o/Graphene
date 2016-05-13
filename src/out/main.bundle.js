@@ -1,28 +1,28 @@
-webpackJsonp([2],{
+webpackJsonp([3],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 	
-	var _from = __webpack_require__(242);
+	var _from = __webpack_require__(247);
 	
 	var _from2 = _interopRequireDefault(_from);
 	
-	var _scrollTo = __webpack_require__(241);
+	var _scrollTo = __webpack_require__(246);
 	
 	var _scrollTo2 = _interopRequireDefault(_scrollTo);
 	
-	var _luminousLightbox = __webpack_require__(346);
+	var _luminousLightbox = __webpack_require__(353);
 	
 	var _luminousLightbox2 = _interopRequireDefault(_luminousLightbox);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	__webpack_require__(500);
+	__webpack_require__(507);
 	__webpack_require__(94);
 	
-	__webpack_require__(496);
+	__webpack_require__(503);
 	// found that code on github
 	
 	// import Luminous from "Luminous"
@@ -82,6 +82,7 @@ webpackJsonp([2],{
 	
 		videos[idx].classList.add("show");
 		close.classList.add("show");
+		videos[idx].play();
 	}
 	
 	close.addEventListener("click", hideVideos);
@@ -138,225 +139,20 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 22:
-/***/ function(module, exports) {
-
-	var core = module.exports = {version: '1.2.6'};
-	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-
-/***/ },
-
-/***/ 25:
-/***/ function(module, exports, __webpack_require__) {
-
-	var store  = __webpack_require__(70)('wks')
-	  , uid    = __webpack_require__(71)
-	  , Symbol = __webpack_require__(34).Symbol;
-	module.exports = function(name){
-	  return store[name] || (store[name] =
-	    Symbol && Symbol[name] || (Symbol || uid)('Symbol.' + name));
-	};
-
-/***/ },
-
 /***/ 34:
 /***/ function(module, exports) {
 
-	// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-	var global = module.exports = typeof window != 'undefined' && window.Math == Math
-	  ? window : typeof self != 'undefined' && self.Math == Math ? self : Function('return this')();
-	if(typeof __g == 'number')__g = global; // eslint-disable-line no-undef
-
-/***/ },
-
-/***/ 41:
-/***/ function(module, exports, __webpack_require__) {
-
-	var global    = __webpack_require__(34)
-	  , core      = __webpack_require__(22)
-	  , ctx       = __webpack_require__(52)
-	  , PROTOTYPE = 'prototype';
-	
-	var $export = function(type, name, source){
-	  var IS_FORCED = type & $export.F
-	    , IS_GLOBAL = type & $export.G
-	    , IS_STATIC = type & $export.S
-	    , IS_PROTO  = type & $export.P
-	    , IS_BIND   = type & $export.B
-	    , IS_WRAP   = type & $export.W
-	    , exports   = IS_GLOBAL ? core : core[name] || (core[name] = {})
-	    , target    = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE]
-	    , key, own, out;
-	  if(IS_GLOBAL)source = name;
-	  for(key in source){
-	    // contains in native
-	    own = !IS_FORCED && target && key in target;
-	    if(own && key in exports)continue;
-	    // export native or passed
-	    out = own ? target[key] : source[key];
-	    // prevent global pollution for namespaces
-	    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
-	    // bind timers to global for call from export context
-	    : IS_BIND && own ? ctx(out, global)
-	    // wrap global constructors for prevent change them in library
-	    : IS_WRAP && target[key] == out ? (function(C){
-	      var F = function(param){
-	        return this instanceof C ? new C(param) : C(param);
-	      };
-	      F[PROTOTYPE] = C[PROTOTYPE];
-	      return F;
-	    // make static versions for prototype methods
-	    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
-	    if(IS_PROTO)(exports[PROTOTYPE] || (exports[PROTOTYPE] = {}))[key] = out;
-	  }
-	};
-	// type bitmap
-	$export.F = 1;  // forced
-	$export.G = 2;  // global
-	$export.S = 4;  // static
-	$export.P = 8;  // proto
-	$export.B = 16; // bind
-	$export.W = 32; // wrap
-	module.exports = $export;
-
-/***/ },
-
-/***/ 46:
-/***/ function(module, exports) {
-
-	module.exports = function(exec){
-	  try {
-	    return !!exec();
-	  } catch(e){
-	    return true;
-	  }
-	};
-
-/***/ },
-
-/***/ 52:
-/***/ function(module, exports, __webpack_require__) {
-
-	// optional / simple context binding
-	var aFunction = __webpack_require__(97);
-	module.exports = function(fn, that, length){
-	  aFunction(fn);
-	  if(that === undefined)return fn;
-	  switch(length){
-	    case 1: return function(a){
-	      return fn.call(that, a);
-	    };
-	    case 2: return function(a, b){
-	      return fn.call(that, a, b);
-	    };
-	    case 3: return function(a, b, c){
-	      return fn.call(that, a, b, c);
-	    };
-	  }
-	  return function(/* ...args */){
-	    return fn.apply(that, arguments);
-	  };
-	};
-
-/***/ },
-
-/***/ 53:
-/***/ function(module, exports) {
-
-	// 7.2.1 RequireObjectCoercible(argument)
-	module.exports = function(it){
-	  if(it == undefined)throw TypeError("Can't call method on  " + it);
-	  return it;
-	};
-
-/***/ },
-
-/***/ 54:
-/***/ function(module, exports) {
-
-	var hasOwnProperty = {}.hasOwnProperty;
-	module.exports = function(it, key){
-	  return hasOwnProperty.call(it, key);
-	};
-
-/***/ },
-
-/***/ 55:
-/***/ function(module, exports, __webpack_require__) {
-
-	var $          = __webpack_require__(18)
-	  , createDesc = __webpack_require__(56);
-	module.exports = __webpack_require__(67) ? function(object, key, value){
-	  return $.setDesc(object, key, createDesc(1, value));
-	} : function(object, key, value){
-	  object[key] = value;
-	  return object;
-	};
+	module.exports = {};
 
 /***/ },
 
 /***/ 56:
-/***/ function(module, exports) {
-
-	module.exports = function(bitmap, value){
-	  return {
-	    enumerable  : !(bitmap & 1),
-	    configurable: !(bitmap & 2),
-	    writable    : !(bitmap & 4),
-	    value       : value
-	  };
-	};
-
-/***/ },
-
-/***/ 57:
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.13 ToObject(argument)
-	var defined = __webpack_require__(53);
+	var defined = __webpack_require__(46);
 	module.exports = function(it){
 	  return Object(defined(it));
-	};
-
-/***/ },
-
-/***/ 65:
-/***/ function(module, exports, __webpack_require__) {
-
-	var isObject = __webpack_require__(68);
-	module.exports = function(it){
-	  if(!isObject(it))throw TypeError(it + ' is not an object!');
-	  return it;
-	};
-
-/***/ },
-
-/***/ 66:
-/***/ function(module, exports) {
-
-	var toString = {}.toString;
-	
-	module.exports = function(it){
-	  return toString.call(it).slice(8, -1);
-	};
-
-/***/ },
-
-/***/ 67:
-/***/ function(module, exports, __webpack_require__) {
-
-	// Thank's IE8 for his funny defineProperty
-	module.exports = !__webpack_require__(46)(function(){
-	  return Object.defineProperty({}, 'a', {get: function(){ return 7; }}).a != 7;
-	});
-
-/***/ },
-
-/***/ 68:
-/***/ function(module, exports) {
-
-	module.exports = function(it){
-	  return typeof it === 'object' ? it !== null : typeof it === 'function';
 	};
 
 /***/ },
@@ -364,24 +160,71 @@ webpackJsonp([2],{
 /***/ 69:
 /***/ function(module, exports, __webpack_require__) {
 
-	var def = __webpack_require__(18).setDesc
-	  , has = __webpack_require__(54)
-	  , TAG = __webpack_require__(25)('toStringTag');
+	'use strict';
+	var LIBRARY        = __webpack_require__(100)
+	  , $export        = __webpack_require__(41)
+	  , redefine       = __webpack_require__(101)
+	  , hide           = __webpack_require__(53)
+	  , has            = __webpack_require__(67)
+	  , Iterators      = __webpack_require__(34)
+	  , $iterCreate    = __webpack_require__(99)
+	  , setToStringTag = __webpack_require__(54)
+	  , getProto       = __webpack_require__(18).getProto
+	  , ITERATOR       = __webpack_require__(22)('iterator')
+	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
+	  , FF_ITERATOR    = '@@iterator'
+	  , KEYS           = 'keys'
+	  , VALUES         = 'values';
 	
-	module.exports = function(it, tag, stat){
-	  if(it && !has(it = stat ? it : it.prototype, TAG))def(it, TAG, {configurable: true, value: tag});
-	};
-
-/***/ },
-
-/***/ 70:
-/***/ function(module, exports, __webpack_require__) {
-
-	var global = __webpack_require__(34)
-	  , SHARED = '__core-js_shared__'
-	  , store  = global[SHARED] || (global[SHARED] = {});
-	module.exports = function(key){
-	  return store[key] || (store[key] = {});
+	var returnThis = function(){ return this; };
+	
+	module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
+	  $iterCreate(Constructor, NAME, next);
+	  var getMethod = function(kind){
+	    if(!BUGGY && kind in proto)return proto[kind];
+	    switch(kind){
+	      case KEYS: return function keys(){ return new Constructor(this, kind); };
+	      case VALUES: return function values(){ return new Constructor(this, kind); };
+	    } return function entries(){ return new Constructor(this, kind); };
+	  };
+	  var TAG        = NAME + ' Iterator'
+	    , DEF_VALUES = DEFAULT == VALUES
+	    , VALUES_BUG = false
+	    , proto      = Base.prototype
+	    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
+	    , $default   = $native || getMethod(DEFAULT)
+	    , methods, key;
+	  // Fix native
+	  if($native){
+	    var IteratorPrototype = getProto($default.call(new Base));
+	    // Set @@toStringTag to native iterators
+	    setToStringTag(IteratorPrototype, TAG, true);
+	    // FF fix
+	    if(!LIBRARY && has(proto, FF_ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
+	    // fix Array#{values, @@iterator}.name in V8 / FF
+	    if(DEF_VALUES && $native.name !== VALUES){
+	      VALUES_BUG = true;
+	      $default = function values(){ return $native.call(this); };
+	    }
+	  }
+	  // Define iterator
+	  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
+	    hide(proto, ITERATOR, $default);
+	  }
+	  // Plug for library
+	  Iterators[NAME] = $default;
+	  Iterators[TAG]  = returnThis;
+	  if(DEFAULT){
+	    methods = {
+	      values:  DEF_VALUES  ? $default : getMethod(VALUES),
+	      keys:    IS_SET      ? $default : getMethod(KEYS),
+	      entries: !DEF_VALUES ? $default : getMethod('entries')
+	    };
+	    if(FORCED)for(key in methods){
+	      if(!(key in proto))redefine(proto, key, methods[key]);
+	    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
+	  }
+	  return methods;
 	};
 
 /***/ },
@@ -389,10 +232,11 @@ webpackJsonp([2],{
 /***/ 71:
 /***/ function(module, exports) {
 
-	var id = 0
-	  , px = Math.random();
-	module.exports = function(key){
-	  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
+	// 7.1.4 ToInteger
+	var ceil  = Math.ceil
+	  , floor = Math.floor;
+	module.exports = function(it){
+	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
 	};
 
 /***/ },
@@ -490,49 +334,107 @@ webpackJsonp([2],{
 /***/ },
 
 /***/ 97:
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
+	// getting tag from 19.1.3.6 Object.prototype.toString()
+	var cof = __webpack_require__(52)
+	  , TAG = __webpack_require__(22)('toStringTag')
+	  // ES3 wrong here
+	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
+	
 	module.exports = function(it){
-	  if(typeof it != 'function')throw TypeError(it + ' is not a function!');
-	  return it;
+	  var O, T, B;
+	  return it === undefined ? 'Undefined' : it === null ? 'Null'
+	    // @@toStringTag case
+	    : typeof (T = (O = Object(it))[TAG]) == 'string' ? T
+	    // builtinTag case
+	    : ARG ? cof(O)
+	    // ES3 arguments fallback
+	    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
 	};
-
-/***/ },
-
-/***/ 98:
-/***/ function(module, exports) {
-
-	module.exports = {};
 
 /***/ },
 
 /***/ 99:
-/***/ function(module, exports) {
-
-	module.exports = true;
-
-/***/ },
-
-/***/ 100:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(55);
-
-/***/ },
-
-/***/ 146:
-/***/ function(module, exports) {
-
-	// 7.1.4 ToInteger
-	var ceil  = Math.ceil
-	  , floor = Math.floor;
-	module.exports = function(it){
-	  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
+	'use strict';
+	var $              = __webpack_require__(18)
+	  , descriptor     = __webpack_require__(70)
+	  , setToStringTag = __webpack_require__(54)
+	  , IteratorPrototype = {};
+	
+	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
+	__webpack_require__(53)(IteratorPrototype, __webpack_require__(22)('iterator'), function(){ return this; });
+	
+	module.exports = function(Constructor, NAME, next){
+	  Constructor.prototype = $.create(IteratorPrototype, {next: descriptor(1, next)});
+	  setToStringTag(Constructor, NAME + ' Iterator');
 	};
 
 /***/ },
 
-/***/ 241:
+/***/ 102:
+/***/ function(module, exports, __webpack_require__) {
+
+	var toInteger = __webpack_require__(71)
+	  , defined   = __webpack_require__(46);
+	// true  -> String#at
+	// false -> String#codePointAt
+	module.exports = function(TO_STRING){
+	  return function(that, pos){
+	    var s = String(defined(that))
+	      , i = toInteger(pos)
+	      , l = s.length
+	      , a, b;
+	    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
+	    a = s.charCodeAt(i);
+	    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
+	      ? TO_STRING ? s.charAt(i) : a
+	      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
+	  };
+	};
+
+/***/ },
+
+/***/ 103:
+/***/ function(module, exports, __webpack_require__) {
+
+	var classof   = __webpack_require__(97)
+	  , ITERATOR  = __webpack_require__(22)('iterator')
+	  , Iterators = __webpack_require__(34);
+	module.exports = __webpack_require__(23).getIteratorMethod = function(it){
+	  if(it != undefined)return it[ITERATOR]
+	    || it['@@iterator']
+	    || Iterators[classof(it)];
+	};
+
+/***/ },
+
+/***/ 104:
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var $at  = __webpack_require__(102)(true);
+	
+	// 21.1.3.27 String.prototype[@@iterator]()
+	__webpack_require__(69)(String, 'String', function(iterated){
+	  this._t = String(iterated); // target
+	  this._i = 0;                // next index
+	// 21.1.5.2.1 %StringIteratorPrototype%.next()
+	}, function(){
+	  var O     = this._t
+	    , index = this._i
+	    , point;
+	  if(index >= O.length)return {value: undefined, done: true};
+	  point = $at(O, index);
+	  this._i += point.length;
+	  return {value: point, done: false};
+	});
+
+/***/ },
+
+/***/ 246:
 /***/ function(module, exports) {
 
 	'use strict';
@@ -597,50 +499,28 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 242:
+/***/ 247:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = { "default": __webpack_require__(250), __esModule: true };
+	module.exports = { "default": __webpack_require__(256), __esModule: true };
 
 /***/ },
 
-/***/ 250:
+/***/ 256:
 /***/ function(module, exports, __webpack_require__) {
 
+	__webpack_require__(104);
 	__webpack_require__(276);
-	__webpack_require__(270);
-	module.exports = __webpack_require__(22).Array.from;
+	module.exports = __webpack_require__(23).Array.from;
 
 /***/ },
 
-/***/ 255:
-/***/ function(module, exports, __webpack_require__) {
-
-	// getting tag from 19.1.3.6 Object.prototype.toString()
-	var cof = __webpack_require__(66)
-	  , TAG = __webpack_require__(25)('toStringTag')
-	  // ES3 wrong here
-	  , ARG = cof(function(){ return arguments; }()) == 'Arguments';
-	
-	module.exports = function(it){
-	  var O, T, B;
-	  return it === undefined ? 'Undefined' : it === null ? 'Null'
-	    // @@toStringTag case
-	    : typeof (T = (O = Object(it))[TAG]) == 'string' ? T
-	    // builtinTag case
-	    : ARG ? cof(O)
-	    // ES3 arguments fallback
-	    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-	};
-
-/***/ },
-
-/***/ 258:
+/***/ 266:
 /***/ function(module, exports, __webpack_require__) {
 
 	// check on default Array iterator
-	var Iterators  = __webpack_require__(98)
-	  , ITERATOR   = __webpack_require__(25)('iterator')
+	var Iterators  = __webpack_require__(34)
+	  , ITERATOR   = __webpack_require__(22)('iterator')
 	  , ArrayProto = Array.prototype;
 	
 	module.exports = function(it){
@@ -649,11 +529,11 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 260:
+/***/ 268:
 /***/ function(module, exports, __webpack_require__) {
 
 	// call something on iterator step with safe closing on error
-	var anObject = __webpack_require__(65);
+	var anObject = __webpack_require__(64);
 	module.exports = function(iterator, fn, value, entries){
 	  try {
 	    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
@@ -667,101 +547,10 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 261:
+/***/ 269:
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	var $              = __webpack_require__(18)
-	  , descriptor     = __webpack_require__(56)
-	  , setToStringTag = __webpack_require__(69)
-	  , IteratorPrototype = {};
-	
-	// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-	__webpack_require__(55)(IteratorPrototype, __webpack_require__(25)('iterator'), function(){ return this; });
-	
-	module.exports = function(Constructor, NAME, next){
-	  Constructor.prototype = $.create(IteratorPrototype, {next: descriptor(1, next)});
-	  setToStringTag(Constructor, NAME + ' Iterator');
-	};
-
-/***/ },
-
-/***/ 262:
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var LIBRARY        = __webpack_require__(99)
-	  , $export        = __webpack_require__(41)
-	  , redefine       = __webpack_require__(100)
-	  , hide           = __webpack_require__(55)
-	  , has            = __webpack_require__(54)
-	  , Iterators      = __webpack_require__(98)
-	  , $iterCreate    = __webpack_require__(261)
-	  , setToStringTag = __webpack_require__(69)
-	  , getProto       = __webpack_require__(18).getProto
-	  , ITERATOR       = __webpack_require__(25)('iterator')
-	  , BUGGY          = !([].keys && 'next' in [].keys()) // Safari has buggy iterators w/o `next`
-	  , FF_ITERATOR    = '@@iterator'
-	  , KEYS           = 'keys'
-	  , VALUES         = 'values';
-	
-	var returnThis = function(){ return this; };
-	
-	module.exports = function(Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED){
-	  $iterCreate(Constructor, NAME, next);
-	  var getMethod = function(kind){
-	    if(!BUGGY && kind in proto)return proto[kind];
-	    switch(kind){
-	      case KEYS: return function keys(){ return new Constructor(this, kind); };
-	      case VALUES: return function values(){ return new Constructor(this, kind); };
-	    } return function entries(){ return new Constructor(this, kind); };
-	  };
-	  var TAG        = NAME + ' Iterator'
-	    , DEF_VALUES = DEFAULT == VALUES
-	    , VALUES_BUG = false
-	    , proto      = Base.prototype
-	    , $native    = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT]
-	    , $default   = $native || getMethod(DEFAULT)
-	    , methods, key;
-	  // Fix native
-	  if($native){
-	    var IteratorPrototype = getProto($default.call(new Base));
-	    // Set @@toStringTag to native iterators
-	    setToStringTag(IteratorPrototype, TAG, true);
-	    // FF fix
-	    if(!LIBRARY && has(proto, FF_ITERATOR))hide(IteratorPrototype, ITERATOR, returnThis);
-	    // fix Array#{values, @@iterator}.name in V8 / FF
-	    if(DEF_VALUES && $native.name !== VALUES){
-	      VALUES_BUG = true;
-	      $default = function values(){ return $native.call(this); };
-	    }
-	  }
-	  // Define iterator
-	  if((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])){
-	    hide(proto, ITERATOR, $default);
-	  }
-	  // Plug for library
-	  Iterators[NAME] = $default;
-	  Iterators[TAG]  = returnThis;
-	  if(DEFAULT){
-	    methods = {
-	      values:  DEF_VALUES  ? $default : getMethod(VALUES),
-	      keys:    IS_SET      ? $default : getMethod(KEYS),
-	      entries: !DEF_VALUES ? $default : getMethod('entries')
-	    };
-	    if(FORCED)for(key in methods){
-	      if(!(key in proto))redefine(proto, key, methods[key]);
-	    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
-	  }
-	  return methods;
-	};
-
-/***/ },
-
-/***/ 263:
-/***/ function(module, exports, __webpack_require__) {
-
-	var ITERATOR     = __webpack_require__(25)('iterator')
+	var ITERATOR     = __webpack_require__(22)('iterator')
 	  , SAFE_CLOSING = false;
 	
 	try {
@@ -785,34 +574,11 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 267:
-/***/ function(module, exports, __webpack_require__) {
-
-	var toInteger = __webpack_require__(146)
-	  , defined   = __webpack_require__(53);
-	// true  -> String#at
-	// false -> String#codePointAt
-	module.exports = function(TO_STRING){
-	  return function(that, pos){
-	    var s = String(defined(that))
-	      , i = toInteger(pos)
-	      , l = s.length
-	      , a, b;
-	    if(i < 0 || i >= l)return TO_STRING ? '' : undefined;
-	    a = s.charCodeAt(i);
-	    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
-	      ? TO_STRING ? s.charAt(i) : a
-	      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
-	  };
-	};
-
-/***/ },
-
-/***/ 268:
+/***/ 274:
 /***/ function(module, exports, __webpack_require__) {
 
 	// 7.1.15 ToLength
-	var toInteger = __webpack_require__(146)
+	var toInteger = __webpack_require__(71)
 	  , min       = Math.min;
 	module.exports = function(it){
 	  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
@@ -820,32 +586,18 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 269:
-/***/ function(module, exports, __webpack_require__) {
-
-	var classof   = __webpack_require__(255)
-	  , ITERATOR  = __webpack_require__(25)('iterator')
-	  , Iterators = __webpack_require__(98);
-	module.exports = __webpack_require__(22).getIteratorMethod = function(it){
-	  if(it != undefined)return it[ITERATOR]
-	    || it['@@iterator']
-	    || Iterators[classof(it)];
-	};
-
-/***/ },
-
-/***/ 270:
+/***/ 276:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
-	var ctx         = __webpack_require__(52)
+	var ctx         = __webpack_require__(98)
 	  , $export     = __webpack_require__(41)
-	  , toObject    = __webpack_require__(57)
-	  , call        = __webpack_require__(260)
-	  , isArrayIter = __webpack_require__(258)
-	  , toLength    = __webpack_require__(268)
-	  , getIterFn   = __webpack_require__(269);
-	$export($export.S + $export.F * !__webpack_require__(263)(function(iter){ Array.from(iter); }), 'Array', {
+	  , toObject    = __webpack_require__(56)
+	  , call        = __webpack_require__(268)
+	  , isArrayIter = __webpack_require__(266)
+	  , toLength    = __webpack_require__(274)
+	  , getIterFn   = __webpack_require__(103);
+	$export($export.S + $export.F * !__webpack_require__(269)(function(iter){ Array.from(iter); }), 'Array', {
 	  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
 	  from: function from(arrayLike/*, mapfn = undefined, thisArg = undefined*/){
 	    var O       = toObject(arrayLike)
@@ -877,30 +629,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 276:
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	var $at  = __webpack_require__(267)(true);
-	
-	// 21.1.3.27 String.prototype[@@iterator]()
-	__webpack_require__(262)(String, 'String', function(iterated){
-	  this._t = String(iterated); // target
-	  this._i = 0;                // next index
-	// 21.1.5.2.1 %StringIteratorPrototype%.next()
-	}, function(){
-	  var O     = this._t
-	    , index = this._i
-	    , point;
-	  if(index >= O.length)return {value: undefined, done: true};
-	  point = $at(O, index);
-	  this._i += point.length;
-	  return {value: point, done: false};
-	});
-
-/***/ },
-
-/***/ 346:
+/***/ 353:
 /***/ function(module, exports, __webpack_require__) {
 
 	var require;var require;(function(f){if(true){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.Luminous = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -1377,23 +1106,23 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 349:
+/***/ 356:
 /***/ function(module, exports) {
 
-	module.exports = "@font-face {\n\tfont-family:\"TeXGyreAdventor\";\n\tsrc:url(\"./fnt/texgyreadventor-regular.woff\") format(\"woff\"),url(\"./fnt/texgyreadventor-regular.ttf\") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n@font-face {\n\tfont-family:\"Droid-sans\";\n\tsrc:url(\"./fnt/DroidSans.ttf\") format(\"truetype\"),url(\"./fnt/DroidSans-Bold.ttf\") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n@font-face {\n\tfont-family:\"steinemu\";\n\tsrc:url(\"./fnt/STEINEMU.ttf\") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n\n@media (max-width: 750px) {\n\t.row {\n\t\t-webkit-box-orient: vertical;\n\t\t-webkit-box-direction: normal;\n\t\t-webkit-flex-direction: column;\n\t\t    -ms-flex-direction: column;\n\t\t        flex-direction: column;\n\t}\n\t.row > * {\n\t\tmargin: 10 auto 0 auto !important;\n\t}\n\n\n\tsection {\n\t\theight: auto !important;\n\t\tpadding: 15px;\n\t}\n\n\n\tsection > .content .full-image {\n\t\theight: 50% !important;\n\t\t/*width: 100% !important;*/\n\t}\n\n}\n/* \n@media (max-height: 800px) {\n\t.vid-box {\n\t}\n\n}\n\n@media (max-width: 1350px) {\n\t.vid-box {\n\n\t}\n} */\n@-webkit-keyframes float{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -10px);\n\t\t        transform: translate(0, -10px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n@keyframes float{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -10px);\n\t\t        transform: translate(0, -10px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n\n@-webkit-keyframes float-small{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -5px);\n\t\t        transform: translate(0, -5px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n\n@keyframes float-small{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -5px);\n\t\t        transform: translate(0, -5px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n\n@-webkit-keyframes sprite{\n  from { background-position:0 0%; }\n  to { background-position:0 100%; }\n}\n\n@keyframes sprite{\n  from { background-position:0 0%; }\n  to { background-position:0 100%; }\n}\n\nbody {\n\twidth: 100%;\n\tmargin: 0px;\n\tpadding: 0px;\n\tfont-family: Helvetica; \n}\n\n\nsection {\n\twidth: 100%;\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\theight: 50vh;\n\t-webkit-transform-style: preserve-3d;\n\t        transform-style: preserve-3d;\n\tposition: relative;\n\tfont-size: 1.1em;\n\tbackground-color: #00AFEF; \n\tcolor: white;\n}\n\n\nsection > .content.show {\n\topacity: 1 !important;\n}\n\n\nsection > .content {\n\t/*background-color: white;*/\n\t/* border-top: 2px solid black;\n\t\tborder-bottom: 2px solid black; */\n\tmargin: auto;\n\t-webkit-box-flex: 1;\n\t-webkit-flex: 1 1;\n\t    -ms-flex: 1 1;\n\t        flex: 1 1;\n\ttext-align: center;\n\t-webkit-transition:opacity 1.5s;\n\ttransition: opacity 1.5s;\n}\n\n\nsection > .content .icon {\n\theight: 35vh;\n\twidth: 35vh;\n\tdisplay: inline-block;\n\tmargin-right: 10px;\n\t-webkit-transition:opacity 0.5s;\n\ttransition: opacity 0.5s\n}\n\n\nsection > .content .icon.animated {\n\t-webkit-animation:sprite 1.5s steps(26) infinite;\n\t        animation:sprite 1.5s steps(26) infinite;\n\t-webkit-transform:translateX(0px);\n\t        transform:translateX(0px);\n}\n\n\nsection > .content .full-image {\n\theight: 100%;\n\t-webkit-animation-name: float-small;\n\t        animation-name: float-small;\n\t-webkit-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-duration: 3s;\n\t        animation-duration: 3s;\n\t-webkit-animation-timing-function: ease-in-out;\n\t        animation-timing-function: ease-in-out;\n}\n\n\nsection > .content h1 {\n\tfont-size: 3em;\n\tfont-family: steinemu;\n\tletter-spacing: 2px;\n}\n\n\nsection > .content > .row {\n\tmargin: 0 10% 0 10%;\n}\n\n\nsection > .content > .row > .icon {\n\t/* flex: 1; */\n}\n\n\nsection > .content > .row > p {\n\tfont-size: 1.1em;\n\t-webkit-box-flex: 5;\n\t-webkit-flex: 5;\n\t    -ms-flex: 5;\n\t        flex: 5;\n\t-webkit-align-self: center;\n\t    -ms-flex-item-align: center;\n\t        align-self: center;\n\ttext-align: left;\n\ttext-shadow: 0 0 3px #000;\n\tletter-spacing: 1px;\n}\n\n\nsection > .content > .row.wrap {\n\t-webkit-flex-wrap:wrap;\n\t    -ms-flex-wrap:wrap;\n\t        flex-wrap:wrap;\n}\n\n\nsection.paralax {\n\tmin-height:500px;\n\tbackground-image:url(\"./img/Background.jpg\");\n\tbackground-position:center;\n\tbackground-repeat:no-repeat;\n\tbackground-attachment:fixed;\n\tbackground-size:cover;\n}\n\n\nsection.paralax h1 {\n\t-webkit-animation-name:float;\n\t        animation-name:float;\n\t-webkit-animation-iteration-count:infinite;\n\t        animation-iteration-count:infinite;\n\t-webkit-animation-duration:3s;\n\t        animation-duration:3s;\n\t-webkit-animation-timing-function:ease-in-out;\n\t        animation-timing-function:ease-in-out;\n}\n\n\n#flexibility .icon {\n\tbackground:  url(\"./img/home_page/guvkavost_sprite.png\");\n\tbackground-size: 100%;\n}\n\n.row {\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\t-webkit-box-pack: center;\n\t-webkit-justify-content: center;\n\t    -ms-flex-pack: center;\n\t        justify-content: center;\n}\n\n.row > * {}\n\na {\n\tcolor: blue;\n\tcursor: pointer;\n}\n\n.static > * {\n\tposition: fixed;\n}\n\n.static > #to-game {\n\tright: 50px;\n\tbottom: -34px;\n\tpadding: 6px 12px 6px 12px;\n\tdisplay: block;\n\tfont-size: 1.2em;\n\tcolor: #444;\n\tbackground-color: #0096CC;\n\t-webkit-transition:color 0.1s;\n\ttransition: color 0.1s;\n\ttext-decoration: none;\n\t/* border-bottom: 2px black solid; */\n\t-webkit-perspective: 800px;\n\t        perspective: 800px;\n\t-webkit-transition:all 0.5s;\n\ttransition: all 0.5s;\n\topacity: 0;\n\tfont-weight: bold\n}\n\n.static > #to-game.show {\n\tbottom:40px;\n\topacity:1;\n}\n\n.static > #to-game:hover {\n\tcolor:white;\n}\n\n.static > #to-game:before {\n\tcontent:\"\";\n\tposition:absolute;\n\tbackground:#444;\n\tbottom:0;\n\tleft:0;\n\tright:0;\n\ttop:0;\n\tz-index:-1;\n\t/* border-radius: 3px; */\n\t-webkit-transform:rotatex( 90deg );\n\t        transform:rotatex( 90deg );\n\t-webkit-transform-origin:bottom;\n\t        transform-origin:bottom;\n\t-webkit-transition:-webkit-transform 0.15s ease-in;\n\ttransition:-webkit-transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in, -webkit-transform 0.15s ease-in;\n}\n\n.static > #to-game:hover:before {\n\tright:0;\n\t-webkit-transform:rotatex( 0deg );\n\t        transform:rotatex( 0deg );\n}\n\n.static .vid-box\n\t{\n\ttop: 50vh;\n\t-webkit-transform: translateY(-22.5vw);\n\t        transform: translateY(-22.5vw);\n\tleft: 10vw;\n\twidth: 80vw;\n\topacity: 0;\n\tdisplay: none\n}\n\n.static .vid-box.display {\n\tdisplay:block;\n}\n\n.static .vid-box.show {\n\topacity:1;\n}\n\n.static #close {\n\ttop: calc(50vh - 22.5vw - 80px);\n\tright: 10vw;\n\t-webkit-transform: translateX(93px) scale(0.5, 0.5);\n\t        transform: translateX(93px) scale(0.5, 0.5);\n\tbackground-color: #444;\n\t/* transform: translateX(80px) translateY(-22.5vw) translateY(-80px) scale(0.5, 0.5); */\n\tborder-radius: 80px;\n\tdisplay: none\n}\n\n.static #close:hover {\n\tbackground-color:#bbb;\n}\n\n.static #close.show {\n\tdisplay:block;\n}\n\n\n.thumb {\n\theight: 200px;\n\tmargin: 10px;\n\tcursor: pointer;\n}\n\n#landing {\n\theight: 100vh !important;\n}\n\n#landing > .content {\n\topacity: 0;\n}\n\n#landing a {\n\tdisplay: block;\n\tposition: absolute;\n\tmargin: 0px;\n\t-webkit-transform: rotate(180deg);\n\t        transform: rotate(180deg);\n\tbottom: 0px;\n\tleft: calc(50% - 80px);\n\tcursor: pointer;\n}\n\n/* transition: all .3s; */\n\n#landing a img {\n\tz-index: 11;\n\t-webkit-transition:all .3s;\n\ttransition: all .3s;\n\t/* \t\t\twidth: 160px;\n\t\t\theight: 160px; */\n}\n\n/* left: calc(50% - 90px); */\n\n#landing a:hover img {\n\t/* \t\t\twidth: 180px;\n\t\t\theight: 180px; */\n\t-webkit-transform: scale(1.3);\n\t        transform: scale(1.3);\n}\n\n/*#logo {\n\t\tposition: absolute;\n\t\ttop: calc(50vh - 720px/2);\n\t\tleft: calc(50vw - 1280px/2);\n\t}\n*/\n\n#landing #logo {\n\tposition: absolute;\n\ttop: 50vh;\n\t-webkit-transform: translate(-640px, -360px) scale(1);\n\t        transform: translate(-640px, -360px) scale(1);\n\tleft: 50vw;\n\t-webkit-transition:all .5s;\n\ttransition: all .5s;\n\tz-index: -1;\n}\n\n#landing #logo.hidden {\n\t-webkit-transform: translate(-640px, -360px) scale(0);\n\t        transform: translate(-640px, -360px) scale(0);\n}\n\n#landing h1, #landing h2{\n\tfont-family: steinemu, Verdana, sans-serif;\n\tcolor: white;\n\tz-index: 10;\n}\n\n#landing h1 {\n\tfont-size: 4em;\n\tmargin: 0px;\n\t-webkit-animation-name: float;\n\t        animation-name: float;\n\t-webkit-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-duration: 3s;\n\t        animation-duration: 3s;\n\t-webkit-animation-timing-function: ease-in-out;\n\t        animation-timing-function: ease-in-out;\n}\n\n#landing h2 {}\n\n.button {\n\tfont-weight: bold;\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\twidth: 200px;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition:background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor, Verdana, sans-serif;\n\tfont-size: 2em;\n}\n\n.button:hover{\n\tbackground-color: #444;\n\tcolor: white;\n}\n\n\n.button-small {\n\tfont-size: 1em;\n\twidth: 200px;\n\n}\n\n.button-large {\n\tfont-size: 1.5em;\n\twidth: 300px;\n\n}\n\n.button-slide {\n\ttext-decoration: inherit;\n\ttext-align: center;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\tbackground-image: -webkit-linear-gradient(#444, #444);\n\tbackground-image: linear-gradient(#444, #444);\n\tbackground-position: 50% 50%;\n\tbackground-size: 100% 0%;\n\tbackground-repeat: no-repeat;\n\t-webkit-transition:background-size .3s, color .3s;\n\ttransition: background-size .3s, color .3s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n\tfont-weight: bold;\n}\n\na {\n\tcolor: #000;\n\ttext-shadow: none;\n}\n\n\n.button-slide:hover{\n\tbackground-size: 100% 100%;\n\tcolor: #FFF;\n}\n\n\n.button-black {\n\tfont-weight: bold;\n\tfont-size: 1.5em;\n\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\twidth: 400px;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition:background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n}\n\n.button-black:hover{\n\tbackground-color: #444;\n\tcolor: white;\n}\n\n\n.text {\n\tbackground-color: blue;\n}\n\n.button-3d {\n\tfont-weight: bold;\n\tfont-size: 1.5em;\n\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\twidth: 400px;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition:background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n\t-webkit-perspective: 800px;\n\t        perspective: 800px\n}\n\n.button-3d:hover {\n\tcolor:white;\n}\n\n.button-3d:before {\n\tcontent:\"\";\n\tposition:absolute;\n\tbackground:#444;\n\tbottom:0;\n\tleft:0;\n\tright:0;\n\ttop:0;\n\tz-index:-1;\n\t/* border-radius: 3px; */\n\t-webkit-transform:rotatex( 90deg );\n\t        transform:rotatex( 90deg );\n\t-webkit-transform-origin:bottom;\n\t        transform-origin:bottom;\n\t-webkit-transition:-webkit-transform 0.15s ease-in;\n\ttransition:-webkit-transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in, -webkit-transform 0.15s ease-in;\n}\n\n.button-3d:hover:before {\n\tright:0;\n\t-webkit-transform:rotatex( 0deg );\n\t        transform:rotatex( 0deg );\n}\n\n.button-3d:hover{\n\tbackground-color: #444;\n\tcolor: white;\n}\n\n\n\n\n#sources {\n\tdisplay: none;\n\t-webkit-box-orient: vertical;\n\t-webkit-box-direction: normal;\n\t-webkit-flex-direction: column;\n\t    -ms-flex-direction: column;\n\t        flex-direction: column;\n}\n\n\n\n\n#sources > * {\n\ttext-align: left;\n\tmargin: auto;\n\t-webkit-box-flex:1;\n\t-webkit-flex:1;\n\t    -ms-flex:1;\n\t        flex:1;\n}\n\n\n\n\n/*\n Luminous css\n*/\n\n@-webkit-keyframes lum-fade {\n  0% { opacity: 0; }\n  100% { opacity: 1; }\n}\n\n@keyframes lum-fade {\n  0% { opacity: 0; }\n  100% { opacity: 1; }\n}\n\n@-webkit-keyframes lum-fadeZoom {\n  0% { -webkit-transform: scale(0.5); transform: scale(0.5); opacity: 0; }\n  100% { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }\n}\n\n@keyframes lum-fadeZoom {\n  0% { -webkit-transform: scale(0.5); transform: scale(0.5); opacity: 0; }\n  100% { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }\n}\n\n@-webkit-keyframes lum-loader-rotate {\n  0% { -webkit-transform: translate(-50%, -50%) rotate(0); transform: translate(-50%, -50%) rotate(0); }\n  50% { -webkit-transform: translate(-50%, -50%) rotate(-180deg); transform: translate(-50%, -50%) rotate(-180deg); }\n  100% { -webkit-transform: translate(-50%, -50%) rotate(-360deg); transform: translate(-50%, -50%) rotate(-360deg); }\n}\n\n@keyframes lum-loader-rotate {\n  0% { -webkit-transform: translate(-50%, -50%) rotate(0); transform: translate(-50%, -50%) rotate(0); }\n  50% { -webkit-transform: translate(-50%, -50%) rotate(-180deg); transform: translate(-50%, -50%) rotate(-180deg); }\n  100% { -webkit-transform: translate(-50%, -50%) rotate(-360deg); transform: translate(-50%, -50%) rotate(-360deg); }\n}\n\n@-webkit-keyframes lum-loader-before {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  25% { -webkit-transform: scale(1.3) translateX(8px); transform: scale(1.3) translateX(8px); }\n  40% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  75% { -webkit-transform: scale(0.7) translateX(8px); transform: scale(0.7) translateX(8px); }\n  90% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n@keyframes lum-loader-before {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  25% { -webkit-transform: scale(1.3) translateX(8px); transform: scale(1.3) translateX(8px); }\n  40% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  75% { -webkit-transform: scale(0.7) translateX(8px); transform: scale(0.7) translateX(8px); }\n  90% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n@-webkit-keyframes lum-loader-after {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  25% { -webkit-transform: scale(1.3) translateX(-8px); transform: scale(1.3) translateX(-8px); }\n  40% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  75% { -webkit-transform: scale(0.7) translateX(-8px); transform: scale(0.7) translateX(-8px); }\n  90% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n@keyframes lum-loader-after {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  25% { -webkit-transform: scale(1.3) translateX(-8px); transform: scale(1.3) translateX(-8px); }\n  40% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  75% { -webkit-transform: scale(0.7) translateX(-8px); transform: scale(0.7) translateX(-8px); }\n  90% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n.lum-lightbox {\n  background: rgba(0, 0, 0, 0.6);\n}\n\n.lum-lightbox-inner {\n  top: 2.5%;\n  right: 2.5%;\n  bottom: 2.5%;\n  left: 2.5%;\n}\n\n.lum-lightbox-inner img {\n  position: relative;\n    cursor: zoom-out;\n  \n}\n\n.lum-lightbox-inner .lum-lightbox-caption {\n  margin: 0 auto;\n  color: #fff;\n  max-width: 700px;\n  text-align: center;\n}\n\n.lum-lightbox-loader {\n  display: block;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  width: 66px;\n  height: 20px;\n  -webkit-animation: lum-loader-rotate 1800ms infinite linear;\n          animation: lum-loader-rotate 1800ms infinite linear;\n}\n\n.lum-lightbox-loader:before, .lum-lightbox-loader:after {\n  content: \"\";\n  display: block;\n  width: 20px;\n  height: 20px;\n  position: absolute;\n  top: 50%;\n  margin-top: -10px;\n  border-radius: 20px;\n  background: rgba(255, 255, 255, 0.9);\n}\n\n.lum-lightbox-loader:before {\n  left: 0;\n  -webkit-animation: lum-loader-before 1800ms infinite linear;\n          animation: lum-loader-before 1800ms infinite linear;\n}\n\n.lum-lightbox-loader:after {\n  right: 0;\n  -webkit-animation: lum-loader-after 1800ms infinite linear;\n          animation: lum-loader-after 1800ms infinite linear;\n  -webkit-animation-delay: -900ms;\n          animation-delay: -900ms;\n}\n\n.lum-lightbox.lum-opening {\n  -webkit-animation: lum-fade 180ms ease-out;\n          animation: lum-fade 180ms ease-out;\n}\n\n.lum-lightbox.lum-opening .lum-lightbox-inner {\n  -webkit-animation: lum-fadeZoom 180ms ease-out;\n          animation: lum-fadeZoom 180ms ease-out;\n}\n\n.lum-lightbox.lum-closing {\n  -webkit-animation: lum-fade 300ms ease-in;\n          animation: lum-fade 300ms ease-in;\n  -webkit-animation-direction: reverse;\n          animation-direction: reverse;\n}\n\n.lum-lightbox.lum-closing .lum-lightbox-inner {\n  -webkit-animation: lum-fadeZoom 300ms ease-in;\n          animation: lum-fadeZoom 300ms ease-in;\n  -webkit-animation-direction: reverse;\n          animation-direction: reverse;\n}\n\n/* This media query makes screens less than 460px wide display in a \"fullscreen\"-esque mode. Users can then scroll around inside the lightbox to see the entire image. */\n@media (max-width: 460px) {\n  .lum-lightbox-image-wrapper {\n    display: block;\n    overflow: auto;\n    -webkit-overflow-scrolling: touch;\n  }\n\n  .lum-lightbox-caption {\n    width: 100%;\n    position: absolute;\n    bottom: 0;\n  }\n\n  .lum-lightbox-inner img {\n    max-width: none;\n    max-height: none;\n    display: block;\n  }\n}\n"
+	module.exports = "@font-face {\n\tfont-family:\"TeXGyreAdventor\";\n\tsrc:url(\"./fnt/texgyreadventor-regular.woff\") format(\"woff\"),url(\"./fnt/texgyreadventor-regular.ttf\") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n@font-face {\n\tfont-family:\"Droid-sans\";\n\tsrc:url(\"./fnt/DroidSans.ttf\") format(\"truetype\"),url(\"./fnt/DroidSans-Bold.ttf\") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n@font-face {\n\tfont-family:\"steinemu\";\n\tsrc:url(\"./fnt/STEINEMU.ttf\") format(\"truetype\");\n\tfont-weight:normal;\n\tfont-style:normal;\n}\n\n\n@media (max-width: 750px) {\n\t.row {\n\t\t-webkit-box-orient: vertical;\n\t\t-webkit-box-direction: normal;\n\t\t-webkit-flex-direction: column;\n\t\t    -ms-flex-direction: column;\n\t\t        flex-direction: column;\n\t}\n\t.row > * {\n\t\tmargin: 10 auto 0 auto !important;\n\t}\n\n\n\tsection {\n\t\theight: auto !important;\n\t\tpadding: 15px;\n\t}\n\n\n\tsection > .content .full-image {\n\t\theight: 50% !important;\n\n\t\t/*width: 100% !important;*/\n\t}\n\n}\n\n@media (max-height: 900px) {\n\tsection {\n\t\theight: auto !important;\n\t\tpadding: 15px;\n\t}\n}\n\n/*  \n@media (max-width: 1350px) {\n\t.vid-box {\n\n\t}\n} */\n@-webkit-keyframes float{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -10px);\n\t\t        transform: translate(0, -10px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n@keyframes float{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -10px);\n\t\t        transform: translate(0, -10px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n\n@-webkit-keyframes float-small{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -5px);\n\t\t        transform: translate(0, -5px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n\n@keyframes float-small{\n\tfrom {\n\t\t-webkit-transform: translate(0, 0px);\n\t\t        transform: translate(0, 0px);\n\t}\n\t65% {\n\t\t-webkit-transform: translate(0, -5px);\n\t\t        transform: translate(0, -5px);\n\t}\n\tto {\n\t\t-webkit-transform: translate(0, -0px);\n\t\t        transform: translate(0, -0px);\n\n\t}\n}\n\n@-webkit-keyframes sprite{\n  from { background-position:0 0%; }\n  to { background-position:0 100%; }\n}\n\n@keyframes sprite{\n  from { background-position:0 0%; }\n  to { background-position:0 100%; }\n}\n\nbody {\n\twidth: 100%;\n\tmargin: 0px;\n\tpadding: 0px;\n\tfont-family: Helvetica; \n}\n\n\nsection {\n\twidth: 100%;\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\theight: 50vh;\n\t-webkit-transform-style: preserve-3d;\n\t        transform-style: preserve-3d;\n\tposition: relative;\n\tfont-size: 1.1em;\n\tbackground-color: #00AFEF; \n\tcolor: white;\n}\n\n\nsection > .content.show {\n\topacity: 1 !important;\n}\n\n\nsection > .content {\n\n\t/*background-color: white;*/\n\n\t/* border-top: 2px solid black;\n\t\tborder-bottom: 2px solid black; */\n\tmargin: auto;\n\t-webkit-box-flex: 1;\n\t-webkit-flex: 1 1;\n\t    -ms-flex: 1 1;\n\t        flex: 1 1;\n\ttext-align: center;\n\t-webkit-transition:opacity 1.5s;\n\ttransition: opacity 1.5s;\n}\n\n\nsection > .content .icon {\n\theight: 35vh;\n\twidth: 35vh;\n\tdisplay: inline-block;\n\tmargin-right: 10px;\n\t-webkit-transition:opacity 0.5s;\n\ttransition: opacity 0.5s\n}\n\n\nsection > .content .icon.animated {\n\t-webkit-animation:sprite 1.5s steps(26) infinite;\n\t        animation:sprite 1.5s steps(26) infinite;\n\t-webkit-transform:translateX(0px);\n\t        transform:translateX(0px);\n}\n\n\nsection > .content .full-image {\n\theight: 100%;\n\t-webkit-animation-name: float-small;\n\t        animation-name: float-small;\n\t-webkit-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-duration: 3s;\n\t        animation-duration: 3s;\n\t-webkit-animation-timing-function: ease-in-out;\n\t        animation-timing-function: ease-in-out;\n}\n\n\nsection > .content h1 {\n\tfont-size: 3em;\n\tfont-family: steinemu;\n\tletter-spacing: 2px;\n}\n\n\nsection > .content h2 {\n\ttext-shadow: 0 0 3px #000;\n}\n\n\nsection > .content > .row {\n\tmargin: 0 10% 0 10%;\n}\n\n\nsection > .content > .row > .icon {\n\n\t/* flex: 1; */\n}\n\n\nsection > .content > .row > p {\n\tfont-size: 1.1em;\n\t-webkit-box-flex: 5;\n\t-webkit-flex: 5;\n\t    -ms-flex: 5;\n\t        flex: 5;\n\t-webkit-align-self: center;\n\t    -ms-flex-item-align: center;\n\t        align-self: center;\n\ttext-align: left;\n\ttext-shadow: 0 0 3px #000;\n\tletter-spacing: 1px;\n}\n\n\nsection > .content > .row.wrap {\n\t-webkit-flex-wrap:wrap;\n\t    -ms-flex-wrap:wrap;\n\t        flex-wrap:wrap;\n}\n\n\nsection.paralax {\n\tmin-height:500px;\n\tbackground-image:url(\"./img/Background.jpg\");\n\tbackground-position:center;\n\tbackground-repeat:no-repeat;\n\tbackground-attachment:fixed;\n\tbackground-size:cover;\n}\n\n\nsection.paralax h1 {\n\t-webkit-animation-name:float;\n\t        animation-name:float;\n\t-webkit-animation-iteration-count:infinite;\n\t        animation-iteration-count:infinite;\n\t-webkit-animation-duration:3s;\n\t        animation-duration:3s;\n\t-webkit-animation-timing-function:ease-in-out;\n\t        animation-timing-function:ease-in-out;\n}\n\n\n#flexibility .icon {\n\tbackground:  url(\"./img/home_page/guvkavost_sprite.png\");\n\tbackground-size: 100%;\n}\n\n.row {\n\tdisplay: -webkit-box;\n\tdisplay: -webkit-flex;\n\tdisplay: -ms-flexbox;\n\tdisplay: flex;\n\t-webkit-box-pack: center;\n\t-webkit-justify-content: center;\n\t    -ms-flex-pack: center;\n\t        justify-content: center;\n}\n\n.row > * {}\n\na {\n\tcolor: blue;\n\tcursor: pointer;\n}\n\n.static > * {\n\tposition: fixed;\n}\n\n.static > #to-game {\n\tright: 50px;\n\tbottom: -34px;\n\tpadding: 6px 12px 6px 12px;\n\tdisplay: block;\n\tfont-size: 1.2em;\n\tcolor: #444;\n\tbackground-color: #0096CC;\n\t-webkit-transition:color 0.1s;\n\ttransition: color 0.1s;\n\ttext-decoration: none;\n\n\t/* border-bottom: 2px black solid; */\n\t-webkit-perspective: 800px;\n\t        perspective: 800px;\n\t-webkit-transition:all 0.5s;\n\ttransition: all 0.5s;\n\topacity: 0;\n\tfont-weight: bold\n}\n\n.static > #to-game.show {\n\tbottom:40px;\n\topacity:1;\n}\n\n.static > #to-game:hover {\n\tcolor:white;\n}\n\n.static > #to-game:before {\n\tcontent:\"\";\n\tposition:absolute;\n\tbackground:#444;\n\tbottom:0;\n\tleft:0;\n\tright:0;\n\ttop:0;\n\tz-index:-1;\n\n\t/* border-radius: 3px; */\n\t-webkit-transform:rotatex( 90deg );\n\t        transform:rotatex( 90deg );\n\t-webkit-transform-origin:bottom;\n\t        transform-origin:bottom;\n\t-webkit-transition:-webkit-transform 0.15s ease-in;\n\ttransition:-webkit-transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in, -webkit-transform 0.15s ease-in;\n}\n\n.static > #to-game:hover:before {\n\tright:0;\n\t-webkit-transform:rotatex( 0deg );\n\t        transform:rotatex( 0deg );\n}\n\n.static .vid-box\n\t{\n\ttop: 50vh;\n\t-webkit-transform: translateY(-22.5vw);\n\t        transform: translateY(-22.5vw);\n\tleft: 10vw;\n\twidth: 80vw;\n\topacity: 0;\n\tdisplay: none\n}\n\n.static .vid-box.display {\n\tdisplay:block;\n}\n\n.static .vid-box.show {\n\topacity:1;\n}\n\n.static #close {\n\ttop: calc(50vh - 22.5vw - 80px);\n\tright: 10vw;\n\t-webkit-transform: translateX(94px) scale(0.2, 0.2);\n\t        transform: translateX(94px) scale(0.2, 0.2);\n\tbackground-color: #444;\n\n\t/* transform: translateX(80px) translateY(-22.5vw) translateY(-80px) scale(0.5, 0.5); */\n\tborder-radius: 80px;\n\tdisplay: none\n}\n\n.static #close:hover {\n\tbackground-color:#bbb;\n}\n\n.static #close.show {\n\tdisplay:block;\n}\n\n\n.thumb {\n\theight: 200px;\n\tmargin: 10px;\n\tcursor: pointer;\n}\n\n#landing {\n\theight: 100vh !important;\n}\n\n#landing > .content {\n\topacity: 0;\n}\n\n#landing a {\n\tdisplay: block;\n\tposition: absolute;\n\tmargin: 0px;\n\t-webkit-transform: rotate(180deg);\n\t        transform: rotate(180deg);\n\tbottom: 0px;\n\tleft: calc(50% - 80px);\n\tcursor: pointer;\n}\n\n/* transition: all .3s; */\n\n#landing a img {\n\tz-index: 11;\n\t-webkit-transition:all .3s;\n\ttransition: all .3s;\n\n\t/* \t\t\twidth: 160px;\n\t\t\theight: 160px; */\n}\n\n/* left: calc(50% - 90px); */\n\n#landing a:hover img {\n\n\t/* \t\t\twidth: 180px;\n\t\t\theight: 180px; */\n\t-webkit-transform: scale(1.3);\n\t        transform: scale(1.3);\n}\n\n/*#logo {\n\t\tposition: absolute;\n\t\ttop: calc(50vh - 720px/2);\n\t\tleft: calc(50vw - 1280px/2);\n\t}\n*/\n\n#landing #logo {\n\tposition: absolute;\n\ttop: 50vh;\n\t-webkit-transform: translate(-640px, -360px) scale(1);\n\t        transform: translate(-640px, -360px) scale(1);\n\tleft: 50vw;\n\t-webkit-transition:all .5s;\n\ttransition: all .5s;\n\tz-index: -1;\n}\n\n#landing #logo.hidden {\n\t-webkit-transform: translate(-640px, -360px) scale(0);\n\t        transform: translate(-640px, -360px) scale(0);\n}\n\n#landing h1, #landing h2{\n\tfont-family: steinemu, Verdana, sans-serif;\n\tcolor: white;\n\tz-index: 10;\n}\n\n#landing h1 {\n\tfont-size: 4em;\n\tmargin: 0px;\n\t-webkit-animation-name: float;\n\t        animation-name: float;\n\t-webkit-animation-iteration-count: infinite;\n\t        animation-iteration-count: infinite;\n\t-webkit-animation-duration: 3s;\n\t        animation-duration: 3s;\n\t-webkit-animation-timing-function: ease-in-out;\n\t        animation-timing-function: ease-in-out;\n}\n\n#landing h2 {}\n\n.button {\n\tfont-weight: bold;\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\twidth: 200px;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition:background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor, Verdana, sans-serif;\n\tfont-size: 2em;\n}\n\n.button:hover{\n\tbackground-color: #444;\n\tcolor: white;\n}\n\n\n.button-small {\n\n\tfont-size: 1em;\n\twidth: 200px;\n\n}\n\n.button-large {\n\tfont-size: 1.5em;\n\twidth: 300px;\n\n}\n\n.button-slide {\n\ttext-decoration: inherit;\n\ttext-align: center;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground-color: #0096CC;\n\t/*background: none;*/\n\tposition: relative;\n\tz-index: 1;\n\tbackground-image: -webkit-linear-gradient(#444, #444);\n\tbackground-image: linear-gradient(#444, #444);\n\tbackground-position: 50% 50%;\n\tbackground-size: 100% 0%;\n\tbackground-repeat: no-repeat;\n\t-webkit-transition:background-size .3s, color .3s;\n\ttransition: background-size .3s, color .3s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n\tfont-weight: bold;\n}\n\na {\n\tcolor: #000;\n\ttext-shadow: none;\n}\n\n\n.button-slide:hover{\n\tbackground-size: 100% 100%;\n\tcolor: #FFF;\n}\n\n\n.button-black {\n\tfont-weight: bold;\n\tfont-size: 1.5em;\n\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\twidth: 400px;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition:background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n}\n\n.button-black:hover{\n\tbackground-color: #444;\n\tcolor: white;\n}\n\n\n.text {\n\tbackground-color: blue;\n}\n\n.button-3d {\n\tfont-weight: bold;\n\tfont-size: 1.5em;\n\n\ttext-decoration: inherit;\n\tmargin: 10px;\n\tborder: #444 3px solid;\n\tdisplay: inline-block;\n\twidth: 400px;\n\tcolor: #444;\n\tpadding: 10px;\n\tbox-sizing: border-box;\n\tborder-radius: 2px;\n\tbackground: none;\n\tposition: relative;\n\tz-index: 1;\n\t-webkit-transition:background-color .4s, color .4s;\n\ttransition: background-color .4s, color .4s;\n\tfont-family: TeXGyreAdventor,Verdana, sans-serif;\n\t-webkit-perspective: 800px;\n\t        perspective: 800px\n}\n\n.button-3d:hover {\n\tcolor:white;\n}\n\n.button-3d:before {\n\tcontent:\"\";\n\tposition:absolute;\n\tbackground:#444;\n\tbottom:0;\n\tleft:0;\n\tright:0;\n\ttop:0;\n\tz-index:-1;\n\n\t/* border-radius: 3px; */\n\t-webkit-transform:rotatex( 90deg );\n\t        transform:rotatex( 90deg );\n\t-webkit-transform-origin:bottom;\n\t        transform-origin:bottom;\n\t-webkit-transition:-webkit-transform 0.15s ease-in;\n\ttransition:-webkit-transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in;\n\ttransition:transform 0.15s ease-in, -webkit-transform 0.15s ease-in;\n}\n\n.button-3d:hover:before {\n\tright:0;\n\t-webkit-transform:rotatex( 0deg );\n\t        transform:rotatex( 0deg );\n}\n\n.button-3d:hover{\n\tbackground-color: #444;\n\tcolor: white;\n}\n\n\n\n\n#sources {\n\tdisplay: none;\n\t-webkit-box-orient: vertical;\n\t-webkit-box-direction: normal;\n\t-webkit-flex-direction: column;\n\t    -ms-flex-direction: column;\n\t        flex-direction: column;\n}\n\n\n\n\n#sources > * {\n\ttext-align: left;\n\tmargin: auto;\n\t-webkit-box-flex:1;\n\t-webkit-flex:1;\n\t    -ms-flex:1;\n\t        flex:1;\n}\n\n\n\n\n/*\n Luminous css\n*/\n\n@-webkit-keyframes lum-fade {\n  0% { opacity: 0; }\n  100% { opacity: 1; }\n}\n\n@keyframes lum-fade {\n  0% { opacity: 0; }\n  100% { opacity: 1; }\n}\n\n@-webkit-keyframes lum-fadeZoom {\n  0% { -webkit-transform: scale(0.5); transform: scale(0.5); opacity: 0; }\n  100% { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }\n}\n\n@keyframes lum-fadeZoom {\n  0% { -webkit-transform: scale(0.5); transform: scale(0.5); opacity: 0; }\n  100% { -webkit-transform: scale(1); transform: scale(1); opacity: 1; }\n}\n\n@-webkit-keyframes lum-loader-rotate {\n  0% { -webkit-transform: translate(-50%, -50%) rotate(0); transform: translate(-50%, -50%) rotate(0); }\n  50% { -webkit-transform: translate(-50%, -50%) rotate(-180deg); transform: translate(-50%, -50%) rotate(-180deg); }\n  100% { -webkit-transform: translate(-50%, -50%) rotate(-360deg); transform: translate(-50%, -50%) rotate(-360deg); }\n}\n\n@keyframes lum-loader-rotate {\n  0% { -webkit-transform: translate(-50%, -50%) rotate(0); transform: translate(-50%, -50%) rotate(0); }\n  50% { -webkit-transform: translate(-50%, -50%) rotate(-180deg); transform: translate(-50%, -50%) rotate(-180deg); }\n  100% { -webkit-transform: translate(-50%, -50%) rotate(-360deg); transform: translate(-50%, -50%) rotate(-360deg); }\n}\n\n@-webkit-keyframes lum-loader-before {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  25% { -webkit-transform: scale(1.3) translateX(8px); transform: scale(1.3) translateX(8px); }\n  40% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  75% { -webkit-transform: scale(0.7) translateX(8px); transform: scale(0.7) translateX(8px); }\n  90% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n@keyframes lum-loader-before {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  25% { -webkit-transform: scale(1.3) translateX(8px); transform: scale(1.3) translateX(8px); }\n  40% { -webkit-transform: scale(1.2) translateX(6px); transform: scale(1.2) translateX(6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  75% { -webkit-transform: scale(0.7) translateX(8px); transform: scale(0.7) translateX(8px); }\n  90% { -webkit-transform: scale(0.8) translateX(6px); transform: scale(0.8) translateX(6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n@-webkit-keyframes lum-loader-after {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  25% { -webkit-transform: scale(1.3) translateX(-8px); transform: scale(1.3) translateX(-8px); }\n  40% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  75% { -webkit-transform: scale(0.7) translateX(-8px); transform: scale(0.7) translateX(-8px); }\n  90% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n@keyframes lum-loader-after {\n  0% { -webkit-transform: scale(1); transform: scale(1); }\n  10% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  25% { -webkit-transform: scale(1.3) translateX(-8px); transform: scale(1.3) translateX(-8px); }\n  40% { -webkit-transform: scale(1.2) translateX(-6px); transform: scale(1.2) translateX(-6px); }\n  50% { -webkit-transform: scale(1); transform: scale(1); }\n  60% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  75% { -webkit-transform: scale(0.7) translateX(-8px); transform: scale(0.7) translateX(-8px); }\n  90% { -webkit-transform: scale(0.8) translateX(-6px); transform: scale(0.8) translateX(-6px); }\n  100% { -webkit-transform: scale(1); transform: scale(1); }\n}\n\n.lum-lightbox {\n  background: rgba(0, 0, 0, 0.6);\n}\n\n.lum-lightbox-inner {\n  top: 2.5%;\n  right: 2.5%;\n  bottom: 2.5%;\n  left: 2.5%;\n}\n\n.lum-lightbox-inner img {\n  position: relative;\n    cursor: zoom-out;\n  \n}\n\n.lum-lightbox-inner .lum-lightbox-caption {\n  margin: 0 auto;\n  color: #fff;\n  max-width: 700px;\n  text-align: center;\n}\n\n.lum-lightbox-loader {\n  display: block;\n  position: absolute;\n  top: 50%;\n  left: 50%;\n  -webkit-transform: translate(-50%, -50%);\n          transform: translate(-50%, -50%);\n  width: 66px;\n  height: 20px;\n  -webkit-animation: lum-loader-rotate 1800ms infinite linear;\n          animation: lum-loader-rotate 1800ms infinite linear;\n}\n\n.lum-lightbox-loader:before, .lum-lightbox-loader:after {\n  content: \"\";\n  display: block;\n  width: 20px;\n  height: 20px;\n  position: absolute;\n  top: 50%;\n  margin-top: -10px;\n  border-radius: 20px;\n  background: rgba(255, 255, 255, 0.9);\n}\n\n.lum-lightbox-loader:before {\n  left: 0;\n  -webkit-animation: lum-loader-before 1800ms infinite linear;\n          animation: lum-loader-before 1800ms infinite linear;\n}\n\n.lum-lightbox-loader:after {\n  right: 0;\n  -webkit-animation: lum-loader-after 1800ms infinite linear;\n          animation: lum-loader-after 1800ms infinite linear;\n  -webkit-animation-delay: -900ms;\n          animation-delay: -900ms;\n}\n\n.lum-lightbox.lum-opening {\n  -webkit-animation: lum-fade 180ms ease-out;\n          animation: lum-fade 180ms ease-out;\n}\n\n.lum-lightbox.lum-opening .lum-lightbox-inner {\n  -webkit-animation: lum-fadeZoom 180ms ease-out;\n          animation: lum-fadeZoom 180ms ease-out;\n}\n\n.lum-lightbox.lum-closing {\n  -webkit-animation: lum-fade 300ms ease-in;\n          animation: lum-fade 300ms ease-in;\n  -webkit-animation-direction: reverse;\n          animation-direction: reverse;\n}\n\n.lum-lightbox.lum-closing .lum-lightbox-inner {\n  -webkit-animation: lum-fadeZoom 300ms ease-in;\n          animation: lum-fadeZoom 300ms ease-in;\n  -webkit-animation-direction: reverse;\n          animation-direction: reverse;\n}\n\n/* This media query makes screens less than 460px wide display in a \"fullscreen\"-esque mode. Users can then scroll around inside the lightbox to see the entire image. */\n@media (max-width: 460px) {\n  .lum-lightbox-image-wrapper {\n    display: block;\n    overflow: auto;\n    -webkit-overflow-scrolling: touch;\n  }\n\n  .lum-lightbox-caption {\n    width: 100%;\n    position: absolute;\n    bottom: 0;\n  }\n\n  .lum-lightbox-inner img {\n    max-width: none;\n    max-height: none;\n    display: block;\n  }\n}\n"
 
 /***/ },
 
-/***/ 496:
+/***/ 503:
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(349);
+	var content = __webpack_require__(356);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(141)(content, {});
+	var update = __webpack_require__(144)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -1411,7 +1140,7 @@ webpackJsonp([2],{
 
 /***/ },
 
-/***/ 500:
+/***/ 507:
 /***/ function(module, exports) {
 
 	/*!
