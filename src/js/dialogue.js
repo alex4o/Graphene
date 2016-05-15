@@ -1,11 +1,5 @@
 import R from "ramda"
 
-var participants = [
-	"Graphene",
-	"Carbon",
-	"Silver"
-]
-
 var dialogue = [
 	{
 		name: "begin",
@@ -121,13 +115,15 @@ var dialogue = [
 		array: [ // scene: After blood 
 			{ // loc: 0
 				who: "Графен",
-				say: "И това не е всичко!"
+				say: "И това не е всичко!",
 			},
 			{ // loc: 1
 				who: "Графен",
-				say: "С моята енергийна плътност от 75 F/g и 31-9 Wh/kg\n мога да захранвам устройство много по дълго от теб!",
+				//say: "С моята енергийна плътност от 75 F/g и 31-9 Wh/kg\n мога да захранвам устройство много по дълго от теб!",
+				say: "С моята електропроводимост аз съм ненадминат.",
 				tag: "free",
-				scene: "cars"
+				//scene: "cars"
+				scene: "phone"
 			}
 		]
 	},

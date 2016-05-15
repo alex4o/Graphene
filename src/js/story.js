@@ -118,8 +118,8 @@ var story = [
 		"type": "End"
 	},
 	{
+		"scene": "End",
 		"src": "vid/Background.mp4",
-		"scene": "test",
 		"type": "End"
 	}	
 ]

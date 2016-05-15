@@ -3,29 +3,38 @@ require("./Element.mutation.js")
 
 require("../css/index.css")
 // found that code on github
-import scrollTo from "./util/scrollTo"
 import Luminous from "luminous-lightbox"
 // import Luminous from "Luminous"
 
-window.ps = Luminous
+import $  from "jquery"
 
+// () => {} === function(){}
 // for eslint, couldn't find a way not to polute the environement
-
 let Waypoint = window.Waypoint
+$(document).ready(() => {
 
-let arrow = document.getElementById("scroll-arrow")
+	if(window.location.hash){
+		$("body, html").animate({
+			scrollTop: $( window.location.hash ).offset().top
+		}, 1000)
+	}
 
+	$("a").click(function(){
+		$("body, html").animate({
+			scrollTop: $( $(this).attr("href") ).offset().top
+		}, 800)
+		return false;
+	})
+
+	// $("#landing").fadeIn()
+})
 let info = document.getElementById("info")
-let landing = document.getElementById("landing")
-
 let to_game = document.getElementById("to-game")
-
 let logo = document.getElementById("logo")
 
-
-arrow.addEventListener("click", () => {
-	scrollTo(window.innerHeight, 800)
-})
+// arrow.addEventListener("click", () => {
+// 	scrollTo(window.innerHeight, 800)
+// })
 
 let butFlex = document.getElementById("but-flex")
 let butStr = document.getElementById("but-str")

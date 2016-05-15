@@ -34,22 +34,6 @@ var container = null
 var volume = new Atom(0.5)
 
 /*
-story.onBefore("end_true",() => {
-
-	story.showDialogue = false
-	guz = true
-	toggleCharacters(false)
-	graphene.visible = true
-	talk_text.visible = true
-
-
-	graphene.setPosition(paper.view.center)
-	talk_text.content = "А ти какво научи от всичко това?"	
-	paper.view.update(true)
-
-})
-
-
 //gala --replace
 */
 

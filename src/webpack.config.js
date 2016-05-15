@@ -53,7 +53,7 @@ module.exports = {
 	postcss: function () {
 		return {
 			defaults: [precss, lost, cssnext],
-			cleaner:  [autoprefixer({ browsers: ["last 2 version"] })]
+			cleaner:  [autoprefixer({ browsers: ["last 3 version"] })]
 		}
 	},
 	resolve: {
