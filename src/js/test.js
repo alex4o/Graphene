@@ -199,7 +199,9 @@ class App extends React.Component
 				<Alert bsStyle="success">
 					Браво вие преминахте теста! {wrong()}
 					<img className="alert_img" src="./img/HappyEnd.png" onClick={() =>  {
-						window.location.pathname = window.location.pathname.replace("test","index")
+						//window.location.pathname = window.location.pathname.replace("test","index")
+						window.location = window.location.pathname.replace("test","index") + "#info"
+
 					}}/>
 				</Alert> )				
 		case 3:

@@ -10,7 +10,9 @@ export default class EndScene {
 		this.Graphene.visible = true
 
 		this.Graphene.onClick = () => {
-			window.location.pathname = window.location.pathname.replace("game","index")
+			window.location = window.location.pathname.replace("test","index") + "#end"
+
+			//window.location.pathname = window.location.pathname.replace("game","index")
 		}
 
 		this.talkText = new paper.PointText({
