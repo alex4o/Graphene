@@ -27382,7 +27382,7 @@ webpackJsonp([2],{
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _ref() {
-		window.location = window.location.pathname.replace("test", "index") + "#end";
+		window.location = window.location.pathname.replace("game", "index") + "#end";
 	
 		//window.location.pathname = window.location.pathname.replace("game","index")
 	}
