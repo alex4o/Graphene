@@ -2,28 +2,67 @@ require("waypoints/lib/noframework.waypoints")
 require("./Element.mutation.js")
 
 require("../css/index.css")
+
 // found that code on github
-import Luminous from "luminous-lightbox"
+// import Luminous from "luminous-lightbox"
 // import Luminous from "Luminous"
 
-import $  from "jquery"
 
+import $ from "jquery"
+window.$ = $
+window.jQuery = $
+
+require("magnific-popup/dist/magnific-popup.css")
+import mp from "magnific-popup/dist/jquery.magnific-popup.js"
+window.mp = mp
+/*
+require("lightgallery/dist/css/lightgallery.min.css")
+import lg from "lightgallery"
+window.lg = lg
+
+require("fluidbox/dist/css/fluidbox.min.css")
+import fb from "fluidbox"
+window.fb = fb
+*/
 // () => {} === function(){}
 // for eslint, couldn't find a way not to polute the environement
 let Waypoint = window.Waypoint
 $(document).ready(() => {
 
-	if(window.location.hash){
+	if (window.location.hash) {
 		$("body, html").animate({
-			scrollTop: $( window.location.hash ).offset().top
+			scrollTop: $(window.location.hash).offset().top
 		}, 1000)
 	}
 
-	$("a").click(function(){
+	$(".thumb").attr("src", function() {
+	//	$(this).attr("href", $(this).attr("src"))
+	})
+
+	//$(".thumb").parent().lightGallery()
+
+	$("#gallery").magnificPopup({
+		delegate: "a",
+		type: "image",
+		mainClass: "guzGolqm",
+		image: {
+			verticalFit: true
+		},
+		gallery: {
+			enabled: true
+		},
+		callbacks: {
+			open: function() {
+				console.log(this.el)
+			}
+		}
+	})
+
+	$("#scroll-arrow").click(function() {
 		$("body, html").animate({
-			scrollTop: $( $(this).attr("href") ).offset().top
+			scrollTop: $($(this).attr("href")).offset().top
 		}, 800)
-		return false;
+		return false
 	})
 
 	// $("#landing").fadeIn()
@@ -32,83 +71,46 @@ let info = document.getElementById("info")
 let to_game = document.getElementById("to-game")
 let logo = document.getElementById("logo")
 
-// arrow.addEventListener("click", () => {
-// 	scrollTo(window.innerHeight, 800)
-// })
+let table = {
+	strength: "./vid/Meteor.mp4", 
+	conductivity: "./vid/Cars.mp4",
+	flexibility: "./vid/Blood.mp4"
+}
+let video = $("#vid-box-vid")
+let box = $("#vid-box")
+let close = $(".close")
 
-let butFlex = document.getElementById("but-flex")
-let butStr = document.getElementById("but-str")
-let butCond = document.getElementById("but-cond")
-let butEle = document.getElementById("but-ele")
+function showVideo(src) {
+	console.log("src: ", src)
+	console.log("video: ", video)
+	
 
-let videos = Array.from(document.getElementsByClassName("vid-box"))
+	video.attr("src", src)
+	box.fadeIn(500)
 
-let thumbs = Array.from(document.getElementsByClassName("thumb"))
-
-let options = {
-	sourceAttribute: "src"
+	video[0].play()
 }
 
-let lum = thumbs.map(thumb => {
-	return new Luminous(thumb, options)
+close.click(function(){
+
+	video[0].pause()
+	box.fadeOut(500)
+
 })
 
 
-let close = document.getElementById("close")
-
-function hideVideos(){
-	videos.forEach(video => {
-		video.pause()
-		video.classList.remove("show")
-		video.classList.remove("display")
-
-	})
-
-	close.classList.remove("show")
-
-
-}
-
-function showVideo(idx){
-	videos[idx].classList.add("display")
-
-	videos[idx].classList.add("show")
-	close.classList.add("show")
-	videos[idx].play()
-
-
-
-}
-
-close.addEventListener("click", hideVideos)
-
-
-// butFlex.addEventListener("click", () => {
-// 	showVideo(0)
-// })
-
-butStr.addEventListener("click", () => {
-	showVideo(1)
+$(".demo").click(function(){
+	showVideo(table[$(this).data("type")])
 })
-
-butCond.addEventListener("click", () => {
-	showVideo(2)
-})
-
-butEle.addEventListener("click", () => {
-	showVideo(3)
-})
-
-
 
 let landingWaypoint = new Waypoint({
 	element: landing,
 	handler: (dir) => {
 		//console.log(landing + " " + dir)
-		if(dir == "up"){
+		if (dir == "up") {
 			to_game.classList.remove("show")
 
-		}else{ // dir == "down"
+		} else { // dir == "down"
 			to_game.classList.add("show")
 		}
 		//to_game.style.color = "black";
@@ -119,8 +121,8 @@ let landingWaypoint = new Waypoint({
 let infoWaypoint = new Waypoint({
 	element: info,
 	handler: (dir) => {
-		if(dir == "down"){
-				
+		if (dir == "down") {
+
 		}
 	},
 	offset: 0
