@@ -101,8 +101,11 @@ section {
 	height: 50vh;
 	transform-style: preserve-3d;
 	position: relative;
+	background-color: #00AFEF !important; 
+
+
 	font-size: 1.1em;
-	background-color: #00AFEF; 
+	/*#00AFEF;*/ 
 	color: white;
 	
 	&.paralax {

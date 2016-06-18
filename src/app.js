@@ -1,5 +1,5 @@
-var app = require("app")
-var BrowserWindow = require("browser-window")
+var app = require('electron').app;
+var BrowserWindow = require('electron').BrowserWindow;
 
 app.on("ready", function(){
 	var win = new BrowserWindow({
@@ -10,7 +10,7 @@ app.on("ready", function(){
 
 
 	win.loadURL("file://" + __dirname + "/out/index.html")
-//	win.toggleDevTools()
+win.toggleDevTools()
 	win.setFullScreen(true)
 
 })

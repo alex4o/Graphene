@@ -63,8 +63,18 @@ window.addEventListener("load", () => {
 			mountedVideo.remove()
 		}
 
+		console.log(video.l)
+		if(video.l){
+			console.log("Looping vid!")
+			video.addEventListener("ended", (ctxv) => {
+			//	console.log(ctxv)
+				video.currentTime = 0
+				video.play()
+			})
 
-		video.addEventListener("ended", () => story.next())
+		}else{
+			video.addEventListener("ended", () => story.next())
+		}
 
 		container.appendChild(video)
 		video.play()

@@ -137,7 +137,8 @@ function createVideo(element){
 	}else{
 		let vid = document.createElement("video")
 		if(element.src == "vid/Background.mp4"){
-			vid.loop = true
+			//vid.loop = true
+			vid.l = true
 		}
 		vid.src = element.src
 		cache.push({src: element.src, video: vid})
