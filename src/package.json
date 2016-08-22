@@ -30,7 +30,7 @@
     "lost": "^6.8.1",
     "luminous-lightbox": "^0.2.7",
     "magnific-popup": "^1.1.0",
-    "paper": "github:paperjs/paper.js",
+    "paper": "^0.10.2",
     "photoswipe": "^4.1.1",
     "postcss": "^5.0.21",
     "postcss-cssnext": "^2.6.0",

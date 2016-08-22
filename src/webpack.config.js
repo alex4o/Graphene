@@ -6,6 +6,7 @@ var webpack = require("webpack")
 
 var LiveReloadPlugin = require('webpack-livereload-plugin');
 
+
 module.exports = {
 	entry: {
 		main: "./js/main.js",
