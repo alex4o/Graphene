@@ -41,7 +41,6 @@
     "react-addons-css-transition-group": "^15.1.0",
     "react-bootstrap": "^0.29.4",
     "react-dom": "^15.1.0",
-    "smooth-scroll": "github:cferdinandi/smooth-scroll",
     "style-loader": "^0.13.1",
     "url-loader": "^0.5.7",
     "waypoint": "github:imakewebthings/waypoints",
