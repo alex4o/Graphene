@@ -38,12 +38,12 @@ class DialogueButtons {
 
 			let button = this.button.clone()
 			button.visible = true
-			button.setBounds(this.calculateButtonSize(text.bounds))
+			button.setBounds(this.calculateButtonSize(text.bounds, button))
 
 			group.addChild(button)
 			group.addChild(text)
 
-			let rootButtonelement = button.children[0]//.children[0] // illogical but the first two are groups
+			let rootButtonelement = button.children[1] // illogical but the first two are groups
 
 			group.onMouseEnter = e => {
 				rootButtonelement.shadowBlur = 50
@@ -61,13 +61,14 @@ class DialogueButtons {
 		})
 	}
 
-	calculateButtonSize(rect){
-		let res_rect = R.clone(rect)
+	calculateButtonSize(rect, { bounds }){
+		//let res_rect = {...rect}
+		let res_rect = bounds
 		let margin = 10
-		res_rect.x -= margin/2
-		res_rect.y -= margin/2
-		res_rect.width += margin
-		res_rect.height += margin
+		res_rect.x = rect.x - margin/2
+		res_rect.y = rect.y - margin/2
+		res_rect.width = rect.width + margin
+		res_rect.height = rect.height + margin
 
 		return res_rect
 	}
@@ -130,7 +131,7 @@ export default class DialogueScene {
 			this.hiddenSampleButton = e
 			this.hiddenSampleButton.visible = false
 			window.hsb = this.hiddenSampleButton
-			this.DialogueButtons = new DialogueButtons(font_size, this.hiddenSampleButton)
+			this.DialogueButtons = new DialogueButtons(font_size, this.hiddenSampleButton.children[1])
 
 			this.DialogueButtons.onSelect(n => {
 				this.story.next(n)

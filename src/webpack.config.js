@@ -38,7 +38,7 @@ module.exports = {
 		}]
 	},
 	plugins: [
-		new webpack.optimize.CommonsChunkPlugin("commons.chunk.js"),
+		//new webpack.optimize.CommonsChunkPlugin("commons.chunk.js"),
 		//new LiveReloadPlugin(),
 		new webpack.ProvidePlugin({
 			$: "jquery",
