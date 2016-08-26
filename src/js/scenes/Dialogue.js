@@ -43,7 +43,7 @@ class DialogueButtons {
 			group.addChild(button)
 			group.addChild(text)
 
-			let rootButtonelement = button.children[0].children[0] // illogical but the first two are groups
+			let rootButtonelement = button.children[0]//.children[0] // illogical but the first two are groups
 
 			group.onMouseEnter = e => {
 				rootButtonelement.shadowBlur = 50
