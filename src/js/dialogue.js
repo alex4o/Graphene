@@ -411,9 +411,7 @@ export default class Dialogue {
 					this.loc = tag.loc
 					this.currentPhrase = this.phrase(tag.loc)
 				}
-
-
-
+				return null
 			}
 
 			this.loc += 1
