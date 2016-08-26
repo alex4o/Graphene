@@ -361,11 +361,11 @@ export default class Dialogue {
 		return this.loc < (this.currentDialogue.array.length() - 1)
 	}
 
-	chekcTag(phrase){
-		if(phrase.tag){
-			this.tags[phrase.tag] = 1
-			console.log("Tag added:", this.tags)
+	checkTag(name){
+		if(this.tags[name]){
+			return this.tags[name] == 1
 		}
+		return false
 	}
 
 	next(choice){
@@ -400,18 +400,20 @@ export default class Dialogue {
 			
 			for(let tag of this.currentPhrase.tags){
 				console.log("Cur:", tag)
-				if(this.tags[tag.name]){
-					if(this.tags[tag.name] == 1){
-						console.log("Chosen:", tag)
-
-						this.loc = tag.loc
-						this.currentPhrase = this.phrase(tag.loc)
-
-
-
-						return null
-					}
+				let name = tag.name
+				let inversed = false
+				if(tag.name.startsWith("!")){
+					name = tag.name.slice(1)
+					inversed = true
 				}
+
+				if(this.checkTag(name) == !inversed){
+					this.loc = tag.loc
+					this.currentPhrase = this.phrase(tag.loc)
+				}
+
+
+
 			}
 
 			this.loc += 1
