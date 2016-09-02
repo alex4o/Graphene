@@ -369,6 +369,7 @@ export default class Dialogue {
 	}
 
 	next(choice){
+		console.log(this, choice)
 		if(this.currentPhrase.tag){
 			this.tags[this.currentPhrase.tag] = 1
 		}
@@ -410,8 +411,12 @@ export default class Dialogue {
 				if(this.checkTag(name) == !inversed){
 					this.loc = tag.loc
 					this.currentPhrase = this.phrase(tag.loc)
+					console.log("Jump: ", tag.loc)
+					return null
+
+				}else{
+					console.error(`No tag with ${tag.name} in pool`)
 				}
-				return null
 			}
 
 			this.loc += 1
