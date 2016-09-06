@@ -38,7 +38,7 @@ var dialogue = [
 				answer: [
 					{ say: "Eлектропроводимост", scene: "phone" },
 					{ say: "Здравината", scene: "asteroid" },
-					{ say: "Енергийна плътност", scene:  "cars"},
+					//{ say: "Енергийна плътност", scene:  "cars"},
 				]
 			},
 			{ // loc: 7
