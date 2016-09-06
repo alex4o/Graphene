@@ -59,7 +59,7 @@ var dialogue = [
 				answer: [
 					{ say: "Гъвкавост/Компактност", scene: "blood" },
 					{ say: "Здравина", scene: "elevator"},
-					{ say: "Енергийна плътност", scene:  "cars"},
+					//{ say: "Енергийна плътност", scene:  "cars"},
 				]
 			},
 			{ // loc: 11
