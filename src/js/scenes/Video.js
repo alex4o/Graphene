@@ -1,4 +1,6 @@
 import paper from "paper"
+import rasterLoad from "../util/rasterLoad"
+
 
 export default class VideoScene {
 	constructor(story){
@@ -36,5 +38,10 @@ export default class VideoScene {
 		this.Skip.onMouseEnter = null
 		this.Skip.onMouseLeave = null
 		this.Skip.onClick = null
+	}
+
+
+	assetsLoaded(){
+		return Promise.all([this.Skip].map(rasterLoad))
 	}
 }

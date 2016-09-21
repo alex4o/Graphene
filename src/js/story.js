@@ -144,11 +144,13 @@ function createVideo(element){
 		cache.push({src: element.src, video: vid})
 		element.video = vid
 	}
-	
 }
 
+let convert = R.compose(R.map(R.zipObj(["name", "scene"])), R.toPairs)
+
 export default class Story {
-	constructor(types, update){
+	constructor(types, update, loadingScene){
+		this.sceneUi = loadingScene
 		this.update = update
 
 		this.story = story
@@ -170,6 +172,18 @@ export default class Story {
 			this.types[t] = new types[t](this)
 			this.types[t].hide()
 		}
+
+		let scenesArray = convert(this.types)
+
+		Promise.all(scenesArray.map(t => t.scene.assetsLoaded())).then(e => {
+			console.log("Assets loaded", e, scenesArray)
+
+
+			loadingScene.hide()
+			this.next()
+		})
+
+
 
 		this.sceneUi = {
 			hide: () => {},
@@ -256,7 +270,7 @@ export default class Story {
 
 		this.sceneUi.hide()
 		this.ui(this.current.type)
-		this.tags[scene] = 1;
+		this.tags[scene] = 1
 
 		if(this.current.dialogue != null){
 			this.dialogue.select(this.current.dialogue)

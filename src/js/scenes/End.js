@@ -1,4 +1,5 @@
 import paper from "paper"
+import rasterLoad from "../util/rasterLoad"
 
 
 export default class EndScene {
@@ -50,5 +51,9 @@ export default class EndScene {
 
 	destructor(story){
 		
+	}
+
+	assetsLoaded(){
+		return Promise.all([this.Graphene].map(rasterLoad))
 	}
 }

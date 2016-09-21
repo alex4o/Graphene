@@ -1,5 +1,7 @@
 import paper from "paper"
-import R from "ramda"
+import Sprite from "../sprite"
+
+import rasterLoad from "../util/rasterLoad"
 
 const font_size = 21
 
@@ -98,14 +100,16 @@ export default class DialogueScene {
 	constructor(story){
 		this.story = story
 
-		this.Graphene = new paper.Raster("./img/Graphene.png")
-		this.Graphene.scale(-1,1)
+		this.Graphene = new Sprite("./img/ga.png", new paper.Size(720, 720))
+		//this.Graphene.scale(-1,1)
 
-		this.Enemy = new paper.Raster("./img/Carbon1.png")
+		this.Enemy = new Sprite("./img/cl.png", new paper.Size(720, 720))
 		this.Enemy.scale(0.8,0.8)
 		this.Graphene.scale(0.8,0.8)
 
-		this.Enemy.position.x = 100
+		window.g = this.Graphene
+
+		this.Enemy.position.x = -70
 
 		this.GrapheneText = new paper.PointText({
 			point: paper.view.center,
@@ -150,7 +154,7 @@ export default class DialogueScene {
 		})
 
 
-		this.EnemyText.position.x = 100
+		this.EnemyText.position.x = 200
 		
 		let ppbs = 0.4
 
@@ -181,7 +185,15 @@ export default class DialogueScene {
 		}
 
 		this.paused = true
-	
+
+
+	}
+
+	assetsLoaded(){
+		let assets = [this.Play, this.Pause, this.Graphene._raster, this.Enemy._raster]
+		//console.log(assets.map(rasterLoad).map(p => p.then(e => console.log("p loaded a: ", e))))
+		//console.log(assets.map(e => e.constructor == Sprite))
+		return Promise.all(assets.map(rasterLoad))
 	}
 
 	play() {
@@ -237,13 +249,15 @@ export default class DialogueScene {
 			this.Pause.visible = true
 
 		}
-
+			
+		this.interval = setInterval(() => requestAnimationFrame(this.frame.bind(this)), 66.66)
 
 		paper.view.onMouseDown = (e) => {
 			if(e.event.button == 0){
 				this.story.next()
 			}
 		}
+		//paper.view.onFrame = 
 
 		// this.Play.visible = false
 		// this.Pause.visible = false
@@ -258,6 +272,11 @@ export default class DialogueScene {
 		this.Play.visible = false
 		this.Pause.visible = false
 		paper.view.onMouseDown = null // disable clicking on the screen
+		paper.view.onFrame = null // disable animation
+
+		clearInterval(this.interval)
+
+
 		if(this.DialogueButtons != null){
 			this.DialogueButtons.remove() 
 		}
@@ -274,14 +293,20 @@ export default class DialogueScene {
 
 	}
 
+	frame(){
+		this.Enemy.next()
+		this.Graphene.next()
+	}
+
 	position(width, height, center){
 		this.talkText.point = new paper.Point(center.x, (center.y * 2) - 130)
 
-		this.GrapheneText.position.x = this.Graphene.position.x = width - 100
+		this.Graphene.position.x = width - 500
+		this.GrapheneText.position.x = width - 200
 
 		this.DialogueButtons.calculate({height, width})
-
-		this.Graphene.position.y = this.Enemy.position.y = center.y - 100
+		//= (center.y / 2) - 150
+		this.Graphene.position.y = this.Enemy.position.y  = (center.y / 2) - 150
 
 		this.EnemyText.position.y = this.GrapheneText.position.y = center.y + 200
 

@@ -18,7 +18,7 @@ require("../css/global.css")
 import DialogueUI from "./scenes/Dialogue.js"
 import VideoUI from "./scenes/Video.js"
 import EndUI from "./scenes/End.js"
-
+import LoadingUI from "./scenes/Loading.js"
 
 // TODO: move to new file and find better name
 
@@ -53,7 +53,7 @@ window.addEventListener("load", () => {
 	}, () => {
 		paper.view.update(true)
 		paper.view.draw()
-	})
+	}, new LoadingUI())
 
 
 	story.onVideo(video => {
@@ -119,7 +119,6 @@ window.addEventListener("load", () => {
 		volCtrl.update(value)
 	})
 
-	story.next()
 	console.log("Loaded")
 }, false )
 
