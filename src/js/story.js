@@ -1,5 +1,6 @@
 import R from "ramda"
 import Dialogue from "./dialogue"
+import paper from "paper"
 
 var story = [
 	{
@@ -150,7 +151,6 @@ let convert = R.compose(R.map(R.zipObj(["name", "scene"])), R.toPairs)
 
 export default class Story {
 	constructor(types, update, loadingScene){
-		this.sceneUi = loadingScene
 		this.update = update
 
 		this.story = story
@@ -191,7 +191,11 @@ export default class Story {
 			position: () => {}
 		}
 
-		this.old = {}
+		this.sceneUi = loadingScene
+
+		this.old = { width: 1920, height: 1080 }
+		this.uiCalc(window.innerWidth, window.innerHeight, paper.view.center, this.old)
+		this.old = { width: window.innerWidth, height: window.innerHeight }
 
 	}
 
@@ -201,9 +205,10 @@ export default class Story {
 	}
 
 	uiCalc(width, height, center){
-		this.old  = {width, height, center}
-		this.sceneUi.position(width, height, center)
+		console.log("ui resize")
+		this.sceneUi.position(width, height, center, this.old)
 		this.update()
+		this.old  = {width, height, center}
 	}
 
 	defaultVideo(){ //TODO: write to be more flexible
