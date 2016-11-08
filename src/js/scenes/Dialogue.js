@@ -100,10 +100,10 @@ export default class DialogueScene {
 	constructor(story){
 		this.story = story
 
-		this.Graphene = new Sprite("./img/ga.png", new paper.Size(720, 720))
+		this.Graphene = new Sprite("./img/ga-fs8.png", new paper.Size(720, 720))
 		//this.Graphene.scale(-1,1)
 
-		this.Enemy = new Sprite("./img/cl.png", new paper.Size(720, 720))
+		this.Enemy = new Sprite("./img/cl-fs8.png", new paper.Size(720, 720))
 		this.Enemy.scale(0.8,0.8)
 		this.Graphene.scale(0.8,0.8)
 

@@ -4,7 +4,7 @@ import rasterLoad from "../util/rasterLoad"
 
 export default class VideoScene {
 	constructor(story){
-		this.Skip = new paper.Raster("./img/skip.png")
+		this.Skip = new paper.Raster("./img/skip-fs8.png")
 		this.Skip.scale(0.2, 0.2)
 
 		this.hide()
