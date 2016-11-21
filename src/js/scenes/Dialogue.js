@@ -218,11 +218,11 @@ export default class DialogueScene {
 
 			this.talkText.content = line.who +": "+ line.say
 
-			paper.view.onMouseDown = (e) => {
+			paper.view.onClick = (e) => {
 				// console.log(e.event.button == 0)
-				if(e.event.button == 0){
+				// if(e.event.button == 0){
 					this.story.next()
-				}
+				// }
 			}
 
 		}else{
@@ -230,7 +230,7 @@ export default class DialogueScene {
 				this.talkText.content = line.who +": "+ line.say
 			}
 
-			paper.view.onMouseDown = null // disable clicking on the screen
+			paper.view.onClick = null // disable clicking on the screen
 
 			this.DialogueButtons.create(choices)
 			this.DialogueButtons.calculate({height: window.innerHeight, width: window.innerWidth})
@@ -255,12 +255,12 @@ export default class DialogueScene {
 
 		}
 			
-		this.interval = setInterval(() => requestAnimationFrame(this.frame.bind(this)), 66.66)
+		//this.interval = setInterval(() => requestAnimationFrame(this.frame.bind(this)), 66.66)
 
-		paper.view.onMouseDown = (e) => {
-			if(e.event.button == 0){
+		paper.view.onClick = (e) => {
+			// if(e.event.button == 0){
 				this.story.next()
-			}
+			// }
 		}
 		//paper.view.onFrame = 
 
