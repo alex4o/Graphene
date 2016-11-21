@@ -345,6 +345,7 @@ a {
 
 	> .content {
 		opacity: 0;
+		z-index: 2;
 	}
 
 	a {
@@ -390,7 +391,7 @@ a {
 		transform: translate(-640px, -360px) scale(1);
 		left: 50vw;
 		transition: all .5s;
-		z-index: -1;
+		z-index: 0;
 	}
 
 	#logo.hidden {
