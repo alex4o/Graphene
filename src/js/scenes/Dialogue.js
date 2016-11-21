@@ -100,10 +100,15 @@ export default class DialogueScene {
 	constructor(story){
 		this.story = story
 
-		this.Graphene = new Sprite("./img/ga-fs8.png", new paper.Size(720, 720))
-		//this.Graphene.scale(-1,1)
+		//this.Graphene = new Sprite("./img/ga-fs8.png", new paper.Size(720, 720))
+		this.Graphene = new paper.Raster("./img/Graphene-fs8.png",new paper.Size(720, 720))
+		
+		this.Graphene.scale(-1,1)
 
-		this.Enemy = new Sprite("./img/cl-fs8.png", new paper.Size(720, 720))
+		//this.Enemy = new Sprite("./img/cl-fs8.png", new paper.Size(720, 720))
+		this.Enemy = new paper.Raster("./img/Carbon2-fs8.png", new paper.Size(720, 720))
+
+
 		this.Enemy.scale(0.8,0.8)
 		this.Graphene.scale(0.8,0.8)
 
@@ -190,7 +195,7 @@ export default class DialogueScene {
 	}
 
 	assetsLoaded(){
-		let assets = [this.Play, this.Pause, this.Graphene._raster, this.Enemy._raster]
+		let assets = [this.Play, this.Pause, this.Graphene, this.Enemy]
 		//console.log(assets.map(rasterLoad).map(p => p.then(e => console.log("p loaded a: ", e))))
 		//console.log(assets.map(e => e.constructor == Sprite))
 		return Promise.all(assets.map(rasterLoad))
@@ -294,20 +299,24 @@ export default class DialogueScene {
 	}
 
 	frame(){
-		this.Enemy.next()
-		this.Graphene.next()
+		//this.Enemy.next()
+		//this.Graphene.next()
 	}
 
 	position(width, height, center){
 		this.talkText.point = new paper.Point(center.x, (center.y * 2) - 130)
 
-		this.Graphene.position.x = width - 500
-		this.GrapheneText.position.x = width - 200
+		this.GrapheneText.position.x = this.Graphene.position.x = width - 150
+
+		// this.Graphene.position.x = width - 500
+		// this.GrapheneText.position.x = width - 200
 
 		this.DialogueButtons.calculate({height, width})
 		//= (center.y / 2) - 150
-		this.Graphene.position.y = this.Enemy.position.y  = (center.y / 2) - 150
+		// this.Graphene.position.y = this.Enemy.position.y  = (center.y / 2) - 150
 
+		this.Graphene.position.y = this.Enemy.position.y = center.y - 100
+		this.Enemy.position.x = 150 
 		this.EnemyText.position.y = this.GrapheneText.position.y = center.y + 200
 
 		this.Play.position.x = this.Pause.position.x = 50
