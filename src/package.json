@@ -1,7 +1,7 @@
 {
   "name": "graphene-web",
-  "version": "0.0.1",
-  "description": "webpage",
+  "version": "0.1.0",
+  "description": "application",
   "main": "app.js",
   "dependencies": {
     "ajpng": "^0.1.2",
@@ -18,8 +18,7 @@
     "babel-preset-react": "^6.5.0",
     "babel-preset-stage-0": "^6.5.0",
     "css-loader": "^0.23.1",
-    "electron": "^0.4.1",
-    "electron-prebuilt": "^1.2.2",
+    "electron": "^1.4.8",
     "file-loader": "^0.8.5",
     "fluidbox": "^2.0.0",
     "jquery": "^3.0.0",

@@ -328,6 +328,7 @@ export default class DialogueScene {
 
 			this.talkText.text = line.who +": "+ line.say
 
+		}else{
 
 			this.DialogueButtons.create(choices)
 			this.DialogueButtons.calculate({height: window.innerHeight, width: window.innerWidth})
