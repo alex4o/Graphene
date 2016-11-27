@@ -1,59 +1,69 @@
-import paper from "paper"
+
 import rasterLoad from "../util/rasterLoad"
 
+function center(sprite) {
+	sprite.anchor.set(.5, .5)
+}
 
 export default class EndScene {
-	constructor(){
-		this.Graphene = new paper.Raster("./img/Graphene.png")
-		this.Graphene.scale(-1,1)
+	constructor(story, stage){
+	this.story = story
+	this.stage = stage
+		// this.Graphene = new paper.Raster("./img/Graphene.png")
+		// PIXI.loader.add("graphene", "./img/Graphene-fs8.png")
 
+	
+	}
+
+	assetsLoaded(resources){
+		
+		this.Graphene =  new PIXI.Sprite(resources['graphene'].texture)
+		center(this.Graphene)
+		this.Graphene.interactive = true
+		this.Graphene.scale.set(-1,1)
 
 		this.Graphene.visible = true
 
-		this.Graphene.onClick = () => {
-			window.location = window.location.pathname.replace("game","index") + "#end"
+		this.Graphene.click = () => {
+			window.location = window.location.pathname.replace("game","test") + "#end"
 
 			//window.location.pathname = window.location.pathname.replace("game","index")
 		}
 
-		this.talkText = new paper.PointText({
-			point: paper.view.center,
-		//	content: choices.who +": "+ choices.say,
-			fillColor: "white",
+		this.Graphene.tap = () => {
+			window.location = window.location.pathname.replace("game","test") + "#end"
+
+			//window.location.pathname = window.location.pathname.replace("game","index")
+		}
+
+		this.talkText = new PIXI.Text("А ти какво научи от всичко това?",
+		{
+			fill: "white",
 			fontFamily: "Verdana",
 			fontWeight: "bold",
 			fontSize: 21,
-			justification: "center"
 		})
 
 		this.talkText.visible = true
 
 
-		this.Graphene.setPosition(paper.view.center)
-		this.talkText.content = "А ти какво научи от всичко това?"	
+		this.stage.addChild(this.Graphene)
+		this.stage.addChild(this.talkText)
+
+		//this.Graphene.setPosition(paper.view.center)
 	}
 
 	position(width, height, center){
-		this.Graphene.setPosition(center)
-		this.talkText.point = new paper.Point(center.x, (center.y * 2) - 130)
+		this.Graphene.position.set(center.x, center.y)
+		this.talkText.position.set(center.x - this.talkText.getBounds().width/2, (center.y * 2) - 130)
 
 	}
 
-	hide(){
-		this.Graphene.visible = false
-		this.talkText.visible = false
+	update(){
+
 	}
 
-	show(){
-		this.Graphene.visible = true
-		this.talkText.visible = true
-	}
-
-	destructor(story){
+	destructor(){
 		
-	}
-
-	assetsLoaded(){
-		return Promise.all([this.Graphene].map(rasterLoad))
 	}
 }

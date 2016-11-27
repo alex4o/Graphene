@@ -9,8 +9,8 @@ app.on("ready", function(){
 	})
 
 
-	win.loadURL("file://" + __dirname + "/out/index.html")
-win.toggleDevTools()
+	win.loadURL("file://" + __dirname + "/out/game.html")
+	win.toggleDevTools()
 	win.setFullScreen(true)
 
 })

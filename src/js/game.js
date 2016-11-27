@@ -19,8 +19,20 @@ import DialogueUI from "./scenes/Dialogue.js"
 import VideoUI from "./scenes/Video.js"
 import EndUI from "./scenes/End.js"
 import LoadingUI from "./scenes/Loading.js"
+import MenuUI from "./scenes/Menu.js"
+
 
 // TODO: move to new file and find better name
+
+
+var PIXI = require('pixi.js')
+
+
+var TEX = require('pixi-compressed-textures');
+
+
+console.log(PIXI)
+
 
 const volumeModifier = 0.05
 
@@ -44,24 +56,39 @@ window.addEventListener("load", () => {
 
 	canvas = document.getElementById("drawSurf")
 	container = document.getElementById("container")
-	paper.setup(canvas)
+	let render = document.getElementById("render")
+	
+	let renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight,{ transparent: true })
+
+	var extensions = PIXI.compressedTextures.detectExtensions(renderer);
+	console.log(extensions)
+	// PIXI.loader.loader = new PIXI.loaders.Loader();
+	// window.loader.before(PIXI.compressedTextures.imageParser());
+
+	//PIXI.loader.before(PIXI.compressedTextures.imageParser())
+
+	renderer.autoResize = true
+
+	render.appendChild(renderer.view)
+
+	//paper.setup(canvas)
 
 	let story = new Story({
 		"Video": VideoUI,
+		"Loading": LoadingUI,
 		"Dialogue": DialogueUI,
-		"End" : EndUI
-	}, () => {
-		paper.view.update(true)
-		paper.view.draw()
-	}, new LoadingUI())
+		"End" : EndUI,
+		"Menu": MenuUI
+
+	}, renderer, container)
 
 
 	story.onVideo(video => {
 
 		console.log("Removeing: ", video)
-		if(mountedVideo != null){
-			mountedVideo.remove()
-		}
+		// if(mountedVideo != null){
+			// mountedVideo.remove()
+		// }
 
 		console.log(video.l)
 		if(video.l){
@@ -76,7 +103,7 @@ window.addEventListener("load", () => {
 			video.addEventListener("ended", () => story.next())
 		}
 
-		container.appendChild(video)
+		// container.appendChild(video)
 		video.play()
 
 		mountedVideo = video
@@ -84,7 +111,7 @@ window.addEventListener("load", () => {
 
 	})
 
-	Kefir.fromEvents(canvas, "mousewheel").map(e => e.wheelDelta < 0 ? -volumeModifier : volumeModifier).onValue(mod => {
+	Kefir.fromEvents(window.document.body , "mousewheel").map(e => e.wheelDelta < 0 ? -volumeModifier : volumeModifier).onValue(mod => {
 		volume.modify(old => {
 			let volume = old + mod
 			if(volume < 0){
@@ -102,21 +129,27 @@ window.addEventListener("load", () => {
 	}
 
 	Kefir.fromEvents(window, "resize").toProperty(() => null).onValue(() => {
-		canvas.width = window.innerWidth
-		canvas.height = window.innerHeight
-		paper.view.setViewSize(window.innerWidth, window.innerHeight)
+		//renderer.resize(window.innerWidth, window.innerHeight)
 
-		story.uiCalc(window.innerWidth, window.innerHeight, paper.view.center)
+		//canvas.width = window.innerWidth
+		//canvas.height = window.innerHeight
+		//paper.view.setViewSize(window.innerWidth, window.innerHeight)
+
+
+		story.uiCalc()
 	})
 
 
-	let volCtrl = new VolumeCtrl(volume.get())
+	//let volCtrl = new VolumeCtrl(volume.get())
 
 	volume.onValue(value => {
 		if(mountedVideo != null){
 			mountedVideo.volume = value
 		}
-		volCtrl.update(value)
+
+		document.getElementById("bgmusic").volume = value
+
+		//volCtrl.update(value)
 	})
 
 	console.log("Loaded")

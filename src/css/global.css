@@ -9,15 +9,31 @@ canvas[resize] {
     width: 100%;
     height: 100%;
 }
-
-video {
-	width: 100%;
+#container {
+	display: flex;
+	height: 100vh;
+	align-content: center;
+	align-items: center;
 	position: absolute;
-	top: 50vh;
-	transform: translateY(-50%);
+	top: 0px;
+
+}
+video {
+	flex: 1 1 100vw;
+	align-self: center;
+	width: 100vw;
+/*transform: translateY(-50%);*/
 }
 
 .draw {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+}
+
+#render canvas{
+	width: 100%;
+	height: 100%;
 	position: absolute;
 	top: 0px;
 	left: 0px;

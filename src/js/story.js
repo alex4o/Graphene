@@ -1,8 +1,16 @@
 import R from "ramda"
 import Dialogue from "./dialogue"
-import paper from "paper"
+import videoCanplaythrough from "./util/videoCanplaythrough.js"
+
+import parallax from "./util/parallax.js"
 
 var story = [
+	{
+		"scene": "menu",
+		"src": "vid/Background.mp4",
+		"next": "intro",
+		"type": "Menu"
+	},
 	{
 		"scene": "intro",
 		"src": "vid/Intro.mp4",
@@ -135,23 +143,38 @@ function createVideo(element){
 	var item = R.find(R.propEq("src", element.src))(cache)
 	if(item != null){
 		element.video = item.video
+
 	}else{
+		
 		let vid = document.createElement("video")
 		if(element.src == "vid/Background.mp4"){
 			//vid.loop = true
+			return 0;
 			vid.l = true
 		}
 		vid.src = element.src
 		cache.push({src: element.src, video: vid})
 		element.video = vid
+		vid.style.display = "none"
+
+
+		console.log(vid)
+		this.appendChild(vid)
+
 	}
 }
 
-let convert = R.compose(R.map(R.zipObj(["name", "scene"])), R.toPairs)
+function getWindowSize(){
+	return { width: window.innerWidth, height: window.innerHeight, center: {x: window.innerWidth / 2, y: window.innerHeight / 2} }
+}
+
+
+
+//let convert = R.compose(R.map(R.zipObj(["name", "scene"])), R.toPairs)
 
 export default class Story {
-	constructor(types, update, loadingScene){
-		this.update = update
+	constructor(types, renderer, container){
+		this.renderer = renderer
 
 		this.story = story
 		this.showDialogue = false
@@ -164,23 +187,40 @@ export default class Story {
 			"next" : this.story[0].scene
 		}
 
-		this.story.forEach(createVideo)
+		let r3dcontainer = document.getElementById("render3d")
+
+		r3dcontainer.appendChild(parallax.renderer.domElement)
+
+		this.story.forEach(createVideo.bind(container))
+
+		let allVideos = Promise.all(cache.map(vid => videoCanplaythrough(vid)))
+
+
 		console.log("Loaded videos:", cache)
 		this.types = {}
 
 		for(let t in types){
-			this.types[t] = new types[t](this)
-			this.types[t].hide()
+			let stage = new PIXI.Container()
+
+			this.types[t] = new types[t](this, stage)
+			this.types[t].stage = stage
+			//his.types[t].hide()
 		}
 
-		let scenesArray = convert(this.types)
+		//let scenesArray = convert(this.types)
 
-		Promise.all(scenesArray.map(t => t.scene.assetsLoaded())).then(e => {
-			console.log("Assets loaded", e, scenesArray)
+		PIXI.loader.load((loader, resources) => { 
+			
+
+			for(let t in types){
+
+				this.types[t].assetsLoaded(resources)
+			}
 
 
-			loadingScene.hide()
-			this.next()
+			allVideos.then(() => {
+				this.next()
+			})
 		})
 
 
@@ -191,27 +231,63 @@ export default class Story {
 			position: () => {}
 		}
 
-		this.sceneUi = loadingScene
+		this.ui("Loading")
 
-		this.old = { width: 1920, height: 1080 }
-		this.uiCalc(window.innerWidth, window.innerHeight, paper.view.center, this.old)
-		this.old = { width: window.innerWidth, height: window.innerHeight }
+		this.uiCalc()
 
+
+
+		this.animate()
+	
+	}
+
+	animate() {
+		this.sceneUi.update()
+
+		if(this.parallax){
+			parallax.animation()
+			parallax.renderer.render(parallax.scene, parallax.camera)
+		}
+
+		this.renderer.render(this.sceneUi.stage)
+
+		requestAnimationFrame(this.animate.bind(this))
 	}
 
 	ui(type){
+
 		this.sceneUi = this.types[type]
-		this.sceneUi.show()
+
+		if(this.sceneUi.click){
+			this.renderer.view.onclick = this.sceneUi.click.bind(this.sceneUi)
+			this.renderer.view.ontouchstart = this.sceneUi.click.bind(this.sceneUi)
+		}else{
+			this.renderer.view.onclick = null
+			this.renderer.view.ontouchstart = null
+
+		}
+
+		//this.sceneUi.show()
 	}
 
-	uiCalc(width, height, center){
+	uiCalc(){
 		console.log("ui resize")
-		this.sceneUi.position(width, height, center, this.old)
-		this.update()
+		let {width, height, center} = getWindowSize()
+
+
+
+		parallax.camera.aspect = width / height
+		parallax.camera.updateProjectionMatrix()
+		parallax.renderer.setSize( width, height )
+
+		this.renderer.resize(width, height)
+
+
+		this.sceneUi.position(width, height, center, this.old | getWindowSize())
 		this.old  = {width, height, center}
 	}
 
-	defaultVideo(){ //TODO: write to be more flexible
+	defaultVideo(){ //TODO: write this to be more flexible
 		return R.find(R.propEq("src", "vid/Background.mp4"))(cache)
 	}
 
@@ -263,6 +339,17 @@ export default class Story {
 	switchTo(scene){
 		//Before the switch
 		let oldVideo = this.current.video
+		if(oldVideo){
+
+			oldVideo.style.display = "none"
+			oldVideo.pause()
+		}else{
+			this.parallax = false
+			document.getElementById("bgmusic").pause()
+
+			oldVideo = "parallax"
+		}
+
 		console.log("Switching to:", scene)
 		this.current = this.scene(scene) // switch the video with the next one
 		if(this.current == null){
@@ -270,10 +357,16 @@ export default class Story {
 		}
 
 		if(oldVideo != this.current.video){
-			this.onvideo(this.current.video)
+			if(this.current.video){
+				this.current.video.style.display = "block"
+				this.onvideo(this.current.video)
+			}else{
+				this.parallax = true
+				document.getElementById("bgmusic").play()
+			}
 		}
 
-		this.sceneUi.hide()
+		// this.sceneUi.hide()
 		this.ui(this.current.type)
 		this.tags[scene] = 1
 
@@ -312,6 +405,6 @@ export default class Story {
 		}
 
 		let {width, height, center} = this.old
-		this.uiCalc(width, height, center)
+		this.uiCalc()
 	}
 }
