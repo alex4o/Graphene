@@ -40,7 +40,7 @@ export default class VideoScene {
 		// this.button.position.y = 200
 		// this.button.position.x = 200
 
-		console.log(this.button)
+		// console.log(this.button)
 
 		this.Skip.interactive = true
 		//this.Skip = new paper.Raster("./img/skip-fs8.png")

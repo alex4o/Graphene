@@ -41,9 +41,17 @@ var canvas = null
 var container = null
 
 
+if(localStorage.getItem("volume")){
+	localStorage.setItem("volume", 0.5)
+}
 
-
-var volume = new Atom(0.5)
+if(localStorage.getItem("autoplay")){
+	localStorage.setItem("autoplay", false)
+}
+ 
+window.volume = new Atom(parseInt(localStorage.getItem("volume")))
+window.autoplay = new Atom(JSON.parse(localStorage.getItem("autoplay")))
+window.quality = new Atom(JSON.parse(localStorage.getItem("quality")))
 
 /*
 //gala --replace
@@ -119,6 +127,8 @@ window.addEventListener("load", () => {
 			}else if(volume > 1){
 				volume = 1
 			}
+
+			localStorage.setItem("volume", volume)
 			return volume
 		})
 
@@ -135,12 +145,15 @@ window.addEventListener("load", () => {
 		//canvas.height = window.innerHeight
 		//paper.view.setViewSize(window.innerWidth, window.innerHeight)
 
-
 		story.uiCalc()
 	})
 
 
 	//let volCtrl = new VolumeCtrl(volume.get())
+
+	autoplay.onValue(value => {
+		localStorage.setItem("autoplay", value)
+	})
 
 	volume.onValue(value => {
 		if(mountedVideo != null){

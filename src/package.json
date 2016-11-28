@@ -4,7 +4,6 @@
   "description": "application",
   "main": "app.js",
   "dependencies": {
-    "ajpng": "^0.1.2",
     "async.js": "^0.9.5",
     "autoprefixer": "^6.3.6",
     "babel": "^6.5.2",
@@ -26,7 +25,6 @@
     "kefir.atom": "^2.2.2",
     "lightgallery": "^1.2.19",
     "lodash": "^4.13.1",
-    "lost": "^6.8.1",
     "luminous-lightbox": "^0.2.7",
     "magnific-popup": "^1.1.0",
     "paper": "^0.10.2",
@@ -41,6 +39,7 @@
     "react": "^15.1.0",
     "react-addons-css-transition-group": "^15.1.0",
     "react-bootstrap": "^0.29.4",
+    "react-bootstrap-slider": "^1.1.3",
     "react-dom": "^15.1.0",
     "style-loader": "^0.13.1",
     "three": "^0.82.1",

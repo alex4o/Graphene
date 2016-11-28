@@ -52,8 +52,7 @@ class DialogueButtons {
 			// center(button)
 
 			console.log(button)
-			//button.visible = true
-			//this.calculateButtonSize(text.getBounds(), button.getBounds())
+
 			let add = 20
 
 			button.width = text.getBounds().width + add
@@ -90,39 +89,12 @@ class DialogueButtons {
 				button.height = text.getBounds().height + add
 			})
 
-
-			// let rootButtonelement = button.children[1] // illogical but the first two are groups
-
-			// group.onMouseEnter = e => {
-			// 	rootButtonelement.shadowBlur = 50
-			// 	rootButtonelement.shadowColor = new paper.Color(255,255,255)
-			// }
-
-			// group.onMouseLeave = e => {
-			// 	rootButtonelement.shadowBlur = 0
-			// 	rootButtonelement.shadowColor = new paper.Color(0,0,0)
-			// }
-
 			this.width += group.getBounds().width
 
 			return group
 		})
 
 		this.list.map(e => this.container.addChild(e))
-	}
-
-	calculateButtonSize(textBounds, buttonBounds){
-
-		//let res_rect = {...rect}
-		let res_rect = bounds
-		let margin = 10
-
-		res_rect.x = rect.x - margin/2
-		res_rect.y = rect.y - margin/2
-		res_rect.width = rect.width + margin
-		res_rect.height = rect.height + margin
-
-		return res_rect
 	}
 
 	calculate(size){
@@ -133,7 +105,7 @@ class DialogueButtons {
 		for(let i = 0; i < this.list.length; i++){
 			let group = this.list[i]
 			group.x = cur
-			group.y = size.height - 75
+			group.y = size.height * (6/7)
 			
 			cur += group.width + padding
 		}
@@ -273,14 +245,22 @@ export default class DialogueScene {
 		this.Play.click = () => {
 			this.Play.visible = false
 			this.Pause.visible = true
-			this.paused = false
+
+			autoplay.modify(() => {
+				return true
+			})
+
+
 			this.play()
 		}
 
 		this.Pause.click = () => {
 			this.Play.visible = true
 			this.Pause.visible = false
-			this.paused = true
+
+			autoplay.modify(() => {
+				return false
+			})
 
 			clearTimeout(window.timeout_next)
 		}
@@ -305,13 +285,12 @@ export default class DialogueScene {
 
 	play() {
 		if(!this.story.hasChoices()){
-			if(this.paused == false){
+			if(autoplay.get() == true){
 				window.timeout_next = setTimeout(() => {
 					this.story.next()
 				}, 5000)
 			}
 		}
-
 	}
 
 	update(){
@@ -346,7 +325,7 @@ export default class DialogueScene {
 
 	position(width, height, center){
 		let TTbounds = this.talkText.getBounds()
-		this.talkText.position.set(center.x - (TTbounds.width/2), height * (5/6))
+		this.talkText.position.set(center.x - (TTbounds.width/2), height * (5/7))
 		// console.log(this.talkText)
 
 		this.GrapheneText.position.x  = width - 200

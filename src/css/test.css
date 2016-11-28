@@ -20,4 +20,58 @@ video {
 	width: 100%;
 }
 
+.static {
 
+	> * {
+		position: fixed;
+	}
+
+	> #to-game {
+		right: 50px;
+		bottom: 40px;
+		padding: 6px 12px 6px 12px;
+		display: block;
+		font-size: 1.2em;
+		color: #444;
+		background-color: #0096CC;
+		transition: color 0.1s;
+		text-decoration: none;
+		/* border-bottom: 2px black solid; */
+		perspective: 800px;
+		transition: all 0.5s;
+		font-weight: bold;	
+
+		&.show{
+			bottom: 40px;
+			opacity: 1;
+		}
+
+		&:hover {
+			color: white;
+		}
+
+		&:before {
+			content: "";
+			position: absolute;
+			background: #444;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			top: 0;
+			z-index: -1;
+			/* border-radius: 3px; */
+			transform: rotatex( 90deg );
+			transform-origin: bottom;
+			transition: transform 0.15s ease-in;
+
+		}
+
+		&:hover:before {
+			right: 0;
+			transform: rotatex( 0deg );
+
+		}
+
+
+	}
+}

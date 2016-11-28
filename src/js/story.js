@@ -158,7 +158,7 @@ function createVideo(element){
 		vid.style.display = "none"
 
 
-		console.log(vid)
+		// console.log(vid)
 		this.appendChild(vid)
 
 	}
@@ -271,7 +271,7 @@ export default class Story {
 	}
 
 	uiCalc(){
-		console.log("ui resize")
+		//console.log("ui resize")
 		let {width, height, center} = getWindowSize()
 
 

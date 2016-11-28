@@ -1,5 +1,13 @@
-import paper from "paper"
-import rasterLoad from "../util/rasterLoad"
+import React from "react"
+import ReactDOM from "react-dom"
+
+import ReactBootstrapSlider from 'react-bootstrap-slider';
+import {Grid, Row, Col, Panel, Input, Button, Alert, Modal, Radio, FormGroup, Checkbox} from "react-bootstrap"
+
+
+
+require("bootstrap-slider/dist/css/bootstrap-slider.min.css")
+
 
 function center(sprite) {
 	sprite.anchor.set(.5, .5)
@@ -11,11 +19,13 @@ export default class VideoScene {
 	constructor(story, stage){
 		this.stage = stage
 		this.story = story
-		this.increment = 0.07
+		this.increment = 0.05
 		this.index = -1
 		this.animtoggle = true
 
 		//this.Skip.onClick = () => story.next()
+
+		PIXI.loader.add("title", './img/title.png')
 
 	}
 
@@ -55,8 +65,11 @@ export default class VideoScene {
 		}
 
 
-		this.Graphene.position.x = width/6*4
+		this.Graphene.position.x = width*(3/4)
 		this.Graphene.position.y = center.y
+
+		this.Title.position.x = center.x
+		this.Title.position.y = height * 1/5
 
 		this.w = width
 		this.h = height
@@ -99,9 +112,16 @@ export default class VideoScene {
 
 	assetsLoaded(resources){
 
+		this.htmlUI =  document.getElementById("htmlUI")
+
 		this.texts = []
 		this.Graphene =  new PIXI.Sprite(resources['graphene'].texture)
+
+		this.Title = new PIXI.Sprite(resources['title'].texture)
+		this.Title.scale.set(0.3,0.3)
 		center(this.Graphene)
+		center(this.Title)
+
 		this.Graphene.scale.set(-0.8,0.8)
 
 		this.texts.push(new PIXI.Text("Начало",
@@ -149,12 +169,16 @@ export default class VideoScene {
 			this.story.next()
 		}
 
-		this.texts[2].click = () => {
-
+		this.texts[1].click = () => {
+			this.htmlUI.style.display = "block"
+			ReactDOM.render(<App/>, this.htmlUI)
 		}
 
 		this.texts[2].click = () => {
 			window.location = "/"
+		}
+
+		this.texts[3].click = () => {
 		}
 
 		this.texts.forEach((text, index) => {
@@ -178,7 +202,77 @@ export default class VideoScene {
 		})
 
 		this.stage.addChild(this.Graphene)
-
+		this.stage.addChild(this.Title)
 		// this.stage.addChild(this.button)
+	}
+}
+
+class App extends React.Component
+{
+	constructor(props){
+		
+		super(props)
+		this.state = {
+			volume: volume.get(),
+			autoplay: autoplay.get()
+		}
+
+
+		volume.onValue(x => {
+			this.setState({volume: x})
+		})
+
+	}
+
+	changeVolume(event){
+		console.log(event.target.value)
+		volume.modify(() => {
+			return event.target.value
+		})
+		// localStorage.getItem("volume")
+	}
+
+	changeAutoplay(event){
+		autoplay.modify(() => {
+			return event.target.value
+		})
+	}
+
+	close() {
+		document.getElementById("htmlUI").style.display = "none"; 
+		ReactDOM.unmountComponentAtNode(document.getElementById("htmlUI")) 
+	}
+
+	render(){
+		return(
+			<Grid>
+				<h1>Настройки</h1>
+				<Row>
+
+				<h2>Сила на звука</h2>
+					 <ReactBootstrapSlider
+						value={this.state.volume}
+						change={this.changeVolume}
+						// slideStop={this.changeValue}
+						step={0.01}
+						max={1}
+						min={0}
+						orientation="horizontal"
+						reverse={false}/>
+				</Row>
+				<Row>
+					
+
+					<Checkbox onChange={this.changeAutoplay.bind(this)}>
+						Автоматично продължаване
+					</Checkbox>
+				</Row>
+				
+				<Row>
+
+					<Button onClick={this.close.bind(this)}>Затвори</Button> 
+				</Row>
+			</Grid>
+			)
 	}
 }

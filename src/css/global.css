@@ -38,3 +38,12 @@ video {
 	top: 0px;
 	left: 0px;
 }
+
+#htmlUI {
+	position: absolute;
+	top: 0px;
+	background: #00AFEF;
+
+	width: 100vw;
+	height: 100vh;
+}
