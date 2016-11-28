@@ -41,15 +41,15 @@ var canvas = null
 var container = null
 
 
-if(!localStorage.getItem("volume")){
+if(localStorage.getItem("volume")){
 	localStorage.setItem("volume", 0.5)
 }
 
-if(!localStorage.getItem("autoplay")){
+if(localStorage.getItem("autoplay")){
 	localStorage.setItem("autoplay", false)
 }
  
-window.volume = new Atom(JSON.parse(localStorage.getItem("volume")))
+window.volume = new Atom(parseInt(localStorage.getItem("volume")))
 window.autoplay = new Atom(JSON.parse(localStorage.getItem("autoplay")))
 window.quality = new Atom(JSON.parse(localStorage.getItem("quality")))
 
