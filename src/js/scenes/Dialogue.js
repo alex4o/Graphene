@@ -229,7 +229,6 @@ export default class DialogueScene {
 		this.Play.interactive = true
 		center(this.Play)
 
-		this.Play.visible = true
 		this.Play.scale.set(ppbs, ppbs)
 
 		this.Pause = new PIXI.Sprite(resources["Paused"].texture)
@@ -238,7 +237,9 @@ export default class DialogueScene {
 		center(this.Pause)
 
 
-		this.Pause.visible = false
+
+		this.Play.visible = !autoplay.get()
+		this.Pause.visible = autoplay.get()
 		this.Pause.scale.set(ppbs, ppbs)
 
 
@@ -264,9 +265,6 @@ export default class DialogueScene {
 
 			clearTimeout(window.timeout_next)
 		}
-
-		this.paused = true
-
 
 		this.stage.addChild(this.Play)
 		this.stage.addChild(this.Pause)
