@@ -248,7 +248,6 @@ class App extends React.Component
 			<Grid>
 				<h1>Настройки</h1>
 				<Row>
-
 				<h2>Сила на звука</h2>
 					 <ReactBootstrapSlider
 						value={this.state.volume}
@@ -259,17 +258,19 @@ class App extends React.Component
 						min={0}
 						orientation="horizontal"
 						reverse={false}/>
+				<Row> 
+				Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+				</Row>
 				</Row>
 				<Row>
-					
-
 					<Checkbox onChange={this.changeAutoplay.bind(this)}>
-						Автоматично продължаване
+						<p>Автоматично продължаване</p>
 					</Checkbox>
-				</Row>
-				
+					<Row>
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+					</Row>
+				</Row>				
 				<Row>
-
 					<Button onClick={this.close.bind(this)}>Затвори</Button> 
 				</Row>
 			</Grid>
