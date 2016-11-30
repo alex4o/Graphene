@@ -311,6 +311,7 @@ export default class DialogueScene {
 			this.DialogueButtons.remove()
 
 			this.talkText.text = line.who +": "+ line.say
+			this.play()
 
 		}else{
 
@@ -318,7 +319,6 @@ export default class DialogueScene {
 			this.DialogueButtons.calculate({height: window.innerHeight, width: window.innerWidth})
 		}
 
-		this.play()
 
 	}
 
