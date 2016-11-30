@@ -303,6 +303,7 @@ export default class DialogueScene {
 	}
 
 	click(){
+		clearTimeout(window.timeout_next)
 		this.story.next()
 	}
 

@@ -13,7 +13,6 @@ function center(sprite) {
 	sprite.anchor.set(.5, .5)
 }
 
-function easeInOut(t) { return (--t)*t*t+1 }
 
 export default class VideoScene {
 	constructor(story, stage){
@@ -36,7 +35,7 @@ export default class VideoScene {
 		{
 			this.Graphene.position.y += speed
 
-			if(this.Graphene.position.y >  (this.h / 2) + 25)
+			if(this.Graphene.position.y >  (this.h / 2) + 25 + 100)
 			{
 				this.animtoggle = false
 			}
@@ -44,7 +43,7 @@ export default class VideoScene {
 		else if (!this.animtoggle)
 		{
 			this.Graphene.position.y -= speed
-			if (this.Graphene.position.y < (this.h / 2) - 25)
+			if (this.Graphene.position.y < (this.h / 2) - 25 + 100)
 			{
 				this.animtoggle = true
 			}						
@@ -59,17 +58,17 @@ export default class VideoScene {
 		for(let i = 0; i < this.texts.length; i++){
 			let text = this.texts[i]
 			text.x = width*(1/4)
-			text.y = cur - 50 + (off / 2)
+			text.y = cur - 50 + (off / 2) + 100
 			
 			cur += text.height + padding
 		}
 
 
 		this.Graphene.position.x = width*(3/4)
-		this.Graphene.position.y = center.y
+this.Graphene.position.y = center.y + 100
 
-		this.Title.position.x = center.x
-		this.Title.position.y = height * 1/5
+this.Title.position.x = center.x
+this.Title.position.y = height * 1/5
 
 		this.w = width
 		this.h = height
@@ -118,7 +117,7 @@ export default class VideoScene {
 		this.Graphene =  new PIXI.Sprite(resources['graphene'].texture)
 
 		this.Title = new PIXI.Sprite(resources['title'].texture)
-		this.Title.scale.set(0.3,0.3)
+this.Title.scale.set(0.2,0.2)
 		center(this.Graphene)
 		center(this.Title)
 
