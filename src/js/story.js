@@ -365,8 +365,10 @@ export default class Story {
 				document.getElementById("bgmusic").play()
 			}
 		}
+		if(this.sceneUi.hide){
+			this.sceneUi.hide()
+		}
 
-		// this.sceneUi.hide()
 		this.ui(this.current.type)
 		this.tags[scene] = 1
 

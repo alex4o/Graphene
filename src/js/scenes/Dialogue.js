@@ -30,6 +30,8 @@ class DialogueButtons {
 		this.callback = null
 	}
 
+
+
 	create(choices){
 		this.remove()
 
@@ -280,6 +282,10 @@ export default class DialogueScene {
 		this.stage.addChild(this.GrapheneText)
 
 
+	}
+
+	hide() {
+		clearTimeout(window.timeout_next)
 	}
 
 	play() {
