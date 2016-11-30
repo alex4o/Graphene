@@ -234,7 +234,10 @@ class App extends React.Component
 
 	changeAutoplay(event){
 		autoplay.modify(() => {
-			return event.target.value
+			if(event.target.value=="on"){
+				return true
+			}
+			return false
 		})
 	}
 
@@ -263,7 +266,7 @@ class App extends React.Component
 				</Row>
 				</Row>
 				<Row>
-					<Checkbox onChange={this.changeAutoplay.bind(this)}>
+					<Checkbox checked={this.state.autoplay} onChange={this.changeAutoplay.bind(this)}>
 						<p>Автоматично продължаване</p>
 					</Checkbox>
 					<Row>
