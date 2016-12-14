@@ -65,10 +65,10 @@ export default class VideoScene {
 
 
 		this.Graphene.position.x = width*(3/4)
-this.Graphene.position.y = center.y + 100
+		this.Graphene.position.y = center.y + 100
 
-this.Title.position.x = center.x
-this.Title.position.y = height * 1/5
+		this.Title.position.x = center.x
+		this.Title.position.y = height * 1/5
 
 		this.w = width
 		this.h = height
@@ -174,10 +174,15 @@ this.Title.scale.set(0.2,0.2)
 		}
 
 		this.texts[2].click = () => {
-			window.location = "/"
+			window.location = window.location.pathname.replace("game","index")
 		}
 
 		this.texts[3].click = () => {
+			if(window.require){
+				var remote = window.require('electron').remote
+				var bw = remote.getCurrentWindow()
+				bw.close()
+			}
 		}
 
 		this.texts.forEach((text, index) => {
@@ -217,10 +222,19 @@ class App extends React.Component
 		}
 
 
+	}
+
+	componentDidMount() {
+
 		volume.onValue(x => {
 			this.setState({volume: x})
 		})
 
+		autoplay.onValue(x => {
+			this.setState({autoplay: x})
+		})
+
+		console.log(this.checkbox)
 	}
 
 	changeVolume(event){
@@ -232,16 +246,17 @@ class App extends React.Component
 	}
 
 	changeAutoplay(event){
-		autoplay.modify(() => {
-			if(event.target.value=="on"){
-				return true
-			}
-			return false
+		// event.persist()
+		// console.log(event)
+		// console.log(event.target)
+
+		autoplay.modify((v) => {
+			return !v
 		})
 	}
 
 	close() {
-		document.getElementById("htmlUI").style.display = "none"; 
+		document.getElementById("htmlUI").style.display = "none"
 		ReactDOM.unmountComponentAtNode(document.getElementById("htmlUI")) 
 	}
 
@@ -265,7 +280,7 @@ class App extends React.Component
 				</Row>
 				</Row>
 				<Row>
-					<Checkbox checked={this.state.autoplay} onChange={this.changeAutoplay.bind(this)}>
+					<Checkbox {...this.state.autoplay ? {checked: true} : {}} inputRef={el => {this.checkbox = el}} onChange={this.changeAutoplay.bind(this)}>
 						<p>Автоматично продължаване</p>
 					</Checkbox>
 					<Row>
@@ -273,7 +288,7 @@ class App extends React.Component
 					Можете да контролирате това по време на игра в долния ляв ъгъл.					
 					</Row>
 				</Row>				
-				<Row>
+				<Row style={{marginTop: "20px"}}>
 					<Button onClick={this.close.bind(this)}>Затвори</Button> 
 				</Row>
 			</Grid>

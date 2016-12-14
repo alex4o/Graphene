@@ -128,7 +128,7 @@ window.addEventListener("load", () => {
 				volume = 1
 			}
 
-			localStorage.setItem("volume", volume)
+
 			return volume
 		})
 
@@ -152,6 +152,7 @@ window.addEventListener("load", () => {
 	//let volCtrl = new VolumeCtrl(volume.get())
 
 	autoplay.onValue(value => {
+		console.log("setItem autoplay")
 		localStorage.setItem("autoplay", value)
 	})
 
@@ -159,6 +160,9 @@ window.addEventListener("load", () => {
 		if(mountedVideo != null){
 			mountedVideo.volume = value
 		}
+
+		console.log("setItem volume:", value)
+		localStorage.setItem("volume", value)
 
 		document.getElementById("bgmusic").volume = value
 

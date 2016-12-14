@@ -290,6 +290,7 @@ export default class DialogueScene {
 
 	play() {
 		if(!this.story.hasChoices()){
+			console.log("autoplay: ", autoplay.get())
 			if(autoplay.get() == true){
 				window.timeout_next = setTimeout(() => {
 					this.story.next()

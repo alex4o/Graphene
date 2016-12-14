@@ -4,7 +4,7 @@ var lost = require("lost")
 var cssnext = require("postcss-cssnext")
 var webpack = require("webpack")
 
-var LiveReloadPlugin = require('webpack-livereload-plugin');
+// var LiveReloadPlugin = require('webpack-livereload-plugin');
 
 
 module.exports = {
@@ -65,15 +65,16 @@ module.exports = {
 	},
 	resolve: {
 		modulesDirectories: ["./node_modules"]
-	},
-	devServer: {
-		host: "0.0.0.0",
-		posrt: 8080,
-		contentBase: "./out",
-		publicPath: "./out",
-		inline: true,
-		progress: true
-	//	hot: true
 	}
+	// ,
+	// devServer: {
+	// 	host: "0.0.0.0",
+	// 	posrt: 8080,
+	// 	contentBase: "./out",
+	// 	publicPath: "./out",
+	// 	inline: true,
+	// 	progress: true
+	// //	hot: true
+	// }
 	//,plugins: [/*new EncodingPlugin("utf-8"),*/ new BomPlugin(true)]
 }
