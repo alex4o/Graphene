@@ -148,8 +148,8 @@ export default class DialogueScene {
 
 		console.log(resources['carbon_atlas'])
 
-
-		this.Graphene =  new PIXI.MovieClip(_.values(resources['graphene_atlas'].textures))
+		console.log("AnimatedSprite: ",PIXI.extras.AnimatedSprite)
+		this.Graphene =  new PIXI.extras.AnimatedSprite(_.values(resources['graphene_atlas'].textures))
 		center(this.Graphene)
 		this.Graphene.animationSpeed = 0.25
 		this.Graphene.play()
@@ -159,7 +159,7 @@ export default class DialogueScene {
 		// this.Graphene.scale.set(-1,1)
 
 		//this.Enemy =  new PIXI.Sprite(PIXI.Texture.fromImage("123_0600.png"))
-		this.Enemy = new PIXI.extras.MovieClip(_.values(resources['carbon_atlas'].textures))
+		this.Enemy = new PIXI.extras.AnimatedSprite(_.values(resources['carbon_atlas'].textures))
 
 
 		console.log(this.Enemy)

@@ -13,7 +13,7 @@ module.exports = {
 		game: "./js/game.js",
 		test: "./js/test.js"
 	},
-	devtool: "eval-source-map",
+	devtool: "source-map",
 	output: {
 		path: "./out",
 		filename: "[name].bundle.js"

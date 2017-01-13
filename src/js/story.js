@@ -217,10 +217,23 @@ export default class Story {
 				this.types[t].assetsLoaded(resources)
 			}
 
+			console.log("videos: ", cache.map(vid => vid.video.readyState))
 
-			allVideos.then(() => {
+			if(cache.map(vid => vid.video.readyState).reduce((curr, ret) => ret || curr == 4)){
 				this.next()
-			})
+
+			}else{
+				allVideos.then(() => {
+					this.next()
+
+					console.log("222: story.js", "story.next()")
+
+				}).catch(err => {
+					console.log("224: story.js", err)
+				})
+			}
+
+
 		})
 
 
