@@ -66,10 +66,11 @@ window.addEventListener("load", () => {
 	container = document.getElementById("container")
 	let render = document.getElementById("render")
 	
-	let renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight,{ transparent: true })
+	// let renderer = PIXI.autoDetectRenderer(window.innerWidth, window.innerHeight,{ transparent: true })
+	let renderer = new PIXI.CanvasRenderer(window.innerWidth, window.innerHeight,{ transparent: true })
 
-	var extensions = PIXI.compressedTextures.detectExtensions(renderer);
-	console.log(extensions)
+	//var extensions = PIXI.compressedTextures.detectExtensions(renderer);
+	// console.log(extensions)
 	// PIXI.loader.loader = new PIXI.loaders.Loader();
 	// window.loader.before(PIXI.compressedTextures.imageParser());
 
