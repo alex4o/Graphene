@@ -218,20 +218,22 @@ export default class Story {
 			}
 
 			console.log("videos: ", cache.map(vid => vid.video.readyState))
+			this.next()
 
-			if(cache.map(vid => vid.video.readyState).reduce((curr, ret) => ret || curr == 4)){
-				this.next()
+			// if(cache.map(vid => vid.video.readyState).reduce((curr, ret) => ret || curr == 4)){
+			// 	this.next()
 
-			}else{
-				allVideos.then(() => {
-					this.next()
+			// }else{
+			// 	allVideos.then(() => {
 
-					console.log("222: story.js", "story.next()")
+			// 		console.log("229: story.js", "story.next()")
 
-				}).catch(err => {
-					console.log("224: story.js", err)
-				})
-			}
+			// 	}).catch(err => {
+			// 		console.log("232: story.js", err)
+			// 	})
+				
+
+			// }
 
 
 		})

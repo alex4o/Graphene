@@ -35,6 +35,7 @@ class DialogueButtons {
 	create(choices){
 		this.remove()
 
+		window.shit = []
 
 
 		this.list = choices.map((choice,n) => {
@@ -57,14 +58,27 @@ class DialogueButtons {
 
 			let add = 20
 
-			button.width = text.getBounds().width + add
-			button.height = text.getBounds().height + add
 			text.x += 12
 			text.y += 8
+
+			button.width = text.getBounds().width + add
+			button.height = text.getBounds().height + add
+
 			//text.getBounds().width + 10
 
 
 			//button.setBounds()
+
+			let set = (nineplane, texture) => {
+				nineplane.texture = texture
+
+				nineplane.leftWidth = 15
+				nineplane.bottomHeight = 15
+				nineplane.rightWidth = 15
+				nineplane.topHeight = 15
+			}
+			
+			window.shit.push(button)
 
 			group.addChild(button)
 			group.addChild(text)
@@ -75,18 +89,22 @@ class DialogueButtons {
 			group.tap = () => this.callback(n)
 
 			group.on('mouseover', () => {
-				button.texture = this.hover
+				// button.texture = this.hover
+				set(button, this.hover)
+
 				button.width = text.getBounds().width + add
 				button.height = text.getBounds().height + add
 			})
 
 			// set the mouseout callback...
 			group.on('mouseout', () => {
-				button.texture = this.button
+				// button.texture = this.button
+				set(button, this.button)
+
 				button.width = text.getBounds().width + add
 				button.height = text.getBounds().height + add
 			}).on('mousedown', () => {
-				button.texture = this.clicked
+				set(button, this.clicked)
 				button.width = text.getBounds().width + add
 				button.height = text.getBounds().height + add
 			})
